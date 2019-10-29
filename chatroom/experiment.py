@@ -1,6 +1,7 @@
 """Chatroom game."""
 
 import logging
+import socket
 from dallinger import networks
 from dallinger.compat import unicode
 from dallinger.config import get_config
@@ -9,13 +10,11 @@ from dallinger.nodes import Agent
 
 try:
     from .bots import Bot
-
     Bot = Bot  # Make name "Bot" importable without triggering style warnings
 except ImportError:
     pass
 
 logger = logging.getLogger(__file__)
-
 
 def extra_parameters():
     config = get_config()
@@ -23,13 +22,13 @@ def extra_parameters():
     config.register("repeats", int)
     config.register("n", int)
 
-
 class CoordinationChatroom(Experiment):
     """Define the structure of the experiment."""
 
     def __init__(self, session=None):
         """Initialize the experiment."""
         super(CoordinationChatroom, self).__init__(session)
+        self.channel = 'chat'
         if session:
             self.setup()
 
