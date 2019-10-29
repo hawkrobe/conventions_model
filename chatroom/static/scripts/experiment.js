@@ -1,5 +1,9 @@
 /*globals $, dallinger */
 var my_node_id;
+var ws_scheme = (window.location.protocol === "https:") ? 'wss://' : 'ws://';
+var socket = new ReconnectingWebSocket(
+  ws_scheme + window.location.host + "/chat?channel=chat"
+);
 
 // Create the agent.
 var create_agent = function () {
@@ -12,7 +16,6 @@ var create_agent = function () {
       $("#send-message").removeClass("disabled");
       $("#send-message").html("Send");
       $("#reproduction").focus();
-      get_transmissions(my_node_id);
     })
     .fail(function (rejection) {
       // A 403 is our signal that it's time to go to the questionnaire
@@ -25,44 +28,21 @@ var create_agent = function () {
     });
 };
 
-var get_transmissions = function (my_node_id) {
-  dallinger.getTransmissions(my_node_id, { status: 'pending' })
-    .done(function (resp) {
-      console.log(resp);
-      transmissions = resp.transmissions;
-      for (var i = transmissions.length - 1; i >= 0; i--) {
-        console.log(transmissions[i]);
-        display_info(transmissions[i].info_id);
-      }
-      setTimeout(function () { get_transmissions(my_node_id); }, 100);
-    });
-};
-
-var display_info = function(info_id) {
-  dallinger.getInfo(my_node_id, info_id)
-    .done(function (resp) {
-      console.log(resp.info.contents);
-      $("#story").append("<p>" + resp.info.contents + "</p>");
-    });
+var display_info = function(msg) {
+  $("#story").append("<p>" + msg + "</p>");
 };
 
 var send_message = function() {
   $("#send-message").addClass("disabled");
   $("#send-message").html("Sending...");
 
-  response = $("#reproduction").val();
+  const response = $("#reproduction").val();
   $("#reproduction").val("");
-  $("#story").append("<p style='color: #1693A5;'>" + response + "</p>");
   $("#reproduction").focus();
 
-  dallinger.createInfo(my_node_id, {
-    contents: response,
-    info_type: "Info"
-  }).done(function (resp) {
-    console.log("sent!");
-    $("#send-message").removeClass("disabled");
-    $("#send-message").html("Send");
-  });
+  socket.send('chat:' + response);
+  $("#send-message").removeClass("disabled");
+  $("#send-message").html("Send");
 };
 
 var leave_chatroom = function() {
@@ -78,7 +58,12 @@ $(document).keypress(function (e) {
 });
 
 $(document).ready(function() {
-
+  socket.onmessage = function(msg) {
+    console.log(msg);
+    if(msg.data.split(":")[0] == 'chat')
+      display_info(msg.data.split(":")[1]);
+  };
+  
   // Send a message.
   $("#send-message").click(function() {
     send_message();
