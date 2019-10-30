@@ -2,6 +2,7 @@
 
 import logging
 import socket
+import json
 from dallinger import networks
 from dallinger.compat import unicode
 from dallinger.config import get_config
@@ -14,7 +15,7 @@ from dallinger.nodes import Agent
 # except ImportError:
 #     pass
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 def extra_parameters():
     config = get_config()
@@ -57,3 +58,19 @@ class CoordinationChatroom(Experiment):
     def create_node(self, participant, network):
         """Create a node for a participant."""
         return Agent(network=network, participant=participant)
+
+    def handle_clicked_obj(self, msg) :
+        print('handleing msg', msg)
+        
+    def send(self, raw_message) :
+        """override default send to handle participant messages on channel"""
+        handlers = {'clickedObj' : self.handle_clicked_obj}
+        if raw_message.startswith(self.channel + ":") :
+            logger.info("We received a message for our channel: {}".format(
+                raw_message))
+            body = raw_message.replace(self.channel + ":", "")
+            msg = json.loads(body)
+            if msg['type'] in handlers:
+                handlers[msg['type']](msg)
+            else :
+                logger.info("Received message: {}".format(raw_message))
