@@ -11,7 +11,7 @@ var create_agent = function () {
     .done(function (resp) {
       my_node_id = resp.node.id;
       console.log(my_node_id);
-      $("#stimulus").show();
+      $("#chat-history").show();
       $("#response-form").show();
       $("#send-message").removeClass("disabled");
       $("#send-message").html("Send");
@@ -28,8 +28,35 @@ var create_agent = function () {
     });
 };
 
+var initialize_grid = function() {
+  var currStim = [
+    {url: 'tangram_A.png', targetStatus: 'target'},
+    {url: 'tangram_B.png', targetStatus: 'distractor1'},
+    {url: 'tangram_C.png', targetStatus: 'distractor2'}
+  ];
+  _.forEach(currStim, (stim, i) => {
+    var bkg = 'url(./static/images/' + stim.url + ')';
+    var div = $('<div/>')
+	.addClass('pressable')
+	.attr({'id' : stim.targetStatus})
+	.css({'background' : bkg})
+	.css({
+	  'position': 'relative',
+	  'grid-row': 1, 'grid-column': i+1,
+	  'background-size' :'cover'
+	});
+    $("#object-grid").append(div);
+  });
+};
+
 var display_info = function(msg) {
-  $("#story").append("<p>" + msg + "</p>");
+  $("#story")
+    .append("<p>" + msg + "</p>")
+    .stop(true,true)
+    .animate({
+      scrollTop: $("#story").prop("scrollHeight")
+    }, 800);
+;
 };
 
 var send_message = function() {
@@ -40,7 +67,13 @@ var send_message = function() {
   $("#reproduction").val("");
   $("#reproduction").focus();
 
-  socket.send('chat:' + response);
+  socket.send('chat:' + JSON.stringify({
+    'type' : 'message', 'content' : response
+  }));
+  
+  socket.send('chat:' + JSON.stringify({
+    'type' : 'clickedObj', 'objectID' : '1'
+  }));
   $("#send-message").removeClass("disabled");
   $("#send-message").html("Send");
 };
@@ -58,12 +91,20 @@ $(document).keypress(function (e) {
 });
 
 $(document).ready(function() {
-  socket.onmessage = function(msg) {
-    console.log(msg);
-    if(msg.data.split(":")[0] == 'chat')
-      display_info(msg.data.split(":")[1]);
+  socket.onmessage = function(e) {
+    var handlers = {'message' : (msg) => display_info(msg.content)};
+    var raw_message = e.data;
+    if(raw_message.startsWith("chat:")) {
+      console.log("We received a message for our channel: " + raw_message);
+      var body = JSON.parse(raw_message.replace("chat:", ""));
+      if(handlers.hasOwnProperty(body.type)) {
+	handlers[body.type](body);
+      } else {
+	console.log("Received mysterious message", raw_message);
+      }
+    }
   };
-  
+
   // Send a message.
   $("#send-message").click(function() {
     send_message();
