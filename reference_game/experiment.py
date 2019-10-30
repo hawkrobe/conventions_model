@@ -8,11 +8,11 @@ from dallinger.config import get_config
 from dallinger.experiment import Experiment
 from dallinger.nodes import Agent
 
-try:
-    from .bots import Bot
-    Bot = Bot  # Make name "Bot" importable without triggering style warnings
-except ImportError:
-    pass
+# try:
+#     from .bots import Bot
+#     Bot = Bot  # Make name "Bot" importable without triggering style warnings
+# except ImportError:
+#     pass
 
 logger = logging.getLogger(__file__)
 
