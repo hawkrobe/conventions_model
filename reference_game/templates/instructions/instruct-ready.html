@@ -17,3 +17,12 @@
         </div>
     </div>
 {% endblock %}
+    
+{% block scripts %}
+  <script>
+    // Proceed to the waiting room.
+    $("#go-to-waiting-room").click(function() {
+      dallinger.goToPage("waiting");
+    });
+  </script>
+{% endblock %}
