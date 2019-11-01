@@ -8,6 +8,10 @@ from dallinger.compat import unicode
 from dallinger.config import get_config
 from dallinger.experiment import Experiment
 from dallinger.nodes import Agent
+from dallinger.db import redis_conn
+from sqlalchemy import String
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql.expression import cast
 
 # try:
 #     from .bots import Bot
@@ -30,6 +34,7 @@ class CoordinationChatroom(Experiment):
         """Initialize the experiment."""
         super(CoordinationChatroom, self).__init__(session)
         self.channel = 'chat'
+        self.games = {}
         if session:
             self.setup()
 
@@ -57,14 +62,23 @@ class CoordinationChatroom(Experiment):
 
     def create_node(self, participant, network):
         """Create a node for a participant."""
-        return Agent(network=network, participant=participant)
+        a = Agent(network=network, participant=participant)
 
     def handle_clicked_obj(self, msg) :
-        print('handleing msg', msg)
+        self.publish({'type' : 'feedback', 'objectId' : msg['clickedId']})
+
+    def handle_connect(self, msg):
+        logger.info('oh wow connect')
+
+    def publish(self, msg):
+        redis_conn.publish('chat', json.dumps(msg))
         
     def send(self, raw_message) :
         """override default send to handle participant messages on channel"""
-        handlers = {'clickedObj' : self.handle_clicked_obj}
+        handlers = {
+            'clickedObj' : self.handle_clicked_obj,
+            'connect' : self.handle_connect
+        }
         if raw_message.startswith(self.channel + ":") :
             logger.info("We received a message for our channel: {}".format(
                 raw_message))
