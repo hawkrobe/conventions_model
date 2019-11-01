@@ -6,13 +6,13 @@ class CoordinationChatRoomClient {
     this.socket = new ReconnectingWebSocket(
       ws_scheme + window.location.host + "/chat?channel=chat"
     );
-    this.my_node_id = '';
-    this.im_old = 'blah blah blah';
+    this.id = dallinger.getUrlParameter('participant_id');
     this.messageSent = false;
     this.alreadyClicked = false;
     this.createAgent();
     this.initializeStimGrid();
     this.setupHandlers();
+    this.playerRoleNames = {'role1' : 'speaker', 'role2' : 'listener'};
   }
 
   createAgent() {
@@ -20,13 +20,7 @@ class CoordinationChatRoomClient {
     dallinger.createAgent()
       .done(resp => {
 	self.my_node_id = resp.node.id;
-	console.log(this);
-	console.log('done changing node id');
-	$("#chat-history").show();
-	$("#response-form").show();
-	$("#send-message").removeClass("disabled");
-	$("#send-message").html("Send");
-	$("#reproduction").focus();
+	self.socket.send({'type' : 'connect', id: resp.node.id});
       })
       .fail(rejection => {
 	// A 403 is our signal that it's time to go to the questionnaire
@@ -98,13 +92,42 @@ class CoordinationChatRoomClient {
       }));
     }
   }
+
+  initializeDisplay () {
+    $("#chat-history").show();
+    $("#response-form").show();
+    $("#send-message").removeClass("disabled");
+    $("#send-message").html("Send");
+    $("#reproduction").focus();
+  }
+
+  handleNewRound(msg) {
+    // the first time the server sends info, start game
+    if(msg.roundNum == 0) {
+      self.initializeDisplay();
+      self.role = msg.role;
+    }
+  }
+
+  handleClickedObj(msg) {
+    // show feedback
+    console.log(msg);
+    var targetcolor = this.my_role == this.playerRoleNames.role1 ? '#5DADE2' : '#FFFFFF';
+    var clickedcolor = msg.clickedId == 'target' ? '#32CD32' :'#FF4136';
+    $('#target').css({outline: 'solid 10px ' + targetcolor, 'z-index': 2});
+    $('#' + msg.clickedId).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});  
+  }
   
   setupHandlers() {
     // Handle messages sent from the server
     self = this;
     this.socket.onmessage = e => {
       const rawMessage = e.data;
-      const handlers = {'chatMessage' : self.handleChatReceived.bind(this)};
+      const handlers = {
+	'chatMessage' : self.handleChatReceived.bind(this),
+	'clickedObj' : self.handleClickedObj.bind(this),
+	'newRound' : self.handleNewRound.bind(this)
+      };
       if(rawMessage.startsWith("chat:")) {
 	const body = JSON.parse(rawMessage.replace("chat:", ""));
 	if(handlers.hasOwnProperty(body.type)) {
