@@ -119,30 +119,6 @@ class CoordinationChatRoomClient {
     }
   }
 
-  initializeDisplay () {
-    $("#chat-history").show();
-    $("#response-form").show();
-    $("#send-message").removeClass("disabled");
-    $("#send-message").html("Send");
-    $("#reproduction").focus();
-  }
-
-  handleNewRound(msg) {
-    // the first time the server sends info, start game
-    if(msg.roundNum == 0) {
-      self.initializeDisplay();
-      self.role = msg.role;
-    }
-  }
-
-  handleClickedObj(msg) {
-    // show feedback
-    console.log(msg);
-    var targetcolor = this.my_role == this.playerRoleNames.role1 ? '#5DADE2' : '#FFFFFF';
-    var clickedcolor = msg.clickedId == 'target' ? '#32CD32' :'#FF4136';
-    $('#target').css({outline: 'solid 10px ' + targetcolor, 'z-index': 2});
-    $('#' + msg.clickedId).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});  
-  }
   
   setupHandlers() {
     // Handle messages sent from the server
