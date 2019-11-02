@@ -42,15 +42,16 @@ class CoordinationChatRoomClient {
 
   initializeUI() {
     $("#chat-history").show();
+    $("#story").empty();
     $("#response-form").show();
     $("#send-message").removeClass("disabled");
     $("#send-message").html("Send");
     $("#reproduction").focus();
   }
   
-  initializeStimGrid(currStim) {
+  initializeStimGrid() {
     $('#object-grid').empty();
-    _.forEach(currStim, (stim, i) => {
+    _.forEach(this.currStim, (stim, i) => {
       const bkg = 'url(./static/images/' + stim.url + ')';
       const div = $('<div/>')
 	  .addClass('pressable')
@@ -72,12 +73,25 @@ class CoordinationChatRoomClient {
 	if(self.messageSent & !self.alreadyClicked) {
 	  const clickedId = event.target.id;
 	  this.alreadyClicked = true;
-	  this.socket.broadcast({'type' : 'clickedObj', 'objectID' : clickedId});
+	  this.socket.broadcast({'type' : 'clickedObj', 'object_id' : clickedId, 'network_id' : this.networkid});
 	}
       });
     }
   };
 
+  handleClickedObj(msg) {
+    // after we or partner have made response, show feedback
+    $("#send-message").addClass("disabled");
+    $('#reproduction').val('');
+    $('#reproduction').addClass('disabled');    
+    
+    // show highlights as outlines
+    var targetcolor = this.role == 'speaker' ? '#5DADE2' : '#000000';
+    var clickedcolor = msg.object_id == 'target' ? '#32CD32' :'#FF4136';
+    $('#target').css({outline: 'solid 10px ' + targetcolor, 'z-index': 2});
+    $('#' + msg.object_id).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});  
+  }
+  
   handleChatReceived (msg) {
     this.messageSent = true;
     $("#story")
@@ -102,20 +116,14 @@ class CoordinationChatRoomClient {
     $("#send-message").html("Send");
   }
 
-  sendResponse(id) {
-  }
-
   newRound(msg) {
     if(msg.networkid == this.networkid) {
       this.trialNum = msg['trialNum'];
       this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
       this.currStim = msg['currStim'];
-      const currStim = [
-	{url: 'tangram_A.png', targetStatus: 'target'},
-	{url: 'tangram_B.png', targetStatus: 'distractor1'},
-	{url: 'tangram_C.png', targetStatus: 'distractor2'}
-      ];
-      this.initializeStimGrid(currStim);
+      this.alreadyClicked = false;
+      this.messageSent = false;      
+      this.initializeStimGrid();
       this.initializeUI();
     }
   }
@@ -126,6 +134,7 @@ class CoordinationChatRoomClient {
     // Handle messages from server
     this.socket.subscribe(this.newRound, "newRound", this);
     this.socket.subscribe(this.handleChatReceived, 'chatMessage', this);
+    this.socket.subscribe(this.handleClickedObj, 'clickedObj', this);
     
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
