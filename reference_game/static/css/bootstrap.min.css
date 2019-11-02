@@ -14,10 +14,10 @@
 #object-grid {
     display: grid;
     position: absolute;
-    grid-template-columns: 15vw 15vw 15vw;
+    grid-template-columns: 15vw 15vw 15vw 15vw;
     grid-template-rows: 15vw;
     height: 15vw;
-    width: 45vw;
+    width: 60vw;
     grid-gap: 0vh;
     bottom:10%;
     left:6vw;
