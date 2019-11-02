@@ -55,7 +55,6 @@ class RefGame :
         distractors = [{'url': d, 'targetStatus': "distr" + str(distNums.pop())}
                        for d in self.context if d != targetUrl]
         return {
-            'trialNum': repetition,
             'targetImg' : target,
             'stimuli': distractors + [target]
         }
@@ -71,7 +70,7 @@ class RefGame :
         packet = json.dumps({
             'type': 'newRound',
             'networkid' : self.network_id,
-            'trialNum' : newTrial['trialNum'],
+            'trialNum' : self.trialNum,
             'currStim' : newTrial['stimuli'],
             'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
         })
