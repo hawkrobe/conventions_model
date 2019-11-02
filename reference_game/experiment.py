@@ -3,6 +3,8 @@
 import logging
 import socket
 import json
+import threading
+
 from dallinger import networks
 from dallinger.compat import unicode
 from dallinger.config import get_config
@@ -20,12 +22,68 @@ def extra_parameters():
     config.register("repeats", int)
     config.register("n", int)
 
-class CoordinationChatroom(Experiment):
+class RefGame :
+    def __init__(self, network_id) :
+        self.network_id = network_id
+        self.players = []
+        self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
+        self.numRepetitions = 6
+        self.trialNum = -1
+        self.trialList = [];
+        self.makeTrialList()
+        logger.info('done making trial list')
+        
+    def makeTrialList(self) :
+        # Keep sampling trial lists until we meet criterion
+        # Show each object once as target in each repetition block
+        while not self.checkTrialList() :
+            self.trialList = [];
+            for repetition in range(self.numRepetitions) :
+                for target in self.context :
+                    self.trialList.append(self.sampleTrial(repetition, target));
+
+    def checkTrialList (self) :
+        trialList = self.trialList
+        lengthMatch = len(trialList) == 24 
+        noRepeats = all([trialList[i]['targetImg']['url'] != trialList[i+1]['targetImg']['url']
+                         for i in range(len(trialList) - 1)])
+        return lengthMatch and noRepeats
+  
+    def sampleTrial (self, repetition, targetUrl) :
+        target = {'url': targetUrl , 'targetStatus' : 'target'};
+        distNums = list(range(len(self.context) - 1))
+        distractors = [{'url': d, 'targetStatus': "distr" + str(distNums.pop())}
+                       for d in self.context if d != targetUrl]
+        return {
+            'trialNum': repetition,
+            'targetImg' : target,
+            'stimuli': distractors + [target]
+        }
+
+    def newRound (self) :
+        logger.info('called new round')
+        # TODO: this would be a lot more elegant if diff networks had diff channels
+        # instead of sending everything through single channel (so everyone has to check if they're recipient)
+        self.trialNum = self.trialNum + 1
+        logger.info('sending newRound packet for round')
+
+        newTrial = self.trialList[self.trialNum]
+        packet = json.dumps({
+            'type': 'newRound',
+            'networkid' : self.network_id,
+            'trialNum' : newTrial['trialNum'],
+            'currStim' : newTrial['stimuli'],
+            'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
+        })
+        logger.info(packet)
+        redis_conn.publish('refgame', packet)
+
+class RefGameServer(Experiment):
     """Define the structure of the experiment."""
 
     def __init__(self, session=None):
         """Initialize the experiment."""
-        super(CoordinationChatroom, self).__init__(session)
+        super(RefGameServer, self).__init__(session)
         self.channel = 'refgame'
         self.games = {}
         if session:
@@ -59,30 +117,27 @@ class CoordinationChatroom(Experiment):
         return Agent(network=network, participant=participant)
 
     def handle_clicked_obj(self, msg) :
-        print('handleing msg', msg)
-
+        """ When we find out listener has made response, schedule next round to begin """
+        currGame = self.games[msg['network_id']]
+        t = threading.Timer(2, currGame.newRound)
+        t.start()
+        logger.info('starting timer to start next round')
+        
     def handle_connect(self, msg):
-        # Once participant connects, add them to their respective game list
         network_id = msg['network_id']
-        if network_id not in self.games :
-            self.games[network_id] = []
-            
-        connected_player_list = self.games[network_id]
-        connected_player_list.append(msg['participant_id'])
 
-        # Once everyone is properly connected (i.e. nodes added, etc), send message to commence play
-        if len(connected_player_list) == self.quorum :
-            network = Network.query.filter_by(id=msg['network_id'])
-            
-            # TODO: this would be a lot more elegant if diff networks had diff channels
-            # instead of sending everything through single channel (so everyone has to check if they're recipient)
-            logger.info('sending newRound packet')
-            redis_conn.publish('refgame', json.dumps({
-                'type': 'newRound',
-                'trialNum' : 1,
-                'networkid' : msg['network_id'],
-                'roles' : {'speaker' : connected_player_list[0], 'listener' : connected_player_list[1]}
-            }))
+        # create game object if first player in network to join
+        if network_id not in self.games :
+            self.games[network_id] = RefGame(network_id)
+
+        # Once participant connects, add them to their respective game list
+        game = self.games[network_id]
+        game.players.append(msg['participant_id'])
+
+        # After everyone is properly connected (i.e. nodes added, etc), send packet for first trial
+        if len(game.players) == self.quorum :
+            logger.info('hit quorum!')
+            game.newRound()
             
     def send(self, raw_message) :
         """override default send to handle participant messages on channel"""
