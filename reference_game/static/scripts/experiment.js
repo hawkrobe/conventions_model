@@ -6,7 +6,7 @@ class CoordinationChatRoomClient {
     this.socket = new ReconnectingWebSocket(
       ws_scheme + window.location.host + "/chat?channel=chat"
     );
-    this.id = dallinger.getUrlParameter('participant_id');
+    this.id = dallinger.getUrlParameter("participant_id");
     this.messageSent = false;
     this.alreadyClicked = false;
     this.createAgent();
@@ -19,6 +19,7 @@ class CoordinationChatRoomClient {
     self = this;
     dallinger.createAgent()
       .done(resp => {
+	// get id from server, and explicitly tell server you're connected
 	self.my_node_id = resp.node.id;
 	self.socket.send({'type' : 'connect', id: resp.node.id});
       })
@@ -54,6 +55,31 @@ class CoordinationChatRoomClient {
     });
   };
 
+  initializeDisplay () {
+    $("#chat-history").show();
+    $("#response-form").show();
+    $("#send-message").removeClass("disabled");
+    $("#send-message").html("Send");
+    $("#reproduction").focus();
+  }
+  
+  handleNewRound(msg) {
+    // the first time the server sends info, start game
+    if(msg.roundNum == 0) {
+      self.initializeDisplay();
+      self.role = msg.role;
+    }
+  }
+  
+  handleClickedObj(msg) {
+    // show feedback
+    console.log(msg);
+    var targetcolor = this.my_role == this.playerRoleNames.role1 ? '#5DADE2' : '#FFFFFF';
+    var clickedcolor = msg.clickedId == 'target' ? '#32CD32' :'#FF4136';
+    $('#target').css({outline: 'solid 10px ' + targetcolor, 'z-index': 2});
+    $('#' + msg.clickedId).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});  
+  }
+  
   handleChatReceived (msg) {
     console.log(this);
     this.messageSent = true;
