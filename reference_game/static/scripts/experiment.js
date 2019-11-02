@@ -42,6 +42,8 @@ class CoordinationChatRoomClient {
 
   initializeUI() {
     $("#chat-history").show();
+    
+    $("#trial-counter").text('trial' + (this.trialNum + 1) + '/24');
     $("#story").empty();
     $("#response-form").show();
     $("#send-message").removeClass("disabled");

@@ -26,6 +26,19 @@
     background: #FFFFFF;
 }
 
+#trial-counter {
+    height: 2vh;
+    width: 20vh;
+    text-align: right;
+    margin-left: 85%;
+    margin-top: 1%;
+    margin-right: auto;
+    margin-bottom: auto ;
+    left:auto; right:5%; top:auto; bottom: 5%;
+    position: absolute;
+    font-size: 3vh;
+}
+
 .pressable { 
     margin-left: auto;
     margin-right: auto; 
