@@ -64,15 +64,18 @@ class CoordinationChatRoomClient {
       $("#object-grid").append(div);
     });
 
-    $('div.pressable').click(event => {
-      console.log('click')
-      if(self.messageSent & !self.alreadyClicked) {
-	const clickedId = event.target.id;
-	this.alreadyClicked = true;
-	this.socket.broadcast({'type' : 'clickedObj', 'objectID' : clickedId});
-      }
-    });
-
+    // Outline target if speaker; set click handlers if listener
+    if(this.role === 'speaker') {
+      $('#target').css({'outline' : 'solid 10px #5DADE2', 'z-index': 2});
+    } else if (this.role === 'listener') {
+      $('div.pressable').click(event => {
+	if(self.messageSent & !self.alreadyClicked) {
+	  const clickedId = event.target.id;
+	  this.alreadyClicked = true;
+	  this.socket.broadcast({'type' : 'clickedObj', 'objectID' : clickedId});
+	}
+      });
+    }
   };
 
   handleChatReceived (msg) {
