@@ -3,30 +3,31 @@ const ws_scheme = (window.location.protocol === "https:") ? 'wss://' : 'ws://';
 
 class CoordinationChatRoomClient {
   constructor() {
-    this.socket = new ReconnectingWebSocket(
-      ws_scheme + window.location.host + "/chat?channel=chat"
-    );
-    this.my_node_id = '';
-    this.im_old = 'blah blah blah';
+    this.nodeid = '';
+    this.networkid = '';
     this.messageSent = false;
     this.alreadyClicked = false;
-    this.createAgent();
-    this.initializeStimGrid();
-    this.setupHandlers();
+
+    // immediately open socket connection for game 
+    this.socket = pubsub.Socket({"endpoint": "chat", "broadcast" : "refgame", "control":"refgame"});
+    this.socket.open().done(() => this.createAgent());
   }
 
   createAgent() {
     self = this;
     dallinger.createAgent()
       .done(resp => {
-	self.my_node_id = resp.node.id;
-	console.log(this);
-	console.log('done changing node id');
-	$("#chat-history").show();
-	$("#response-form").show();
-	$("#send-message").removeClass("disabled");
-	$("#send-message").html("Send");
-	$("#reproduction").focus();
+	// initialize game
+	self.participantid = resp.node.participant_id;
+	self.networkid = resp.node.network_id;
+	self.setupHandlers();
+
+	// once we get our node, need to tell the server (again) that we've connected so it can launch
+	self.socket.send({
+	  'type' : 'connect',
+	  participant_id: self.participantid,
+	  network_id : self.networkid
+	});
       })
       .fail(rejection => {
 	// A 403 is our signal that it's time to go to the questionnaire
@@ -39,12 +40,16 @@ class CoordinationChatRoomClient {
       });
   }
 
-  initializeStimGrid() {
-    const currStim = [
-      {url: 'tangram_A.png', targetStatus: 'target'},
-      {url: 'tangram_B.png', targetStatus: 'distractor1'},
-      {url: 'tangram_C.png', targetStatus: 'distractor2'}
-    ];
+  initializeUI() {
+    $("#chat-history").show();
+    $("#response-form").show();
+    $("#send-message").removeClass("disabled");
+    $("#send-message").html("Send");
+    $("#reproduction").focus();
+  }
+  
+  initializeStimGrid(currStim) {
+    $('#object-grid').empty();
     _.forEach(currStim, (stim, i) => {
       const bkg = 'url(./static/images/' + stim.url + ')';
       const div = $('<div/>')
@@ -58,12 +63,20 @@ class CoordinationChatRoomClient {
 	  });
       $("#object-grid").append(div);
     });
+
+    $('div.pressable').click(event => {
+      console.log('click')
+      if(self.messageSent & !self.alreadyClicked) {
+	const clickedId = event.target.id;
+	this.alreadyClicked = true;
+	this.socket.broadcast({'type' : 'clickedObj', 'objectID' : clickedId});
+      }
+    });
+
   };
 
   handleChatReceived (msg) {
-    console.log(this);
     this.messageSent = true;
-    console.log(this);
     $("#story")
       .append("<p>" + msg.content + "</p>")
       .stop(true,true)
@@ -73,47 +86,43 @@ class CoordinationChatRoomClient {
   }
 
   sendMessage (msg) {
-    console.log(this);
-    this.im_old = 'not anymore';
     $("#send-message").addClass("disabled");
     $("#send-message").html("Sending...");
     $("#reproduction").val("");
     $("#reproduction").focus();
     if(msg != '') {
-      this.socket.send('chat:' + JSON.stringify({
+      this.socket.broadcast({
 	'type' : 'chatMessage', 'content' : msg
-      }));
+      });
     }
     $("#send-message").removeClass("disabled");
     $("#send-message").html("Send");
   }
 
   sendResponse(id) {
-    console.log(this);
-    if(this.messageSent & !this.alreadyClicked) {
-      const clickedId = id;
-      this.alreadyClicked = true;
-      this.socket.send('chat:' + JSON.stringify({
-	'type' : 'clickedObj', 'objectID' : clickedId
-      }));
+  }
+
+  newRound(msg) {
+    if(msg.networkid == this.networkid) {
+      this.trialNum = msg['trialNum'];
+      this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
+      this.currStim = msg['currStim'];
+      const currStim = [
+	{url: 'tangram_A.png', targetStatus: 'target'},
+	{url: 'tangram_B.png', targetStatus: 'distractor1'},
+	{url: 'tangram_C.png', targetStatus: 'distractor2'}
+      ];
+      this.initializeStimGrid(currStim);
+      this.initializeUI();
     }
   }
   
   setupHandlers() {
-    // Handle messages sent from the server
     self = this;
-    this.socket.onmessage = e => {
-      const rawMessage = e.data;
-      const handlers = {'chatMessage' : self.handleChatReceived.bind(this)};
-      if(rawMessage.startsWith("chat:")) {
-	const body = JSON.parse(rawMessage.replace("chat:", ""));
-	if(handlers.hasOwnProperty(body.type)) {
-	  handlers[body.type](body);
-	} else {
-	  console.log("Received mysterious message", rawMessage);
-	}
-      }
-    };
+    
+    // Handle messages from server
+    this.socket.subscribe(this.newRound, "newRound", this);
+    this.socket.subscribe(this.handleChatReceived, 'chatMessage', this);
     
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
@@ -121,11 +130,6 @@ class CoordinationChatRoomClient {
       self.sendMessage(msg);
     });
     
-    $('div.pressable').click(event => {
-      // Only let listener click once they've heard answer back
-      self.sendResponse(event.target.id);
-    });
-
     // Leave the chatroom.
     $("#leave-chat").click(function() {
       dallinger.goToPage("questionnaire");
