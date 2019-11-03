@@ -47,10 +47,11 @@ class CoordinationChatRoomClient {
   initializeUI() {
     $("#chat-history").show();
     $("#feedback").html("");
-    $("#trial-counter").text('trial: ' + (this.trialNum + 1) + '/24');
+    $("#trial-counter").text('trial ' + (this.trialNum + 1) + '/24');
     $("#story").empty();
-    $("#response-form").show();
-    $("#send-message").removeClass("disabled");
+    $("#response-form").show();    
+    $("#send-message").prop("disabled", false);
+    $('#reproduction').prop('disabled', false);    
     $("#send-message").html("Send");
     $("#reproduction").focus();
   }
@@ -91,9 +92,9 @@ class CoordinationChatRoomClient {
     const correct = msg.object_id == "target";
     
     // freeze UI
-    $("#send-message").addClass("disabled");
+    $("#send-message").prop("disabled", true);
     $('#reproduction').val('');
-    $('#reproduction').addClass('disabled');    
+    $('#reproduction').prop('disabled', true);    
     
     // show highlights as outlines
     const targetcolor = this.role == 'speaker' ? '#5DADE2' : '#000000';
@@ -111,9 +112,16 @@ class CoordinationChatRoomClient {
   }
   
   handleChatReceived (msg) {
-    this.messageSent = true;
+    // Only allow to click after speaker produces message
+    if(msg.role == 'speaker') {
+      this.messageSent = true;
+    }
+
+    // Add message to chat log (and scroll to bottom)
+    const color = msg.role == this.role ? 'black' : '#1693A5';
+
     $("#story")
-      .append("<p>" + msg.content + "</p>")
+      .append("<p style='color: " + color + ";'>" + msg.content + "</p>")
       .stop(true,true)
       .animate({
 	scrollTop: $("#story").prop("scrollHeight")
@@ -121,32 +129,35 @@ class CoordinationChatRoomClient {
   }
 
   sendMessage (msg) {
-    $("#send-message").addClass("disabled");
+    $("#send-message").prop('disabled', true);
     $("#send-message").html("Sending...");
     $("#reproduction").val("");
     $("#reproduction").focus();
     if(msg != '') {
       this.socket.broadcast({
-	'type' : 'chatMessage', 'content' : msg, 'networkid' : this.networkid, 'participantid' : this.participantid
+	'type' : 'chatMessage',
+	'content' : msg,
+	'networkid' : this.networkid,
+	'participantid' : this.participantid,
+	'role' : this.role
       });
     }
-    $("#send-message").removeClass("disabled");
+    $("#send-message").prop('disabled', false);
     $("#send-message").html("Send");
   }
 
   newRound(msg) {
-    if(msg.networkid == this.networkid) {
-      this.trialNum = msg['trialNum'];
-      this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
-      this.currStim = msg['currStim'];
-      this.alreadyClicked = false;
-      this.messageSent = false;      
-      this.initializeStimGrid();
-      this.initializeUI();
-    }
+    this.trialNum = msg['trialNum'];
+    this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
+    this.currStim = msg['currStim'];
+    this.alreadyClicked = false;
+    this.messageSent = false;      
+    this.initializeStimGrid();
+    this.initializeUI();
   }
 
   block (callback) {
+    // only pass to callback if intended for our network
     return msg => {
       if(msg.networkid == this.networkid)
 	return callback(msg);
