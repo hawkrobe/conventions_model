@@ -2,7 +2,7 @@
 mode = debug
 auto_recruit = true
 network = FullyConnected
-repeats = 1
+repeats = 2
 n = 2
 
 [MTurk]
