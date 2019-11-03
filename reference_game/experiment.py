@@ -117,13 +117,13 @@ class RefGameServer(Experiment):
 
     def handle_clicked_obj(self, msg) :
         """ When we find out listener has made response, schedule next round to begin """
-        currGame = self.games[msg['network_id']]
+        currGame = self.games[msg['networkid']]
         t = threading.Timer(2, currGame.newRound)
         t.start()
         logger.info('starting timer to start next round')
         
     def handle_connect(self, msg):
-        network_id = msg['network_id']
+        network_id = msg['networkid']
 
         # create game object if first player in network to join
         if network_id not in self.games :
@@ -131,7 +131,7 @@ class RefGameServer(Experiment):
 
         # Once participant connects, add them to their respective game list
         game = self.games[network_id]
-        game.players.append(msg['participant_id'])
+        game.players.append(msg['participantid'])
 
         # After everyone is properly connected (i.e. nodes added, etc), send packet for first trial
         if len(game.players) == self.quorum :
