@@ -4,6 +4,7 @@ import logging
 import socket
 import json
 import threading
+import random
 
 from dallinger import networks
 from dallinger.compat import unicode
@@ -31,7 +32,6 @@ class RefGame :
         self.trialNum = -1
         self.trialList = [];
         self.makeTrialList()
-        logger.info('done making trial list')
         
     def makeTrialList(self) :
         # Keep sampling trial lists until we meet criterion
@@ -39,7 +39,7 @@ class RefGame :
         while not self.checkTrialList() :
             self.trialList = [];
             for repetition in range(self.numRepetitions) :
-                for target in self.context :
+                for target in random.sample(self.context, len(self.context)) :
                     self.trialList.append(self.sampleTrial(repetition, target));
 
     def checkTrialList (self) :
@@ -60,12 +60,9 @@ class RefGame :
         }
 
     def newRound (self) :
-        logger.info('called new round')
         # TODO: this would be a lot more elegant if diff networks had diff channels
         # instead of sending everything through single channel (so everyone has to check if they're recipient)
         self.trialNum = self.trialNum + 1
-        logger.info('sending newRound packet for round')
-
         newTrial = self.trialList[self.trialNum]
         packet = json.dumps({
             'type': 'newRound',
@@ -74,7 +71,6 @@ class RefGame :
             'currStim' : newTrial['stimuli'],
             'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
         })
-        logger.info(packet)
         redis_conn.publish('refgame', packet)
 
 class RefGameServer(Experiment):
@@ -120,7 +116,6 @@ class RefGameServer(Experiment):
         currGame = self.games[msg['networkid']]
         t = threading.Timer(2, currGame.newRound)
         t.start()
-        logger.info('starting timer to start next round')
         
     def handle_connect(self, msg):
         network_id = msg['networkid']
@@ -133,15 +128,12 @@ class RefGameServer(Experiment):
         game = self.games[network_id]
         game.players.append(msg['participantid'])
 
-        # After everyone is properly connected (i.e. nodes added, etc), send packet for first trial
+        # After everyone is properly connected, send packet for first trial
         if len(game.players) == self.quorum :
-            logger.info('hit quorum!')
             game.newRound()
             
     def record (self, msg) :
-        logger.info('recording ' + json.dumps(msg))
         node = Participant.query.get(msg['participantid']).all_nodes[0]
-        logger.info(node.__repr__())
         info = Info(origin=node, contents=msg['type'], details=msg)
         self.session.add(info)
         self.session.commit()
@@ -153,8 +145,7 @@ class RefGameServer(Experiment):
             'clickedObj' : self.handle_clicked_obj
         }
         if raw_message.startswith(self.channel + ":") :
-            logger.info("We received a message for our channel: {}".format(
-                raw_message))
+            logger.info("We received a message for our channel: {}".format(raw_message))
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
 
