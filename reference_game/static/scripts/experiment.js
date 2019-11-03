@@ -5,9 +5,13 @@ class CoordinationChatRoomClient {
   constructor() {
     this.participantid = '';
     this.networkid = '';
+    this.role = '';
     this.messageSent = false;
     this.alreadyClicked = false;
-
+    this.score = 0;
+    this.bonusAmt = 2;
+    this.currStim = [];
+    
     // immediately open socket connection for game 
     this.socket = pubsub.Socket({"endpoint": "chat", "broadcast" : "refgame", "control":"refgame"});
     this.socket.open().done(() => this.createAgent());
@@ -42,7 +46,8 @@ class CoordinationChatRoomClient {
 
   initializeUI() {
     $("#chat-history").show();
-    $("#trial-counter").text('trial' + (this.trialNum + 1) + '/24');
+    $("#feedback").html("");
+    $("#trial-counter").text('trial: ' + (this.trialNum + 1) + '/24');
     $("#story").empty();
     $("#response-form").show();
     $("#send-message").removeClass("disabled");
@@ -52,7 +57,7 @@ class CoordinationChatRoomClient {
   
   initializeStimGrid() {
     $('#object-grid').empty();
-    _.forEach(this.currStim, (stim, i) => {
+    _.forEach(_.shuffle(this.currStim), (stim, i) => {
       const bkg = 'url(./static/images/' + stim.url + ')';
       const div = $('<div/>')
 	  .addClass('pressable')
@@ -83,16 +88,26 @@ class CoordinationChatRoomClient {
   };
 
   handleClickedObj(msg) {
-    // after we or partner have made response, show feedback
+    const correct = msg.object_id == "target";
+    
+    // freeze UI
     $("#send-message").addClass("disabled");
     $('#reproduction').val('');
     $('#reproduction').addClass('disabled');    
     
     // show highlights as outlines
-    var targetcolor = this.role == 'speaker' ? '#5DADE2' : '#000000';
-    var clickedcolor = msg.object_id == 'target' ? '#32CD32' :'#FF4136';
+    const targetcolor = this.role == 'speaker' ? '#5DADE2' : '#000000';
+    const clickedcolor = correct ? '#32CD32' :'#FF4136';
     $('#target').css({outline: 'solid 10px ' + targetcolor, 'z-index': 2});
-    $('#' + msg.object_id).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});  
+    $('#' + msg.object_id).css({outline: 'solid 10px ' + clickedcolor, 'z-index': 3});
+    $('#feedback').html(correct ? "Nice! You earned " + this.bonusAmt + " cents." :
+			this.role == 'speaker' ? "Oh no! Your partner didn't pick the target!" :
+			"Oh no! Your partner was describing a different image.");
+    
+    // update score
+    this.score += correct ? this.bonusAmt : 0;
+    const bonus_score = (parseFloat(this.score) / 100).toFixed(2);
+    $('#score').empty().append('total bonus: $' + bonus_score);
   }
   
   handleChatReceived (msg) {

@@ -18,12 +18,33 @@
     grid-template-rows: 15vw;
     height: 15vw;
     width: 60vw;
-    grid-gap: 0vh;
-    bottom:10%;
-    left:6vw;
+    grid-gap: 2vh;
+    bottom:20%;
+    margin-right: auto
+}
+
+#feedback {
+    height: 5%;
+    width: 30%;
+    text-align: left;
+    margin-left: 0;
     margin-right: auto;
-    margin-bottom: auto ;
-    background: #FFFFFF;
+    margin-bottom: auto;
+    left:auto; right:5%; top:5%; bottom: 0;
+    position: absolute;
+    font-weight:lighter;
+}
+
+#score {
+    height: 2vh;
+    width: 50vh;
+    text-align: left;
+    margin-right: 85%;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-bottom: auto;
+    left:5%; bottom:5%;
+    position: absolute;
 }
 
 #trial-counter {
@@ -36,7 +57,6 @@
     margin-bottom: auto ;
     left:auto; right:5%; top:auto; bottom: 5%;
     position: absolute;
-    font-size: 3vh;
 }
 
 .pressable { 
