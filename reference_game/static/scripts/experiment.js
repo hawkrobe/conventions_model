@@ -25,8 +25,8 @@ class CoordinationChatRoomClient {
 	// once we get our node, need to tell the server (again) that we've connected so it can launch
 	self.socket.send({
 	  'type' : 'connect',
-	  participant_id: self.participantid,
-	  network_id : self.networkid
+	  participantid: self.participantid,
+	  networkid : self.networkid
 	});
       })
       .fail(rejection => {
@@ -42,7 +42,6 @@ class CoordinationChatRoomClient {
 
   initializeUI() {
     $("#chat-history").show();
-    
     $("#trial-counter").text('trial' + (this.trialNum + 1) + '/24');
     $("#story").empty();
     $("#response-form").show();
@@ -75,7 +74,7 @@ class CoordinationChatRoomClient {
 	if(self.messageSent & !self.alreadyClicked) {
 	  const clickedId = event.target.id;
 	  this.alreadyClicked = true;
-	  this.socket.broadcast({'type' : 'clickedObj', 'object_id' : clickedId, 'network_id' : this.networkid});
+	  this.socket.broadcast({'type' : 'clickedObj', 'object_id' : clickedId, 'networkid' : this.networkid});
 	}
       });
     }
@@ -111,7 +110,7 @@ class CoordinationChatRoomClient {
     $("#reproduction").focus();
     if(msg != '') {
       this.socket.broadcast({
-	'type' : 'chatMessage', 'content' : msg
+	'type' : 'chatMessage', 'content' : msg, 'networkid' : this.networkid
       });
     }
     $("#send-message").removeClass("disabled");
@@ -129,14 +128,21 @@ class CoordinationChatRoomClient {
       this.initializeUI();
     }
   }
+
+  block (callback) {
+    return msg => {
+      if(msg.networkid == this.networkid)
+	return callback(msg);
+    };
+  }
   
   setupHandlers() {
     self = this;
     
     // Handle messages from server
-    this.socket.subscribe(this.newRound, "newRound", this);
-    this.socket.subscribe(this.handleChatReceived, 'chatMessage', this);
-    this.socket.subscribe(this.handleClickedObj, 'clickedObj', this);
+    this.socket.subscribe(self.block(this.newRound.bind(this)), "newRound", this);
+    this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
+    this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
     
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
