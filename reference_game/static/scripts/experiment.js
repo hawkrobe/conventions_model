@@ -3,7 +3,7 @@ const ws_scheme = (window.location.protocol === "https:") ? 'wss://' : 'ws://';
 
 class CoordinationChatRoomClient {
   constructor() {
-    this.nodeid = '';
+    this.participantid = '';
     this.networkid = '';
     this.messageSent = false;
     this.alreadyClicked = false;
@@ -74,7 +74,9 @@ class CoordinationChatRoomClient {
 	if(self.messageSent & !self.alreadyClicked) {
 	  const clickedId = event.target.id;
 	  this.alreadyClicked = true;
-	  this.socket.broadcast({'type' : 'clickedObj', 'object_id' : clickedId, 'networkid' : this.networkid});
+	  this.socket.broadcast({
+	    'type' : 'clickedObj', 'object_id' : clickedId,
+	    'networkid' : this.networkid, 'participantid' : this.participantid});
 	}
       });
     }
@@ -110,7 +112,7 @@ class CoordinationChatRoomClient {
     $("#reproduction").focus();
     if(msg != '') {
       this.socket.broadcast({
-	'type' : 'chatMessage', 'content' : msg, 'networkid' : this.networkid
+	'type' : 'chatMessage', 'content' : msg, 'networkid' : this.networkid, 'participantid' : this.participantid
       });
     }
     $("#send-message").removeClass("disabled");
