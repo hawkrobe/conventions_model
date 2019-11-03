@@ -10,7 +10,7 @@ from dallinger.compat import unicode
 from dallinger.config import get_config
 from dallinger.experiment import Experiment
 from dallinger.nodes import Agent
-from dallinger.models import Network, Node
+from dallinger.models import Network, Node, Info, Participant
 
 from dallinger.db import redis_conn
 
@@ -138,6 +138,14 @@ class RefGameServer(Experiment):
             logger.info('hit quorum!')
             game.newRound()
             
+    def record (self, msg) :
+        logger.info('recording ' + json.dumps(msg))
+        node = Participant.query.get(msg['participantid']).all_nodes[0]
+        logger.info(node.__repr__())
+        info = Info(origin=node, contents=msg['type'], details=msg)
+        self.session.add(info)
+        self.session.commit()
+        
     def send(self, raw_message) :
         """override default send to handle participant messages on channel"""
         handlers = {
@@ -149,6 +157,9 @@ class RefGameServer(Experiment):
                 raw_message))
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
+
+            # Record message as event in database
+            self.record(msg)
             if msg['type'] in handlers:
                 handlers[msg['type']](msg)
             else :
