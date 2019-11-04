@@ -24,15 +24,37 @@ def extra_parameters():
     config.register("n", int)
 
 class RefGame :
-    def __init__(self, network_id) :
+    def __init__(self, network_id, num_players) :
         self.network_id = network_id
+        self.num_players = num_players
         self.players = []
+        self.schedule = {}
         self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
         self.numRepetitions = 6
         self.trialNum = -1
-        self.trialList = [];
+        self.trialList = []
         self.makeTrialList()
-        
+
+    def createSchedule(self):
+        """ 
+        Create a schedule for all players to play all others using 'circle' method
+        (en.wikipedia.org/wiki/Round-robin_tournament#Scheduling_algorithm)
+        """
+        l = self.players.copy()
+        self.schedule = {k : [] for k in l}
+        assert(self.num_players % 2 == 0)
+        for i in range(self.num_players - 1):
+            mid = int(self.num_players / 2)
+            l1 = l[:mid]
+            l2 = l[mid:]
+            l2.reverse()
+            for i in range(mid) :
+                self.schedule[l1[i]].append(l2[i])
+                self.schedule[l2[i]].append(l1[i])
+                
+            # rotate around fixed point
+            l.insert(1, l.pop())
+    
     def makeTrialList(self) :
         # Keep sampling trial lists until we meet criterion
         # Show each object once as target in each repetition block
@@ -69,6 +91,7 @@ class RefGame :
             'networkid' : self.network_id,
             'trialNum' : self.trialNum,
             'currStim' : newTrial['stimuli'],
+            'schedule' : self.schedule,
             'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
         })
         redis_conn.publish('refgame', packet)
@@ -122,7 +145,7 @@ class RefGameServer(Experiment):
 
         # create game object if first player in network to join
         if network_id not in self.games :
-            self.games[network_id] = RefGame(network_id)
+            self.games[network_id] = RefGame(network_id, self.quorum)
 
         # Once participant connects, add them to their respective game list
         game = self.games[network_id]
@@ -130,6 +153,7 @@ class RefGameServer(Experiment):
 
         # After everyone is properly connected, send packet for first trial
         if len(game.players) == self.quorum :
+            game.createSchedule()
             game.newRound()
             
     def record (self, msg) :
