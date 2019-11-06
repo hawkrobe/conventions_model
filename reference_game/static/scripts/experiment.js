@@ -5,6 +5,7 @@ class CoordinationChatRoomClient {
   constructor() {
     this.participantid = '';
     this.networkid = '';
+    this.roomid = '';
     this.role = '';
     this.messageSent = false;
     this.alreadyClicked = false;
@@ -81,7 +82,7 @@ class CoordinationChatRoomClient {
 	  const clickedId = event.target.id;
 	  this.alreadyClicked = true;
 	  this.socket.broadcast({
-	    'type' : 'clickedObj', 'object_id' : clickedId,
+	    'type' : 'clickedObj', 'object_id' : clickedId, 'roomid' : this.roomid,
 	    'networkid' : this.networkid, 'participantid' : this.participantid});
 	}
       });
@@ -139,6 +140,7 @@ class CoordinationChatRoomClient {
 	'content' : msg,
 	'networkid' : this.networkid,
 	'participantid' : this.participantid,
+	'roomid' : this.roomid,
 	'role' : this.role
       });
     }
@@ -146,9 +148,11 @@ class CoordinationChatRoomClient {
     $("#send-message").html("Send");
   }
 
-  newRound(msg) {
+  newTrial(msg) {
     this.trialNum = msg['trialNum'];
     this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
+    this.roomid = msg['roomid'];
+    this.partnerNum = msg['partnerNum'];
     this.currStim = msg['currStim'];
     this.alreadyClicked = false;
     this.messageSent = false;      
@@ -157,18 +161,23 @@ class CoordinationChatRoomClient {
   }
 
   block (callback) {
-    // only pass to callback if intended for our network
+    // only pass to callback if intended for our network and room
     return msg => {
-      if(msg.networkid == this.networkid)
-	return callback(msg);
-    };
+      if(msg.networkid == this.networkid) {
+	// if we know our room, check it; otherwise check players (as in newTrial)
+	if(msg.hasOwnProperty('players') && _.includes(msg.players, this.participantid))
+	  callback(msg);
+	else if (msg.roomid == this.roomid)
+	  callback(msg);
+      }
+    }
   }
   
   setupHandlers() {
     self = this;
     
     // Handle messages from server
-    this.socket.subscribe(self.block(this.newRound.bind(this)), "newRound", this);
+    this.socket.subscribe(self.block(this.newTrial.bind(this)), "newTrial", this);
     this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
     this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
     
