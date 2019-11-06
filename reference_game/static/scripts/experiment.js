@@ -46,6 +46,8 @@ class CoordinationChatRoomClient {
   }
 
   initializeUI() {
+    $('#waiting').hide();
+    $('#refgame').show();
     $("#chat-history").show();
     $("#feedback").html("");
     $("#trial-counter").text('trial ' + (this.trialNum + 1) + '/24');
@@ -160,16 +162,22 @@ class CoordinationChatRoomClient {
     this.initializeUI();
   }
 
+  waitForPartner (msg) {
+    console.log('got wait for partner');
+    $('#refgame').hide()
+    $('#waiting').show()
+    $('#message').html("Waiting for partner #" + msg.partnerNum + ' to finish');
+  }
+  
   block (callback) {
-    // only pass to callback if intended for our network and room
+    // only pass to callback if intended for us
+    // because participant ids are unique, this is one way messages can be intended for
+    // us; otherwise, check network id and room id
     return msg => {
-      if(msg.networkid == this.networkid) {
-	// if we know our room, check it; otherwise check players (as in newTrial)
-	if(msg.hasOwnProperty('players') && _.includes(msg.players, this.participantid))
-	  callback(msg);
-	else if (msg.roomid == this.roomid)
-	  callback(msg);
-      }
+      if (_.includes(msg.participantids, this.participantid))
+	callback(msg);
+      else if(msg.networkid == this.networkid && msg.roomid == this.roomid)
+	callback(msg);
     }
   }
   
@@ -180,6 +188,7 @@ class CoordinationChatRoomClient {
     this.socket.subscribe(self.block(this.newTrial.bind(this)), "newTrial", this);
     this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
     this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
+    this.socket.subscribe(self.block(this.waitForPartner.bind(this)), "waitForPartner", this);
     
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
