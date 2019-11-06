@@ -50,7 +50,7 @@ class RefGameRoom() :
             'type': 'newTrial',
             'networkid' : self.network_id,
             'roomid' : self.room_id,
-            'players' : self.players,            
+            'participantids' : self.players,
             'partnerNum' : self.partnerNum,
             'trialNum' : self.trialNum,
             'currStim' : new_trial['stimuli'],
@@ -141,6 +141,11 @@ class RefGame :
         """
         logger.info('pairing with new partner: {}, {}'.format(room_id, partner_num))
         self.ready.extend(self.rooms[room_id].players)
+        redis_conn.publish('refgame', json.dumps({
+            'type' : 'waitForPartner',
+            'participantids' : self.rooms[room_id].players,
+            'partnerNum' : partner_num
+        }));
         self.assignPartners(partner_num)
         
 
@@ -188,7 +193,7 @@ class RefGameServer(Experiment):
         curr_room = curr_network.rooms[msg['roomid']]
 
         # after final trial, we assign a next partner; otherwise, schedule next trial
-        if curr_room.trialNum + 1 >= curr_room.numTrials :            
+        if curr_room.trialNum + 1 >= curr_room.numTrials :
             curr_network.newPartner(msg['roomid'], curr_room.partnerNum + 1)
         else :
             t = threading.Timer(2, lambda : curr_room.new_trial())
