@@ -2,8 +2,8 @@
 mode = debug
 auto_recruit = true
 network = FullyConnected
-repeats = 2
-n = 2
+repeats = 1
+n = 4
 
 [MTurk]
 title = Chatroom game
