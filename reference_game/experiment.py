@@ -33,7 +33,8 @@ class RefGameRoom() :
         self.players = player_ids
         self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
         self.trialList = []
-        self.numRepetitions = 6
+        self.numRepetitions = 1
+        self.numTrials = self.numRepetitions * len(self.context)
         self.make_trial_list()
         
     def new_trial (self) :
@@ -69,7 +70,7 @@ class RefGameRoom() :
 
     def check_trial_list (self) :
         trialList = self.trialList
-        lengthMatch = len(trialList) == 24 
+        lengthMatch = len(trialList) == self.numTrials
         noRepeats = all([trialList[i]['targetImg']['url'] != trialList[i+1]['targetImg']['url']
                          for i in range(len(trialList) - 1)])
         return lengthMatch and noRepeats
@@ -91,6 +92,7 @@ class RefGame :
         self.players = []
         self.rooms = []
         self.schedule = {}
+        self.num_rooms = 0
         self.roomAssignments = []
         
     def createSchedule(self):
@@ -117,23 +119,28 @@ class RefGame :
     def assignPartners(self, partnerNum) :
         """ 
         create rooms and launch game with initial partners
-         TODO: check if both people in pair are 'available'
-               for subsequent rounds when one person may be available first
+        TODO: potential bug here if game gets *way* behind. 
+              might need to store partnerNum in 'ready' 
+              suppose player A just finished partner 1 and player B just finished partner 2.
+              if player B's next partner is supposed to be A, this might force A to skip a partner. 
         """
         current_pairs = self.roomAssignments[partnerNum]
-        for i, pair in enumerate(current_pairs) :
-            logger.info('assigning pair to room {}'.format(i))
-            new_room = RefGameRoom(self.network_id, i, pair)
-            logger.info('new room created')
-            self.rooms.append(new_room)
-            logger.info('calling new trial')
-            new_room.new_trial()
         
-    def newPartner(self, participant_id, partner_num) :
+        for pair in current_pairs :
+            if set(pair).issubset(set(self.ready)) :
+                new_room = RefGameRoom(self.network_id, self.num_rooms, pair)
+                self.ready.remove(pair[0])
+                self.ready.remove(pair[1])
+                self.num_rooms += 1
+                self.rooms.append(new_room)
+                new_room.new_trial()
+        
+    def newPartner(self, room_id, partner_num) :
         """ 
         advance to the next partner on game schedule
         """
-        self.waiting.append(participant_id)
+        logger.info('pairing with new partner: {}, {}'.format(room_id, partner_num))
+        self.ready.extend(self.rooms[room_id].players)
         self.assignPartners(partner_num)
         
 
@@ -179,8 +186,13 @@ class RefGameServer(Experiment):
         """ When we find out listener has made response, schedule next round to begin """
         curr_network = self.games[msg['networkid']]
         curr_room = curr_network.rooms[msg['roomid']]
-        t = threading.Timer(2, lambda : curr_room.new_trial())
-        t.start()
+
+        # after final trial, we assign a next partner; otherwise, schedule next trial
+        if curr_room.trialNum + 1 >= curr_room.numTrials :            
+            curr_network.newPartner(msg['roomid'], curr_room.partnerNum + 1)
+        else :
+            t = threading.Timer(2, lambda : curr_room.new_trial())
+            t.start()
         
     def handle_connect(self, msg):
         network_id = msg['networkid']
@@ -195,9 +207,9 @@ class RefGameServer(Experiment):
 
         # After everyone is properly connected, send packet for first trial
         if len(game.players) == self.quorum :
+            game.ready = game.players.copy()
             game.createSchedule()
-            logger.info(json.dumps(game.schedule))
-            game.assignPartners(0)
+            game.assignPartners(partnerNum=0)
             
     def record (self, msg) :
         node = Participant.query.get(msg['participantid']).all_nodes[0]
