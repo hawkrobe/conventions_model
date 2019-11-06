@@ -23,18 +23,76 @@ def extra_parameters():
     config.register("repeats", int)
     config.register("n", int)
 
+class RefGameRoom() :
+    def __init__(self, network_id, room_id, player_ids) :
+        """ Create a room for the given dyad"""
+        self.network_id = network_id
+        self.room_id = room_id
+        self.trialNum = -1
+        self.partnerNum = 0
+        self.players = player_ids
+        self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
+        self.trialList = []
+        self.numRepetitions = 6
+        self.make_trial_list()
+        
+    def new_trial (self) :
+        """ 
+        advance to the next trial 
+        TODO: this would be a lot more elegant if diff networks had diff channels
+              instead of sending everything through single channel (so everyone has to check if they're recipient)
+
+        """
+        self.trialNum = self.trialNum + 1
+        new_trial = self.trialList[self.trialNum]
+        packet = json.dumps({
+            'type': 'newTrial',
+            'networkid' : self.network_id,
+            'roomid' : self.room_id,
+            'players' : self.players,            
+            'partnerNum' : self.partnerNum,
+            'trialNum' : self.trialNum,
+            'currStim' : new_trial['stimuli'],
+            'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
+        })
+        
+        redis_conn.publish('refgame', packet)
+
+    def make_trial_list(self) :
+        # Keep sampling trial lists until we meet criterion
+        # Show each object once as target in each repetition block
+        while not self.check_trial_list() :
+            self.trialList = [];
+            for repetition in range(self.numRepetitions) :
+                for target in random.sample(self.context, len(self.context)) :
+                    self.trialList.append(self.sample_trial(repetition, target));
+
+    def check_trial_list (self) :
+        trialList = self.trialList
+        lengthMatch = len(trialList) == 24 
+        noRepeats = all([trialList[i]['targetImg']['url'] != trialList[i+1]['targetImg']['url']
+                         for i in range(len(trialList) - 1)])
+        return lengthMatch and noRepeats
+  
+    def sample_trial (self, repetition, targetUrl) :
+        target = {'url': targetUrl , 'targetStatus' : 'target'};
+        dist_nums = list(range(len(self.context) - 1))
+        distractors = [{'url': d, 'targetStatus': "distr" + str(dist_nums.pop())}
+                       for d in self.context if d != targetUrl]
+        return {
+            'targetImg' : target,
+            'stimuli': distractors + [target]
+        }
+    
 class RefGame :
     def __init__(self, network_id, num_players) :
         self.network_id = network_id
         self.num_players = num_players
         self.players = []
+        self.rooms = []
         self.schedule = {}
-        self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
-        self.numRepetitions = 6
-        self.trialNum = -1
-        self.trialList = []
-        self.makeTrialList()
-
+        self.roomAssignments = []
+        
     def createSchedule(self):
         """ 
         Create a schedule for all players to play all others using 'circle' method
@@ -48,53 +106,36 @@ class RefGame :
             l1 = l[:mid]
             l2 = l[mid:]
             l2.reverse()
+            self.roomAssignments.append(list(zip(l1, l2)))
             for i in range(mid) :
                 self.schedule[l1[i]].append(l2[i])
                 self.schedule[l2[i]].append(l1[i])
                 
             # rotate around fixed point
             l.insert(1, l.pop())
-    
-    def makeTrialList(self) :
-        # Keep sampling trial lists until we meet criterion
-        # Show each object once as target in each repetition block
-        while not self.checkTrialList() :
-            self.trialList = [];
-            for repetition in range(self.numRepetitions) :
-                for target in random.sample(self.context, len(self.context)) :
-                    self.trialList.append(self.sampleTrial(repetition, target));
 
-    def checkTrialList (self) :
-        trialList = self.trialList
-        lengthMatch = len(trialList) == 24 
-        noRepeats = all([trialList[i]['targetImg']['url'] != trialList[i+1]['targetImg']['url']
-                         for i in range(len(trialList) - 1)])
-        return lengthMatch and noRepeats
-  
-    def sampleTrial (self, repetition, targetUrl) :
-        target = {'url': targetUrl , 'targetStatus' : 'target'};
-        distNums = list(range(len(self.context) - 1))
-        distractors = [{'url': d, 'targetStatus': "distr" + str(distNums.pop())}
-                       for d in self.context if d != targetUrl]
-        return {
-            'targetImg' : target,
-            'stimuli': distractors + [target]
-        }
-
-    def newRound (self) :
-        # TODO: this would be a lot more elegant if diff networks had diff channels
-        # instead of sending everything through single channel (so everyone has to check if they're recipient)
-        self.trialNum = self.trialNum + 1
-        newTrial = self.trialList[self.trialNum]
-        packet = json.dumps({
-            'type': 'newRound',
-            'networkid' : self.network_id,
-            'trialNum' : self.trialNum,
-            'currStim' : newTrial['stimuli'],
-            'schedule' : self.schedule,
-            'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
-        })
-        redis_conn.publish('refgame', packet)
+    def assignPartners(self, partnerNum) :
+        """ 
+        create rooms and launch game with initial partners
+         TODO: check if both people in pair are 'available'
+               for subsequent rounds when one person may be available first
+        """
+        current_pairs = self.roomAssignments[partnerNum]
+        for i, pair in enumerate(current_pairs) :
+            logger.info('assigning pair to room {}'.format(i))
+            new_room = RefGameRoom(self.network_id, i, pair)
+            logger.info('new room created')
+            self.rooms.append(new_room)
+            logger.info('calling new trial')
+            new_room.new_trial()
+        
+    def newPartner(self, participant_id, partner_num) :
+        """ 
+        advance to the next partner on game schedule
+        """
+        self.waiting.append(participant_id)
+        self.assignPartners(partner_num)
+        
 
 class RefGameServer(Experiment):
     """Define the structure of the experiment."""
@@ -136,8 +177,9 @@ class RefGameServer(Experiment):
 
     def handle_clicked_obj(self, msg) :
         """ When we find out listener has made response, schedule next round to begin """
-        currGame = self.games[msg['networkid']]
-        t = threading.Timer(2, currGame.newRound)
+        curr_network = self.games[msg['networkid']]
+        curr_room = curr_network.rooms[msg['roomid']]
+        t = threading.Timer(2, lambda : curr_room.new_trial())
         t.start()
         
     def handle_connect(self, msg):
@@ -154,7 +196,8 @@ class RefGameServer(Experiment):
         # After everyone is properly connected, send packet for first trial
         if len(game.players) == self.quorum :
             game.createSchedule()
-            game.newRound()
+            logger.info(json.dumps(game.schedule))
+            game.assignPartners(0)
             
     def record (self, msg) :
         node = Participant.query.get(msg['participantid']).all_nodes[0]
@@ -166,6 +209,7 @@ class RefGameServer(Experiment):
         """override default send to handle participant messages on channel"""
         handlers = {
             'connect' : self.handle_connect,
+            'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
         if raw_message.startswith(self.channel + ":") :
@@ -173,9 +217,9 @@ class RefGameServer(Experiment):
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
 
-            # Record message as event in database
-            self.record(msg)
+            # Record message as event in database and call handler
             if msg['type'] in handlers:
+                self.record(msg)
                 handlers[msg['type']](msg)
             else :
                 logger.info("Received message: {}".format(raw_message))
