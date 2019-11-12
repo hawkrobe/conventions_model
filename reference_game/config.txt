@@ -1,6 +1,7 @@
 [Experiment]
 mode = debug
 auto_recruit = true
+recruiter = cli
 network = FullyConnected
 repeats = 1
 n = 4
