@@ -40,9 +40,6 @@ class RefGameRoom() :
     def new_trial (self) :
         """ 
         advance to the next trial 
-        TODO: this would be a lot more elegant if diff networks had diff channels
-              instead of sending everything through single channel (so everyone has to check if they're recipient)
-
         """
         self.trialNum = self.trialNum + 1
         new_trial = self.trialList[self.trialNum]
@@ -215,8 +212,9 @@ class RefGameServer(Experiment):
             game.ready = game.players.copy()
             game.createSchedule()
             game.assignPartners(partnerNum=0)
-            
+        
     def record (self, msg) :
+        """ store an Info object for this msg in the database """
         node = Participant.query.get(msg['participantid']).all_nodes[0]
         info = Info(origin=node, contents=msg['type'], details=msg)
         self.session.add(info)
@@ -229,6 +227,7 @@ class RefGameServer(Experiment):
             'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
+        
         if raw_message.startswith(self.channel + ":") :
             logger.info("We received a message for our channel: {}".format(raw_message))
             body = raw_message.replace(self.channel + ":", "")

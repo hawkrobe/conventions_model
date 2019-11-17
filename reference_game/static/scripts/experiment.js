@@ -25,8 +25,8 @@ class CoordinationChatRoomClient {
 	// initialize game
 	self.participantid = resp.node.participant_id;
 	self.networkid = resp.node.network_id;
-	self.setupHandlers();
 
+	self.setupHandlers();
 	// once we get our node, need to tell the server (again) that we've connected so it can launch
 	self.socket.send({
 	  'type' : 'connect',
@@ -91,6 +91,25 @@ class CoordinationChatRoomClient {
     }
   };
 
+  sendMessage (msg) {
+    $("#send-message").prop('disabled', true);
+    $("#send-message").html("Sending...");
+    $("#reproduction").val("");
+    $("#reproduction").focus();
+    if(msg != '') {
+      this.socket.broadcast({
+	'type' : 'chatMessage',
+	'content' : msg,
+	'networkid' : this.networkid,
+	'participantid' : this.participantid,
+	'roomid' : this.roomid,
+	'role' : this.role
+      });
+    }
+    $("#send-message").prop('disabled', false);
+    $("#send-message").html("Send");
+  }
+
   handleClickedObj(msg) {
     const correct = msg.object_id == "target";
     
@@ -131,26 +150,7 @@ class CoordinationChatRoomClient {
       }, 800);
   }
 
-  sendMessage (msg) {
-    $("#send-message").prop('disabled', true);
-    $("#send-message").html("Sending...");
-    $("#reproduction").val("");
-    $("#reproduction").focus();
-    if(msg != '') {
-      this.socket.broadcast({
-	'type' : 'chatMessage',
-	'content' : msg,
-	'networkid' : this.networkid,
-	'participantid' : this.participantid,
-	'roomid' : this.roomid,
-	'role' : this.role
-      });
-    }
-    $("#send-message").prop('disabled', false);
-    $("#send-message").html("Send");
-  }
-
-  newTrial(msg) {
+  handleNewTrial(msg) {
     this.trialNum = msg['trialNum'];
     this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
     this.roomid = msg['roomid'];
@@ -162,43 +162,46 @@ class CoordinationChatRoomClient {
     this.initializeUI();
   }
 
-  waitForPartner (msg) {
-    console.log('got wait for partner');
-    $('#refgame').hide()
-    $('#waiting').show()
+  handleWaitForPartner (msg) {
+    $('#refgame').hide();
+    $('#waiting').show();
     $('#message').html("Waiting for partner #" + msg.partnerNum + ' to finish');
   }
-  
+
+  handleDisconnect (msg) {
+    // Leave the chatroom.
+    dallinger.goToPage("questionnaire");
+  }
+
   block (callback) {
-    // only pass to callback if intended for us
-    // because participant ids are unique, this is one way messages can be intended for
-    // us; otherwise, check network id and room id
+    // only pass to callback if intended for us; participant ids are unique, so this is one way messages
+    // can be intended for a single individual; otherwise, check network id and room id
     return msg => {
-      if (_.includes(msg.participantids, this.participantid))
+      if(_.includes(msg.participantids, this.participantid))
 	callback(msg);
       else if(msg.networkid == this.networkid && msg.roomid == this.roomid)
 	callback(msg);
+      else if(msg.networkid == this.networkid && !_.has(msg, 'roomid')) {
+	callback(msg);
+      }
     }
   }
+  
   
   setupHandlers() {
     self = this;
     
     // Handle messages from server
-    this.socket.subscribe(self.block(this.newTrial.bind(this)), "newTrial", this);
+    this.socket.subscribe(self.block(this.handleNewTrial.bind(this)), "newTrial", this);
     this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
     this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
-    this.socket.subscribe(self.block(this.waitForPartner.bind(this)), "waitForPartner", this);
-    
+    this.socket.subscribe(self.block(this.handleWaitForPartner.bind(this)), "waitForPartner", this);
+    this.socket.subscribe(self.block(this.handleDisconnect.bind(this)), "disconnect", this);
+
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
       const msg = $("#reproduction").val();
       self.sendMessage(msg);
-    });
-    
-    // Leave the chatroom.
-    $("#leave-chat").click(function() {
-      dallinger.goToPage("questionnaire");
     });
   }
 }
