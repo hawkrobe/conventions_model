@@ -84,8 +84,12 @@ class CoordinationChatRoomClient {
 	  const clickedId = event.target.id;
 	  this.alreadyClicked = true;
 	  this.socket.broadcast({
-	    'type' : 'clickedObj', 'object_id' : clickedId, 'roomid' : this.roomid,
-	    'networkid' : this.networkid, 'participantid' : this.participantid});
+	    'type' : 'clickedObj',
+	    'object_id' : clickedId,
+	    'stim_set_id' : self.stimsetid,
+	    'previously_interacted_with_neighbor_of_partner' : self.prev,
+	    'partner_num' : self.partnerNum,
+	    'roomid' : this.roomid, 'networkid' : this.networkid, 'participantid' : this.participantid});
 	}
       });
     }
@@ -156,6 +160,8 @@ class CoordinationChatRoomClient {
     this.roomid = msg['roomid'];
     this.partnerNum = msg['partnerNum'];
     this.currStim = msg['currStim'];
+    this.stimsetid = msg['stim_set_id'];
+    this.prev = msg['prev'];
     this.alreadyClicked = false;
     this.messageSent = false;      
     this.initializeStimGrid();
@@ -165,11 +171,21 @@ class CoordinationChatRoomClient {
   handleWaitForPartner (msg) {
     $('#refgame').hide();
     $('#waiting').show();
-    $('#message').html("Waiting for partner #" + msg.partnerNum + ' to finish');
+    var dollars = this.score / 100;
+    dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
+    $('#message').html(
+      "Partner " + (this.partnerNum + 1) + " has left the room. " +
+	"You are now waiting for your next partner to finish their current game.\n"
+    );
+    $('#submessage').html(
+      "You've earned a bonus of " + dollars + " so far, " +
+	"and will earn up to $2.40 if you play with all 5 partners!"
+    );
   }
 
   handleDisconnect (msg) {
     // Leave the chatroom.
+    console.log(msg);
     dallinger.goToPage("questionnaire");
   }
 
@@ -196,7 +212,7 @@ class CoordinationChatRoomClient {
     this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
     this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
     this.socket.subscribe(self.block(this.handleWaitForPartner.bind(this)), "waitForPartner", this);
-    this.socket.subscribe(self.block(this.handleDisconnect.bind(this)), "disconnect", this);
+    this.socket.subscribe(self.block(this.handleDisconnect.bind(this)), "disconnectClient", this);
 
     // Send whatever is in the chatbox when button clicked
     $("#send-message").click(() => {
