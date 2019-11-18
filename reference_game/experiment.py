@@ -17,21 +17,35 @@ from dallinger.db import redis_conn
 
 logger = logging.getLogger(__name__)
 
+contexts = [['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png'],
+            ['tangram_E.png', 'tangram_F.png', 'tangram_G.png', 'tangram_L.png'],
+            ['tangram_I.png', 'tangram_J.png', 'tangram_K.png', 'tangram_H.png']]
+            
 def extra_parameters():
     config = get_config()
     config.register("network", unicode)
     config.register("repeats", int)
     config.register("n", int)
 
+def prev_interacted_with_neighbor(schedule, pair, partner_num) :
+    history1 = set(schedule[pair[0]][:partner_num])
+    history2 = set(schedule[pair[1]][:partner_num])
+    return not history1.isdisjoint(history2)
+
 class RefGameRoom() :
-    def __init__(self, network_id, room_id, player_ids) :
+    def __init__(self, refgame, partner_num, player_ids, prev) :
         """ Create a room for the given dyad"""
-        self.network_id = network_id
-        self.room_id = room_id
+        self.network_id = refgame.network_id
+        self.stim_set_id = refgame.stim_set_id
+        self.room_id = refgame.num_rooms
+        self.partner_num = partner_num
+        self.prev = prev
+
+        # list of ids is scrambled to randomize roles with each partner
+        self.players = random.sample(player_ids, len(player_ids))
+        self.context = contexts[self.stim_set_id]
+        
         self.trialNum = -1
-        self.partnerNum = 0
-        self.players = player_ids
-        self.context = ['tangram_A.png', 'tangram_B.png', 'tangram_C.png', 'tangram_D.png']
         self.trialList = []
         self.numRepetitions = 1
         self.numTrials = self.numRepetitions * len(self.context)
@@ -47,8 +61,10 @@ class RefGameRoom() :
             'type': 'newTrial',
             'networkid' : self.network_id,
             'roomid' : self.room_id,
+            'stim_set_id' : self.stim_set_id,
             'participantids' : self.players,
-            'partnerNum' : self.partnerNum,
+            'partnerNum' : self.partner_num,
+            'prev' : self.prev,
             'trialNum' : self.trialNum,
             'currStim' : new_trial['stimuli'],
             'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
@@ -86,6 +102,7 @@ class RefGame :
     def __init__(self, network_id, num_players) :
         self.network_id = network_id
         self.num_players = num_players
+        self.stim_set_id = random.choice([0,1,2])        
         self.players = []
         self.rooms = []
         self.schedule = {}
@@ -113,38 +130,46 @@ class RefGame :
             # rotate around fixed point
             l.insert(1, l.pop())
 
-    def assignPartners(self, partnerNum) :
+    def assignPartners(self, partner_num) :
         """ 
-        create rooms and launch game with initial partners
+        create rooms and try to launch next games
         TODO: potential bug here if game gets *way* behind. 
-              might need to store partnerNum in 'ready' 
+              might need to store partner_num in 'ready' 
               suppose player A just finished partner 1 and player B just finished partner 2.
               if player B's next partner is supposed to be A, this might force A to skip a partner. 
         """
-        current_pairs = self.roomAssignments[partnerNum]
+        current_pairs = self.roomAssignments[partner_num]
         
         for pair in current_pairs :
             if set(pair).issubset(set(self.ready)) :
-                new_room = RefGameRoom(self.network_id, self.num_rooms, pair)
+                prev = prev_interacted_with_neighbor(self.schedule, pair, partner_num)
+                new_room = RefGameRoom(self, partner_num, pair, prev)
                 self.ready.remove(pair[0])
                 self.ready.remove(pair[1])
                 self.num_rooms += 1
                 self.rooms.append(new_room)
                 new_room.new_trial()
         
-    def newPartner(self, room_id, partner_num) :
+    def new_partner(self, room_id, partner_num) :
         """ 
         advance to the next partner on game schedule
         """
-        logger.info('pairing with new partner: {}, {}'.format(room_id, partner_num))
-        self.ready.extend(self.rooms[room_id].players)
-        redis_conn.publish('refgame', json.dumps({
-            'type' : 'waitForPartner',
-            'participantids' : self.rooms[room_id].players,
-            'partnerNum' : partner_num
-        }));
-        self.assignPartners(partner_num)
-        
+        ids = self.rooms[room_id].players
+        if partner_num + 1 >= self.num_players :
+            self.players.remove(ids[0])
+            self.players.remove(ids[1])
+            redis_conn.publish(
+                'refgame',
+                json.dumps({'type' : 'disconnectClient', 'participantids' : ids})
+            )
+        else :
+            self.ready.extend(ids)
+            redis_conn.publish(
+                'refgame',
+                json.dumps({'type' : 'waitForPartner', 'participantids' : ids, 'partnerNum' : partner_num})
+            )
+            t = threading.Timer(4, lambda : self.assignPartners(partner_num))
+            t.start()        
 
 class RefGameServer(Experiment):
     """Define the structure of the experiment."""
@@ -191,10 +216,20 @@ class RefGameServer(Experiment):
 
         # after final trial, we assign a next partner; otherwise, schedule next trial
         if curr_room.trialNum + 1 >= curr_room.numTrials :
-            curr_network.newPartner(msg['roomid'], curr_room.partnerNum + 1)
+            t = threading.Timer(1, lambda : curr_network.new_partner(msg['roomid'], curr_room.partner_num + 1))
         else :
             t = threading.Timer(2, lambda : curr_room.new_trial())
-            t.start()
+        t.start()
+
+    def handle_disconnect(self, msg) :
+        network_id = msg['networkid']
+
+        # if disconnected participant has not already finished game, disconnect rest of their network
+        if msg['participantid'] in self.games[network_id].players :
+            redis_conn.publish(
+                'refgame',
+                json.dumps({'type' : 'disconnectClient', 'networkid' : network_id})
+            )
         
     def handle_connect(self, msg):
         network_id = msg['networkid']
@@ -211,7 +246,7 @@ class RefGameServer(Experiment):
         if len(game.players) == self.quorum :
             game.ready = game.players.copy()
             game.createSchedule()
-            game.assignPartners(partnerNum=0)
+            game.assignPartners(partner_num=0)
         
     def record (self, msg) :
         """ store an Info object for this msg in the database """
@@ -223,6 +258,7 @@ class RefGameServer(Experiment):
     def send(self, raw_message) :
         """override default send to handle participant messages on channel"""
         handlers = {
+            'disconnect' : self.handle_disconnect,
             'connect' : self.handle_connect,
             'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
