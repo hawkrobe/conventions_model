@@ -61,9 +61,20 @@
     position: absolute;
 }
 
+#avatar {
+    height: 10vh;
+    width: 10vh;
+    margin-bottom: auto;
+    top: auto;
+    bottom: 1%;
+    left: 50%;
+    right: 50%;
+    position: absolute;
+}
+
 #trial-counter {
     height: 2vh;
-    width: 20vh;
+    width: 30vh;
     text-align: right;
     margin-left: 85%;
     margin-top: 1%;

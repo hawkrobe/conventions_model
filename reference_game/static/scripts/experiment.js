@@ -11,6 +11,7 @@ class CoordinationChatRoomClient {
     this.alreadyClicked = false;
     this.score = 0;
     this.bonusAmt = 2;
+    this.avatars = _.shuffle(_.map(_.range(1,7), i => "avatar" + i + ".png"));
     this.currStim = [];
     
     // immediately open socket connection for game 
@@ -50,7 +51,8 @@ class CoordinationChatRoomClient {
     $('#refgame').show();
     $("#chat-history").show();
     $("#feedback").html("");
-    $("#trial-counter").text('trial ' + (this.trialNum + 1) + '/24');
+    $("#trial-counter").text('partner ' + (this.partnerNum + 1) + '/5, ' +
+			     'trial ' + (this.trialNum + 1) + '/24');
     $("#story").empty();
     $("#response-form").show();    
     $("#send-message").prop("disabled", false);
@@ -74,6 +76,13 @@ class CoordinationChatRoomClient {
 	  });
       $("#object-grid").append(div);
     });
+
+    // Show avatar
+    $('#avatar').empty();
+    $('#avatar').append($('<div/>').css({
+      'background' : 'no-repeat center/80% url(./static/images/' + this.avatars[this.partnerNum] + ')',
+      'width' : '100%', 'height' : '100%'
+    }));
 
     // Outline target if speaker; set click handlers if listener
     if(this.role === 'speaker') {
@@ -173,10 +182,13 @@ class CoordinationChatRoomClient {
     $('#waiting').show();
     var dollars = this.score / 100;
     dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
-    $('#message').html(
+    $('#message').empty().html(
       "Partner " + (this.partnerNum + 1) + " has left the room. " +
-	"You are now waiting for your next partner to finish their current game.\n"
-    );
+	"You are now waiting for your next partner to finish their current game."
+    ).append($('<div/>').css({
+      'background' : 'no-repeat center/80% url(./static/images/' + this.avatars[this.partnerNum + 1] + ')',
+      'width' : '10vh', 'height' : '10vh', 'left' : '45%', 'position' : 'relative'
+    }));
     $('#submessage').html(
       "You've earned a bonus of " + dollars + " so far, " +
 	"and will earn up to $2.40 if you play with all 5 partners!"
