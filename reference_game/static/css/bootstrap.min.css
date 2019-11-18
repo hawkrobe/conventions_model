@@ -11,19 +11,22 @@
     overflow-y: scroll;
 }
 
-
 #message {
     position:absolute;
-    width:780px;
-    height:650px;
-    left:50%;
-    top:50%;
-    margin-left:-390px;
-    margin-top:-325px;
+    left:20%;
+    right:20%;
+    top:20%;
+}
+
+#submessage {
+    position:absolute;
+    left:20%;
+    right:20%;
+    top:60%;
 }
 
 #object-grid {
-    display: grid;
+    Display: grid;
     position: absolute;
     grid-template-columns: 15vw 15vw 15vw 15vw;
     grid-template-rows: 15vw;
