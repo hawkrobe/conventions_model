@@ -1,21 +1,77 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <div class="main_div">
-        <h1>Instructions</h1>
-        <hr>
-        <p>In this experiment, you will be able to broadcast messages to some other players in the game. Some of them will be able to broadcast messages to you.</p>
-        <p>The chat session will last until all players leave the chatroom.</p>
-        <hr>
-        <div>
-            <div class="row">
-                <div class="col-xs-10"></div>
-                <div class="col-xs-2">
-                    <button type="button" id="go-to-waiting-room" class="btn btn-success btn-lg">Begin</button>
-                </div>
-            </div>
-        </div>
+<div class="main_div">
+  <h1>Instructions</h1>
+  <hr>
+  <p>In this experiment, you will play a communication game with a group of five other turkers.</p>
+  <p>All of you will see the same set of four pictures, which will look something like this:</p>
+  <p>
+    <center><img src="images/tangramBoard.png" alt="Example gameplay" style="width:600px;height:200px"></center>
+  </p>
+  <p>You will be paired with different partners to play a series of matching games.</p>
+  <p>
+    Each time you are paired with a new partner, one of you will be
+    randomly assigned the <b>Director</b> role and the other will be
+    assigned the <b>Matcher</b> role. The Director will see a blue box
+    secretly marking one of the four pictures as the <b>target</b>.
+  </p>
+  <p>
+    <center> <img src="images/target.png" style="width:600px; height:200px"></center>
+  </p>
+  <p>
+    The Director's job is to send a description of the target through
+    the chatbox so that the Matcher is able to pick it out of the
+    set. You can write whatever description you think will best allow
+    your partner to identity the target (this isn't a game of "Taboo"
+    and there is no reason to give cryptic clues!) Please note that
+    the order of the pictures on your screen is scrambled on each
+    round, so descriptions like ``the one on the left'' will not work.
+  </p>
+
+  <p>
+    <center><img  src="images/typing.png" style="width:600px; height:200px"></center>
+  </p>
+
+  <p>
+    The Matcher will then read this description and click the picture
+    they believe is the target.  They are also allowed to response by sending
+    messages back through the chatbox. After the Matcher clicks one of
+    the pictures, both of you will be given feedback before advancing
+    to the next round: the Director will see which picture the Matcher
+    clicked, and the Matcher will see the true identity of the
+    target. You will earn a <b>2 cent bonus</b> for each correct
+    match, so pay attention!
+  </p>
+
+  <p>
+    There are a total of <b>16 rounds</b> with each partner, so each
+    picture will appear as the target multiple times. After the final
+    round you will <b>switch partners</b>! Once you have played a game with all five other turkers in your group, you will fill out a quick 15 second survey and be on your way.
+  </p>
+
+  <p> A few final notes before you begin. First, because six turkers
+    must connect simultaneously for the study to begin, you might
+    briefly see a waiting room screen with a progress bar at the
+    beginning while other turkers join the game. Second, when you are
+    ready to swap partners, your new partner may still be completing a
+    game with someone else and you may see another brief waiting
+    screen. Just hold tight a moment while they catch up to you!</p>
+  <p>
+    <center><img  src="images/waitingForPartner.png" style="width:600px; height:200px"></center>
+  </p>
+
+  
+  <hr>
+  <div>
+    <div class="row">
+      <div class="col-xs-10"></div>
+      <div class="col-xs-2">
+        <button type="button" id="go-to-waiting-room" class="btn btn-success btn-lg">Begin</button>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock %}
     
 {% block scripts %}
