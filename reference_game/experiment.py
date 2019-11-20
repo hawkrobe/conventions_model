@@ -166,7 +166,12 @@ class RefGame :
             self.ready.extend(ids)
             redis_conn.publish(
                 'refgame',
-                json.dumps({'type' : 'waitForPartner', 'participantids' : ids, 'partnerNum' : partner_num})
+                json.dumps({
+                    'type' : 'waitForPartner',
+                    'participantids' : ids,
+                    'partnerNum' : partner_num,
+                    'schedule' : self.schedule
+                })
             )
             t = threading.Timer(4, lambda : self.assignPartners(partner_num))
             t.start()        

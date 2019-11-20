@@ -9,6 +9,8 @@ class CoordinationChatRoomClient {
     this.role = '';
     this.messageSent = false;
     this.alreadyClicked = false;
+    this.waiting = false;
+    this.nextPartner = '';
     this.score = 0;
     this.bonusAmt = 2;
     this.avatars = _.shuffle(_.map(_.range(1,7), i => "avatar" + i + ".png"));
@@ -52,7 +54,7 @@ class CoordinationChatRoomClient {
     $("#chat-history").show();
     $("#feedback").html("");
     $("#trial-counter").text('partner ' + (this.partnerNum + 1) + '/5, ' +
-			     'trial ' + (this.trialNum + 1) + '/24');
+			     'trial ' + (this.trialNum + 1) + '/16');
     $("#story").empty();
     $("#response-form").show();    
     $("#send-message").prop("disabled", false);
@@ -163,7 +165,17 @@ class CoordinationChatRoomClient {
       }, 800);
   }
 
+  handleOtherGameNewTrial(msg) {
+    if(this.waiting && _.includes(msg.participantids, this.nextPartner)) {
+      var percent = Math.round((msg.trialNum / 16) * 100.0) + '%';
+      $("#partner-progress-bar").css("width", percent);
+      $("#progress-percentage").text(percent);
+    }
+  }
+  
   handleNewTrial(msg) {
+    this.nextPartner = '';
+    this.waiting = false;
     this.trialNum = msg['trialNum'];
     this.role = msg['roles']['speaker'] == this.participantid ? 'speaker' : 'listener';
     this.roomid = msg['roomid'];
@@ -178,20 +190,23 @@ class CoordinationChatRoomClient {
   }
 
   handleWaitForPartner (msg) {
+    this.waiting = true;
+    this.nextPartner = msg.schedule[this.participantid][msg.partnerNum];
+    this.partnerNum = msg.partnerNum;
     $('#refgame').hide();
     $('#waiting').show();
     var dollars = this.score / 100;
     dollars = dollars.toLocaleString("en-US", {style:"currency", currency:"USD"});
     $('#message').empty().html(
-      "Partner " + (this.partnerNum + 1) + " has left the room. " +
-	"You are now waiting for your next partner to finish their current game."
+      "<h1>Partner " + (this.partnerNum) + " has left the room. </h1>" +
+	"<p>Here is your next partner.</p>"
     ).append($('<div/>').css({
-      'background' : 'no-repeat center/80% url(./static/images/' + this.avatars[this.partnerNum + 1] + ')',
+      'background' : 'no-repeat center/80% url(./static/images/' + this.avatars[this.partnerNum] + ')',
       'width' : '10vh', 'height' : '10vh', 'left' : '45%', 'position' : 'relative'
-    }));
+    })).append("<p>You are now waiting for your next partner to finish their current game.</p> <p>The progress bar below is updated each time they finish a round, so you can see how close they are to finishing!</p>");
     $('#submessage').html(
       "You've earned a bonus of " + dollars + " so far, " +
-	"and will earn up to $2.40 if you play with all 5 partners!"
+	"and will earn a bonus up to $1.60 if you play with all 5 partners!"
     );
   }
 
@@ -220,6 +235,7 @@ class CoordinationChatRoomClient {
     self = this;
     
     // Handle messages from server
+    this.socket.subscribe(this.handleOtherGameNewTrial.bind(this), "newTrial", this);
     this.socket.subscribe(self.block(this.handleNewTrial.bind(this)), "newTrial", this);
     this.socket.subscribe(self.block(this.handleChatReceived.bind(this)), "chatMessage", this);
     this.socket.subscribe(self.block(this.handleClickedObj.bind(this)), "clickedObj", this);
