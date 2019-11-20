@@ -12,16 +12,29 @@
       <input type="text" id="reproduction" class="form-control" />
       <p></p>
       <button id="send-message" type="button" class="btn btn-primary">Send.</button>
-      <button id="leave-chat" type="button" class="btn">Leave chat.</button>
     </div>
     <div id="object-grid"></div>
     <p id='score'></p>
     <div id='avatar'></div>
     <div id="trial-counter">Loading...</div>
   </div>
-  <div id='waiting'>
-    <h1 id='message'></h1>
-    <p id='submessage'></p>
+  <div id='waiting' class="container-fluid">
+    <div class="row align-items-start">
+      <div class="col" id='message'></div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col" id='submessage'></div>
+    </div>
+    <div class="row justify-content-center center-block">
+      <div class="col-md-4 pt-4">
+	<div class="progress progress-striped active">
+          <div id="partner-progress-bar" class="progress-bar progress-bar-success" role="progressbar"
+	       aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+	    <span id="progress-percentage">0%</span>
+	  </div>
+	</div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
