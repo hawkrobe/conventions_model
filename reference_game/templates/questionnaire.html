@@ -1,0 +1,92 @@
+{% extends "base/questionnaire.html" %}
+
+{% block replace_questions %}
+<div class="row question">
+  <div class="col-md-8">
+    On a scale of 1-10 (where 10 is the most engaged), please rate how <b>ENGAGED</b> you were while performing the task:
+  </div>
+  <br>
+  <div class="col-md-4">
+    <select id="engagement" name="engagement">
+      <option value=""></option>
+      <option value="10">10 - Very engaged</option>
+      <option value="9">9</option>
+      <option value="8">8</option>
+      <option value="7">7</option>
+      <option value="6">6</option>
+      <option value="5">5 - Moderately engaged</option>
+      <option value="4">4</option>
+      <option value="3">3</option>
+      <option value="2">2</option>
+      <option value="1">1 - Not engaged</option>
+    </select>
+  </div>
+
+  <br>
+  <div class="col-md-8">
+    Did you read the instructions and think you did the HIT correctly?
+  </div>
+  <br>
+  <div class="col-md-4">
+    <select id="readInstructions" name="readInstructions">
+      <option value=""></option>
+      <option value="yes">Yes</option>
+      <option value="no">No, I was confused.</option>
+    </select>
+  </div>
+
+  <br>
+  <div class="col-md-8">
+    Is English your native language?
+  </div>
+  <br>
+  <div class="col-md-4">
+    <select id="nativeEnglish" name="nativeEnglish">
+      <option value=""></option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </div>
+
+  <br>
+  
+  <div class="col-md-8">
+    Did you believe you were playing with real human partners?
+  </div>
+  <br>
+  <div class="col-md-4">
+    <select id="humanPartners" name="humanPartners">
+      <option value=""></option>
+      <option value="yes">Yes, my partners were real turkers.</option>
+      <option value="no">No, my partners were secretly computers.</option>
+    </select>
+  </div>
+
+  <br>
+  <div class="col-md-8">
+    Did you believe you were playing with a new partner in each room you joined?
+  </div>
+  <br>
+  <div class="col-md-4">
+    <select id="newPartners" name="newPartners">
+      <option value=""></option>
+      <option value="yes">Yes, all partners were new.</option>
+      <option value="no">No, I thought I had already interacted with my partners.</option>
+    </select>
+  </div>
+
+  <br>
+  <div class="col-md-8">
+    Did you notice any problems or have any other comments about the study?
+  </div>
+  <br>
+  <div class="col-md-8">
+    <textarea class="form-control" rows="5" name="comments" id="comments"></textarea>
+  </div>
+  
+  <p>
+    Thanks for your responses -- in this experiment, you <b>were</b> interacting with five other turkers playing in real time, and talked to a different partner in each chat room! The purpose of this study was to understand the language you used to talk about these objects, and how language eventually spread (or didn't spread) through your group!
+  </p>
+
+</div>
+{% endblock %}
