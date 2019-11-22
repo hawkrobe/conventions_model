@@ -4,20 +4,24 @@
 <div class="main_div">
   <h1>Instructions</h1>
   <hr>
-  <p>In this experiment, you will play a communication game with a group of five other turkers.</p>
-  <p>All of you will see the same set of four pictures, which will look something like this:</p>
   <p>
-    <center><img src="images/tangrams.png" alt="Example gameplay" style="width:600px;height:200px"></center>
+    In this experiment, you will play a series of communication games with other turkers.
   </p>
-  <p>You will be paired with different partners to play a series of matching games.</p>
+
+  <p>
+    All of you will see the same set of four pictures, which will look something like this:
+  </p>
+  <p>
+    <center><img src="/static/images/tangrams.png" alt="Example gameplay" style="width:600px;height:200px"></center>
+  </p>
   <p>
     Each time you are paired with a new partner, one of you will be
     randomly assigned the <b>Director</b> role and the other will be
     assigned the <b>Matcher</b> role. The Director will see a blue box
-    secretly marking one of the four pictures as the <b>target</b>.
+    secretly marking one of these four pictures as the <b>target</b>.
   </p>
   <p>
-    <center> <img src="images/target.png" style="width:600px; height:200px"></center>
+    <center> <img src="/static/images/target.png" style="width:200px; height:200px"></center>
   </p>
   <p>
     The Director's job is to send a description of the target through
@@ -27,58 +31,129 @@
     and there is no reason to give cryptic clues!) Please note that
     the order of the pictures on your screen is scrambled on each
     round, so descriptions like ``the one on the left'' will not work.
+    Also, please limit your description to the current target picture:
+    do not discuss previous trials or chat about any other topics!
   </p>
 
   <p>
-    <center><img  src="images/typing.png" style="width:600px; height:200px"></center>
+    <center><img  src="/static/images/typing.png" style="width:600px; height:276px"></center>
   </p>
 
   <p>
-    The Matcher will then read this description and click the picture
-    they believe is the target.  They are also allowed to response by sending
-    messages back through the chatbox. After the Matcher clicks one of
-    the pictures, both of you will be given feedback before advancing
-    to the next round: the Director will see which picture the Matcher
-    clicked, and the Matcher will see the true identity of the
-    target. You will earn a <b>2 cent bonus</b> for each correct
+    After the Director sends a message, the Matcher will read it and
+    click the picture they believe is the target.  They are also
+    allowed to respond by sending messages back through the chatbox
+    until they are ready to make a selection. After the Matcher clicks
+    one of the pictures, both of you will be given feedback before
+    advancing to the next round: the Director will see which picture
+    the Matcher clicked, and the Matcher will see the true identity of
+    the target. You will earn a <b>3 cent bonus</b> for each correct
     match, so pay attention!
   </p>
 
   <p>
     There are a total of <b>16 rounds</b> with each partner, so each
-    picture will appear as the target multiple times. After the final
-    round you will <b>switch partners</b>! Once you have played a game with all five other turkers in your group, you will fill out a quick 15 second survey and be on your way.
+    picture will appear as the target multiple times with that
+    partner. After the final round of your game with one partner, you
+    will <b>switch partners</b> to someone you haven't talked to before!
+    Once you have played a game with <b>five different turkers</b>,
+    you will fill out a quick 15 second survey and be on your way.
   </p>
 
-  <p> A few final notes before you begin. First, because six turkers
-    must connect simultaneously for the study to begin, you might
+  <p>
+    A few final notes before you begin. First, because multiple players
+    must be connected simultaneously for the study to begin, you might
     briefly see a waiting room screen with a progress bar at the
     beginning while other turkers join the game. Second, when you are
     ready to swap partners, your new partner may still be completing a
     game with someone else and you may see another brief waiting
-    screen. Just hold tight a moment while they catch up to you!</p>
+    screen like this one:
+  </p>
   <p>
-    <center><img  src="images/waitingForPartner.png" style="width:600px; height:200px"></center>
+    <center><img  src="/static/images/waitingForPartner.png" style="width:600px; height:165px"></center>
   </p>
 
+  <p>
+    Just hold tight a moment while they catch up to you!
+  </p>
   
-  <hr>
-  <div>
-    <div class="row">
-      <div class="col-xs-10"></div>
-      <div class="col-xs-2">
-        <button type="button" id="go-to-waiting-room" class="btn btn-success btn-lg">Begin</button>
+  <div class="page-header">
+    <h3>Comprehension Quiz</h3>
+  </div>
+  
+  <div class="well" style="width:800px; margin: 0">
+
+    <div class="col-md-8 pb-4">
+      The <b>Speaker</b> can click on a picture to move to the next round. <br>
+      <input type="radio" name="dgoal" value="no"> True
+      <input type="radio" name="dgoal" value="yes"> False
+    </div>
+
+    <div class="col-md-8 pb-4">
+      The Listener wants to select the target that the Speaker is describing, and avoid selecting the other pictures. <br>
+      <input type="radio" name="mgoal" value="yes"> True
+      <input type="radio" name="mgoal" value="no"> False
+    </div>
+
+    <div class="col-md-8 pb-4">
+      The target photo is marked for the Speaker with a blue box <br>
+      <input type="radio" name="round" value="yes"> True
+      <input type="radio" name="round" value="no"> False
+    </div>
+
+    <div class="col-md-8 pb-4">
+      Your pictures are in the same order on your screen as your partner's pictures: <br>
+      <input type="radio" name="comp" value="no"> True
+      <input type="radio" name="comp" value="yes"> False, the pictures are shuffled
+    </div>
+
+    <div class="col-md-8 pb-4">
+      You will be introduced to a new partner every 16 rounds of the game. <br>
+      <input type="radio" name="message" value="yes"> True
+      <input type="radio" name="message" value="no"> False
+    </div>
+
+    <div class="col-md-8 pb-4">
+      You might be introduced to someone you've talked to before.  <br>
+      <input type="radio" name="completed" value="no"> True
+      <input type="radio" name="completed" value="yes"> False
+    </div>
+    
+    <div>
+      <div class="row">
+	<div class="col-xs-10"></div>
+	<div class="col-xs-2">
+          <button type="button" id="go-to-waiting-room" class="btn btn-success btn-lg">Submit</button>
+	</div>
       </div>
     </div>
+
+    <div class="error" style="display:none"> Ooops! Looks like you made a mistake. You have one more try. </div>
   </div>
 </div>
 {% endblock %}
     
 {% block scripts %}
-  <script>
-    // Proceed to the waiting room.
-    $("#go-to-waiting-room").click(function() {
+<script>
+  // Proceed to the waiting room.
+  var counter = 0;
+  $("#go-to-waiting-room").click(function() {
+    var ans1 = $('input[name="dgoal"]:checked').val();
+    var ans2 = $('input[name="mgoal"]:checked').val();
+    var ans3 = $('input[name="round"]:checked').val();
+    var ans4 = $('input[name="message"]:checked').val();
+    var ans5 = $('input[name="comp"]:checked').val();
+    var ans6 = $('input[name="completed"]:checked').val();
+
+    if(ans1 == "yes" && ans2 == "yes" && ans3 == "yes" && 
+       ans4 == "yes" && ans5 == "yes" && ans6 == "yes") {
       dallinger.goToPage("waiting");
-    });
-  </script>
+    } else if(counter == 3) {
+      location.goToPage("fail");
+    } else {
+      $('.error').show()
+      counter += 1;
+    }
+  });
+</script>
 {% endblock %}
