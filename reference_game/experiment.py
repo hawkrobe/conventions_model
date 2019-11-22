@@ -5,7 +5,9 @@ import socket
 import json
 import threading
 import random
+import math
 
+from collections import defaultdict
 from dallinger import networks
 from dallinger.compat import unicode
 from dallinger.config import get_config
@@ -184,6 +186,7 @@ class RefGameServer(Experiment):
         super(RefGameServer, self).__init__(session)
         self.channel = 'refgame'
         self.games = {}
+        self.participant_bonuses = defaultdict(int)
         if session:
             self.setup()
 
@@ -193,8 +196,9 @@ class RefGameServer(Experiment):
         self.network_class = config.get("network")
         self.quorum = config.get("n")
 
-        # Recruit for all networks at once
-        self.initial_recruitment_size = repeats * self.quorum
+        # Recruit for all networks at once and add a few extra just in case
+        max_number = repeats * self.quorum
+        self.initial_recruitment_size = max_number + math.ceil(max_number * .25)
 
     def create_network(self):
         """Create a new network by reading the configuration file."""
@@ -202,8 +206,13 @@ class RefGameServer(Experiment):
         return class_(max_size=self.quorum)
 
     def choose_network(self, networks, participant):
-        # Choose first available network rather than random
-        return networks[0]
+        """Choose first available network; if no networks left, close recruitment"""
+        logger.info("{} games already started".format(len(self.games.keys())))
+        logger.info("num networks available: {}".format(len(networks)))
+        try :
+            return networks[0]
+        finally :
+            self.recruiter().close_recruitment()
 
     def info_post_request(self, node, info):
         """Run when a request to create an info is complete."""
@@ -214,11 +223,28 @@ class RefGameServer(Experiment):
         """Create a node for a participant."""
         return Agent(network=network, participant=participant)
 
+    def bonus(self, participant) :
+        """ Calculate participant's bonus at the end """
+        payment_per_hour = 2
+        max_bonus_amount = 6
+        waiting_time = participant.end_time - participant.creation_time
+        waiting_bonus = round(
+            (waiting_time.total_seconds() / 3600.0) * payment_per_hour,
+            2
+        )
+        performance_bonus = self.participant_bonuses[participant.id] 
+        return min(waiting_bonus + performance_bonus, max_bonus_amount)
+
     def handle_clicked_obj(self, msg) :
         """ When we find out listener has made response, schedule next round to begin """
         curr_network = self.games[msg['networkid']]
         curr_room = curr_network.rooms[msg['roomid']]
 
+        # keep track of bonuses server-side
+        if msg['object_id'] == "target" :
+            self.participant_bonuses[curr_room.players[0]] += 0.03
+            self.participant_bonuses[curr_room.players[1]] += 0.03
+        
         # after final trial, we assign a next partner; otherwise, schedule next trial
         if curr_room.trialNum + 1 >= curr_room.numTrials :
             t = threading.Timer(1, lambda : curr_network.new_partner(msg['roomid'], curr_room.partner_num + 1))
