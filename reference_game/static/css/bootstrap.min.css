@@ -9,6 +9,8 @@
 #story {
     height:20vh;
     overflow-y: scroll;
+    border-left: 3px solid #6c757d3b;
+    padding-left: 10px;
 }
 
 /* #message { */
