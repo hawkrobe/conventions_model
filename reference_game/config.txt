@@ -1,23 +1,23 @@
 [Experiment]
-mode = debug
+mode = sandbox
 auto_recruit = true
-recruiter = cli
+recruiter = mturk
 network = FullyConnected
-repeats = 1
+repeats = 2
 n = 4
 
 [MTurk]
-title = Chatroom game
-description = Chat with other players.
-keywords = Chat
-base_payment = 1.00
-lifetime = 24
-duration = 0.1
+title = Communication game
+description = Play a series of interactive matching games with other turkers in real time! Describe an object so that your partner can pick it out of a lineup. Expected completion time is between 20 and 30 minutes with a performance bonus of up to $2.40! We will also bonus you for unexpected time you spend in the waiting room. 
+keywords = psychology, research, language, communication, game, multi-player, interactive
+base_payment = 2.00
+lifetime = 1
+duration = 1
 us_only = true
 approve_requirement = 95
-contact_email_on_error = dallinger-chatroom@mailinator.com
-ad_group = Chatroom
-organization_name = Monsters University
+contact_email_on_error = rdhawkins@princeton.edu
+ad_group = Matching
+organization_name = Princeton University
 browser_exclude_rule = MSIE, mobile, tablet
 
 [Database]
