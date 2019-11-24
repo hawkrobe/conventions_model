@@ -262,6 +262,6 @@ $(document).keypress(e => {
 });
 
 $(document).ready(() => {
-  console.log('ready');
+  dallinger.preventExit = true;
   new CoordinationChatRoomClient();
 });
