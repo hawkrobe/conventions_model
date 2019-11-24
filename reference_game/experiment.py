@@ -263,7 +263,7 @@ class RefGameServer(Experiment):
                 json.dumps({'type' : 'disconnectClient', 'networkid' : network_id})
             )
             
-    def handle_connect(self, msg):
+    def handle_connect(self, p, msg):
         network_id = msg['networkid']
 
         # create game object if first player in network to join
@@ -287,20 +287,20 @@ class RefGameServer(Experiment):
         self.session.add(info)
 
     def send_waiting (self, p, msg) :
+        p = Participant.query.get(msg['participantid'])
         # if disconnect in waiting room, just need to change their status away from waiting
         if 'type' in msg and msg['participantid'] != '' and msg['type'] == 'disconnect' :
             if p.status == "waiting" :
                 p.status = "dropped"
             
-    def send_refgame (self, msg) :
-        """override default send to handle participant messages on channel"""
+    def send_refgame (self, p, msg) :
+        p = Participant.query.get(msg['participantid'])
         handlers = {
             'disconnect' : self.handle_disconnect,
             'connect' : self.handle_connect,
             'chatMessage' : lambda p, msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
-        p = Participant.query.get(msg['participantid'])
         
         # Record message as event in database and call handler if client started
         if msg['type'] in handlers and p.status == 'working':
@@ -308,6 +308,7 @@ class RefGameServer(Experiment):
             handlers[msg['type']](p, msg)
         
     def send(self, raw_message) :
+        """override default send to handle participant messages on channel"""
         logger.info("We received a message for channel: {}".format(raw_message))
 
         if raw_message.startswith('quorum:') :
@@ -318,7 +319,6 @@ class RefGameServer(Experiment):
         if raw_message.startswith(self.channel + ":") :
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
-            
             self.send_refgame(msg)
 
         self.session.commit()
