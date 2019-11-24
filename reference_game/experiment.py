@@ -282,7 +282,8 @@ class RefGameServer(Experiment):
         
     def record (self, msg) :
         """ store an Info object for this msg in the database """
-        node = Participant.query.get(msg['participantid']).all_nodes[0]
+        p = Participant.query.get(msg['participantid'])
+        node = p.all_nodes[0]
         info = Info(origin=node, contents=msg['type'], details=msg)
         self.session.add(info)
 
@@ -301,13 +302,12 @@ class RefGameServer(Experiment):
             'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
-        # Record message as event in database and call handler
-        if msg['type'] in handlers:
+        p = Participant.query.get(msg['participantid'])
+        
+        # Record message as event in database and call handler if client started
+        if msg['type'] in handlers and p.status == 'working':
             self.record(msg)
             handlers[msg['type']](msg)
-        else :
-            logger.info("Received message: {}".format(raw_message))
-
         
     def send(self, raw_message) :
         logger.info("We received a message for channel: {}".format(raw_message))
@@ -320,6 +320,7 @@ class RefGameServer(Experiment):
         if raw_message.startswith(self.channel + ":") :
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
+            
             self.send_refgame(msg)
 
         self.session.commit()
