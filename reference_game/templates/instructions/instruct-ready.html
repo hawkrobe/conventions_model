@@ -77,7 +77,9 @@
     Just hold tight a moment while they catch up to you! We realize
     this waiting can make the completion time of the HIT more
     variable, but we are tracking the amount of time you spend in
-    waiting room and will bonus you for your time.
+    waiting room and will bonus you for your time. Lastly, please DO
+    NOT refresh the page; you may not be able to complete the
+    experiment.
   </p>
   
   <div class="page-header">
@@ -139,6 +141,7 @@
 {% block scripts %}
 <script>
   // Proceed to the waiting room.
+  dallinger.preventExit = true;
   var counter = 0;
   $("#go-to-waiting-room").click(function() {
     var ans1 = $('input[name="dgoal"]:checked').val();
