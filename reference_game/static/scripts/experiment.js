@@ -64,6 +64,7 @@ class CoordinationChatRoomClient {
   }
   
   initializeStimGrid() {
+    self = this;
     $('#object-grid').empty();
     _.forEach(_.shuffle(this.currStim), (stim, i) => {
       const bkg = 'url(./static/images/' + stim.url + ')';
@@ -93,14 +94,15 @@ class CoordinationChatRoomClient {
       $('div.pressable').click(event => {
 	if(self.messageSent & !self.alreadyClicked) {
 	  const clickedId = event.target.id;
-	  this.alreadyClicked = true;
-	  this.socket.broadcast({
+	  self.alreadyClicked = true;
+	  self.socket.broadcast({
 	    'type' : 'clickedObj',
 	    'object_id' : clickedId,
 	    'stim_set_id' : self.stimsetid,
+	    'trialnum' : self.trialNum,
 	    'previously_interacted_with_neighbor_of_partner' : self.prev,
-	    'partner_num' : self.partnerNum,
-	    'roomid' : this.roomid, 'networkid' : this.networkid, 'participantid' : this.participantid});
+	    'partnernum' : self.partnerNum,
+	    'roomid' : self.roomid, 'networkid' : self.networkid, 'participantid' : self.participantid});
 	}
       });
     }
@@ -115,6 +117,8 @@ class CoordinationChatRoomClient {
       this.socket.broadcast({
 	'type' : 'chatMessage',
 	'content' : msg,
+	'trialnum' : this.trialNum,
+	'partnernum' : this.partnerNum,
 	'networkid' : this.networkid,
 	'participantid' : this.participantid,
 	'roomid' : this.roomid,
