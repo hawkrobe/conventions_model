@@ -49,7 +49,7 @@ class RefGameRoom() :
         
         self.trialNum = -1
         self.trialList = []
-        self.numRepetitions = 1
+        self.numRepetitions = 4
         self.numTrials = self.numRepetitions * len(self.context)
         self.make_trial_list()
         
@@ -253,15 +253,16 @@ class RefGameServer(Experiment):
         t.start()
 
     def handle_disconnect(self, msg) :
-        network_id = msg['networkid']
-
+        network_id = p.all_nodes[0].network_id
+        
         # if disconnected participant has not already finished game, disconnect rest of their network
         if msg['participantid'] in self.games[network_id].players :
+            p.status = "dropped"
             redis_conn.publish(
                 'refgame',
                 json.dumps({'type' : 'disconnectClient', 'networkid' : network_id})
             )
-        
+            
     def handle_connect(self, msg):
         network_id = msg['networkid']
 
@@ -284,9 +285,15 @@ class RefGameServer(Experiment):
         node = Participant.query.get(msg['participantid']).all_nodes[0]
         info = Info(origin=node, contents=msg['type'], details=msg)
         self.session.add(info)
-        self.session.commit()
-        
-    def send(self, raw_message) :
+
+    def send_waiting (self, msg) :
+        # if disconnect in waiting room, just need to change their status away from waiting
+        if 'type' in msg and msg['participantid'] != '' and msg['type'] == 'disconnect' :
+            p = Participant.query.get(msg['participantid'])
+            if p.status == "waiting" :
+                p.status = "dropped"
+            
+    def send_refgame (self, msg) :
         """override default send to handle participant messages on channel"""
         handlers = {
             'disconnect' : self.handle_disconnect,
@@ -294,15 +301,25 @@ class RefGameServer(Experiment):
             'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
+        # Record message as event in database and call handler
+        if msg['type'] in handlers:
+            self.record(msg)
+            handlers[msg['type']](msg)
+        else :
+            logger.info("Received message: {}".format(raw_message))
+
         
+    def send(self, raw_message) :
+        logger.info("We received a message for channel: {}".format(raw_message))
+
+        if raw_message.startswith('quorum:') :
+            body = raw_message.replace("quorum:", "")
+            msg = json.loads(body)
+            self.send_waiting(msg)
+            
         if raw_message.startswith(self.channel + ":") :
-            logger.info("We received a message for our channel: {}".format(raw_message))
             body = raw_message.replace(self.channel + ":", "")
             msg = json.loads(body)
+            self.send_refgame(msg)
 
-            # Record message as event in database and call handler
-            if msg['type'] in handlers:
-                self.record(msg)
-                handlers[msg['type']](msg)
-            else :
-                logger.info("Received message: {}".format(raw_message))
+        self.session.commit()
