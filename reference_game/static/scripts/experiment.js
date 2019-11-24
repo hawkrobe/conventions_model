@@ -216,7 +216,7 @@ class CoordinationChatRoomClient {
 
   handleDisconnect (msg) {
     // Leave the chatroom.
-    console.log(msg);
+    dallinger.allowExit();
     dallinger.goToPage("questionnaire");
   }
 
