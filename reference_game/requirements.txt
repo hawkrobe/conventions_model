@@ -1,1 +1,1 @@
-dallinger==5.1.0
+-e git+git://github.com/hawkrobe/Dallinger@dev#egg=dallinger
