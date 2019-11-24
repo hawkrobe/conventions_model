@@ -235,7 +235,7 @@ class RefGameServer(Experiment):
         performance_bonus = self.participant_bonuses[participant.id] 
         return min(waiting_bonus + performance_bonus, max_bonus_amount)
 
-    def handle_clicked_obj(self, p, msg) :
+    def handle_clicked_obj(self, msg) :
         """ When we find out listener has made response, schedule next round to begin """
         curr_network = self.games[msg['networkid']]
         curr_room = curr_network.rooms[msg['roomid']]
@@ -252,7 +252,8 @@ class RefGameServer(Experiment):
             t = threading.Timer(2, lambda : curr_room.new_trial())
         t.start()
 
-    def handle_disconnect(self, p, msg) :
+    def handle_disconnect(self, msg) :
+        p = Participant.query.get(msg['participantid'])
         network_id = p.all_nodes[0].network_id
         
         # if disconnected participant has not already finished game, disconnect rest of their network
@@ -263,7 +264,7 @@ class RefGameServer(Experiment):
                 json.dumps({'type' : 'disconnectClient', 'networkid' : network_id})
             )
             
-    def handle_connect(self, p, msg):
+    def handle_connect(self, msg):
         network_id = msg['networkid']
 
         # create game object if first player in network to join
@@ -280,32 +281,33 @@ class RefGameServer(Experiment):
             game.createSchedule()
             game.assignPartners(partner_num=0)
         
-    def record (self, p, msg) :
+    def record (self, msg) :
         """ store an Info object for this msg in the database """
-        node = p.all_nodes[0]
-        info = Info(origin=node, contents=msg['type'], details=msg)
-        self.session.add(info)
-
-    def send_waiting (self, p, msg) :
         p = Participant.query.get(msg['participantid'])
-        # if disconnect in waiting room, just need to change their status away from waiting
+        if len(p.all_nodes) > 0 :
+            node = p.all_nodes[0]
+            info = Info(origin=node, contents=msg['type'], details=msg)
+            self.session.add(info)
+
+    def send_waiting (self, msg) :
+        # if disconnect in waiting room, just need to change their status
         if 'type' in msg and msg['participantid'] != '' and msg['type'] == 'disconnect' :
+            p = Participant.query.get(msg['participantid'])
             if p.status == "waiting" :
                 p.status = "dropped"
             
-    def send_refgame (self, p, msg) :
-        p = Participant.query.get(msg['participantid'])
+    def send_refgame (self, msg) :
         handlers = {
             'disconnect' : self.handle_disconnect,
             'connect' : self.handle_connect,
-            'chatMessage' : lambda p, msg : None,
+            'chatMessage' : lambda msg : None,
             'clickedObj' : self.handle_clicked_obj
         }
         
         # Record message as event in database and call handler if client started
-        if msg['type'] in handlers and p.status == 'working':
-            self.record(p, msg)
-            handlers[msg['type']](p, msg)
+        if msg['type'] in handlers :
+            self.record(msg)
+            handlers[msg['type']](msg)
         
     def send(self, raw_message) :
         """override default send to handle participant messages on channel"""
