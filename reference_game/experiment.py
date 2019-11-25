@@ -225,14 +225,16 @@ class RefGameServer(Experiment):
 
     def bonus(self, participant) :
         """ Calculate participant's bonus at the end """
-        payment_per_hour = 2
-        max_bonus_amount = 6
+        payment_per_hour = 2.00
+        max_bonus_amount = 6.00
         waiting_time = participant.end_time - participant.creation_time
         waiting_bonus = round(
             (waiting_time.total_seconds() / 3600.0) * payment_per_hour,
             2
         )
-        performance_bonus = self.participant_bonuses[participant.id] 
+        performance_bonus = self.participant_bonuses[participant.id]
+        logger.info("waiting: {}, performance: {}".format(waiting_bonus, performance_bonus))
+        logger.info("paying min of {} and {}".format(waiting_bonus + performance_bonus, max_bonus_amount))        
         return min(waiting_bonus + performance_bonus, max_bonus_amount)
 
     def handle_clicked_obj(self, msg) :
@@ -285,6 +287,7 @@ class RefGameServer(Experiment):
         """ store an Info object for this msg in the database """
         p = Participant.query.get(msg['participantid'])
         if len(p.all_nodes) > 0 :
+            msg['score'] = self.participant_bonuses[msg['participantid']]
             node = p.all_nodes[0]
             info = Info(origin=node, contents=msg['type'], details=msg)
             self.session.add(info)
