@@ -1,13 +1,12 @@
-from __future__ import division
-
 import numpy as np
 import pandas as pd
 import boto3
 import xmltodict
 import csv
 import os
-import json
 import argparse
+
+from botocore.exceptions import ClientError
 
 # looks for a credentials.py defining the ACCESS_ID and SECRET_KEY
 import credentials
@@ -53,7 +52,7 @@ class Bonuser :
     def handle_assignment(self, info) :
         self.client.send_bonus(
             WorkerId = info['wID'],
-            BonusAmount = info['bonus'],
+            BonusAmount = str(info['bonus']),
             AssignmentId = info['aID'],
             Reason = self.reason
         )
