@@ -71,9 +71,9 @@ if __name__ == '__main__':
         except:
             raise
     elif args.action == 'reset':
+        curr_time = str(datetime.datetime.now())
         print('Now renaming hit-ids.json to hit-ids_{}.json and moving to hit-ids folder'
               .format(curr_time))
-        curr_time = str(datetime.datetime.now())
         if not os.path.exists('hit-ids'):
             os.makedirs('hit-ids')
         if args.sandbox=="True":
