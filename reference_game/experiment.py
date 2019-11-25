@@ -288,8 +288,8 @@ class RefGameServer(Experiment):
         p = Participant.query.get(msg['participantid'])
         if len(p.all_nodes) > 0 :
             msg['bonus'] = self.participant_bonuses[msg['participantid']]
-            msg['wID'] = self.participant.worker_id
-            msg['aID'] = self.participant.assignment_id
+            msg['wID'] = p.worker_id
+            msg['aID'] = p.assignment_id
             node = p.all_nodes[0]
             info = Info(origin=node, contents=msg['type'], details=msg)
             self.session.add(info)
