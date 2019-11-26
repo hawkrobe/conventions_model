@@ -53,6 +53,7 @@ class CoordinationChatRoomClient {
     $('#refgame').show();
     $("#chat-history").show();
     $("#feedback").html("");
+    $("#role").html('You are the ' + this.role + '!');
     $("#trial-counter").text('partner ' + (this.partnerNum + 1) + '/5, ' +
 			     'trial ' + (this.trialNum + 1) + '/16');
     $("#story").empty();
