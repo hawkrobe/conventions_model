@@ -68,6 +68,7 @@ class RefGameRoom() :
             'partnerNum' : self.partner_num,
             'prev' : self.prev,
             'trialNum' : self.trialNum,
+            'targetURL' : new_trial['targetImg']['url'],
             'currStim' : new_trial['stimuli'],
             'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
         })

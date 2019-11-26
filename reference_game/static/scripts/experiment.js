@@ -53,8 +53,9 @@ class CoordinationChatRoomClient {
     $('#refgame').show();
     $("#chat-history").show();
     $("#feedback").html("");
-    $("#role").html('You are the ' + this.role + '!');
-    $("#trial-counter").text('partner ' + (this.partnerNum + 1) + '/5, ' +
+    const roleToDisplay = this.role == 'speaker' ? 'director' : 'matcher';
+    $("#role").html('You are the ' + roleToDisplay + '!');
+    $("#trial-counter").text('partner ' + (this.partnerNum + 1) + '/3, ' +
 			     'trial ' + (this.trialNum + 1) + '/16');
     $("#story").empty();
     $("#response-form").show();    
@@ -118,6 +119,9 @@ class CoordinationChatRoomClient {
       this.socket.broadcast({
 	'type' : 'chatMessage',
 	'content' : msg,
+        'stimsetid' : this.stimsetid,
+        'target' : this.targetURL,
+        'repid' : Math.floor(this.trialNum / 4),
 	'trialnum' : this.trialNum,
 	'partnernum' : this.partnerNum,
 	'networkid' : this.networkid,
@@ -186,6 +190,7 @@ class CoordinationChatRoomClient {
     this.roomid = msg['roomid'];
     this.partnerNum = msg['partnerNum'];
     this.currStim = msg['currStim'];
+    this.targetURL = msg['targetURL'];
     this.stimsetid = msg['stim_set_id'];
     this.prev = msg['prev'];
     this.alreadyClicked = false;
@@ -211,7 +216,7 @@ class CoordinationChatRoomClient {
     })).append("<p>You are now waiting for your next partner to finish their current game.</p> <p>The progress bar below is updated each time they finish a round, so you can see how close they are to finishing!</p>");
     $('#submessage').html(
       "You've earned a bonus of " + dollars + " so far, " +
-	"and will earn a bonus up to $2.40 if you play with all 5 partners!"
+	"and will earn a bonus up to $1.44 if you play with all 3 partners!"
     );
   }
 
