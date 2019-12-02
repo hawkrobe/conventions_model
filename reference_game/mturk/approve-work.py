@@ -27,7 +27,7 @@ class Bonuser :
         self.bonus_multiplier = 1
         self.reason = (
             "Thanks for participating, here's your bonus!" \
-            "Send us an email at rxdh@stanford.edu if you have any questions."
+            "Send us an email at rdhawkins@princeton.edu if you have any questions."
         )
         self.setup_files()
 
@@ -49,10 +49,20 @@ class Bonuser :
         a = np.array([info['wID'], info['aID']])
         return (df == a).all(1).any()
 
+    def assign_qualification(self, wID) :
+        self.client.associate_qualification_with_worker(
+            QualificationTypeId=("3TDQPWMDS7OUWE8HQKH6O5MTD5GNA0"
+                                 if args.production
+                                 else "3VSNMHAUD85G7UYCZW8T6UPBSVHYRX"),
+            WorkerId=wID,
+            SendNotification=False
+        )
+        
     def handle_assignment(self, info) :
+        self.assign_qualification(info['wID'])
         self.client.send_bonus(
             WorkerId = info['wID'],
-            BonusAmount = str(info['bonus']),
+            BonusAmount = str(round(info['bonus'], 2)),
             AssignmentId = info['aID'],
             Reason = self.reason
         )
@@ -79,6 +89,7 @@ source = pd.read_csv(args.source)
 for i, row in source.iterrows() :
     if not bonuser.check_already_bonused(row) :
         try :
+            assert float(row['bonus']) < 4
             bonuser.handle_assignment(row)
         except ClientError as e:
             print("failed to bonus row: {}".format(row))
