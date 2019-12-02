@@ -24,6 +24,8 @@ if __name__ == '__main__':
                         help="upload|expire|status|download|approve|reset")
     parser.add_argument('--sandbox', type=str, default="True",
                         help="True if running on sandbox else False")
+    parser.add_argument('--app', type=str, default="",
+                        help="Name of dallinger app")
     args = parser.parse_args()
     def call_nosub (cmd) :
         os.system("nosub {} {}".format(
@@ -49,7 +51,12 @@ if __name__ == '__main__':
         call_nosub('status')
     elif args.action == 'approve':
         print('generating source from info.csv')
-        info = (pd.read_csv('../data/info.csv', converters={'details':json.loads})
+        os.system("cd ..")
+        os.system("dallinger export --app {}".format(args.app))
+        os.system("unzip data/{}-data.zip -d ../data/{}".format(args.app, args.app))
+        os.system("mv ../data/{}/data/* ../data/{}".format(args.app, args.app))        
+        info = (pd.read_csv('../data/{}/info.csv'.format(args.app),
+                            converters={'details':json.loads})
                 .query('contents == "disconnect"'))
 
         info = (json_normalize(info['details'])
@@ -57,11 +64,7 @@ if __name__ == '__main__':
                 .drop_duplicates()
                 .drop('type', axis=1)
         )
-        participant = pd.read_csv('../data/participant.csv')[['id', 'assignment_id', 'worker_id']]
-        joined = info.join(participant.set_index('id'), on='id')
-        (joined.drop('id', axis=1)
-         .rename(columns={'worker_id' : 'wID', 'assignment_id' : 'aID', 'score' : 'bonus'})
-         .to_csv('./bonus_source.csv'))
+        info.to_csv('./bonus_source.csv')
         print('Now trying to approve work')
         try:
             cmd = 'python approve-work.py {} --source ./bonus_source.csv'.format(
