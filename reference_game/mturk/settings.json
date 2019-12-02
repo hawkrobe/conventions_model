@@ -1,15 +1,20 @@
 {
   "_cosubSpecVersion": 2,
-  "Url": "https://dlgr-asdf18.herokuapp.com/ad",
+  "Url": "https://dlgr-sand1.herokuapp.com/ad",
   "Title": "Communication game",
-  "Description": "Play a series of interactive matching games with other turkers in real time! Describe an object so that your partner can pick it out of a lineup. Expected completion time is between 20 and 30 minutes with a performance bonus of up to $2.40! We will also bonus you for unexpected time you spend in the waiting room. ",
+  "Description": "Play a series of interactive matching games with other turkers in real time! Describe an object so that your partner can pick it out of a lineup. Expected completion time is between 20 and 30 minutes with a performance bonus of up to $1.44!",
   "Keywords": "research, princeton, fun, game, cognitive science, language, multi-player, interactive",
   "Batch": true,
   "FrameHeight": 850,
   "AutoApprovalDelay": "5 minutes",
   "AssignmentDuration":  "1 hour",  
-  "Reward": "2.00",
+  "Reward": "2.50",
   "QualificationRequirements": [
+    {
+      "Name" : "CompletedRefGameNetwork",
+      "Comparator" : "DoesNotExist",
+      "ActionsGuarded" : "DiscoverPreviewAndAccept"
+    },
     {
       "Name": "Worker_Locale",
       "Comparator": "In",
