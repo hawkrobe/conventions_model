@@ -12,7 +12,7 @@ class CoordinationChatRoomClient {
     this.waiting = false;
     this.nextPartner = '';
     this.score = 0;
-    this.bonusAmt = 3;
+    this.bonusAmt = 4;
     this.avatars = _.shuffle(_.map(_.range(1,7), i => "avatar" + i + ".png"));
     this.currStim = [];
     
@@ -216,7 +216,7 @@ class CoordinationChatRoomClient {
     })).append("<p>You are now waiting for your next partner to finish their current game.</p> <p>The progress bar below is updated each time they finish a round, so you can see how close they are to finishing!</p>");
     $('#submessage').html(
       "You've earned a bonus of " + dollars + " so far, " +
-	"and will earn a bonus up to $1.44 if you play with all 3 partners!"
+	"and will earn a bonus up to $1.92 if you play with all 3 partners!"
     );
   }
 
