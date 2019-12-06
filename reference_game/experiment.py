@@ -59,6 +59,14 @@ class RefGameRoom() :
         """
         self.trialNum = self.trialNum + 1
         new_trial = self.trialList[self.trialNum]
+
+        # Swap roles every block of four trials
+        speaker_index = math.floor(self.trialNum / self.numRepetitions) % 2
+        listener_index = (math.floor(self.trialNum / self.numRepetitions) + 1) % 2        
+        roles = {
+            'speaker' : self.players[speaker_index],
+            'listener' : self.players[listener_index]
+        }
         packet = json.dumps({
             'type': 'newTrial',
             'networkid' : self.network_id,
@@ -70,7 +78,7 @@ class RefGameRoom() :
             'trialNum' : self.trialNum,
             'targetURL' : new_trial['targetImg']['url'],
             'currStim' : new_trial['stimuli'],
-            'roles' : {'speaker' : self.players[0], 'listener' : self.players[1]}
+            'roles' : roles
         })
         
         redis_conn.publish('refgame', packet)
@@ -199,7 +207,7 @@ class RefGameServer(Experiment):
 
         # Recruit for all networks at once and add a few extra just in case
         max_number = repeats * self.quorum
-        self.initial_recruitment_size = max_number + math.ceil(max_number * .25)
+        self.initial_recruitment_size = max_number# + math.ceil(max_number * .25)
 
     def create_network(self):
         """Create a new network by reading the configuration file."""
