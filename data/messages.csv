@@ -1,0 +1,2596 @@
+role,bonus,repid,roomid,target,content,trialnum,networkid,stimsetid,partnernum,participantid
+speaker,0,0,0,tangram_I.png,The one that looks like someone lifting their leg behind them,0,1,2,0,1
+speaker,0.03,0,0,tangram_K.png,The one that looks like a person kneeling and praying,1,1,2,0,1
+speaker,0.06,0,0,tangram_H.png,The one that is a bean shape under the diamond head,2,1,2,0,1
+speaker,0.09,0,0,tangram_J.png,The one that looks like a square body with a jagged right edge,3,1,2,0,1
+speaker,0.12,1,0,tangram_H.png,The one that looks like a person sitting and looking down.,4,1,2,0,4
+speaker,0.15,1,0,tangram_K.png,The one that looks like a person kneeling and praying.,5,1,2,0,4
+speaker,0.18,1,0,tangram_J.png,The slightly square one with a jagged right edge.,6,1,2,0,4
+speaker,0.21,1,0,tangram_I.png,The one that looks like a person throwing a kick behind them.,7,1,2,0,4
+speaker,0.24,2,0,tangram_J.png,the one with the square body with a jagged right edge,8,1,2,0,1
+speaker,0.27,2,0,tangram_K.png,the one kneeling and praying,9,1,2,0,1
+speaker,0.3,2,0,tangram_I.png,the one lifting a leg behind them,10,1,2,0,1
+speaker,0.33,2,0,tangram_H.png,the one sitting and looking down,11,1,2,0,1
+speaker,0.36,3,0,tangram_K.png,The one kneeling and praying.,12,1,2,0,4
+speaker,0.39,3,0,tangram_I.png,The one with a raised leg.,13,1,2,0,4
+speaker,0.42,3,0,tangram_H.png,The one sitting and looking down.,14,1,2,0,4
+speaker,0.45,3,0,tangram_J.png,The square one with a jagged right edge.,15,1,2,0,4
+listener,0,0,1,tangram_K.png,"Hello, whatcha got for a description?",0,1,2,0,3
+speaker,0,0,1,tangram_K.png,A person kneeling and praying,0,1,2,0,2
+listener,0,0,1,tangram_K.png,"got it, i see it",0,1,2,0,3
+listener,0.03,0,1,tangram_H.png,alright round 2,1,1,2,0,3
+speaker,0.03,0,1,tangram_H.png,A person sitting with their arms to their sides,1,1,2,0,2
+listener,0.03,0,1,tangram_H.png,yup i see it,1,1,2,0,3
+listener,0.06,0,1,tangram_J.png,got the dude pointing and the dude doing a karate kick,2,1,2,0,3
+speaker,0.06,0,1,tangram_J.png,A person pointing to the right,2,1,2,0,2
+listener,0.09,0,1,tangram_I.png,aiiiiiight we're doing good,3,1,2,0,3
+speaker,0.09,0,1,tangram_I.png,a person kicking their leg out,3,1,2,0,2
+speaker,0.12,1,1,tangram_K.png,alright bingo -- so this one is a guy on his knees praying,4,1,2,0,3
+speaker,0.15,1,1,tangram_H.png,now ive got a dude sitting with arms to the side,5,1,2,0,3
+speaker,0.18,1,1,tangram_I.png,now ive got a guy doing a kick,6,1,2,0,3
+speaker,0.21,1,1,tangram_J.png,now ive got a dude standing pointing to the right,7,1,2,0,3
+speaker,0.24,2,1,tangram_K.png,praying,8,1,2,0,2
+speaker,0.27,2,1,tangram_H.png,sitting with arms at sides,9,1,2,0,2
+speaker,0.3,2,1,tangram_I.png,kicking,10,1,2,0,2
+speaker,0.33,2,1,tangram_J.png,pointing,11,1,2,0,2
+speaker,0.36,3,1,tangram_I.png,kicking dude,12,1,2,0,3
+speaker,0.39,3,1,tangram_K.png,praying dude,13,1,2,0,3
+speaker,0.42,3,1,tangram_H.png,sitting dude,14,1,2,0,3
+speaker,0.45,3,1,tangram_J.png,pointing guy,15,1,2,0,3
+speaker,0.48,0,2,tangram_K.png,The one that looks like a person kneeing and praying.,0,1,2,1,4
+speaker,0.51,0,2,tangram_H.png,The one that looks like a person sitting and looking down.,1,1,2,1,4
+speaker,0.54,0,2,tangram_J.png,The slightly square one with a jagged right edge.,2,1,2,1,4
+speaker,0.57,0,2,tangram_I.png,The one that looks like a person raising their leg.,3,1,2,1,4
+speaker,0.6,1,2,tangram_H.png,sitting and looking down,4,1,2,1,2
+speaker,0.63,1,2,tangram_K.png,praying,5,1,2,1,2
+speaker,0.66,1,2,tangram_I.png,kicking leg,6,1,2,1,2
+speaker,0.69,1,2,tangram_J.png,jagged edge,7,1,2,1,2
+speaker,0.72,2,2,tangram_I.png,kicking leg,8,1,2,1,4
+speaker,0.75,2,2,tangram_K.png,praying,9,1,2,1,4
+speaker,0.78,2,2,tangram_H.png,sitting and looking down,10,1,2,1,4
+speaker,0.81,2,2,tangram_J.png,jagged right edge,11,1,2,1,4
+speaker,0.84,3,2,tangram_H.png,sitting,12,1,2,1,2
+speaker,0.87,3,2,tangram_K.png,praying,13,1,2,1,2
+speaker,0.9,3,2,tangram_J.png,jagged edge,14,1,2,1,2
+speaker,0.93,3,2,tangram_I.png,kicking,15,1,2,1,2
+speaker,0.48,0,3,tangram_J.png,ive got a guy standing and pointing to the right but he's not kicking or kneeling,0,1,2,1,3
+speaker,0.51,0,3,tangram_H.png,"now ive got a dude sitting with his arms to the side, NOT praying",1,1,2,1,3
+speaker,0.54,0,3,tangram_I.png,now ive got a guy doing a karate kick move,2,1,2,1,3
+speaker,0.57,0,3,tangram_K.png,now ive got a dude praying,3,1,2,1,3
+listener,0.6,1,3,tangram_I.png,"nice, whatcha see?",4,1,2,1,3
+speaker,0.6,1,3,tangram_I.png,the one lifting a leg behind them,4,1,2,1,1
+speaker,0.63,1,3,tangram_K.png,kneeling and praying,5,1,2,1,1
+listener,0.66,1,3,tangram_J.png,doing well. whatcha got?,6,1,2,1,3
+speaker,0.66,1,3,tangram_J.png,the one pointing to the right with a square shaped body,6,1,2,1,1
+listener,0.69,1,3,tangram_H.png,dude sitting with arms to the side?,7,1,2,1,3
+speaker,0.69,1,3,tangram_H.png,the one sitting down,7,1,2,1,1
+speaker,0.72,2,3,tangram_I.png,ive got the guy kicking behind him,8,1,2,1,3
+speaker,0.75,2,3,tangram_K.png,got the prayer person,9,1,2,1,3
+speaker,0.78,2,3,tangram_J.png,"got the standing pointing fella, boxman",10,1,2,1,3
+speaker,0.81,2,3,tangram_H.png,sitting guy,11,1,2,1,3
+speaker,0.84,3,3,tangram_J.png,I got the square one pointing to the right,12,1,2,1,1
+listener,0.87,3,3,tangram_K.png,"nice, we're doing well",13,1,2,1,3
+speaker,0.87,3,3,tangram_K.png,the kneeling and praying one,13,1,2,1,1
+speaker,0.9,3,3,tangram_H.png,the sitting one,14,1,2,1,1
+listener,0.93,3,3,tangram_I.png,kicker?,15,1,2,1,3
+speaker,0.93,3,3,tangram_I.png,the leg kicker,15,1,2,1,1
+speaker,0.96,0,4,tangram_H.png,"yo, ive got the guy sitting down arms to the side NOT praying",0,1,2,2,3
+speaker,0.99,0,4,tangram_J.png,"nice, now ive got the boxy guy standing up pointing to the right NOT kicking",1,1,2,2,3
+speaker,1.02,0,4,tangram_K.png,"sweet doing well, got the guy doing a prayer",2,1,2,2,3
+speaker,1.05,0,4,tangram_I.png,now karate homeboy,3,1,2,2,3
+listener,1.08,1,4,tangram_J.png,aight whatcha got?,4,1,2,2,3
+speaker,1.08,1,4,tangram_J.png,Boxy guy,4,1,2,2,4
+listener,1.11,1,4,tangram_H.png,dope,5,1,2,2,3
+speaker,1.11,1,4,tangram_H.png,Man sitting,5,1,2,2,4
+listener,1.14,1,4,tangram_K.png,we on it,6,1,2,2,3
+speaker,1.14,1,4,tangram_K.png,Guy praying,6,1,2,2,4
+listener,1.17,1,4,tangram_I.png,4 cents all day baby,7,1,2,2,3
+speaker,1.17,1,4,tangram_I.png,Karate guy lol,7,1,2,2,4
+speaker,1.2,2,4,tangram_H.png,got the dude sitting,8,1,2,2,3
+speaker,1.23,2,4,tangram_K.png,got the prayer man,9,1,2,2,3
+speaker,1.26,2,4,tangram_I.png,karateeeeee,10,1,2,2,3
+speaker,1.29,2,4,tangram_J.png,boxy brown,11,1,2,2,3
+listener,1.32,3,4,tangram_K.png,you got it killa,12,1,2,2,3
+speaker,1.32,3,4,tangram_K.png,Guy praying,12,1,2,2,4
+speaker,1.35,3,4,tangram_I.png,Karate guy,13,1,2,2,4
+speaker,1.38,3,4,tangram_J.png,Boxy guy,14,1,2,2,4
+speaker,1.41,3,4,tangram_H.png,Guy sitting,15,1,2,2,4
+listener,1.41,3,4,tangram_H.png,you on it,15,1,2,2,3
+speaker,0.96,0,5,tangram_J.png,the one with a square body and a jagged right edge,0,1,2,2,1
+speaker,0.99,0,5,tangram_I.png,the one kicking a leg behind them,1,1,2,2,1
+speaker,1.02,0,5,tangram_H.png,the one that looks like it's sitting down,2,1,2,2,1
+speaker,1.05,0,5,tangram_K.png,the one kneeling and praying,3,1,2,2,1
+speaker,1.08,1,5,tangram_I.png,Person kicking,4,1,2,2,2
+speaker,1.11,1,5,tangram_K.png,person praying,5,1,2,2,2
+speaker,1.14,1,5,tangram_J.png,jagged edge,6,1,2,2,2
+speaker,1.17,1,5,tangram_H.png,person sitting,7,1,2,2,2
+speaker,1.2,2,5,tangram_I.png,the kicking one,8,1,2,2,1
+speaker,1.23,2,5,tangram_H.png,the sitting one,9,1,2,2,1
+speaker,1.26,2,5,tangram_K.png,the kneeling and praying one,10,1,2,2,1
+speaker,1.29,2,5,tangram_J.png,the jagged edge one,11,1,2,2,1
+speaker,1.32,3,5,tangram_H.png,sitting,12,1,2,2,2
+speaker,1.35,3,5,tangram_J.png,jagged,13,1,2,2,2
+speaker,1.38,3,5,tangram_I.png,kicking,14,1,2,2,2
+speaker,1.41,3,5,tangram_K.png,praying,15,1,2,2,2
+speaker,0,0,0,tangram_L.png,diamond head facing right,0,2,1,0,5
+speaker,0,0,0,tangram_G.png,facing left gap at bottom right,1,2,1,0,5
+speaker,0.03,0,0,tangram_E.png,facing right sitting down no gap,2,2,1,0,5
+speaker,0.06,0,0,tangram_F.png,facing left sitting down gap on left,3,2,1,0,5
+speaker,0.09,1,0,tangram_L.png,"standing up, squatting with diamond straight ",4,2,1,0,7
+speaker,0.12,1,0,tangram_F.png,sitting down gap at left ,5,2,1,0,7
+speaker,0.15,1,0,tangram_E.png,"shapes on top of the diamond, no gaps",6,2,1,0,7
+speaker,0.18,1,0,tangram_G.png,"looks like dancing, gap on right ",7,2,1,0,7
+speaker,0.21,2,0,tangram_L.png,Squating one facing right,8,2,1,0,5
+speaker,0.24,2,0,tangram_E.png,sitting down no gap,9,2,1,0,5
+speaker,0.27,2,0,tangram_F.png,sitting down facing left gap on left,10,2,1,0,5
+speaker,0.3,2,0,tangram_G.png,dancing one gap on right,11,2,1,0,5
+speaker,0.33,3,0,tangram_F.png,sitting down gap on left,12,2,1,0,7
+speaker,0.36,3,0,tangram_G.png,"dancing, gap on right",13,2,1,0,7
+speaker,0.39,3,0,tangram_L.png,squatting diamond straight up,14,2,1,0,7
+speaker,0.42,3,0,tangram_E.png,"sitting, shapes on the head",15,2,1,0,7
+speaker,0,0,1,tangram_F.png,bald man sitting down looking at his feet,0,2,1,0,6
+speaker,0.03,0,1,tangram_G.png,triangle tail on the side towards the bottom,1,2,1,0,6
+speaker,0.06,0,1,tangram_E.png,bunny rabbit ears,2,2,1,0,6
+speaker,0.09,0,1,tangram_L.png,man kneeling down reading a book,3,2,1,0,6
+speaker,0.12,1,1,tangram_E.png,bunny ears sitting down,4,2,1,0,8
+speaker,0.15,1,1,tangram_F.png,man sitting down looking at his feet,5,2,1,0,8
+speaker,0.18,1,1,tangram_L.png,man kneeling with something in his hands,6,2,1,0,8
+speaker,0.21,1,1,tangram_G.png,person sitting with triangle tail,7,2,1,0,8
+speaker,0.24,2,1,tangram_L.png,man kneeling reading a book,8,2,1,0,6
+speaker,0.27,2,1,tangram_G.png,triangle tail on the side,9,2,1,0,6
+speaker,0.3,2,1,tangram_E.png,bunny ears,10,2,1,0,6
+speaker,0.33,2,1,tangram_F.png,bald man sitting down looking at his feet,11,2,1,0,6
+speaker,0.36,3,1,tangram_E.png,bunny ears,12,2,1,0,8
+speaker,0.39,3,1,tangram_L.png,kneeling with book,13,2,1,0,8
+speaker,0.42,3,1,tangram_G.png,triangle tail,14,2,1,0,8
+speaker,0.45,3,1,tangram_F.png,looking at feet,15,2,1,0,8
+speaker,0.48,0,2,tangram_E.png,bunny ears,0,2,1,1,6
+speaker,0.51,0,2,tangram_F.png,bland man looking at feet,1,2,1,1,6
+speaker,0.51,0,2,tangram_L.png,man kneeling reading a book,2,2,1,1,6
+speaker,0.54,0,2,tangram_G.png,triangle tail,3,2,1,1,6
+speaker,0.54,1,2,tangram_L.png,man kneeling looking at book,4,2,1,1,5
+speaker,0.57,1,2,tangram_G.png,triangle tail,5,2,1,1,5
+speaker,0.6,1,2,tangram_E.png,bunny ears,6,2,1,1,5
+speaker,0.63,1,2,tangram_F.png,guy sitting facing left,7,2,1,1,5
+speaker,0.63,1,2,tangram_F.png,bland one,7,2,1,1,5
+speaker,0.69,2,2,tangram_L.png,kneeling reading book,8,2,1,1,6
+speaker,0.72,2,2,tangram_F.png,looking at feet no ears,9,2,1,1,6
+speaker,0.75,2,2,tangram_G.png,triangle tail,10,2,1,1,6
+speaker,0.78,2,2,tangram_E.png,bunny ears,11,2,1,1,6
+speaker,0.78,3,2,tangram_L.png,kneeling reading a book,12,2,1,1,5
+speaker,0.81,3,2,tangram_E.png,bunny ears,13,2,1,1,5
+speaker,0.84,3,2,tangram_F.png,sitting looking at feet no ears,14,2,1,1,5
+speaker,0.87,3,2,tangram_G.png,triangle tail,15,2,1,1,5
+speaker,0.48,0,3,tangram_L.png,person kneeling with a book in their hands,0,2,1,1,8
+speaker,0.51,0,3,tangram_G.png,person sitting with a small triangle tail on their right,1,2,1,1,8
+speaker,0.54,0,3,tangram_F.png,bald man sitting looking at his feet,2,2,1,1,8
+speaker,0.57,0,3,tangram_E.png,person with bunny ears,3,2,1,1,8
+speaker,0.57,1,3,tangram_L.png,squatting with diamond head ,4,2,1,1,7
+speaker,0.6,1,3,tangram_E.png,"sitting with shapes on the head, bunny ears",5,2,1,1,7
+speaker,0.63,1,3,tangram_F.png,sitting down with a gap between legs and ground on the right,6,2,1,1,7
+speaker,0.63,1,3,tangram_G.png,dancing with a triangle tail,7,2,1,1,7
+speaker,0.69,2,3,tangram_L.png,person squatting,8,2,1,1,8
+speaker,0.72,2,3,tangram_F.png,person sitting looking at their feet,9,2,1,1,8
+speaker,0.75,2,3,tangram_G.png,person with triangle tail on the right,10,2,1,1,8
+speaker,0.78,2,3,tangram_E.png,sitting person with bunny ears,11,2,1,1,8
+speaker,0.78,3,3,tangram_F.png,sitting down with gap on the left,12,2,1,1,7
+speaker,0.81,3,3,tangram_L.png,squatting with diamond head,13,2,1,1,7
+speaker,0.84,3,3,tangram_G.png,dancing with triangle tail,14,2,1,1,7
+speaker,0.87,3,3,tangram_E.png,sitting with bunny ears,15,2,1,1,7
+speaker,0.9,0,4,tangram_L.png,man squatting facing right nothing on head,0,2,1,2,5
+speaker,0.93,0,4,tangram_G.png,man that looks like hes dancing gap on bottom right,1,2,1,2,5
+speaker,0.96,0,4,tangram_F.png,man sitting facing left no thing on head,2,2,1,2,5
+speaker,0.99,0,4,tangram_E.png,man sitting facing right ,3,2,1,2,5
+speaker,1.05,1,4,tangram_L.png,person squatting with something in their hands,4,2,1,2,8
+speaker,1.08,1,4,tangram_G.png,dancing person with a triangle tail on the right,5,2,1,2,8
+speaker,1.11,1,4,tangram_F.png,man sitting towards the left looking at his feet,6,2,1,2,8
+listener,1.08,1,4,tangram_F.png,triangles on his head?,6,2,1,2,5
+speaker,1.11,1,4,tangram_F.png,no,6,2,1,2,8
+speaker,1.14,1,4,tangram_E.png,person sitting with triangle bunny ears,7,2,1,2,8
+speaker,1.14,2,4,tangram_G.png,man dancing with tail on bottom right,8,2,1,2,5
+speaker,1.17,2,4,tangram_E.png,man sitting with triangle bunny ears,9,2,1,2,5
+speaker,1.2,2,4,tangram_F.png,man sitting looking at feet,10,2,1,2,5
+speaker,1.23,2,4,tangram_L.png,man squatting holding something,11,2,1,2,5
+speaker,1.29,3,4,tangram_G.png,dancing with triangle tail,12,2,1,2,8
+speaker,1.32,3,4,tangram_L.png,squatting with something in hands,13,2,1,2,8
+speaker,1.35,3,4,tangram_E.png,sitting with bunny ears,14,2,1,2,8
+speaker,1.38,3,4,tangram_F.png,sitting looking at feet,15,2,1,2,8
+speaker,0.93,0,5,tangram_F.png,bald guy looking at feet,0,2,1,2,6
+speaker,0.96,0,5,tangram_L.png,kneeling reading a book,1,2,1,2,6
+speaker,0.99,0,5,tangram_G.png,triangle tail,2,2,1,2,6
+speaker,1.02,0,5,tangram_E.png,bunny ears,3,2,1,2,6
+speaker,1.02,1,5,tangram_F.png,sitting down gap on left,4,2,1,2,7
+speaker,1.05,1,5,tangram_E.png,bunny ears,5,2,1,2,7
+speaker,1.08,1,5,tangram_L.png,kneeling with diamond head,6,2,1,2,7
+speaker,1.08,1,5,tangram_G.png,dancing with triangle on bottom right,7,2,1,2,7
+speaker,1.14,2,5,tangram_F.png,"guy looking at feet, bald",8,2,1,2,6
+speaker,1.17,2,5,tangram_E.png,bunny ears,9,2,1,2,6
+speaker,1.2,2,5,tangram_L.png,kneeling reading a book,10,2,1,2,6
+speaker,1.23,2,5,tangram_G.png,triangle tail,11,2,1,2,6
+speaker,1.23,3,5,tangram_F.png,sitting down facing left,12,2,1,2,7
+speaker,1.26,3,5,tangram_G.png,dancing with triangle tail,13,2,1,2,7
+speaker,1.29,3,5,tangram_E.png,bunny ears,14,2,1,2,7
+speaker,1.32,3,5,tangram_L.png,kneeling ,15,2,1,2,7
+speaker,0,0,0,tangram_D.png,straight,0,3,0,0,12
+speaker,0.03,0,0,tangram_A.png,leg up,1,3,0,0,12
+speaker,0.06,0,0,tangram_C.png,falling back,2,3,0,0,12
+speaker,0.09,0,0,tangram_B.png,triangles on opposite ends,3,3,0,0,12
+speaker,0.12,1,0,tangram_D.png,offering a tray,4,3,0,0,9
+speaker,0.12,1,0,tangram_B.png,sit down,5,3,0,0,9
+speaker,0.15,1,0,tangram_C.png,falling backwards,6,3,0,0,9
+speaker,0.18,1,0,tangram_A.png,leg up,7,3,0,0,9
+speaker,0.21,2,0,tangram_D.png,offering a tray,8,3,0,0,12
+speaker,0.24,2,0,tangram_A.png,leg up,9,3,0,0,12
+speaker,0.27,2,0,tangram_C.png,falling back,10,3,0,0,12
+speaker,0.3,2,0,tangram_B.png,sitting,11,3,0,0,12
+speaker,0.33,3,0,tangram_C.png,falling back,12,3,0,0,9
+speaker,0.36,3,0,tangram_B.png,sitting,13,3,0,0,9
+speaker,0.39,3,0,tangram_A.png,leg up,14,3,0,0,9
+speaker,0.42,3,0,tangram_D.png,offering,15,3,0,0,9
+speaker,0,0,1,tangram_C.png,It is the one that looks like it's flying.,0,3,0,0,11
+speaker,0.03,0,1,tangram_A.png,It looks like a monster kicking something.,1,3,0,0,11
+speaker,0.06,0,1,tangram_D.png,It looks like a preacher standing straight holding a book,2,3,0,0,11
+speaker,0.09,0,1,tangram_B.png,It looks like a person kneeling with triangle arms.,3,3,0,0,11
+speaker,0.12,1,1,tangram_C.png,Looks like flying man,4,3,0,0,10
+speaker,0.15,1,1,tangram_D.png,Preacher with book,5,3,0,0,10
+speaker,0.18,1,1,tangram_A.png,monster kicking,6,3,0,0,10
+speaker,0.21,1,1,tangram_B.png,man with triangle arms,7,3,0,0,10
+speaker,0.24,2,1,tangram_A.png,kicking monster,8,3,0,0,11
+speaker,0.27,2,1,tangram_C.png,flying guy,9,3,0,0,11
+speaker,0.3,2,1,tangram_D.png,preacher with the book,10,3,0,0,11
+speaker,0.33,2,1,tangram_B.png,kneeling triangle man,11,3,0,0,11
+speaker,0.36,3,1,tangram_A.png,monster kicking,12,3,0,0,10
+speaker,0.39,3,1,tangram_D.png,preacher with book,13,3,0,0,10
+speaker,0.42,3,1,tangram_B.png,man with triangle arms,14,3,0,0,10
+speaker,0.45,3,1,tangram_C.png,flying man,15,3,0,0,10
+speaker,0.48,0,2,tangram_C.png,Looks like a man flying,0,3,0,1,11
+speaker,0.48,0,2,tangram_B.png,Looks like a man kneeling with triangle arms.,1,3,0,1,11
+speaker,0.51,0,2,tangram_D.png,looks like a preacher standing with a book,2,3,0,1,11
+speaker,0.54,0,2,tangram_A.png,looks like a monster kicking the ground,3,3,0,1,11
+speaker,0.54,1,2,tangram_D.png,preacher offering,4,3,0,1,12
+speaker,0.57,1,2,tangram_C.png,man falling back,5,3,0,1,12
+speaker,0.6,1,2,tangram_B.png,man kneeling,6,3,0,1,12
+speaker,0.63,1,2,tangram_A.png,leg up,7,3,0,1,12
+speaker,0.69,2,2,tangram_C.png,The flying or falling man,8,3,0,1,11
+speaker,0.72,2,2,tangram_D.png,the preacher with the book,9,3,0,1,11
+speaker,0.75,2,2,tangram_B.png,the kneeling man,10,3,0,1,11
+speaker,0.78,2,2,tangram_A.png,the monster with the leg up,11,3,0,1,11
+speaker,0.78,3,2,tangram_C.png,man falling back,12,3,0,1,12
+speaker,0.81,3,2,tangram_B.png,kneeling man,13,3,0,1,12
+speaker,0.84,3,2,tangram_D.png,preacher offering,14,3,0,1,12
+speaker,0.87,3,2,tangram_A.png,leg up,15,3,0,1,12
+speaker,0.45,0,3,tangram_C.png,falling back,0,3,0,1,9
+speaker,0.48,0,3,tangram_A.png,leg up,1,3,0,1,9
+speaker,0.51,0,3,tangram_D.png,offering while standing,2,3,0,1,9
+speaker,0.54,0,3,tangram_B.png,sitting,3,3,0,1,9
+speaker,0.6,1,3,tangram_D.png,standing offering,4,3,0,1,10
+speaker,0.63,1,3,tangram_B.png,sitting,5,3,0,1,10
+speaker,0.66,1,3,tangram_C.png,falling back,6,3,0,1,10
+speaker,0.69,1,3,tangram_A.png,with leg up,7,3,0,1,10
+speaker,0.69,2,3,tangram_C.png,falling back,8,3,0,1,9
+speaker,0.72,2,3,tangram_A.png,leg up,9,3,0,1,9
+speaker,0.75,2,3,tangram_D.png,offering,10,3,0,1,9
+speaker,0.78,2,3,tangram_B.png,sitting,11,3,0,1,9
+speaker,0.84,3,3,tangram_C.png,falling,12,3,0,1,10
+speaker,0.87,3,3,tangram_A.png,leg up,13,3,0,1,10
+speaker,0.9,3,3,tangram_B.png,sitting,14,3,0,1,10
+speaker,0.93,3,3,tangram_D.png,offering,15,3,0,1,10
+speaker,0.9,0,4,tangram_D.png,preacher offering tray,0,3,0,2,12
+speaker,0.93,0,4,tangram_A.png,leg up,1,3,0,2,12
+speaker,0.96,0,4,tangram_B.png,kneeling man,2,3,0,2,12
+speaker,0.99,0,4,tangram_C.png,man falling back,3,3,0,2,12
+speaker,1.05,1,4,tangram_D.png,preacher,4,3,0,2,10
+speaker,1.08,1,4,tangram_C.png,falling,5,3,0,2,10
+speaker,1.11,1,4,tangram_B.png,kneeling,6,3,0,2,10
+speaker,1.14,1,4,tangram_A.png,leg up,7,3,0,2,10
+speaker,1.14,2,4,tangram_D.png,preacher,8,3,0,2,12
+speaker,1.17,2,4,tangram_A.png,leg up,9,3,0,2,12
+speaker,1.2,2,4,tangram_B.png,kneeling,10,3,0,2,12
+speaker,1.23,2,4,tangram_C.png,falling,11,3,0,2,12
+speaker,1.29,3,4,tangram_D.png,preacher,12,3,0,2,10
+speaker,1.32,3,4,tangram_A.png,leg up,13,3,0,2,10
+speaker,1.35,3,4,tangram_C.png,falling,14,3,0,2,10
+speaker,1.38,3,4,tangram_B.png,kneeling,15,3,0,2,10
+speaker,0.93,0,5,tangram_B.png,The man kneeling,0,3,0,2,11
+speaker,0.96,0,5,tangram_A.png,The one that looks like a monster kicking the ground,1,3,0,2,11
+speaker,0.99,0,5,tangram_D.png,looks like a preacher holding a book,2,3,0,2,11
+speaker,1.02,0,5,tangram_C.png,a man either falling or flying,3,3,0,2,11
+speaker,1.02,1,5,tangram_D.png,"offering a tray, standing",4,3,0,2,9
+speaker,1.05,1,5,tangram_C.png,falling,5,3,0,2,9
+speaker,1.08,1,5,tangram_B.png,kneeling,6,3,0,2,9
+speaker,1.11,1,5,tangram_A.png,kicking,7,3,0,2,9
+speaker,1.17,2,5,tangram_C.png,the falling one,8,3,0,2,11
+speaker,1.2,2,5,tangram_A.png,kicking monster,9,3,0,2,11
+speaker,1.23,2,5,tangram_B.png,kneeling one,10,3,0,2,11
+speaker,1.26,2,5,tangram_D.png,standing preacher,11,3,0,2,11
+speaker,1.26,3,5,tangram_B.png,kneeling,12,3,0,2,9
+speaker,1.29,3,5,tangram_C.png,falling,13,3,0,2,9
+speaker,1.32,3,5,tangram_A.png,kicking,14,3,0,2,9
+speaker,1.35,3,5,tangram_D.png,offering,15,3,0,2,9
+listener,0,0,0,tangram_I.png,hi,0,4,2,0,15
+speaker,0,0,0,tangram_I.png,one leg is up. look like a dancing position,0,4,2,0,13
+speaker,0.03,0,0,tangram_H.png,both hand and legs are covered and nil down,1,4,2,0,13
+speaker,0.06,0,0,tangram_K.png,nil down and begging position ,2,4,2,0,13
+speaker,0.09,0,0,tangram_J.png,standing position one hand is up,3,4,2,0,13
+speaker,0.12,1,0,tangram_H.png,looks like they are sitting with hands and feet inside,4,4,2,0,15
+speaker,0.15,1,0,tangram_J.png,looks like they are sitting and pointing,5,4,2,0,15
+speaker,0.15,1,0,tangram_K.png,like they are begging,6,4,2,0,15
+speaker,0.18,1,0,tangram_I.png,like they are dancing,7,4,2,0,15
+speaker,0.21,2,0,tangram_K.png,begging position,8,4,2,0,13
+speaker,0.21,2,0,tangram_K.png,and nil down,8,4,2,0,13
+speaker,0.24,2,0,tangram_J.png,standing position one hand is up,9,4,2,0,13
+speaker,0.27,2,0,tangram_I.png,dancing position,10,4,2,0,13
+speaker,0.3,2,0,tangram_H.png,nil down legs and hands are inside,11,4,2,0,13
+speaker,0.33,3,0,tangram_J.png,standing and pointing,12,4,2,0,15
+speaker,0.36,3,0,tangram_I.png,dancing,13,4,2,0,15
+speaker,0.39,3,0,tangram_H.png,feet and hands all in ,14,4,2,0,15
+speaker,0.42,3,0,tangram_K.png,begging,15,4,2,0,15
+speaker,0,0,1,tangram_I.png,the one that looks like it's standing on a leg,0,4,2,0,14
+speaker,0.03,0,1,tangram_H.png,the one that looks like it's sitting crouched down,1,4,2,0,14
+speaker,0.03,0,1,tangram_J.png,the one that has a more square body,2,4,2,0,14
+speaker,0.06,0,1,tangram_K.png,the sitting one with the spike coming out of its back,3,4,2,0,14
+speaker,0.09,1,1,tangram_H.png,like sitting on the left,4,4,2,0,16
+speaker,0.12,1,1,tangram_K.png,Like praying,5,4,2,0,16
+speaker,0.12,1,1,tangram_J.png,Second from left,6,4,2,0,16
+speaker,0.15,1,1,tangram_I.png,stretching leg,7,4,2,0,16
+speaker,0.18,2,1,tangram_K.png,Sitting with a spike out its back,8,4,2,0,14
+speaker,0.21,2,1,tangram_I.png,Stretching a leg,9,4,2,0,14
+speaker,0.24,2,1,tangram_H.png,Sitting balled up,10,4,2,0,14
+speaker,0.24,2,1,tangram_J.png,The square looking well,11,4,2,0,14
+speaker,0.27,3,1,tangram_K.png,sitting at spike in back,12,4,2,0,16
+speaker,0.3,3,1,tangram_J.png,square one,13,4,2,0,16
+speaker,0.33,3,1,tangram_I.png,dancing,14,4,2,0,16
+speaker,0.36,3,1,tangram_H.png,siting and praying,15,4,2,0,16
+speaker,0.45,0,2,tangram_J.png,looks like they are pointing,0,4,2,1,15
+speaker,0.48,0,2,tangram_K.png,looks like begging,1,4,2,1,15
+speaker,0.48,0,2,tangram_I.png,dancing,2,4,2,1,15
+speaker,0.51,0,2,tangram_H.png,like they are sitting with hand and feet all in,3,4,2,1,15
+speaker,0.48,1,2,tangram_I.png,stretching leg,4,4,2,1,14
+speaker,0.51,1,2,tangram_H.png,The one that is sitting balled up,5,4,2,1,14
+speaker,0.54,1,2,tangram_K.png,The one that looks like it's begging or praying,6,4,2,1,14
+speaker,0.57,1,2,tangram_J.png,The half square one,7,4,2,1,14
+speaker,0.66,2,2,tangram_K.png,praying,8,4,2,1,15
+speaker,0.69,2,2,tangram_J.png,half square,9,4,2,1,15
+speaker,0.72,2,2,tangram_I.png,dancing,10,4,2,1,15
+speaker,0.75,2,2,tangram_H.png,all balled p,11,4,2,1,15
+speaker,0.72,3,2,tangram_I.png,stretching one,12,4,2,1,14
+speaker,0.75,3,2,tangram_K.png,praying one,13,4,2,1,14
+speaker,0.78,3,2,tangram_H.png,balled up one,14,4,2,1,14
+speaker,0.81,3,2,tangram_J.png,half square one,15,4,2,1,14
+speaker,0.45,0,3,tangram_J.png,standing position ,0,4,2,1,13
+speaker,0.48,0,3,tangram_I.png,dancing position,1,4,2,1,13
+speaker,0.51,0,3,tangram_K.png,begging position,2,4,2,1,13
+speaker,0.54,0,3,tangram_H.png,nil down leg and hands are inside,3,4,2,1,13
+speaker,0.51,1,3,tangram_K.png,begging,4,4,2,1,16
+speaker,0.54,1,3,tangram_H.png,no hands outside,5,4,2,1,16
+speaker,0.57,1,3,tangram_I.png,dancing,6,4,2,1,16
+speaker,0.6,1,3,tangram_J.png,square one,7,4,2,1,16
+speaker,0.69,2,3,tangram_H.png,nil down legs and hands are inside,8,4,2,1,13
+speaker,0.72,2,3,tangram_I.png,dancing position,9,4,2,1,13
+speaker,0.75,2,3,tangram_K.png,begging,10,4,2,1,13
+speaker,0.78,2,3,tangram_J.png,standing position,11,4,2,1,13
+speaker,0.75,3,3,tangram_K.png,begging,12,4,2,1,16
+speaker,0.78,3,3,tangram_I.png,dancing,13,4,2,1,16
+speaker,0.81,3,3,tangram_J.png,square,14,4,2,1,16
+speaker,0.84,3,3,tangram_H.png,no hands out,15,4,2,1,16
+speaker,0.9,0,4,tangram_K.png,praying,0,4,2,2,15
+speaker,0.9,0,4,tangram_H.png,all balled up ,1,4,2,2,15
+speaker,0.9,0,4,tangram_J.png,half square,2,4,2,2,15
+speaker,0.93,0,4,tangram_I.png,dancing,3,4,2,2,15
+speaker,0.93,1,4,tangram_K.png,praying,4,4,2,2,16
+speaker,0.96,1,4,tangram_J.png,square one,5,4,2,2,16
+speaker,0.99,1,4,tangram_I.png,dancing,6,4,2,2,16
+speaker,1.02,1,4,tangram_H.png,no hands out,7,4,2,2,16
+speaker,1.08,2,4,tangram_I.png,dancing,8,4,2,2,15
+speaker,1.11,2,4,tangram_J.png,square,9,4,2,2,15
+speaker,1.14,2,4,tangram_H.png,all balled up no hands or feet,10,4,2,2,15
+speaker,1.17,2,4,tangram_K.png,praying,11,4,2,2,15
+speaker,1.17,3,4,tangram_H.png,no hands,12,4,2,2,16
+speaker,1.2,3,4,tangram_K.png,praying,13,4,2,2,16
+speaker,1.23,3,4,tangram_I.png,dance,14,4,2,2,16
+speaker,1.26,3,4,tangram_J.png,square one,15,4,2,2,16
+speaker,0.93,0,5,tangram_J.png,standing position,0,4,2,2,13
+speaker,0.93,0,5,tangram_H.png,nil down legs and hands are inside,1,4,2,2,13
+speaker,0.96,0,5,tangram_K.png,begging ,2,4,2,2,13
+speaker,0.99,0,5,tangram_I.png,dancing,3,4,2,2,13
+speaker,0.93,1,5,tangram_H.png,balled up one,4,4,2,2,14
+speaker,0.93,1,5,tangram_I.png,dancing one,5,4,2,2,14
+speaker,0.96,1,5,tangram_K.png,begging one,6,4,2,2,14
+speaker,0.99,1,5,tangram_J.png,half square one,7,4,2,2,14
+speaker,1.11,2,5,tangram_K.png,begging,8,4,2,2,13
+speaker,1.14,2,5,tangram_J.png,standing position,9,4,2,2,13
+speaker,1.17,2,5,tangram_H.png,nil down legs and hands are inside,10,4,2,2,13
+speaker,1.17,2,5,tangram_I.png,dancing ,11,4,2,2,13
+speaker,1.11,3,5,tangram_H.png,sitting down balled up one,12,4,2,2,14
+speaker,1.14,3,5,tangram_J.png,half square one,13,4,2,2,14
+speaker,1.17,3,5,tangram_I.png,dancing one,14,4,2,2,14
+speaker,1.2,3,5,tangram_K.png,praying one,15,4,2,2,14
+speaker,0,0,0,tangram_K.png,Looks like a guy praying on his knees,0,5,2,0,20
+speaker,0.03,0,0,tangram_I.png,Looks like a cheerleader stretching her leg,1,5,2,0,20
+speaker,0.06,0,0,tangram_H.png,Looks like a buddist monk sitting,2,5,2,0,20
+speaker,0.06,0,0,tangram_J.png,Very square?,3,5,2,0,20
+speaker,0.09,1,0,tangram_H.png,Like Buddhist monk,4,5,2,0,18
+speaker,0.12,1,0,tangram_K.png,Like praying,5,5,2,0,18
+speaker,0.15,1,0,tangram_J.png,Left one,6,5,2,0,18
+listener,0.15,1,0,tangram_J.png,?,6,5,2,0,20
+listener,0.15,1,0,tangram_J.png,The pictures are shuffled,6,5,2,0,20
+speaker,0.15,1,0,tangram_J.png,Square one,6,5,2,0,18
+speaker,0.18,1,0,tangram_I.png,stretching leg,7,5,2,0,18
+speaker,0.21,2,0,tangram_H.png,Meditating guy,8,5,2,0,20
+speaker,0.21,2,0,tangram_I.png,Dancing girl,9,5,2,0,20
+speaker,0.24,2,0,tangram_J.png,Minecraft man,10,5,2,0,20
+speaker,0.27,2,0,tangram_K.png,Bowing,11,5,2,0,20
+speaker,0.27,3,0,tangram_H.png,bowing,12,5,2,0,18
+speaker,0.27,3,0,tangram_I.png,dancing,13,5,2,0,18
+speaker,0.3,3,0,tangram_J.png,square one,14,5,2,0,18
+speaker,0.33,3,0,tangram_K.png,sitting with spike in back,15,5,2,0,18
+speaker,0,0,1,tangram_J.png,One with sit position,0,5,2,0,17
+speaker,0,0,1,tangram_K.png,one with prayer position,1,5,2,0,17
+speaker,0.03,0,1,tangram_I.png,one with kick position,2,5,2,0,17
+speaker,0.06,0,1,tangram_H.png,one with sit position,3,5,2,0,17
+listener,0.06,0,1,tangram_H.png,it looks like it is raising its arms?,3,5,2,0,19
+speaker,0.06,1,1,tangram_K.png,praying position,4,5,2,0,19
+speaker,0.09,1,1,tangram_J.png,arms raised,5,5,2,0,19
+speaker,0.09,1,1,tangram_H.png,no arms,6,5,2,0,19
+speaker,0.12,1,1,tangram_I.png,back kick,7,5,2,0,19
+speaker,0.15,2,1,tangram_J.png,with arms raised,8,5,2,0,17
+speaker,0.18,2,1,tangram_H.png,with sit position,9,5,2,0,17
+speaker,0.21,2,1,tangram_I.png,kick position,10,5,2,0,17
+speaker,0.24,2,1,tangram_K.png,prayer position,11,5,2,0,17
+speaker,0.27,3,1,tangram_H.png,no arms,12,5,2,0,19
+speaker,0.3,3,1,tangram_K.png,praying,13,5,2,0,19
+speaker,0.33,3,1,tangram_J.png,arms up,14,5,2,0,19
+speaker,0.33,3,1,tangram_I.png,back kick,15,5,2,0,19
+speaker,0.36,0,2,tangram_K.png,prayer position,0,5,2,1,17
+speaker,0.39,0,2,tangram_I.png,kick positon,1,5,2,1,17
+speaker,0.42,0,2,tangram_J.png,arms raised,2,5,2,1,17
+speaker,0.45,0,2,tangram_H.png,Sit,3,5,2,1,17
+speaker,0.48,1,2,tangram_I.png,When your drunk buddy tries to jump off a roof with homemade wings.,4,5,2,1,20
+speaker,0.51,1,2,tangram_J.png,This guy wants a hug.,5,5,2,1,20
+speaker,0.54,1,2,tangram_K.png,Your wife after you buy her a diamond necklace.,6,5,2,1,20
+speaker,0.54,1,2,tangram_H.png,Uh,7,5,2,1,20
+speaker,0.54,2,2,tangram_J.png,arms raised,8,5,2,1,17
+speaker,0.57,2,2,tangram_K.png,prayer,9,5,2,1,17
+speaker,0.6,2,2,tangram_H.png,sit,10,5,2,1,17
+speaker,0.63,2,2,tangram_I.png,kick,11,5,2,1,17
+speaker,0.66,3,2,tangram_H.png,Picnic position.,12,5,2,1,20
+speaker,0.66,3,2,tangram_J.png,Arms apart.,13,5,2,1,20
+speaker,0.69,3,2,tangram_I.png,Leg stretching.,14,5,2,1,20
+speaker,0.72,3,2,tangram_K.png,Holding a soup bowl.,15,5,2,1,20
+speaker,0.36,0,3,tangram_H.png,no arms,0,5,2,1,19
+speaker,0.39,0,3,tangram_I.png,back kick,1,5,2,1,19
+speaker,0.42,0,3,tangram_K.png,praying,2,5,2,1,19
+speaker,0.45,0,3,tangram_J.png,rejoicing,3,5,2,1,19
+speaker,0.48,1,3,tangram_I.png,dancing,4,5,2,1,18
+speaker,0.51,1,3,tangram_J.png,square one,5,5,2,1,18
+speaker,0.54,1,3,tangram_K.png,begging,6,5,2,1,18
+speaker,0.57,1,3,tangram_H.png,no hands outside,7,5,2,1,18
+speaker,0.6,2,3,tangram_I.png,back kick,8,5,2,1,19
+speaker,0.63,2,3,tangram_J.png,rejoicing,9,5,2,1,19
+speaker,0.66,2,3,tangram_H.png,no arms,10,5,2,1,19
+speaker,0.69,2,3,tangram_K.png,praying,11,5,2,1,19
+speaker,0.72,3,3,tangram_J.png,square one,12,5,2,1,18
+speaker,0.75,3,3,tangram_I.png,dancing,13,5,2,1,18
+speaker,0.78,3,3,tangram_H.png,no hands out,14,5,2,1,18
+speaker,0.81,3,3,tangram_K.png,begging,15,5,2,1,18
+speaker,0.84,0,4,tangram_H.png,no arms,0,5,2,2,19
+speaker,0.87,0,4,tangram_K.png,praying,1,5,2,2,19
+speaker,0.9,0,4,tangram_I.png,back kick,2,5,2,2,19
+speaker,0.93,0,4,tangram_J.png,rejoicing,3,5,2,2,19
+speaker,0.87,1,4,tangram_I.png,Excercising leg.,4,5,2,2,20
+speaker,0.9,1,4,tangram_K.png,Holding a soup bowl while sitting.,5,5,2,2,20
+speaker,0.93,1,4,tangram_J.png,Arms apart wearing a cape.,6,5,2,2,20
+speaker,0.96,1,4,tangram_H.png,Homeless guy.,7,5,2,2,20
+speaker,1.08,2,4,tangram_I.png,back kick,8,5,2,2,19
+speaker,1.11,2,4,tangram_H.png,no arms,9,5,2,2,19
+speaker,1.14,2,4,tangram_K.png,praying,10,5,2,2,19
+speaker,1.17,2,4,tangram_J.png,rejoicing,11,5,2,2,19
+speaker,1.11,3,4,tangram_K.png,Prayer position.,12,5,2,2,20
+speaker,1.14,3,4,tangram_I.png,"Dancing, kicking.",13,5,2,2,20
+speaker,1.17,3,4,tangram_J.png,Arms wiiiiiide oppeeeen.,14,5,2,2,20
+speaker,1.2,3,4,tangram_H.png,Chillin' dude.,15,5,2,2,20
+speaker,0.84,0,5,tangram_I.png,dancing,0,5,2,2,18
+speaker,0.84,0,5,tangram_J.png,square one,1,5,2,2,18
+speaker,0.87,0,5,tangram_H.png,no hands out,2,5,2,2,18
+speaker,0.9,0,5,tangram_K.png,praying,3,5,2,2,18
+speaker,0.84,1,5,tangram_I.png,kick,4,5,2,2,17
+speaker,0.87,1,5,tangram_H.png,sit,5,5,2,2,17
+speaker,0.9,1,5,tangram_J.png,arms raised,6,5,2,2,17
+speaker,0.93,1,5,tangram_K.png,pray,7,5,2,2,17
+speaker,1.05,2,5,tangram_I.png,dance,8,5,2,2,18
+speaker,1.05,2,5,tangram_H.png,no hands out,9,5,2,2,18
+speaker,1.08,2,5,tangram_J.png,square one,10,5,2,2,18
+speaker,1.11,2,5,tangram_K.png,praying,11,5,2,2,18
+speaker,1.05,3,5,tangram_I.png,kick,12,5,2,2,17
+speaker,1.08,3,5,tangram_K.png,pray,13,5,2,2,17
+speaker,1.11,3,5,tangram_J.png,square,14,5,2,2,17
+speaker,1.14,3,5,tangram_H.png,sit,15,5,2,2,17
+listener,0,0,0,tangram_A.png,I'm ready!,0,6,0,0,23
+speaker,0,0,0,tangram_A.png,The square is in the upper right,0,6,0,0,28
+speaker,0.03,0,0,tangram_C.png,it kind of looks like a person holding his arms in the air with the square as the person's head,1,6,0,0,28
+speaker,0.06,0,0,tangram_D.png,it looks like a person holding his hand while wearing a baggy sleeve,2,6,0,0,28
+listener,0.06,0,0,tangram_D.png,the head is a diamond?,2,6,0,0,23
+speaker,0.06,0,0,tangram_D.png,yes,2,6,0,0,28
+speaker,0.09,0,0,tangram_B.png,the diamond is at the top and a triangle is on the lower right of the diamon,3,6,0,0,28
+speaker,0.12,1,0,tangram_D.png,Diamond head human holds his hand out to the left while standing up straight in a choir robe.,4,6,0,0,23
+speaker,0.15,1,0,tangram_A.png,it looks like a bird looking down and kicking leg forward with a square box on its back,5,6,0,0,23
+speaker,0.18,1,0,tangram_C.png,"it looks like a person throwing hands up while slipping, shown to the waist only, no legs",6,6,0,0,23
+speaker,0.21,1,0,tangram_B.png,It looks like a pointy nose mouse with one diamond and one triangular ear,7,6,0,0,23
+speaker,0.24,2,0,tangram_D.png,The person holding hand out wearing a robe with diamond for his head,8,6,0,0,28
+speaker,0.27,2,0,tangram_A.png,the bird looking down with the diamond on the back of his neck,9,6,0,0,28
+speaker,0.3,2,0,tangram_C.png,the person with his hands in the air and diamond for a head,10,6,0,0,28
+speaker,0.33,2,0,tangram_B.png,the mouse looking thing with a diamond ear and triangle ear,11,6,0,0,28
+speaker,0.36,3,0,tangram_C.png,hands in air diamond head person,12,6,0,0,23
+speaker,0.39,3,0,tangram_D.png,diamon head person in a robe holding out the hand,13,6,0,0,23
+speaker,0.42,3,0,tangram_A.png,downward looking bird with a diamond on its back,14,6,0,0,23
+speaker,0.45,3,0,tangram_B.png,triangle and diaond ear mouse,15,6,0,0,23
+speaker,0,0,1,tangram_D.png,It's a human reading a book.,0,6,0,0,21
+speaker,0.03,0,1,tangram_A.png,It's a person looking at their feet.,1,6,0,0,21
+speaker,0.06,0,1,tangram_C.png,Wondering what happened.,2,6,0,0,21
+listener,0.06,0,1,tangram_C.png,Are they like kneeling?,2,6,0,0,22
+speaker,0.06,0,1,tangram_C.png,Arms open,2,6,0,0,21
+speaker,0.06,0,1,tangram_C.png,Standing up.,2,6,0,0,21
+speaker,0.09,0,1,tangram_B.png,Person kneeling.,3,6,0,0,21
+speaker,0.12,1,1,tangram_D.png,Person reading a book,4,6,0,0,22
+speaker,0.12,1,1,tangram_B.png,Person kneeling with their arms up,5,6,0,0,22
+speaker,0.15,1,1,tangram_A.png,Person with a leg raised,6,6,0,0,22
+speaker,0.18,1,1,tangram_C.png,Slanted person with arms up,7,6,0,0,22
+speaker,0.21,2,1,tangram_D.png,"Person standing, looking at a book.",8,6,0,0,21
+speaker,0.24,2,1,tangram_A.png,Person standing on one leg.,9,6,0,0,21
+speaker,0.27,2,1,tangram_B.png,"Person kneeling, while looking at a book.",10,6,0,0,21
+speaker,0.27,2,1,tangram_B.png,Legs bent,10,6,0,0,21
+speaker,0.3,2,1,tangram_C.png,Person with arms out.,11,6,0,0,21
+listener,0.3,2,1,tangram_C.png,The slanty one?,11,6,0,0,22
+speaker,0.3,2,1,tangram_C.png,Slanted,11,6,0,0,21
+speaker,0.33,3,1,tangram_B.png,person kneeling with arms out,12,6,0,0,22
+speaker,0.36,3,1,tangram_C.png,Slanted person with arms out,13,6,0,0,22
+speaker,0.39,3,1,tangram_A.png,Person with one leg raised,14,6,0,0,22
+speaker,0.42,3,1,tangram_D.png,"Person with one arm lifted, looks like they're facing the side reading a book",15,6,0,0,22
+listener,0.42,0,2,tangram_A.png,Hi :),0,6,0,1,22
+speaker,0.48,0,2,tangram_A.png,downward looking bird,0,6,0,1,23
+speaker,0.51,0,2,tangram_D.png,choir robe extended hand diamond head person,1,6,0,1,23
+speaker,0.54,0,2,tangram_C.png,diamond head prson with hands in the air,2,6,0,1,23
+speaker,0.57,0,2,tangram_B.png,mouse with a diamond ear and a triangle on,3,6,0,1,23
+speaker,0.57,0,2,tangram_B.png,*one,3,6,0,1,23
+speaker,0.54,1,2,tangram_D.png,Person facing the side with arm halfway raised like reading a book,4,6,0,1,22
+speaker,0.54,1,2,tangram_D.png,Arm is level,4,6,0,1,22
+listener,0.6,1,2,tangram_D.png,standing up straight?,4,6,0,1,23
+speaker,0.54,1,2,tangram_D.png,Yes,4,6,0,1,22
+speaker,0.57,1,2,tangram_B.png,Person kneeling with arms raised,5,6,0,1,22
+listener,0.63,1,2,tangram_B.png,"there's a diamond on top, and a triangle to the left and slightly lower?",5,6,0,1,23
+speaker,0.57,1,2,tangram_B.png,No,5,6,0,1,22
+speaker,0.57,1,2,tangram_B.png,That isn't leaning,5,6,0,1,22
+listener,0.63,1,2,tangram_B.png,leaning to the left?,5,6,0,1,23
+speaker,0.57,1,2,tangram_B.png,The one with short arms,5,6,0,1,22
+speaker,0.57,1,2,tangram_B.png,Yes,5,6,0,1,22
+speaker,0.63,1,2,tangram_A.png,Person with a leg raised,7,6,0,1,22
+speaker,0.6,1,2,tangram_C.png,Slanted person with arms raised,6,6,0,1,22
+speaker,0.72,2,2,tangram_B.png,kneeling person with short arms (looks like a pointy nose mouse to me),8,6,0,1,23
+speaker,0.78,2,2,tangram_A.png,kicking forward standing person,10,6,0,1,23
+speaker,0.81,2,2,tangram_C.png,diamond head person with arms up,11,6,0,1,23
+speaker,0.75,2,2,tangram_D.png,Standing person with hand going to the left,9,6,0,1,23
+speaker,0.78,3,2,tangram_B.png,Person kneeling with arms up,12,6,0,1,22
+speaker,0.81,3,2,tangram_D.png,Person with an arm raised to the side,13,6,0,1,22
+speaker,0.84,3,2,tangram_A.png,Person with a raised leg,14,6,0,1,22
+speaker,0.87,3,2,tangram_C.png,Slanted person,15,6,0,1,22
+speaker,0.42,0,3,tangram_B.png,"Person kneeling, reading a book.",0,6,0,1,21
+speaker,0.45,0,3,tangram_C.png,Person slanted with arms open.,2,6,0,1,21
+speaker,0.42,0,3,tangram_A.png,Person carrying a flag,1,6,0,1,21
+speaker,0.6,1,3,tangram_D.png,person standing with arms out in front,5,6,0,1,28
+speaker,0.48,0,3,tangram_D.png,"Person standing, with arms in front.",3,6,0,1,21
+speaker,0.57,1,3,tangram_B.png,kneeling reading a book,4,6,0,1,28
+speaker,0.63,1,3,tangram_C.png,person with arms in the air,6,6,0,1,28
+speaker,0.66,1,3,tangram_A.png,looks like a person kicking with a diamond shape on their back,7,6,0,1,28
+speaker,0.63,2,3,tangram_B.png,"Person kneeling, with legs underneath them.  Looking at something.",8,6,0,1,21
+speaker,0.66,2,3,tangram_D.png,"Arms forward, standing up",9,6,0,1,21
+speaker,0.69,2,3,tangram_A.png,Person walking while carrying something.,10,6,0,1,21
+speaker,0.72,2,3,tangram_C.png,Arms open,11,6,0,1,21
+speaker,0.81,3,3,tangram_A.png,person kicking leg out with diamond shape on their back,12,6,0,1,28
+speaker,0.84,3,3,tangram_D.png,person holding hands out,13,6,0,1,28
+speaker,0.87,3,3,tangram_B.png,person kneeling,14,6,0,1,28
+speaker,0.9,3,3,tangram_C.png,open arms,15,6,0,1,28
+speaker,0.9,0,4,tangram_C.png,Person slanted with arms open.,1,6,0,2,21
+speaker,0.96,0,4,tangram_B.png,"Person kneeling, looking at a book.",3,6,0,2,21
+speaker,0.87,0,4,tangram_A.png,"Person with leg in front, carrying something.",0,6,0,2,21
+speaker,0.93,0,4,tangram_D.png,"Person standing, arms in front.",2,6,0,2,21
+speaker,1.11,1,4,tangram_A.png,forward kicking with a diamond on their back,5,6,0,2,23
+speaker,1.08,1,4,tangram_D.png,"Person standing extending arm to the left, wearing a wide sleeved robe",4,6,0,2,23
+speaker,1.17,1,4,tangram_C.png,person slips and throws hands in the air--legs don't show,7,6,0,2,23
+speaker,1.14,1,4,tangram_B.png,person kneels facing right and reads,6,6,0,2,23
+speaker,1.14,2,4,tangram_D.png,Person standing with arms to the left.,9,6,0,2,21
+speaker,1.17,2,4,tangram_B.png,"Person kneeling, while reading a book.  Facing right.",10,6,0,2,21
+speaker,1.11,2,4,tangram_A.png,Person walking with diamond on their back.,8,6,0,2,21
+speaker,1.2,2,4,tangram_C.png,Person slanted with arms wide open.,11,6,0,2,21
+speaker,1.35,3,4,tangram_C.png,"leaning to left, arms in the air",13,6,0,2,23
+speaker,1.32,3,4,tangram_D.png,"standing, hand out to the left",12,6,0,2,23
+speaker,1.38,3,4,tangram_B.png,kneeling facing right and reading,14,6,0,2,23
+speaker,1.41,3,4,tangram_A.png,kicking leg forward with diamond on back,15,6,0,2,23
+speaker,0.99,0,5,tangram_C.png,person with arms up in the air like they just don't care,2,6,0,2,28
+speaker,0.93,0,5,tangram_B.png,a diamond at the top and a triangle attached to the lower right part of the diamond,0,6,0,2,28
+speaker,0.96,0,5,tangram_A.png,person kicking leg out to the left with a diamond on their back,1,6,0,2,28
+speaker,1.02,0,5,tangram_D.png,person holding hand out to the left,3,6,0,2,28
+speaker,1.02,1,5,tangram_A.png,Person with a raised leg,4,6,0,2,22
+speaker,1.23,2,5,tangram_C.png,hands in the air,10,6,0,2,28
+speaker,1.17,2,5,tangram_D.png,person with hand out to the left,8,6,0,2,28
+speaker,1.05,1,5,tangram_C.png,Slanted person with arms raised,5,6,0,2,22
+speaker,1.08,1,5,tangram_D.png,Person with an arm raised to the side,6,6,0,2,22
+speaker,1.11,1,5,tangram_B.png,Kneeling person,7,6,0,2,22
+speaker,1.2,2,5,tangram_A.png,person kicking,9,6,0,2,28
+speaker,1.26,2,5,tangram_B.png,kneeling person,11,6,0,2,28
+speaker,1.26,3,5,tangram_C.png,Arms raised,12,6,0,2,22
+speaker,1.26,3,5,tangram_C.png,Slanted person,12,6,0,2,22
+speaker,1.29,3,5,tangram_D.png,One arm raised,13,6,0,2,22
+speaker,1.32,3,5,tangram_B.png,kneeling,14,6,0,2,22
+speaker,1.35,3,5,tangram_A.png,Leg raised,15,6,0,2,22
+listener,0,0,0,tangram_C.png,hi good luck,0,7,0,0,27
+speaker,0,0,0,tangram_C.png,looks like person raising their arms,0,7,0,0,32
+listener,0.03,0,0,tangram_B.png,good luck,1,7,0,0,27
+speaker,0.03,0,0,tangram_B.png,"looks like triangle falling off cliff, followed by square.",1,7,0,0,32
+speaker,0.06,0,0,tangram_A.png,square sliding off a person's back,2,7,0,0,32
+speaker,0.09,0,0,tangram_D.png,person in a robe with arms straight out,3,7,0,0,32
+speaker,0.09,1,0,tangram_A.png,Man with square on back,4,7,0,0,27
+speaker,0.12,1,0,tangram_B.png,Square pushing triangle off a ledge,5,7,0,0,27
+speaker,0.15,1,0,tangram_C.png,square headed angel flying,6,7,0,0,27
+speaker,0.18,1,0,tangram_D.png,square headed choir boy singing from hymn book,7,7,0,0,27
+speaker,0.21,2,0,tangram_B.png,square pushing triangle off cliff,8,7,0,0,32
+speaker,0.24,2,0,tangram_A.png,square on man's back,9,7,0,0,32
+speaker,0.27,2,0,tangram_D.png,square head choir boy,10,7,0,0,32
+speaker,0.3,2,0,tangram_C.png,square head angel,11,7,0,0,32
+speaker,0.33,3,0,tangram_B.png,square chasing triangle off cliff,12,7,0,0,27
+speaker,0.36,3,0,tangram_A.png,square on man's back,13,7,0,0,27
+speaker,0.39,3,0,tangram_C.png,angel flying,14,7,0,0,27
+speaker,0.42,3,0,tangram_D.png,Square headed choir boy,15,7,0,0,27
+speaker,0,0,1,tangram_D.png,looks like a waiter serving a plate,0,7,0,0,25
+speaker,0.03,0,1,tangram_B.png,the one that's kneeling,1,7,0,0,25
+speaker,0.06,0,1,tangram_A.png,looks like one leg is in the air,2,7,0,0,25
+speaker,0.09,0,1,tangram_C.png,arms spread wide,3,7,0,0,25
+speaker,0.12,1,1,tangram_A.png,Leg in the air,4,7,0,0,26
+speaker,0.15,1,1,tangram_C.png,Arms spread wide,5,7,0,0,26
+speaker,0.18,1,1,tangram_D.png,Waiter holding a tray,6,7,0,0,26
+speaker,0.21,1,1,tangram_B.png,Kneeling in prayer,7,7,0,0,26
+speaker,0.24,2,1,tangram_A.png,leg in the air,8,7,0,0,25
+speaker,0.27,2,1,tangram_B.png,kneeling in prayer,9,7,0,0,25
+speaker,0.3,2,1,tangram_D.png,waiter serving a tray,10,7,0,0,25
+speaker,0.33,2,1,tangram_C.png,arms spread wide,11,7,0,0,25
+speaker,0.36,3,1,tangram_B.png,kneeling in prayer,12,7,0,0,26
+speaker,0.39,3,1,tangram_D.png,waiter serving a tray,13,7,0,0,26
+speaker,0.42,3,1,tangram_C.png,arms spread wide,14,7,0,0,26
+speaker,0.45,3,1,tangram_A.png,one leg in the air,15,7,0,0,26
+speaker,0.45,0,2,tangram_A.png,A square on a man's back with one foot in the air,0,7,0,1,27
+speaker,0.51,0,2,tangram_C.png,a square headed angle flying diagonally,2,7,0,1,27
+speaker,0.54,0,2,tangram_B.png,a square pushing a triangle off a mountain,3,7,0,1,27
+speaker,0.48,0,2,tangram_D.png,A square headed choir boy singing from a hymn book wearing a robe,1,7,0,1,27
+speaker,0.6,1,2,tangram_C.png,angel flying diagonally,4,7,0,1,26
+speaker,0.66,1,2,tangram_D.png,choir boy singing from book,6,7,0,1,26
+speaker,0.69,1,2,tangram_A.png,One foot in air,7,7,0,1,26
+speaker,0.63,1,2,tangram_B.png,square pushing triangle off cliff,5,7,0,1,26
+speaker,0.69,2,2,tangram_B.png,square pushing triangle,8,7,0,1,27
+speaker,0.75,2,2,tangram_A.png,square on man's back,10,7,0,1,27
+speaker,0.72,2,2,tangram_C.png,angel flying,9,7,0,1,27
+speaker,0.78,2,2,tangram_D.png,choir boy singing,11,7,0,1,27
+speaker,0.84,3,2,tangram_B.png,square pushing triangle,12,7,0,1,26
+speaker,0.87,3,2,tangram_A.png,one leg in air,13,7,0,1,26
+speaker,0.9,3,2,tangram_D.png,choir boy,14,7,0,1,26
+speaker,0.93,3,2,tangram_C.png,angel flying,15,7,0,1,26
+speaker,0.45,0,3,tangram_C.png,square head angel flying,0,7,0,1,32
+speaker,0.48,0,3,tangram_B.png,square pushing triangle off a cliff,1,7,0,1,32
+speaker,0.51,0,3,tangram_A.png,square on man's back,2,7,0,1,32
+speaker,0.54,0,3,tangram_D.png,square head choir boy singing,3,7,0,1,32
+speaker,0.6,1,3,tangram_B.png,pushing triangle off cliff,4,7,0,1,25
+speaker,0.63,1,3,tangram_C.png,square head angel flying,5,7,0,1,25
+speaker,0.66,1,3,tangram_D.png,choir boy,6,7,0,1,25
+speaker,0.69,1,3,tangram_A.png,square on man's back,7,7,0,1,25
+speaker,0.69,2,3,tangram_B.png,triangle falling off cliff,8,7,0,1,32
+speaker,0.72,2,3,tangram_D.png,choir boy,9,7,0,1,32
+speaker,0.78,2,3,tangram_C.png,angel flying,11,7,0,1,32
+speaker,0.84,3,3,tangram_D.png,choir boy,12,7,0,1,25
+speaker,0.87,3,3,tangram_C.png,angel flying,13,7,0,1,25
+speaker,0.75,2,3,tangram_A.png,square on back,10,7,0,1,32
+speaker,0.9,3,3,tangram_A.png,square on back,14,7,0,1,25
+speaker,0.93,3,3,tangram_B.png,triangle falling off cliff,15,7,0,1,25
+speaker,0.96,0,4,tangram_A.png,one leg lifted in the air,0,7,0,2,25
+speaker,0.99,0,4,tangram_D.png,waiter serving a tray,1,7,0,2,25
+speaker,1.02,0,4,tangram_C.png,leaning to the left with arms raised wide,2,7,0,2,25
+speaker,1.05,0,4,tangram_B.png,person kneeling,3,7,0,2,25
+speaker,1.05,1,4,tangram_D.png,waiter with tray,4,7,0,2,27
+speaker,1.08,1,4,tangram_A.png,man with square on his back,5,7,0,2,27
+speaker,1.11,1,4,tangram_C.png,angel flying with arms out,6,7,0,2,27
+speaker,1.2,2,4,tangram_C.png,angel with arms out,8,7,0,2,25
+speaker,1.14,1,4,tangram_B.png,square chasing triangle off mountain,7,7,0,2,27
+speaker,1.23,2,4,tangram_D.png,waiter with tray,9,7,0,2,25
+speaker,1.26,2,4,tangram_A.png,square on back,10,7,0,2,25
+speaker,1.29,2,4,tangram_B.png,triangle falling off cliff,11,7,0,2,25
+speaker,1.29,3,4,tangram_D.png,server with tray,12,7,0,2,27
+speaker,1.32,3,4,tangram_C.png,angel flying,13,7,0,2,27
+speaker,1.35,3,4,tangram_B.png,square chasing triangle off cliff,14,7,0,2,27
+speaker,1.38,3,4,tangram_A.png,square on back,15,7,0,2,27
+speaker,0.96,0,5,tangram_C.png,person with arms in the air,0,7,0,2,26
+speaker,0.99,0,5,tangram_B.png,somebody kneeling in prayer,1,7,0,2,26
+speaker,1.02,0,5,tangram_A.png,standing on one leg with the other in the air,2,7,0,2,26
+speaker,1.05,0,5,tangram_D.png,choir boy singing from a hymn book,3,7,0,2,26
+speaker,1.05,1,5,tangram_A.png,square falling off man's back,4,7,0,2,32
+speaker,1.08,1,5,tangram_B.png,someone kneeling and praying,5,7,0,2,32
+speaker,1.11,1,5,tangram_D.png,choir boy singing,6,7,0,2,32
+speaker,1.23,2,5,tangram_B.png,kneeling in prayer,9,7,0,2,26
+speaker,1.2,2,5,tangram_D.png,choir boy singing from book,8,7,0,2,26
+speaker,1.14,1,5,tangram_C.png,arms raised in air,7,7,0,2,32
+speaker,1.26,2,5,tangram_A.png,foot in the air,10,7,0,2,26
+speaker,1.29,3,5,tangram_B.png,kneeling in prayer,12,7,0,2,32
+speaker,1.29,2,5,tangram_C.png,arms in the air,11,7,0,2,26
+speaker,1.35,3,5,tangram_D.png,choir boy,14,7,0,2,32
+speaker,1.32,3,5,tangram_C.png,arms in air,13,7,0,2,32
+speaker,1.38,3,5,tangram_A.png,foot in air,15,7,0,2,32
+listener,0,0,0,tangram_C.png,hello,0,8,0,0,36
+speaker,0,0,0,tangram_C.png,The correct choice is the one that looks like a person with their hands raised in the air.,0,8,0,0,31
+listener,0.03,0,0,tangram_D.png,hello,1,8,0,0,36
+speaker,0.03,0,0,tangram_D.png,The correct choice is the one that looks like a person carrying a box,1,8,0,0,31
+listener,0.06,0,0,tangram_A.png,hi,2,8,0,0,36
+speaker,0.06,0,0,tangram_A.png,The correct one looks like some kind of figure walking towards the left of the screen while looking backwards.,2,8,0,0,31
+listener,0.09,0,0,tangram_B.png,hi,3,8,0,0,36
+speaker,0.09,0,0,tangram_B.png,I hope i can describe this one good for you. This one looks like a diamond shape on top of a cliff overlooking rocks??? lol,3,8,0,0,31
+speaker,0.09,0,0,tangram_B.png,it is the only one that i haven't described before.,3,8,0,0,31
+speaker,0.12,1,0,tangram_D.png,this look like a man carrying a box,4,8,0,0,36
+speaker,0.15,1,0,tangram_C.png,this looks like a man that has his hand raised in the air,5,8,0,0,36
+speaker,0.18,1,0,tangram_B.png,"kind of looks like a bunny , or as you mentioned a cliff ",6,8,0,0,36
+speaker,0,0,1,tangram_C.png,a man flying at an angle,0,8,0,0,30
+speaker,0.03,0,1,tangram_A.png,a man kicking one foot up,1,8,0,0,30
+speaker,0.06,0,1,tangram_D.png,a man asking for money,2,8,0,0,30
+speaker,0.09,0,1,tangram_B.png,the weirdest looking image with two hands in opposite directions,3,8,0,0,30
+speaker,0.09,1,1,tangram_A.png,person kicking foot up,4,8,0,0,29
+speaker,0.12,1,1,tangram_B.png,person sitting down,5,8,0,0,29
+speaker,0.15,1,1,tangram_D.png,person begging,6,8,0,0,29
+speaker,0.18,1,1,tangram_C.png,person throwing hands up,7,8,0,0,29
+speaker,0.21,2,1,tangram_A.png,person kicking foot up,8,8,0,0,30
+speaker,0.24,2,1,tangram_B.png,person sitting,9,8,0,0,30
+speaker,0.27,2,1,tangram_C.png,person with hands up,10,8,0,0,30
+speaker,0.3,2,1,tangram_D.png,person begging,11,8,0,0,30
+speaker,0.33,3,1,tangram_C.png,person with hands up,12,8,0,0,29
+speaker,0.36,3,1,tangram_D.png,person begging,13,8,0,0,29
+speaker,0.39,3,1,tangram_B.png,person sitting,14,8,0,0,29
+speaker,0.42,3,1,tangram_A.png,person kicking,15,8,0,0,29
+speaker,0,0,0,tangram_B.png,Kind of looks like a sitting dog,0,9,0,0,40
+speaker,0,0,0,tangram_D.png,Looks like a speaker or graduate holding a book,1,9,0,0,40
+speaker,0.03,0,0,tangram_C.png,Arms are upraised to the sky,2,9,0,0,40
+speaker,0.06,0,0,tangram_A.png,"could be a bear one leg is in the air, one on the ground",3,9,0,0,40
+speaker,0.09,1,0,tangram_B.png,looks like someone with a bow on its head.,4,9,0,0,35
+speaker,0.12,1,0,tangram_A.png,looks like someone walking with a hunchback.,5,9,0,0,35
+speaker,0.15,1,0,tangram_D.png,Looks like someone wearing a robe.,6,9,0,0,35
+speaker,0.18,1,0,tangram_C.png,Looks like someone flying away.,7,9,0,0,35
+speaker,0.21,2,0,tangram_A.png,Looks like someone walking,8,9,0,0,40
+speaker,0.24,2,0,tangram_C.png,Someone with arms raised in the air,9,9,0,0,40
+speaker,0.27,2,0,tangram_D.png,looks like someone reading a book or in a graduation robe,10,9,0,0,40
+speaker,0.33,3,0,tangram_A.png,Looks like someone is walking with a box on its back.,12,9,0,0,35
+speaker,0.3,2,0,tangram_B.png,looks like someone squatting down with a diamond and triangle on their head,11,9,0,0,40
+speaker,0.36,3,0,tangram_B.png,looks like something is sitting down with different shapes on its head.,13,9,0,0,35
+speaker,0.39,3,0,tangram_C.png,Looks like a person that is flying away.,14,9,0,0,35
+speaker,0.42,3,0,tangram_D.png,Looks like someone that holding a tray.,15,9,0,0,35
+speaker,0,0,1,tangram_B.png,it is the biggest blob that looks like it is sitting,0,9,0,0,33
+listener,0.03,0,1,tangram_C.png,cool,1,9,0,0,34
+speaker,0.03,0,1,tangram_C.png,it is the blob that looks like it has arms that are both extended out,1,9,0,0,33
+speaker,0.06,0,1,tangram_D.png,it's the blob that looks like it is sitting/ kneeling and looking up ,2,9,0,0,33
+speaker,0.09,1,1,tangram_D.png,The one that looks like it has one arm outstretched - the one I got wrong. ,4,9,0,0,34
+speaker,0.06,0,1,tangram_A.png,it is the blob that looks like it is walking,3,9,0,0,33
+speaker,0.12,1,1,tangram_C.png,The one that looks like it has both arms stretched upwards - the first one we did,5,9,0,0,34
+speaker,0.18,1,1,tangram_A.png,The one that is kicking,7,9,0,0,34
+speaker,0.15,1,1,tangram_B.png,The one that looks like a kneeling nun with her arms out,6,9,0,0,34
+listener,0.21,2,1,tangram_D.png,"We should just name them: kneeling nun, arms outstretched, kicking, and one arm",8,9,0,0,34
+speaker,0.21,2,1,tangram_D.png,the one you got wrong,8,9,0,0,33
+listener,0.21,2,1,tangram_D.png,kneeling nun?,8,9,0,0,34
+speaker,0.24,2,1,tangram_A.png,walking,9,9,0,0,33
+speaker,0.27,2,1,tangram_B.png,ng,10,9,0,0,33
+speaker,0.27,2,1,tangram_B.png,not arms outstretched/ not walking /not 1wrong- the other one,10,9,0,0,33
+listener,0.27,2,1,tangram_B.png,are you trying to be difficult ?,10,9,0,0,34
+speaker,0.3,2,1,tangram_C.png,arms outstretched,11,9,0,0,33
+listener,0.27,2,1,tangram_B.png,ng?,10,9,0,0,34
+speaker,0.33,3,1,tangram_D.png,one arm,12,9,0,0,34
+speaker,0.36,3,1,tangram_A.png,walking,13,9,0,0,34
+speaker,0.39,3,1,tangram_B.png,kneeling,14,9,0,0,34
+speaker,0.42,3,1,tangram_C.png,arms outstretched ,15,9,0,0,34
+speaker,0.45,0,2,tangram_B.png,It looks like a dog kneeling down.,1,9,0,1,35
+speaker,0.45,0,2,tangram_A.png,It looks like someone with a hunchback,0,9,0,1,35
+listener,0.45,0,2,tangram_B.png,"not the fire hydrant looking one, but the one that could be a dogs face?",1,9,0,1,33
+speaker,0.45,0,2,tangram_B.png,The one with the different shapes on what I would assume it could be a head.,1,9,0,1,35
+listener,0.45,0,2,tangram_B.png,it has 2 points going out/ could look like dogs ears?,1,9,0,1,33
+speaker,0.45,0,2,tangram_B.png,yes.,1,9,0,1,35
+listener,0.48,0,2,tangram_D.png,"not the one walking, not the one with arms out stretched, but the other 1?",2,9,0,1,33
+speaker,0.48,0,2,tangram_D.png,Looks like someone wearing a graduation robe with a graduation hat.,2,9,0,1,35
+speaker,0.48,0,2,tangram_D.png,Yes.,2,9,0,1,35
+speaker,0.51,0,2,tangram_C.png,Looks like someone with their arms up in the air.,3,9,0,1,35
+speaker,0.54,1,2,tangram_A.png,walking/kicking 1,4,9,0,1,33
+speaker,0.57,1,2,tangram_C.png,arms out stretched,5,9,0,1,33
+speaker,0.6,1,2,tangram_D.png,not dog/ears but other 1 kneeling ,6,9,0,1,33
+speaker,0.6,1,2,tangram_B.png,the last one you just chose (dog ears),7,9,0,1,33
+speaker,0.66,2,2,tangram_D.png,The one where it looks like someone is holding a tray and has a diamond shaped head.,9,9,0,1,35
+speaker,0.63,2,2,tangram_C.png,Someone that is floating away.,8,9,0,1,35
+speaker,0.63,2,2,tangram_C.png,Yes.,8,9,0,1,35
+listener,0.63,2,2,tangram_C.png,the one that is kinda slanty bodied?,8,9,0,1,33
+listener,0.66,2,2,tangram_D.png,the one (to me) it looks like someone is like holding a hat out? not the one that has a triangle extended out from the body?,9,9,0,1,33
+speaker,0.66,2,2,tangram_D.png,"The one that looks like they are standing up, looks like they are wearing a robe, holding something and has a diamond shaped head.",9,9,0,1,35
+speaker,0.66,2,2,tangram_D.png,Yes.,9,9,0,1,35
+listener,0.66,2,2,tangram_D.png,"the one with triangle arm? or the one walking, not slanty?",9,9,0,1,33
+listener,0.66,2,2,tangram_D.png,the one walking?,9,9,0,1,33
+speaker,0.69,2,2,tangram_A.png,Looks like someone walking. One foot on the floor and one sticking up. With a square on its back.,10,9,0,1,35
+speaker,0.66,2,2,tangram_D.png,Standing still,9,9,0,1,35
+listener,0.72,2,2,tangram_B.png,triangle arm 1?,11,9,0,1,33
+speaker,0.72,2,2,tangram_B.png,Looks like a dog or a person kneeling down with a square and a triangle on its head.,11,9,0,1,35
+speaker,0.72,3,2,tangram_C.png,"arms outstretched, ",12,9,0,1,33
+speaker,0.75,3,2,tangram_A.png,walking /kicking 1,13,9,0,1,33
+speaker,0.78,3,2,tangram_B.png,triangle extended out from the body,14,9,0,1,33
+speaker,0.78,3,2,tangram_D.png,the last 1 you chose,15,9,0,1,33
+speaker,0.45,0,3,tangram_A.png,Looks like somone walking with a box on their back,0,9,0,1,40
+speaker,0.48,0,3,tangram_C.png,Arms raised up in the air,1,9,0,1,40
+speaker,0.63,1,3,tangram_D.png,The one with the book,6,9,0,1,34
+speaker,0.51,0,3,tangram_B.png,looks like someone sitting/squatting with bow on head,2,9,0,1,40
+speaker,0.54,0,3,tangram_D.png,Someone in a robe holding a book,3,9,0,1,40
+speaker,0.57,1,3,tangram_C.png,The one with arms outstretched ,4,9,0,1,34
+speaker,0.6,1,3,tangram_A.png,The one walking,5,9,0,1,34
+speaker,0.66,1,3,tangram_B.png,The one sitting,7,9,0,1,34
+speaker,0.75,2,3,tangram_C.png,Arms Over Head,10,9,0,1,40
+speaker,0.69,2,3,tangram_A.png,Walking forward,8,9,0,1,40
+speaker,0.72,2,3,tangram_B.png,sitting/squatting,9,9,0,1,40
+speaker,0.78,2,3,tangram_D.png,holding a book or tray,11,9,0,1,40
+speaker,0.87,3,3,tangram_D.png,book,14,9,0,1,34
+speaker,0.9,3,3,tangram_C.png,arms up in the air,15,9,0,1,34
+speaker,0.81,3,3,tangram_B.png,sitting squatting ,12,9,0,1,34
+speaker,0.84,3,3,tangram_A.png,walking,13,9,0,1,34
+speaker,0.93,0,4,tangram_D.png,"The one that looks like it is holding a book, or has one arm out stretched ",0,9,0,2,34
+speaker,0.96,0,4,tangram_A.png,The one that looks like it is walking,1,9,0,2,34
+speaker,0.9,1,4,tangram_D.png,The one that looks like they are wearing a robe and has a triangle head.,4,9,0,2,35
+speaker,1.02,0,4,tangram_B.png,The one that looks like it is on it's knees ,3,9,0,2,34
+speaker,0.99,0,4,tangram_C.png,The one with arms raised up in the air,2,9,0,2,34
+speaker,0.96,1,4,tangram_B.png,Looks like someone kneeling with a square and a triangle on its head.,6,9,0,2,35
+speaker,0.93,1,4,tangram_A.png,Looks like someone walking with a hunchback.,5,9,0,2,35
+speaker,0.99,1,4,tangram_C.png,Looks like someone is flying away.,7,9,0,2,35
+speaker,1.17,2,4,tangram_B.png,One on its knees,8,9,0,2,34
+speaker,1.23,2,4,tangram_D.png,The one in the robe,10,9,0,2,34
+speaker,1.26,2,4,tangram_C.png,The one flying away,11,9,0,2,34
+speaker,1.2,2,4,tangram_A.png,The one that is walking,9,9,0,2,34
+speaker,1.14,3,4,tangram_B.png,Looks like someone is kneeling with a pointed face.,12,9,0,2,35
+speaker,1.17,3,4,tangram_A.png,Someone is kicking.,13,9,0,2,35
+speaker,1.2,3,4,tangram_D.png,Looks like someone is holding a tray.,14,9,0,2,35
+speaker,1.23,3,4,tangram_C.png,Waving hands in the air.,15,9,0,2,35
+speaker,0.93,0,5,tangram_C.png,looks like person with arms in the air,0,9,0,2,40
+speaker,0.9,1,5,tangram_C.png,arms outstretched/ slanty one,4,9,0,2,33
+speaker,0.96,0,5,tangram_A.png,looks like somone walking forward,1,9,0,2,40
+speaker,0.99,0,5,tangram_B.png,looks like someone squatting/sitting,2,9,0,2,40
+speaker,1.02,0,5,tangram_D.png,looks like someone holding a book,3,9,0,2,40
+speaker,0.93,1,5,tangram_A.png,1 walking/kicking,5,9,0,2,33
+speaker,0.96,1,5,tangram_B.png,the one that looks like someone kneeling with 2 arms out stretched,6,9,0,2,33
+speaker,0.99,1,5,tangram_D.png,the last one with the square head looking up,7,9,0,2,33
+speaker,1.14,2,5,tangram_A.png,walking forward,8,9,0,2,40
+speaker,1.17,2,5,tangram_B.png,sitting/squatting with bow on head,9,9,0,2,40
+speaker,1.2,2,5,tangram_D.png,someone in robe holding a tray,10,9,0,2,40
+speaker,1.23,2,5,tangram_C.png,arms in the air,11,9,0,2,40
+speaker,1.11,3,5,tangram_B.png,knealing one / not the one with the tray - the one w/ triangle arm,12,9,0,2,33
+speaker,1.14,3,5,tangram_D.png,the one with the tray,13,9,0,2,33
+speaker,1.17,3,5,tangram_A.png,walking 1,14,9,0,2,33
+speaker,1.2,3,5,tangram_C.png,arms outstretched,15,9,0,2,33
+listener,0,0,1,tangram_F.png,Hi!,0,10,1,0,37
+speaker,0,0,0,tangram_E.png,It looks like a person sitting down with a bow on their head,0,11,1,0,48
+speaker,0,0,0,tangram_H.png,"hi, it looks like a person with a blanket wrapped around them and sitting",0,12,2,0,41
+speaker,0.03,0,0,tangram_J.png,it is a square on the left side with a point to the right,1,12,2,0,41
+speaker,0.06,0,0,tangram_I.png,someone with their arms straight out on the left and standing on one foot,2,12,2,0,41
+speaker,0.09,0,0,tangram_K.png,a square cut out piece on the left side and a v cut out shape on the right,3,12,2,0,41
+speaker,0.12,1,0,tangram_H.png,a person sitting down wrapped in a blanket. ,4,12,2,0,45
+speaker,0.18,1,0,tangram_J.png,"The left side is a square and the right side has two tialngles coming out, almost like a hand pointing and a foot at the bottom. ",6,12,2,0,45
+speaker,0.15,1,0,tangram_I.png,looks like someone figure skating.    One foot down one up in the air. ,5,12,2,0,45
+speaker,0.24,2,0,tangram_I.png,ice skater,8,12,2,0,41
+speaker,0.21,1,0,tangram_K.png,It looks like a person sitting and holding a plate.  ,7,12,2,0,45
+speaker,0.24,2,0,tangram_I.png,on one foot,8,12,2,0,41
+speaker,0.27,2,0,tangram_H.png,person wrapped in a blanket sitting,9,12,2,0,41
+speaker,0.3,2,0,tangram_K.png,looks like someone kneeling and holding a plate facing the right,10,12,2,0,41
+speaker,0.33,2,0,tangram_J.png,a square shape on the left and two points on the right,11,12,2,0,41
+speaker,0.39,3,0,tangram_K.png,A person kneeling and holding a plate,13,12,2,0,45
+speaker,0.36,3,0,tangram_H.png,A perosn sitting wrapped in a blanket,12,12,2,0,45
+speaker,0.42,3,0,tangram_I.png,Looks like a person figure skating,14,12,2,0,45
+speaker,0.45,3,0,tangram_J.png,A square on the left and some points on the right,15,12,2,0,45
+speaker,0,0,1,tangram_K.png,person is kneeling with head up,0,12,2,0,46
+speaker,0,0,1,tangram_H.png,just sitting hands down,1,12,2,0,46
+speaker,0.03,0,1,tangram_J.png,triangle on top of a block not sitting,2,12,2,0,46
+speaker,0.06,0,1,tangram_I.png,on one leg,3,12,2,0,46
+speaker,0.12,1,1,tangram_J.png,triangle head on block,5,12,2,0,47
+speaker,0.09,1,1,tangram_K.png,praying on knees,4,12,2,0,47
+speaker,0.15,1,1,tangram_I.png,standing on one leg,6,12,2,0,47
+speaker,0.18,1,1,tangram_H.png,sitting arms down,7,12,2,0,47
+speaker,0.24,2,1,tangram_K.png,praying,9,12,2,0,46
+speaker,0.21,2,1,tangram_J.png,head on a block,8,12,2,0,46
+speaker,0.27,2,1,tangram_I.png,one leg,10,12,2,0,46
+speaker,0.36,3,1,tangram_K.png,praying,13,12,2,0,47
+speaker,0.33,3,1,tangram_J.png,head on block,12,12,2,0,47
+speaker,0.3,2,1,tangram_H.png,just sitting hands down,11,12,2,0,46
+speaker,0.42,3,1,tangram_H.png,just sitting,15,12,2,0,47
+speaker,0.39,3,1,tangram_I.png,one leg,14,12,2,0,47
+speaker,0.48,0,2,tangram_J.png,square on the left side and two points on the right,0,12,2,1,41
+speaker,0.51,0,2,tangram_K.png,kneeling and holding a plate on the right,1,12,2,1,41
+speaker,0.54,0,2,tangram_H.png, hello,2,12,2,1,41
+speaker,0.54,0,2,tangram_H.png,does it look like a blanket and sitting,2,12,2,1,41
+speaker,0.57,0,2,tangram_I.png,ice skating,3,12,2,1,41
+speaker,0.63,1,2,tangram_H.png,sitting arms down,6,12,2,1,47
+listener,0.51,0,2,tangram_H.png,you there?,2,12,2,1,47
+speaker,0.57,1,2,tangram_K.png,kneeling and praying,4,12,2,1,47
+speaker,0.6,1,2,tangram_J.png,"two points on right, square on left",5,12,2,1,47
+speaker,0.66,1,2,tangram_I.png,ice skating,7,12,2,1,47
+speaker,0.72,2,2,tangram_J.png,square on the left,8,12,2,1,41
+speaker,0.78,2,2,tangram_I.png,ice skater,10,12,2,1,41
+speaker,0.87,3,2,tangram_I.png,skating,14,12,2,1,47
+speaker,0.9,3,2,tangram_J.png,square left,15,12,2,1,47
+speaker,0.75,2,2,tangram_H.png,blanket and sitting,9,12,2,1,41
+speaker,0.81,2,2,tangram_K.png,kneeling and praying,11,12,2,1,41
+speaker,0.81,3,2,tangram_H.png,blanket,12,12,2,1,47
+speaker,0.84,3,2,tangram_K.png,praying,13,12,2,1,47
+speaker,0.51,0,3,tangram_H.png,A person sitting down wrapped in a blanket,1,12,2,1,45
+speaker,0.48,0,3,tangram_I.png,A person figure skating,0,12,2,1,45
+speaker,0.54,0,3,tangram_K.png,A person kneeling down and holding out a plate,2,12,2,1,45
+speaker,0.57,1,3,tangram_K.png,a person holding a plate,4,12,2,1,46
+speaker,0.66,1,3,tangram_I.png,a figure skater,7,12,2,1,46
+speaker,0.57,0,3,tangram_J.png,a square on the left and some points on the right,3,12,2,1,45
+speaker,0.6,1,3,tangram_J.png,a square on the right and points to the left,5,12,2,1,46
+speaker,0.63,1,3,tangram_H.png,a person wrapped in a blanket,6,12,2,1,46
+speaker,0.78,2,3,tangram_H.png,a person sitting down wrapped in a blanket,10,12,2,1,45
+speaker,0.81,2,3,tangram_J.png,A square on the left and some points on the right,11,12,2,1,45
+speaker,0.81,3,3,tangram_I.png,figure skater,12,12,2,1,46
+speaker,0.84,3,3,tangram_K.png,a person kneeling holding out a plate,13,12,2,1,46
+speaker,0.72,2,3,tangram_K.png,A person sitting down and holding a plate out,8,12,2,1,45
+speaker,0.75,2,3,tangram_I.png,a person figure skating ,9,12,2,1,45
+speaker,0.87,3,3,tangram_J.png,a square on the left and points on the right,14,12,2,1,46
+speaker,0.9,3,3,tangram_H.png,a person wrapped in a blanket,15,12,2,1,46
+speaker,0.96,0,4,tangram_K.png,kneeling and praying,0,12,2,2,41
+speaker,0.99,0,4,tangram_H.png,sitting in a blanket,1,12,2,2,41
+speaker,1.02,0,4,tangram_J.png,square on the left,2,12,2,2,41
+speaker,1.05,0,4,tangram_I.png,ice skater,3,12,2,2,41
+speaker,1.05,1,4,tangram_J.png,square on the left,4,12,2,2,46
+speaker,1.08,1,4,tangram_I.png,ice skater,5,12,2,2,46
+speaker,1.11,1,4,tangram_K.png,kneeling praying,6,12,2,2,46
+speaker,1.14,1,4,tangram_H.png,wrapped in a blanket,7,12,2,2,46
+speaker,1.2,2,4,tangram_I.png,ice skater,8,12,2,2,41
+speaker,1.29,3,4,tangram_J.png,square on left,12,12,2,2,46
+speaker,1.38,3,4,tangram_H.png,wrapped in blanket,15,12,2,2,46
+speaker,1.23,2,4,tangram_K.png,praying,9,12,2,2,41
+speaker,1.26,2,4,tangram_J.png,left square,10,12,2,2,41
+speaker,1.32,3,4,tangram_I.png,ice skater,13,12,2,2,46
+speaker,1.35,3,4,tangram_K.png,praying,14,12,2,2,46
+speaker,1.29,2,4,tangram_H.png,blanket sitting,11,12,2,2,41
+speaker,0.96,0,5,tangram_K.png,A person kneeling down and holding a plate out,0,12,2,2,45
+speaker,0.99,0,5,tangram_I.png,a person figure skating,1,12,2,2,45
+speaker,1.02,0,5,tangram_J.png,a squre on the left and points on the right,2,12,2,2,45
+speaker,1.05,1,5,tangram_I.png,skating,4,12,2,2,47
+speaker,1.08,1,5,tangram_H.png,blanket,5,12,2,2,47
+speaker,1.05,0,5,tangram_H.png,a person sitting wrapped in a blanket,3,12,2,2,45
+speaker,1.11,1,5,tangram_J.png,two points,6,12,2,2,47
+speaker,1.14,1,5,tangram_K.png,kneeling and praying,7,12,2,2,47
+speaker,1.17,2,5,tangram_J.png,Square on left points on right,8,12,2,2,45
+speaker,1.2,2,5,tangram_K.png,kneeling and praying,9,12,2,2,45
+speaker,1.23,2,5,tangram_H.png,sitting wrapped in blanket,10,12,2,2,45
+speaker,1.26,2,5,tangram_I.png,figure skaitng,11,12,2,2,45
+speaker,1.26,3,5,tangram_H.png,wrapped in blanket,12,12,2,2,47
+speaker,1.29,3,5,tangram_K.png,praying,13,12,2,2,47
+speaker,1.32,3,5,tangram_I.png,skating,14,12,2,2,47
+speaker,1.35,3,5,tangram_J.png,block with two points on right,15,12,2,2,47
+speaker,0,0,0,tangram_F.png,Sitting person,0,13,1,0,51
+speaker,0.03,0,0,tangram_L.png,Poking triangle to the right,1,13,1,0,51
+speaker,0.06,0,0,tangram_G.png,"Bunny ears, feet to the left",2,13,1,0,51
+speaker,0.09,0,0,tangram_E.png,"bunny ears, feet to the right",3,13,1,0,51
+speaker,0.12,1,0,tangram_L.png,diaond,4,13,1,0,52
+speaker,0.12,1,0,tangram_L.png,m,4,13,1,0,52
+speaker,0.12,1,0,tangram_L.png,diaond head,4,13,1,0,52
+speaker,0.15,1,0,tangram_F.png,feet to left sit,5,13,1,0,52
+speaker,0.18,1,0,tangram_E.png,bunny ears feet right,6,13,1,0,52
+speaker,0.21,1,0,tangram_G.png,funbky head feet left,7,13,1,0,52
+speaker,0.27,2,0,tangram_E.png,"Bunny ears, feet to the right",9,13,1,0,51
+speaker,0.24,2,0,tangram_F.png,"Person sitting, feet to the left, diamond head",8,13,1,0,51
+speaker,0.33,2,0,tangram_L.png,"Person, diamond head, triangle pointing right",11,13,1,0,51
+speaker,0.3,2,0,tangram_G.png,"Bunny ears, feet to the left",10,13,1,0,51
+speaker,0.36,3,0,tangram_F.png,diamond head feet left,12,13,1,0,52
+speaker,0.39,3,0,tangram_E.png,bunny feet right,13,13,1,0,52
+speaker,0.45,3,0,tangram_L.png,diamond head triangle right,15,13,1,0,52
+speaker,0.42,3,0,tangram_G.png,bunny feet left,14,13,1,0,52
+speaker,0,0,1,tangram_F.png,person sitting w/head down and knees up facing to the left,0,13,1,0,49
+listener,0,0,1,tangram_G.png,sitting down knees up and head up.,1,13,1,0,50
+speaker,0.03,0,1,tangram_L.png,man standing with arms as point facing to the right,2,13,1,0,49
+speaker,0,0,1,tangram_G.png,"one that doesn't really look like a person (not the bunny ears one), arms are points facing behind him/head is looking to the left",1,13,1,0,49
+speaker,0.06,0,1,tangram_E.png,bunny ears on head,3,13,1,0,49
+speaker,0.09,1,1,tangram_L.png,man standing up praying hands ,4,13,1,0,50
+speaker,0.12,1,1,tangram_G.png,arms behind the back ,5,13,1,0,50
+speaker,0.15,1,1,tangram_F.png,sitting down looking up to left,6,13,1,0,50
+speaker,0.18,1,1,tangram_E.png,bunny ears on head,7,13,1,0,50
+speaker,0.21,2,1,tangram_F.png,sitting down looking to left (knees bent),8,13,1,0,49
+speaker,0.39,3,1,tangram_G.png,arms behind back,14,13,1,0,50
+speaker,0.42,3,1,tangram_E.png,bunny ears,15,13,1,0,50
+speaker,0.27,2,1,tangram_G.png,arms behind back ,10,13,1,0,49
+speaker,0.3,2,1,tangram_E.png,bunny ears,11,13,1,0,49
+speaker,0.36,3,1,tangram_F.png,sitting knees up looking left,13,13,1,0,50
+speaker,0.24,2,1,tangram_L.png,arms praying to right,9,13,1,0,49
+speaker,0.33,3,1,tangram_L.png,praying hands,12,13,1,0,50
+speaker,0.48,0,2,tangram_G.png,"bunny ears, feet to the left",0,13,1,1,51
+speaker,0.48,0,2,tangram_L.png,"person standing, triangle to the right",1,13,1,1,51
+speaker,0.51,0,2,tangram_E.png,"bunny ears, feet to the right",2,13,1,1,51
+speaker,0.54,0,2,tangram_F.png,"Person sitting, diamond head",3,13,1,1,51
+speaker,0.6,1,2,tangram_L.png,praying hands,6,13,1,1,50
+speaker,0.63,1,2,tangram_E.png,bunny ears head,7,13,1,1,50
+speaker,0.54,1,2,tangram_G.png,arms behind back,4,13,1,1,50
+speaker,0.57,1,2,tangram_F.png,sitting down looking up left,5,13,1,1,50
+speaker,0.78,3,2,tangram_F.png,sitting down looking up left,13,13,1,1,50
+speaker,0.69,2,2,tangram_L.png,"person standing, triangle pointing right",9,13,1,1,51
+speaker,0.72,2,2,tangram_E.png,"bunny ears, feet to the right",10,13,1,1,51
+speaker,0.75,2,2,tangram_F.png,"Diamond head, sitting",11,13,1,1,51
+speaker,0.75,3,2,tangram_L.png,praying hands,12,13,1,1,50
+speaker,0.81,3,2,tangram_E.png,bunny ears head,14,13,1,1,50
+speaker,0.84,3,2,tangram_G.png,ARMS BEHIND BACK,15,13,1,1,50
+speaker,0.69,2,2,tangram_G.png,"bunny ears, feet to the left",8,13,1,1,51
+speaker,0.48,0,3,tangram_G.png,funky head feet left,0,13,1,1,52
+speaker,0.48,0,3,tangram_G.png,square top left,0,13,1,1,52
+listener,0.45,0,3,tangram_G.png,sitting with knees up?,0,13,1,1,49
+speaker,0.48,0,3,tangram_G.png,triangle on right,0,13,1,1,52
+speaker,0.48,0,3,tangram_E.png,"bunny ears, sitting  feet to the right",1,13,1,1,52
+speaker,0.51,0,3,tangram_L.png,with outh open,2,13,1,1,52
+listener,0.48,0,3,tangram_L.png,arms in a praying position?,2,13,1,1,49
+speaker,0.51,0,3,tangram_L.png,diaond head triangle off to the right,2,13,1,1,52
+speaker,0.51,0,3,tangram_L.png,like duck head,2,13,1,1,52
+speaker,0.51,0,3,tangram_L.png,yes,2,13,1,1,52
+speaker,0.54,1,3,tangram_G.png,arms behind back ,4,13,1,1,49
+speaker,0.57,1,3,tangram_F.png,sitting with knees bent (to the left),5,13,1,1,49
+speaker,0.6,1,3,tangram_E.png,bunny ears,6,13,1,1,49
+speaker,0.69,2,3,tangram_F.png,"sit, feet to left, plain head",8,13,1,1,52
+speaker,0.54,0,3,tangram_F.png,"plain head, sitting feet to the left",3,13,1,1,52
+speaker,0.63,1,3,tangram_L.png,arms praying (to the right),7,13,1,1,49
+speaker,0.75,2,3,tangram_E.png,bunny ears,10,13,1,1,52
+speaker,0.78,3,3,tangram_L.png,arms praying (to right),12,13,1,1,49
+speaker,0.84,3,3,tangram_G.png,arms behind back,14,13,1,1,49
+speaker,0.78,2,3,tangram_G.png,"funky head...ars behind back, feet left",11,13,1,1,52
+speaker,0.81,3,3,tangram_E.png,bunny ears,13,13,1,1,49
+speaker,0.72,2,3,tangram_L.png,praying,9,13,1,1,52
+speaker,0.87,3,3,tangram_F.png,sitting knees bent (to the left),15,13,1,1,49
+speaker,0.9,0,4,tangram_F.png,sitting knees bent (to the left),0,13,1,2,49
+speaker,0.93,0,4,tangram_L.png,arms praying (to the right),1,13,1,2,49
+speaker,0.96,0,4,tangram_G.png,arms behind back ,2,13,1,2,49
+speaker,0.99,0,4,tangram_E.png,bunny ears,3,13,1,2,49
+speaker,1.02,1,4,tangram_F.png,person sitting,4,13,1,2,51
+speaker,1.05,1,4,tangram_L.png,praying hands,5,13,1,2,51
+speaker,1.26,3,4,tangram_E.png,bunny ears,12,13,1,2,51
+speaker,1.29,3,4,tangram_G.png,hands behind back,13,13,1,2,51
+speaker,1.08,1,4,tangram_E.png,bunny ears,6,13,1,2,51
+speaker,1.2,2,4,tangram_F.png,sitting knees bent ,10,13,1,2,49
+speaker,1.11,1,4,tangram_G.png,hands behind back,7,13,1,2,51
+speaker,1.14,2,4,tangram_E.png,bunny ears,8,13,1,2,49
+speaker,1.17,2,4,tangram_G.png,arms behind back,9,13,1,2,49
+speaker,1.23,2,4,tangram_L.png,praying,11,13,1,2,49
+speaker,1.35,3,4,tangram_F.png,sitting,15,13,1,2,51
+speaker,1.32,3,4,tangram_L.png,praying,14,13,1,2,51
+speaker,0.93,0,5,tangram_G.png,"funky head, ars behing back, feet to the left",0,13,1,2,52
+speaker,0.96,0,5,tangram_F.png,"sit, feet to left, plain head",1,13,1,2,52
+speaker,0.99,0,5,tangram_E.png,bunny ears,2,13,1,2,52
+speaker,1.02,0,5,tangram_L.png,"praying, ars to right",3,13,1,2,52
+speaker,0.99,1,5,tangram_E.png,bunny ears head,4,13,1,2,50
+speaker,1.02,1,5,tangram_L.png,praying hands,5,13,1,2,50
+speaker,1.05,1,5,tangram_F.png,sitting down looking up left,6,13,1,2,50
+speaker,1.08,1,5,tangram_G.png,arms behind back,7,13,1,2,50
+speaker,1.26,2,5,tangram_L.png,praying ars to the right,11,13,1,2,52
+speaker,1.17,2,5,tangram_F.png,"sit, feet left, plain head",8,13,1,2,52
+speaker,1.2,2,5,tangram_G.png,"funky head, arms behind back",9,13,1,2,52
+speaker,1.23,2,5,tangram_E.png,bunny ears,10,13,1,2,52
+speaker,1.23,3,5,tangram_F.png,sitting down looking up left,12,13,1,2,50
+speaker,1.26,3,5,tangram_G.png,arms behind back,13,13,1,2,50
+speaker,1.29,3,5,tangram_L.png,praying hands,14,13,1,2,50
+speaker,1.32,3,5,tangram_E.png,bunny ears,15,13,1,2,50
+speaker,0,0,0,tangram_E.png,triangle on the bottom,0,14,1,0,54
+speaker,0,0,0,tangram_I.png,"It is facing to the left, looks like it is upright, with two triangles extended to the left",0,15,2,0,61
+speaker,0,0,0,tangram_I.png,to the very right there is a small triangle,0,15,2,0,61
+speaker,0,0,0,tangram_I.png,to the left two triangles one above the other,0,15,2,0,61
+speaker,0,0,0,tangram_I.png,there is a diamond on top,0,15,2,0,61
+speaker,0,0,0,tangram_I.png,hello?,0,15,2,0,61
+speaker,0,0,0,tangram_I.png,You have to select an image for us to move on,0,15,2,0,61
+speaker,0,0,0,tangram_I.png,You have to select the image I'm describing,0,15,2,0,61
+listener,0,0,0,tangram_K.png,hey,0,16,2,0,59
+speaker,0,0,0,tangram_K.png,praying position,0,16,2,0,63
+speaker,0.03,0,0,tangram_I.png,looks like ice skating or standing with a tail on the right,1,16,2,0,63
+speaker,0.06,0,0,tangram_J.png,"the one that would be a square if completed, has a right angle on the upper left",2,16,2,0,63
+speaker,0.09,0,0,tangram_H.png,the one that has not been chosen,3,16,2,0,63
+speaker,0.18,1,0,tangram_K.png,praying,6,16,2,0,59
+speaker,0.15,1,0,tangram_H.png,"""the one that has not been chosen""",5,16,2,0,59
+speaker,0.21,1,0,tangram_J.png,square,7,16,2,0,59
+speaker,0.27,2,0,tangram_I.png,ice skating,9,16,2,0,63
+speaker,0.12,1,0,tangram_I.png,ice skating one,4,16,2,0,59
+speaker,0.24,2,0,tangram_K.png,praying,8,16,2,0,63
+speaker,0.3,2,0,tangram_J.png,square,10,16,2,0,63
+speaker,0.33,2,0,tangram_H.png,not chosen,11,16,2,0,63
+speaker,0.36,3,0,tangram_J.png,square,12,16,2,0,59
+speaker,0.42,3,0,tangram_H.png,the one,14,16,2,0,59
+speaker,0.39,3,0,tangram_I.png,skating,13,16,2,0,59
+speaker,0.45,3,0,tangram_K.png,praying,15,16,2,0,59
+speaker,0,0,1,tangram_J.png,"The fattest dude, especially in the shoulder area.",0,16,2,0,64
+listener,0,0,1,tangram_J.png,which one?,0,16,2,0,62
+speaker,0.03,0,1,tangram_H.png,guy with no arms,1,16,2,0,64
+speaker,0.06,0,1,tangram_I.png,one leg behind,2,16,2,0,64
+speaker,0.12,1,1,tangram_I.png,leg behind,4,16,2,0,62
+speaker,0.27,2,1,tangram_K.png,praying,9,16,2,0,64
+speaker,0.09,0,1,tangram_K.png,praying,3,16,2,0,64
+speaker,0.3,2,1,tangram_J.png,fat shoulders,10,16,2,0,64
+speaker,0.15,1,1,tangram_H.png,no arms,5,16,2,0,62
+speaker,0.18,1,1,tangram_J.png,fat at the shoulders,6,16,2,0,62
+speaker,0.21,1,1,tangram_K.png,praying,7,16,2,0,62
+speaker,0.24,2,1,tangram_I.png,leg behind,8,16,2,0,64
+speaker,0.33,2,1,tangram_H.png,no arms,11,16,2,0,64
+speaker,0.39,3,1,tangram_H.png,no arms,13,16,2,0,62
+speaker,0.42,3,1,tangram_I.png,leg behind,14,16,2,0,62
+speaker,0.36,3,1,tangram_K.png,prayingh,12,16,2,0,62
+speaker,0.45,3,1,tangram_J.png,fat shoulders,15,16,2,0,62
+listener,0.51,0,2,tangram_H.png,with no arms?,1,16,2,1,64
+speaker,0.48,0,2,tangram_K.png,looks like praying,0,16,2,1,59
+speaker,0.51,0,2,tangram_H.png,looks like a potato,1,16,2,1,59
+speaker,0.54,0,2,tangram_J.png,the square one,2,16,2,1,59
+speaker,0.57,0,2,tangram_I.png,looks like ice skating,3,16,2,1,59
+speaker,0.69,1,2,tangram_I.png,ice skating,7,16,2,1,64
+speaker,0.72,2,2,tangram_J.png,square,8,16,2,1,59
+speaker,0.66,1,2,tangram_K.png,praying,6,16,2,1,64
+speaker,0.6,1,2,tangram_J.png,square one,4,16,2,1,64
+speaker,0.63,1,2,tangram_H.png,potato,5,16,2,1,64
+speaker,0.87,3,2,tangram_J.png,square,13,16,2,1,64
+speaker,0.75,2,2,tangram_K.png,praying,9,16,2,1,59
+speaker,0.78,2,2,tangram_H.png,potato,10,16,2,1,59
+speaker,0.81,2,2,tangram_I.png,skating,11,16,2,1,59
+speaker,0.84,3,2,tangram_K.png,praying,12,16,2,1,64
+speaker,0.9,3,2,tangram_I.png,skating,14,16,2,1,64
+speaker,0.93,3,2,tangram_H.png,potato,15,16,2,1,64
+speaker,0.51,0,3,tangram_K.png,looks like its in a praying positino,1,16,2,1,63
+speaker,0.48,0,3,tangram_I.png,"the one that kinda looks like an ice skater with one leg up in the air, like a tail on its right",0,16,2,1,63
+listener,0.54,0,3,tangram_H.png,no arms,2,16,2,1,62
+speaker,0.54,0,3,tangram_H.png,kinda reminds me of a baby swaddled in a blanket,2,16,2,1,63
+listener,0.57,0,3,tangram_J.png,fat shoulder?,3,16,2,1,62
+speaker,0.6,1,3,tangram_K.png,praying,4,16,2,1,62
+speaker,0.57,0,3,tangram_J.png,"the one not chosen yet, would be a square if the picture were complete",3,16,2,1,63
+speaker,0.63,1,3,tangram_J.png,fat shoulder,5,16,2,1,62
+speaker,0.66,1,3,tangram_H.png,no arms,7,16,2,1,62
+speaker,0.72,2,3,tangram_K.png,praying,9,16,2,1,63
+speaker,0.63,1,3,tangram_I.png,skater leg behind,6,16,2,1,62
+speaker,0.69,2,3,tangram_I.png,skater,8,16,2,1,63
+speaker,0.81,3,3,tangram_I.png,skater,12,16,2,1,62
+speaker,0.84,3,3,tangram_K.png,praying,13,16,2,1,62
+speaker,0.78,2,3,tangram_J.png,square,11,16,2,1,63
+speaker,0.87,3,3,tangram_J.png,square,14,16,2,1,62
+speaker,0.75,2,3,tangram_H.png,no arms,10,16,2,1,63
+speaker,0.9,3,3,tangram_H.png,no arms,15,16,2,1,62
+speaker,0.99,0,4,tangram_J.png,square,2,16,2,2,62
+speaker,1.02,0,4,tangram_H.png,no arms,3,16,2,2,62
+speaker,0.93,0,4,tangram_I.png,skater leg behind,0,16,2,2,62
+speaker,0.96,0,4,tangram_K.png,praying,1,16,2,2,62
+speaker,1.08,1,4,tangram_J.png,square,4,16,2,2,59
+speaker,1.17,2,4,tangram_K.png,praying,8,16,2,2,62
+speaker,1.11,1,4,tangram_K.png,praying,5,16,2,2,59
+speaker,1.14,1,4,tangram_H.png,no arms,6,16,2,2,59
+speaker,1.17,1,4,tangram_I.png,skating,7,16,2,2,59
+speaker,1.2,2,4,tangram_I.png,skater,9,16,2,2,62
+speaker,1.23,2,4,tangram_H.png,no arms,10,16,2,2,62
+speaker,1.26,2,4,tangram_J.png,square,11,16,2,2,62
+speaker,1.32,3,4,tangram_I.png,skating,12,16,2,2,59
+speaker,1.35,3,4,tangram_H.png,no arms,13,16,2,2,59
+speaker,1.38,3,4,tangram_J.png,square,14,16,2,2,59
+speaker,1.41,3,4,tangram_K.png,praying,15,16,2,2,59
+speaker,0.93,0,5,tangram_K.png,praying ,0,16,2,2,63
+speaker,0.96,0,5,tangram_I.png,"ice skating like standing on one leg with one leg in the air, or a tail - we'll call it skating from here on",1,16,2,2,63
+speaker,0.99,0,5,tangram_J.png,would be a square if completed - square,2,16,2,2,63
+speaker,1.02,0,5,tangram_H.png,no arms kind of like a baby swaddled in blanket - no arms,3,16,2,2,63
+speaker,1.08,1,5,tangram_I.png,skating,4,16,2,2,64
+speaker,1.11,1,5,tangram_K.png,praying,5,16,2,2,64
+speaker,1.2,2,5,tangram_K.png,praying,9,16,2,2,63
+speaker,1.14,1,5,tangram_H.png,no arms,6,16,2,2,64
+speaker,1.17,1,5,tangram_J.png,square,7,16,2,2,64
+speaker,1.17,2,5,tangram_I.png,skating,8,16,2,2,63
+speaker,1.38,3,5,tangram_K.png,praying,14,16,2,2,64
+speaker,1.23,2,5,tangram_H.png,no arms,10,16,2,2,63
+speaker,1.26,2,5,tangram_J.png,square,11,16,2,2,63
+speaker,1.32,3,5,tangram_H.png,no arms,12,16,2,2,64
+speaker,1.35,3,5,tangram_I.png,skating,13,16,2,2,64
+speaker,1.41,3,5,tangram_J.png,square,15,16,2,2,64
+listener,0,0,0,tangram_K.png,ok,0,17,2,0,67
+speaker,0,0,0,tangram_K.png,person pointing right,0,17,2,0,66
+listener,0.03,0,0,tangram_H.png,ok,1,17,2,0,67
+speaker,0.03,0,0,tangram_H.png,a blob,1,17,2,0,66
+speaker,0.06,0,0,tangram_I.png,person kicking,2,17,2,0,66
+listener,0.09,0,0,tangram_J.png,ok,3,17,2,0,67
+speaker,0.12,1,0,tangram_K.png,person pointing right with thing sticking up,4,17,2,0,67
+speaker,0.09,0,0,tangram_J.png,square,3,17,2,0,66
+listener,0.12,1,0,tangram_K.png,person kicking,4,17,2,0,66
+speaker,0.12,1,0,tangram_H.png,the blob,5,17,2,0,67
+speaker,0.15,1,0,tangram_J.png,person pointing right,6,17,2,0,67
+speaker,0.15,1,0,tangram_I.png,person kicking,7,17,2,0,67
+speaker,0.21,2,0,tangram_K.png,person kneeling,9,17,2,0,66
+speaker,0.18,2,0,tangram_J.png,square shoulder,8,17,2,0,66
+speaker,0.24,2,0,tangram_I.png,person kicking,10,17,2,0,66
+speaker,0.27,2,0,tangram_H.png,blob,11,17,2,0,66
+speaker,0.3,3,0,tangram_J.png,person pointing right,12,17,2,0,67
+speaker,0.3,3,0,tangram_I.png,person kicking,13,17,2,0,67
+speaker,0.36,3,0,tangram_H.png,the blob,15,17,2,0,67
+speaker,0.33,3,0,tangram_K.png,person kneeling,14,17,2,0,67
+speaker,0,0,1,tangram_I.png,the one that looks like a person with their leg kicked up behind them.,0,17,2,0,68
+listener,0.03,0,1,tangram_H.png,p,1,17,2,0,65
+speaker,0.03,0,1,tangram_H.png,the one that has more of a solid for and 3 flat surface at the bottom ,1,17,2,0,68
+listener,0.03,0,1,tangram_H.png,does it have an arm?,1,17,2,0,65
+speaker,0.03,0,1,tangram_H.png,no arms ,1,17,2,0,68
+listener,0.06,0,1,tangram_K.png,"i'd say ""no arms"", ""leg kick"" ""box one arm"" and ""polygon one arm"" or something",2,17,2,0,65
+speaker,0.06,0,1,tangram_K.png,the one with the big arrow at bottom facing left,2,17,2,0,68
+listener,0.06,0,1,tangram_K.png,oh ok,2,17,2,0,65
+speaker,0.06,0,1,tangram_K.png,arm to the right,2,17,2,0,68
+listener,0.09,0,1,tangram_J.png,"i called the big arrow the ""polygon arm"" and the other the ""box arm"" in my head lol",3,17,2,0,65
+speaker,0.09,0,1,tangram_J.png,"square middle, right arm",3,17,2,0,68
+speaker,0.12,1,1,tangram_I.png,kicking,4,17,2,0,65
+speaker,0.15,1,1,tangram_J.png,box middle arm,5,17,2,0,65
+speaker,0.18,1,1,tangram_H.png,no arms sitter,6,17,2,0,65
+speaker,0.21,1,1,tangram_K.png,polygon one arm ,7,17,2,0,65
+speaker,0.21,1,1,tangram_K.png,arrow down pointing left at base,7,17,2,0,65
+speaker,0.24,2,1,tangram_J.png,"box, right arm",8,17,2,0,68
+speaker,0.33,2,1,tangram_I.png,kicking,11,17,2,0,68
+speaker,0.27,2,1,tangram_K.png,"left arrow bottom, right arm",9,17,2,0,68
+speaker,0.3,2,1,tangram_H.png,no arm sitting,10,17,2,0,68
+speaker,0.36,3,1,tangram_J.png,box middle one arm,12,17,2,0,65
+speaker,0.39,3,1,tangram_K.png,"polygon one arm, arrow base",13,17,2,0,65
+speaker,0.45,3,1,tangram_I.png,kung fu kicker,15,17,2,0,65
+speaker,0.42,3,1,tangram_H.png,sitting no arms,14,17,2,0,65
+speaker,0.48,0,2,tangram_H.png,no arm sitting,0,17,2,1,68
+listener,0.39,0,2,tangram_H.png,ok,0,17,2,1,67
+speaker,0.51,0,2,tangram_K.png,"left arrow bottom, right arm",1,17,2,1,68
+speaker,0.54,0,2,tangram_I.png,kicker,2,17,2,1,68
+speaker,0.6,1,2,tangram_H.png,blob sitting,7,17,2,1,67
+speaker,0.57,0,2,tangram_J.png,box right arm,3,17,2,1,68
+speaker,0.54,1,2,tangram_J.png,right arm square,5,17,2,1,67
+speaker,0.57,1,2,tangram_I.png,person kicking,6,17,2,1,67
+speaker,0.51,1,2,tangram_K.png,right arm left bottom,4,17,2,1,67
+speaker,0.72,2,2,tangram_K.png,"left arrow bottom, right arm",8,17,2,1,68
+speaker,0.78,2,2,tangram_H.png,no arm sitter,10,17,2,1,68
+speaker,0.81,2,2,tangram_J.png,"box, right arm",11,17,2,1,68
+speaker,0.78,3,2,tangram_K.png,right arm left bottom,13,17,2,1,67
+speaker,0.75,2,2,tangram_I.png,kicker,9,17,2,1,68
+speaker,0.75,3,2,tangram_H.png,blob sititng,12,17,2,1,67
+speaker,0.81,3,2,tangram_I.png,kicking,14,17,2,1,67
+speaker,0.84,3,2,tangram_J.png,right arm square,15,17,2,1,67
+listener,0.48,0,3,tangram_H.png,the sitting no arms?,0,17,2,1,65
+speaker,0.39,0,3,tangram_H.png,a blob,0,17,2,1,66
+speaker,0.39,0,3,tangram_H.png,no arms,0,17,2,1,66
+speaker,0.42,0,3,tangram_K.png,kneeling pointing right,1,17,2,1,66
+speaker,0.42,0,3,tangram_K.png,poly,1,17,2,1,66
+speaker,0.6,1,3,tangram_I.png,kung fu kicker,4,17,2,1,65
+listener,0.51,0,3,tangram_K.png,the square middle or the polygon middle body?,1,17,2,1,65
+speaker,0.63,1,3,tangram_H.png,no arms sitter,5,17,2,1,65
+speaker,0.66,1,3,tangram_J.png,square body one arm,6,17,2,1,65
+speaker,0.45,0,3,tangram_I.png,looks like person kicking leg,2,17,2,1,66
+speaker,0.48,0,3,tangram_J.png,square body,3,17,2,1,66
+speaker,0.69,1,3,tangram_K.png,polygon middle one arm,7,17,2,1,65
+speaker,0.84,3,3,tangram_H.png,no arms,12,17,2,1,65
+speaker,0.9,3,3,tangram_J.png,square middle pointing,14,17,2,1,65
+speaker,0.69,2,3,tangram_H.png,no arms,10,17,2,1,66
+speaker,0.72,2,3,tangram_K.png,poly pointing,11,17,2,1,66
+speaker,0.63,2,3,tangram_J.png,square body,8,17,2,1,66
+speaker,0.66,2,3,tangram_I.png,kicker,9,17,2,1,66
+speaker,0.87,3,3,tangram_K.png,poly middle pointing,13,17,2,1,65
+speaker,0.93,3,3,tangram_I.png,kung fu,15,17,2,1,65
+speaker,0.96,0,4,tangram_K.png,polygon middle pointing right,0,17,2,2,65
+speaker,0.96,0,4,tangram_I.png,kung fu kicking,1,17,2,2,65
+speaker,0.99,0,4,tangram_H.png,no arms,2,17,2,2,65
+speaker,0.96,1,4,tangram_H.png,no arms,5,17,2,2,67
+speaker,0.99,1,4,tangram_I.png,kicker,6,17,2,2,67
+speaker,1.02,0,4,tangram_J.png,square body pointing right,3,17,2,2,65
+speaker,1.02,1,4,tangram_J.png,square pointing right,7,17,2,2,67
+speaker,0.96,1,4,tangram_K.png,right arm left bottom,4,17,2,2,67
+speaker,1.14,2,4,tangram_H.png,no arms,8,17,2,2,65
+speaker,1.17,2,4,tangram_K.png,polygon pointing right,9,17,2,2,65
+speaker,1.2,2,4,tangram_J.png,square pointing right,10,17,2,2,65
+speaker,1.23,2,4,tangram_I.png,kung fu kicker,11,17,2,2,65
+speaker,1.17,3,4,tangram_J.png,square pointing right,12,17,2,2,67
+speaker,1.2,3,4,tangram_K.png,polygon pointing right,13,17,2,2,67
+speaker,1.23,3,4,tangram_H.png,no arms,14,17,2,2,67
+listener,1.29,3,4,tangram_K.png,sry about messing up the earlier ones,13,17,2,2,65
+speaker,1.26,3,4,tangram_I.png,kicker,15,17,2,2,67
+speaker,0.96,0,5,tangram_I.png,kicker,0,17,2,2,68
+speaker,0.99,0,5,tangram_H.png,no arm sitter,1,17,2,2,68
+speaker,1.02,0,5,tangram_J.png,box right arm,2,17,2,2,68
+speaker,1.05,1,5,tangram_K.png,kneeling pointing right,6,17,2,2,66
+speaker,1.08,1,5,tangram_J.png,square body pointing,7,17,2,2,66
+speaker,1.05,0,5,tangram_K.png,"left bottom arrow, right arm",3,17,2,2,68
+speaker,1.02,1,5,tangram_H.png,blob no arms,5,17,2,2,66
+speaker,0.99,1,5,tangram_I.png,kicker,4,17,2,2,66
+speaker,1.23,2,5,tangram_I.png,kicker,9,17,2,2,68
+speaker,1.26,2,5,tangram_H.png,no arm sitter,10,17,2,2,68
+speaker,1.2,2,5,tangram_K.png,"left arrow bottom, right arm",8,17,2,2,68
+speaker,1.23,3,5,tangram_H.png,blob,12,17,2,2,66
+speaker,1.29,3,5,tangram_I.png,kicker,14,17,2,2,66
+speaker,1.29,2,5,tangram_J.png,box right arm,11,17,2,2,68
+speaker,1.26,3,5,tangram_K.png,arrow bottom right arm,13,17,2,2,66
+speaker,1.32,3,5,tangram_J.png,square body right arm,15,17,2,2,66
+speaker,0,0,0,tangram_H.png,Hello,0,18,2,0,71
+listener,0,0,0,tangram_H.png,Hello,0,18,2,0,70
+speaker,0,0,0,tangram_H.png,This looks likes a person with a blanket wrapped around them,0,18,2,0,71
+listener,0.03,0,0,tangram_K.png,Hi,1,18,2,0,70
+speaker,0.03,0,0,tangram_K.png,Hi. This one looks like a fish with its mouth open toward the right on the bottom.,1,18,2,0,71
+speaker,0.06,0,0,tangram_J.png,This looks like person pointing toward the right,2,18,2,0,71
+speaker,0.09,0,0,tangram_I.png,This one looks like a person standin on one foot.,3,18,2,0,71
+speaker,0.12,1,0,tangram_H.png,This looks like a person covered in a long cape,4,18,2,0,70
+speaker,0.15,1,0,tangram_I.png,This looks like an ice skater twirling ,5,18,2,0,70
+speaker,0.18,1,0,tangram_K.png,This looks like a fish with its mouth open,6,18,2,0,70
+speaker,0.21,1,0,tangram_J.png,"This looks like someone wearing a cape, spreading it open",7,18,2,0,70
+speaker,0.27,2,0,tangram_J.png,This looks like a person with a blanket wrapped around them,9,18,2,0,71
+speaker,0.24,2,0,tangram_I.png,This looks like someone standing on one foot.,8,18,2,0,71
+speaker,0.3,2,0,tangram_K.png,This one looks like a fish with an open mouth,11,18,2,0,71
+speaker,0.27,2,0,tangram_H.png,This one looks like a blanket wrapped around them,10,18,2,0,71
+speaker,0.33,3,0,tangram_I.png,This one looks like someone standing on one leg,12,18,2,0,70
+speaker,0.36,3,0,tangram_H.png,This one looks like someone covered in a blanket or cape,13,18,2,0,70
+speaker,0.39,3,0,tangram_J.png,This one looks like someone pointing at something,14,18,2,0,70
+speaker,0.42,3,0,tangram_K.png,This one looks like a fish with its mouth open,15,18,2,0,70
+speaker,0,0,1,tangram_I.png,looks like man doing a back kick ,0,18,2,0,69
+speaker,0.03,0,1,tangram_H.png,looks like a person on knees praying or meditating ,1,18,2,0,69
+speaker,0.06,0,1,tangram_K.png,person on knees begging hands out ,2,18,2,0,69
+speaker,0.09,0,1,tangram_J.png,bottom is part of a square top is a diamond ,3,18,2,0,69
+listener,0.09,1,1,tangram_H.png,is person on knees?,4,18,2,0,69
+speaker,0.09,1,1,tangram_H.png,no it looks like a diamond on top and bottom has a sideways square slopped to the right,4,18,2,0,72
+speaker,0.09,1,1,tangram_K.png,looks like a man on knees begging,5,18,2,0,72
+speaker,0.12,1,1,tangram_J.png,"looks like a person within a right side of shoulder sticking out, kinda sharp looking",6,18,2,0,72
+speaker,0.15,1,1,tangram_I.png,looks like a person standing on one leg leaning forward,7,18,2,0,72
+speaker,0.18,2,1,tangram_J.png,looks like a person sitting on something on right side the left is straight and smooth ,8,18,2,0,69
+speaker,0.18,2,1,tangram_K.png,a person begging with hands out ,9,18,2,0,69
+speaker,0.21,2,1,tangram_I.png,looks like someone ice skating ,10,18,2,0,69
+speaker,0.24,3,1,tangram_I.png,looks like someone balancing on one leg,12,18,2,0,72
+speaker,0.24,2,1,tangram_H.png,looks like someone meditating or praying ,11,18,2,0,69
+speaker,0.27,3,1,tangram_J.png,person has one shoulder that appears sharp and sticking out to right,13,18,2,0,72
+speaker,0.3,3,1,tangram_K.png,person is bowing on knees,14,18,2,0,72
+speaker,0.33,3,1,tangram_H.png,appears to be meditating,15,18,2,0,72
+listener,0.3,3,1,tangram_K.png,are hands out?,14,18,2,0,69
+speaker,0.3,3,1,tangram_K.png,yes,14,18,2,0,72
+speaker,0.36,0,2,tangram_H.png,person meditating ,0,18,2,1,69
+speaker,0.39,0,2,tangram_I.png,an ice skater ,2,18,2,1,69
+speaker,0.36,0,2,tangram_J.png,a person with sharp right shoulder sticking out ,1,18,2,1,69
+speaker,0.42,0,2,tangram_K.png,person begging with hands out ,3,18,2,1,69
+listener,0.45,1,2,tangram_J.png,on their knees?,4,18,2,1,69
+speaker,0.57,1,2,tangram_H.png,Person wearing a blanket blowing in the wind,5,18,2,1,71
+speaker,0.54,1,2,tangram_J.png,Person pointing toward the right,4,18,2,1,71
+speaker,0.54,1,2,tangram_J.png,Its not the fish or the person on one leg,4,18,2,1,71
+speaker,0.6,1,2,tangram_K.png,Fish one,7,18,2,1,71
+listener,0.51,1,2,tangram_K.png,does it look like a person begging with hands out?,7,18,2,1,69
+listener,0.51,1,2,tangram_K.png,i dont see a fish,7,18,2,1,69
+speaker,0.54,2,2,tangram_J.png,person with sharp right shoulder sticking out ,8,18,2,1,69
+speaker,0.6,1,2,tangram_K.png,It looks like a fish on the bottom. With the mouth open toward the right side.,7,18,2,1,71
+listener,0.51,1,2,tangram_K.png,that could be any...,7,18,2,1,69
+speaker,0.6,1,2,tangram_K.png,It literally looks like a fish and is the only one you haven't clicked yet,7,18,2,1,71
+speaker,0.57,2,2,tangram_I.png,ice skater ,9,18,2,1,69
+speaker,0.6,2,2,tangram_H.png,"person in meditation,  sitting ",10,18,2,1,69
+speaker,0.72,3,2,tangram_I.png,person on one foot,12,18,2,1,71
+speaker,0.57,1,2,tangram_I.png,Person on one leg,6,18,2,1,71
+speaker,0.6,1,2,tangram_K.png,it looks like < sign as a mouth,7,18,2,1,71
+speaker,0.78,3,2,tangram_K.png,the one i say looks like a fish or you think looks like a person with hands out,14,18,2,1,71
+speaker,0.6,2,2,tangram_K.png,person begging with hands out ,11,18,2,1,69
+speaker,0.75,3,2,tangram_J.png,person with sharp right shoulder,13,18,2,1,71
+speaker,0.81,3,2,tangram_H.png,the one where it looks like a person is wrapped in a blanket and its blowing in the wind,15,18,2,1,71
+listener,0.72,3,2,tangram_H.png,the one meditating .....,15,18,2,1,69
+speaker,0.45,0,3,tangram_J.png,this looks like someone pointing,0,18,2,1,70
+speaker,0.48,0,3,tangram_I.png,This looks like someone skating ,1,18,2,1,70
+speaker,0.54,0,3,tangram_K.png,this looks like a fish ,3,18,2,1,70
+speaker,0.51,0,3,tangram_H.png,this looks like someone covered in a blanket,2,18,2,1,70
+speaker,0.48,1,3,tangram_H.png,looks like someone wrappd in blanket,6,18,2,1,72
+speaker,0.51,1,3,tangram_I.png,someone appears to be ice skating on one leg,7,18,2,1,72
+speaker,0.45,1,3,tangram_J.png,looks like someone with a right side of shoulder that is sticking out and sharp,4,18,2,1,72
+speaker,0.48,1,3,tangram_K.png,looks like someone bowing on knees and beggin,5,18,2,1,72
+speaker,0.66,2,3,tangram_K.png,"looks like a fish with its mouth open, and a diamond on its heada",9,18,2,1,70
+speaker,0.72,2,3,tangram_I.png,looks like someone figure skating,11,18,2,1,70
+speaker,0.75,3,3,tangram_I.png,someone balancing on 1 foot,15,18,2,1,72
+speaker,0.63,2,3,tangram_H.png,looks like someone covered in a blanket,8,18,2,1,70
+speaker,0.69,3,3,tangram_J.png,someone with sharp shoulder,13,18,2,1,72
+speaker,0.69,2,3,tangram_J.png,"looks like someone spreading their arms wide, while wearing a cape",10,18,2,1,70
+speaker,0.66,3,3,tangram_H.png,someone wrapped in sheet,12,18,2,1,72
+speaker,0.72,3,3,tangram_K.png,someone beggin on knees,14,18,2,1,72
+speaker,0.84,0,4,tangram_J.png,This appears to be a person with a sharp pointy right shoulder.,0,18,2,2,71
+speaker,0.87,0,4,tangram_I.png,This appears to be a person standing on one leg.,1,18,2,2,71
+speaker,0.9,0,4,tangram_K.png,This looks like a fish with its mouth open on the bottom,2,18,2,2,71
+speaker,0.93,0,4,tangram_H.png,This looks like a person wrapped in a blanket or cape ,3,18,2,2,71
+speaker,0.9,1,4,tangram_I.png,person standing on one leg,4,18,2,2,72
+speaker,0.93,1,4,tangram_K.png,person on knees begging with hands out,5,18,2,2,72
+speaker,1.11,2,4,tangram_I.png,person on one foot,10,18,2,2,71
+speaker,1.05,2,4,tangram_H.png,person wrapped in blanket,8,18,2,2,71
+speaker,1.08,2,4,tangram_J.png,person with sharp right shoulder,9,18,2,2,71
+speaker,0.96,1,4,tangram_J.png,person with sharp right shoulder,7,18,2,2,72
+speaker,1.14,2,4,tangram_K.png,person that appears to be begging with hands out,11,18,2,2,71
+speaker,1.11,3,4,tangram_I.png,person on one foot,13,18,2,2,72
+speaker,1.14,3,4,tangram_K.png,person kneeling and beggin,14,18,2,2,72
+speaker,0.93,1,4,tangram_H.png,person wrapped in blanket,6,18,2,2,72
+speaker,1.11,3,4,tangram_H.png,person wrapped with sheet,12,18,2,2,72
+speaker,1.17,3,4,tangram_J.png,person with sharp shoulder,15,18,2,2,72
+speaker,0.87,0,5,tangram_I.png,someone ice skating,0,18,2,2,70
+speaker,0.93,0,5,tangram_K.png,someone pointing a gun,2,18,2,2,70
+speaker,0.9,0,5,tangram_H.png,someone in a blanket,1,18,2,2,70
+speaker,0.96,0,5,tangram_J.png,"someone in a cape, spreading their arms",3,18,2,2,70
+speaker,0.87,1,5,tangram_I.png,ice skater,4,18,2,2,69
+speaker,0.9,1,5,tangram_K.png,person on knees begging with hands out ,5,18,2,2,69
+speaker,0.93,1,5,tangram_H.png,"person meditating, or wrapped in blanket ",6,18,2,2,69
+speaker,1.17,2,5,tangram_I.png,figure skater,10,18,2,2,70
+speaker,1.2,3,5,tangram_J.png,sharp right shoulder,15,18,2,2,69
+speaker,1.11,2,5,tangram_K.png,person on knees begging,8,18,2,2,70
+speaker,1.17,3,5,tangram_K.png,begging with hands out ,14,18,2,2,69
+speaker,0.96,1,5,tangram_J.png,person with sharp right shoulder sticking out ,7,18,2,2,69
+speaker,1.14,2,5,tangram_H.png,person in blanket,9,18,2,2,70
+speaker,1.14,3,5,tangram_I.png,ice skater ,13,18,2,2,69
+speaker,1.2,2,5,tangram_J.png,sharp right shoulder,11,18,2,2,70
+speaker,1.11,3,5,tangram_H.png,person meditating or in blanket ,12,18,2,2,69
+speaker,0,0,0,tangram_B.png,grsduat kneeling down,0,19,0,0,75
+speaker,0,0,0,tangram_B.png,graduate,0,19,0,0,75
+speaker,0.03,0,0,tangram_C.png,graduate leaning back,1,19,0,0,75
+speaker,0.06,0,0,tangram_D.png,standing straight,2,19,0,0,75
+speaker,0.09,0,0,tangram_A.png,leg up,3,19,0,0,75
+speaker,0.12,1,0,tangram_B.png,kneeling down,4,19,0,0,73
+speaker,0.18,1,0,tangram_D.png,standing straight,6,19,0,0,73
+speaker,0.21,1,0,tangram_C.png,leaning with both arms out,7,19,0,0,73
+speaker,0.15,1,0,tangram_A.png,kicking a leg out,5,19,0,0,73
+speaker,0.24,2,0,tangram_B.png,kneeling down,8,19,0,0,75
+speaker,0.33,2,0,tangram_D.png,standing straight,11,19,0,0,75
+speaker,0.3,2,0,tangram_A.png,leg up,10,19,0,0,75
+speaker,0.27,2,0,tangram_C.png,leaning back,9,19,0,0,75
+speaker,0.36,3,0,tangram_A.png,kicking a leg out,12,19,0,0,73
+speaker,0.45,3,0,tangram_C.png,leaning with arms out,15,19,0,0,73
+speaker,0.39,3,0,tangram_D.png,standing straight,13,19,0,0,73
+speaker,0.42,3,0,tangram_B.png,kneeling down,14,19,0,0,73
+speaker,0,0,1,tangram_A.png,elephant on two legs,0,19,0,0,76
+speaker,0,0,1,tangram_A.png,one foot off the ground,0,19,0,0,76
+listener,0,0,1,tangram_B.png,I got this,1,19,0,0,74
+listener,0,0,1,tangram_A.png,Hands up,0,19,0,0,74
+speaker,0,0,1,tangram_B.png,"mouse nose, with big ears sitting",1,19,0,0,76
+speaker,0.03,0,1,tangram_D.png,man standing holding bowl,2,19,0,0,76
+speaker,0.06,0,1,tangram_C.png,man falling with hands flailing,3,19,0,0,76
+speaker,0.09,1,1,tangram_D.png,man holding bowl,4,19,0,0,74
+speaker,0.12,1,1,tangram_B.png,guy sitting with mouse nose with hands begging,5,19,0,0,74
+speaker,0.21,2,1,tangram_A.png,man with one leg in air,8,19,0,0,76
+speaker,0.15,1,1,tangram_A.png,guy with one leg in air lookign abckwards,6,19,0,0,74
+speaker,0.18,1,1,tangram_C.png,arms flailing looking down,7,19,0,0,74
+speaker,0.24,2,1,tangram_D.png,man standing with bowl out,9,19,0,0,76
+speaker,0.27,2,1,tangram_B.png,man begging on ground with big ears,10,19,0,0,76
+speaker,0.3,2,1,tangram_C.png,man falling with arms out,11,19,0,0,76
+speaker,0.33,3,1,tangram_D.png,Man holding bowl,12,19,0,0,74
+speaker,0.39,3,1,tangram_B.png,big ears holding hands out,14,19,0,0,74
+speaker,0.36,3,1,tangram_C.png,man falling,13,19,0,0,74
+speaker,0.42,3,1,tangram_A.png,one leg in the air,15,19,0,0,74
+speaker,0.48,0,2,tangram_A.png,man with one leg in air,1,19,0,1,76
+speaker,0.45,0,2,tangram_B.png,man on ground with big ears,0,19,0,1,76
+speaker,0.51,0,2,tangram_D.png,man with bowl out,2,19,0,1,76
+speaker,0.54,0,2,tangram_C.png,man falling with arms out,3,19,0,1,76
+speaker,0.6,1,2,tangram_D.png,standing straight,4,19,0,1,73
+speaker,0.63,1,2,tangram_C.png,falling down,5,19,0,1,73
+speaker,0.66,1,2,tangram_A.png,kicking leg,6,19,0,1,73
+speaker,0.69,2,2,tangram_C.png,man falling,8,19,0,1,76
+speaker,0.69,1,2,tangram_B.png,kneeling down,7,19,0,1,73
+speaker,0.72,2,2,tangram_B.png,man on knees big ears,9,19,0,1,76
+speaker,0.75,2,2,tangram_A.png,man with one leg kicking,10,19,0,1,76
+speaker,0.78,2,2,tangram_D.png,man with bowl out,11,19,0,1,76
+speaker,0.84,3,2,tangram_B.png,kneeling down,12,19,0,1,73
+speaker,0.87,3,2,tangram_D.png,standing straight,13,19,0,1,73
+speaker,0.9,3,2,tangram_C.png,falling back,14,19,0,1,73
+speaker,0.93,3,2,tangram_A.png,kicking leg,15,19,0,1,73
+speaker,0.48,0,3,tangram_D.png,standing straight hand out,0,19,0,1,75
+speaker,0.51,0,3,tangram_A.png,kicking,2,19,0,1,75
+speaker,0.51,0,3,tangram_C.png,leaning back arms out,1,19,0,1,75
+speaker,0.54,1,3,tangram_C.png,slanted with arms out,4,19,0,1,74
+speaker,0.54,0,3,tangram_B.png,knealing,3,19,0,1,75
+speaker,0.6,1,3,tangram_D.png,holding bowl standing upright,6,19,0,1,74
+speaker,0.57,1,3,tangram_A.png,standing on one leg and looking backwards,5,19,0,1,74
+speaker,0.63,1,3,tangram_B.png,big ears and begging for something,7,19,0,1,74
+speaker,0.75,2,3,tangram_C.png,slanted with arms out,10,19,0,1,75
+speaker,0.78,2,3,tangram_B.png,big ears and begging for something,11,19,0,1,75
+speaker,0.72,2,3,tangram_A.png,standing on one leg and looking backwards,9,19,0,1,75
+speaker,0.78,3,3,tangram_D.png,holding bowl,12,19,0,1,74
+speaker,0.84,3,3,tangram_B.png,big ears and begging,14,19,0,1,74
+speaker,0.69,2,3,tangram_D.png, holding bowl standing upright,8,19,0,1,75
+speaker,0.81,3,3,tangram_C.png,arms out and falling,13,19,0,1,74
+speaker,0.87,3,3,tangram_A.png,on one leg and looking to the right,15,19,0,1,74
+speaker,0.99,0,4,tangram_D.png,standing straight,1,19,0,2,73
+speaker,0.96,0,4,tangram_C.png,falling backward with arms out,0,19,0,2,73
+speaker,1.02,0,4,tangram_A.png,kicking leg,2,19,0,2,73
+speaker,1.05,0,4,tangram_B.png,kneeling down,3,19,0,2,73
+speaker,1.08,1,4,tangram_B.png,big ears and begging for something,6,19,0,2,74
+speaker,1.05,1,4,tangram_D.png,standing and holding bowl,5,19,0,2,74
+speaker,1.11,1,4,tangram_C.png,slanted to the left and falling,7,19,0,2,74
+speaker,1.02,1,4,tangram_A.png,standing with leg out,4,19,0,2,74
+speaker,1.2,2,4,tangram_B.png,kneeling down,8,19,0,2,73
+speaker,1.26,2,4,tangram_D.png,standing straight,10,19,0,2,73
+speaker,1.29,2,4,tangram_A.png,kicking leg,11,19,0,2,73
+speaker,1.26,3,4,tangram_D.png,holding bowl,12,19,0,2,74
+speaker,1.32,3,4,tangram_C.png,arms out and falling,14,19,0,2,74
+speaker,1.23,2,4,tangram_C.png,falling left,9,19,0,2,73
+speaker,1.29,3,4,tangram_A.png,kicking leg,13,19,0,2,74
+speaker,1.35,3,4,tangram_B.png,begging with big ears,15,19,0,2,74
+speaker,0.93,0,5,tangram_C.png,slanted with arms out,0,19,0,2,75
+speaker,0.96,0,5,tangram_B.png,kneeling down,1,19,0,2,75
+speaker,0.99,0,5,tangram_D.png,standing straight,2,19,0,2,75
+speaker,1.17,2,5,tangram_A.png,kick,8,19,0,2,75
+speaker,1.02,0,5,tangram_A.png,kicking,3,19,0,2,75
+speaker,1.05,1,5,tangram_C.png,"slanted, arms out",4,19,0,2,76
+speaker,1.11,1,5,tangram_A.png,kicking,6,19,0,2,76
+speaker,1.08,1,5,tangram_B.png,kneeling down,5,19,0,2,76
+speaker,1.14,1,5,tangram_D.png,standing straight,7,19,0,2,76
+speaker,1.2,2,5,tangram_C.png,lean,9,19,0,2,75
+speaker,1.23,2,5,tangram_D.png,straight,10,19,0,2,75
+speaker,1.26,2,5,tangram_B.png,kneel,11,19,0,2,75
+speaker,1.32,3,5,tangram_B.png,kneeling,13,19,0,2,76
+speaker,1.29,3,5,tangram_A.png,kicking,12,19,0,2,76
+speaker,1.35,3,5,tangram_D.png,standing straight,14,19,0,2,76
+speaker,1.38,3,5,tangram_C.png,slanted,15,19,0,2,76
+speaker,0,0,0,tangram_K.png,this looks like a duck with a ball on its head,0,20,2,0,78
+listener,0,0,0,tangram_K.png,find the man,0,20,2,0,80
+speaker,0,0,0,tangram_K.png,i think you are supposed to choose,0,20,2,0,78
+listener,0,0,0,tangram_K.png,looking like the man dancing,0,20,2,0,80
+listener,0,0,0,tangram_K.png,i choose the third picture,0,20,2,0,80
+speaker,0,0,0,tangram_K.png,pick the one that looks like a duck with a diamond on its head,0,20,2,0,78
+listener,0,0,0,tangram_K.png,yes third picture,0,20,2,0,80
+listener,0,0,0,tangram_K.png,fourth  picture,0,20,2,0,80
+speaker,0,0,0,tangram_K.png,did you click it?,0,20,2,0,78
+speaker,0,0,0,tangram_K.png,not on my screen. It's different on my screen ,0,20,2,0,78
+listener,0,0,0,tangram_K.png,fourh picture,0,20,2,0,80
+speaker,0,0,0,tangram_K.png,you have to click it ,0,20,2,0,78
+listener,0,0,0,tangram_H.png,yes,1,20,2,0,80
+speaker,0,0,0,tangram_H.png,this looks like a seal balancing a diamond on its nose,1,20,2,0,78
+speaker,0,0,0,tangram_H.png,you have to click the picture,1,20,2,0,78
+speaker,0,0,0,tangram_J.png,the looks like a diamond on the edge of a cliff,2,20,2,0,78
+speaker,0,0,0,tangram_I.png,looks like someone dancing,3,20,2,0,78
+listener,0.03,1,0,tangram_K.png,you describe again ,5,20,2,0,78
+listener,0,0,0,tangram_I.png,hiu,3,20,2,0,80
+listener,0.03,1,0,tangram_J.png,now i am the matcher. you describe the picture,4,20,2,0,78
+speaker,0.03,1,0,tangram_K.png,looks like someone is walking,5,20,2,0,80
+speaker,0.03,1,0,tangram_J.png,looks like someone sitting,4,20,2,0,80
+speaker,0.03,1,0,tangram_J.png,hello,4,20,2,0,80
+listener,0.06,1,0,tangram_I.png,you describe,7,20,2,0,78
+speaker,0.06,1,0,tangram_I.png,looks some one is shaking his leg,7,20,2,0,80
+listener,0.03,1,0,tangram_H.png,you describe ,6,20,2,0,78
+speaker,0.03,1,0,tangram_H.png,looks like some one is quiet,6,20,2,0,80
+speaker,0.09,2,0,tangram_H.png,looks like someone sitting quietly ,8,20,2,0,78
+speaker,0,0,1,tangram_I.png,standing on one leg,0,20,2,0,79
+speaker,0.03,0,1,tangram_J.png,pointing ,1,20,2,0,79
+speaker,0.06,0,1,tangram_H.png,"solid horizontal block, triangle on right bottom side",2,20,2,0,79
+speaker,0.06,0,1,tangram_H.png,*vertical block,2,20,2,0,79
+speaker,0.09,0,1,tangram_K.png,two diamond on top of each other,3,20,2,0,79
+speaker,0.12,1,1,tangram_J.png,"one diamond on top, pointing to the right",4,20,2,0,77
+speaker,0.15,1,1,tangram_H.png,"not pointing, not standing, one diamond on top",5,20,2,0,77
+speaker,0.18,1,1,tangram_K.png,"two diamond top, pointing to the right",6,20,2,0,77
+speaker,0.27,2,1,tangram_J.png,one diamond head pointing right,9,20,2,0,79
+speaker,0.21,1,1,tangram_I.png,standing on one leg,7,20,2,0,77
+speaker,0.24,2,1,tangram_K.png,two diamond head,8,20,2,0,79
+listener,0,0,0,tangram_G.png,What does the target look like?,0,21,1,0,82
+speaker,0,0,0,tangram_G.png,the one with a small triangle sticking out the right bottom side,0,21,1,0,84
+speaker,0.04,0,0,tangram_E.png,two triangles sticking out of the top,1,21,1,0,84
+speaker,0.08,0,0,tangram_F.png,a sure on top with two triangles sticking out left side,2,21,1,0,84
+speaker,0.08,0,0,tangram_F.png,*square on top,2,21,1,0,84
+speaker,0.12,0,0,tangram_L.png,square on the very top with a point sticking out of the middle right,3,21,1,0,84
+speaker,0.16,1,0,tangram_G.png,"the one that has 2 things on top, one of them is a square the other is like a deformed triangle",4,21,1,0,82
+speaker,0.2,1,0,tangram_E.png,the one with 2 triangles on top,5,21,1,0,82
+speaker,0.24,1,0,tangram_L.png,square on top and triangle sticking out of the right side,6,21,1,0,82
+speaker,0.28,1,0,tangram_F.png,only one square on top with  2 triangles sticking out of the right side,7,21,1,0,82
+speaker,0.28,2,0,tangram_E.png,two triangles on top,8,21,1,0,84
+speaker,0.32,2,0,tangram_L.png,square on top triangle sticking out middle right,9,21,1,0,84
+speaker,0.36,2,0,tangram_G.png,small triangle sticking out bottom right,10,21,1,0,84
+speaker,0.4,2,0,tangram_F.png,"square on top, 2 triangles sticking out bottom left",11,21,1,0,84
+speaker,0.44,3,0,tangram_E.png,2 triangles on top,12,21,1,0,82
+speaker,0.48,3,0,tangram_G.png,small triangle on the bottom right,13,21,1,0,82
+speaker,0.52,3,0,tangram_L.png,square on top with triangle sticking out of the right hand side,14,21,1,0,82
+speaker,0.56,3,0,tangram_F.png,square on top with 2 triangles sticking out on the left hand side,15,21,1,0,82
+speaker,0,0,1,tangram_L.png,it looks like a person praying or on their knees,0,21,1,0,83
+speaker,0.04,0,1,tangram_F.png,a person sitting down,1,21,1,0,83
+speaker,0.08,0,1,tangram_G.png,has a square an triangle as ears up top,2,21,1,0,83
+speaker,0.08,0,1,tangram_E.png,"the one you picked last round, two triangles up top",3,21,1,0,83
+speaker,0.12,1,1,tangram_G.png,square on very top left,4,21,1,0,81
+speaker,0.16,1,1,tangram_L.png,preying,5,21,1,0,81
+speaker,0.2,1,1,tangram_E.png,bunny rabbit ears ,6,21,1,0,81
+speaker,0.24,1,1,tangram_F.png,man sitting down ,7,21,1,0,81
+speaker,0.28,2,1,tangram_L.png,praying,8,21,1,0,83
+speaker,0.32,2,1,tangram_E.png,bunny ears,9,21,1,0,83
+speaker,0.36,2,1,tangram_F.png,man sitting,10,21,1,0,83
+speaker,0.4,2,1,tangram_G.png,square balancing on head,11,21,1,0,83
+speaker,0.44,3,1,tangram_E.png,bunny,12,21,1,0,81
+speaker,0.48,3,1,tangram_G.png,square,13,21,1,0,81
+speaker,0.52,3,1,tangram_F.png,man sitting,14,21,1,0,81
+speaker,0.56,3,1,tangram_L.png,praying,15,21,1,0,81
+speaker,0.6,0,2,tangram_F.png,square on top and 2 triangles on the bottom left,0,21,1,1,82
+speaker,0.6,0,2,tangram_E.png,2 triangles on top,1,21,1,1,82
+speaker,0.64,0,2,tangram_L.png,"square on top with a triangle sticking out of the right, looks like a person standing with their knees bent",2,21,1,1,82
+speaker,0.68,0,2,tangram_G.png,small triangle on the bottom right,3,21,1,1,82
+speaker,0.72,1,2,tangram_F.png,man sorry,4,21,1,1,81
+speaker,0.72,1,2,tangram_F.png,looks like a pan sitting down with a square head,4,21,1,1,81
+speaker,0.72,1,2,tangram_E.png,bunny rabbit triangle  ears up top,5,21,1,1,81
+speaker,0.8,1,2,tangram_G.png,little triangle bottom right,7,21,1,1,81
+speaker,0.76,1,2,tangram_L.png,looks like a person kneeling with arms out praying,6,21,1,1,81
+speaker,0.84,2,2,tangram_F.png,the one with only the square head that looks like the person sitting down,8,21,1,1,82
+speaker,0.88,2,2,tangram_G.png,small triangle in the bottom right,9,21,1,1,82
+speaker,0.92,2,2,tangram_E.png,the one with the 2 triangles on the head,10,21,1,1,82
+speaker,0.96,2,2,tangram_L.png,the one that looks like its knees are bent praying,11,21,1,1,82
+speaker,1,3,2,tangram_E.png,bunny rabbit ears,12,21,1,1,81
+speaker,1.04,3,2,tangram_F.png,man sitting down,13,21,1,1,81
+speaker,1.08,3,2,tangram_L.png,person praying,14,21,1,1,81
+speaker,1.12,3,2,tangram_G.png,little triangle,15,21,1,1,81
+speaker,0.6,0,3,tangram_F.png,"square on top, two triangles sticking out left side",0,21,1,1,84
+speaker,0.64,0,3,tangram_E.png,two triangles on top,1,21,1,1,84
+speaker,0.68,0,3,tangram_G.png,small triangle sticking out bottom right,2,21,1,1,84
+speaker,0.8,1,3,tangram_L.png,looks like a man kneeling or praying,5,21,1,1,83
+speaker,0.72,0,3,tangram_L.png,"square on top, triangle sticking out middle right",3,21,1,1,84
+speaker,0.76,1,3,tangram_E.png,two triangles up top,4,21,1,1,83
+speaker,0.84,1,3,tangram_G.png,triangle sticking out bottom right,6,21,1,1,83
+speaker,0.88,1,3,tangram_F.png,man sitting down,7,21,1,1,83
+speaker,0.92,2,3,tangram_G.png,small triangle bottom right,8,21,1,1,84
+speaker,0.96,2,3,tangram_F.png,looks like man sitting,9,21,1,1,84
+speaker,1,2,3,tangram_E.png,two triangles on top,10,21,1,1,84
+speaker,1.12,3,3,tangram_G.png,triangle bottom right,13,21,1,1,83
+speaker,1.04,2,3,tangram_L.png,"man kneeling, praying",11,21,1,1,84
+speaker,1.08,3,3,tangram_F.png,man sitting,12,21,1,1,83
+speaker,1.16,3,3,tangram_E.png,two triangles up top,14,21,1,1,83
+speaker,1.2,3,3,tangram_L.png,man praying,15,21,1,1,83
+speaker,1.28,0,4,tangram_L.png,man kneeling,1,21,1,2,83
+speaker,1.24,0,4,tangram_F.png,man sitting down,0,21,1,2,83
+speaker,1.32,0,4,tangram_E.png,two triangles up top,2,21,1,2,83
+speaker,1.32,1,4,tangram_L.png,man kneeling,4,21,1,2,82
+speaker,1.36,0,4,tangram_G.png,triangle sticking out bottom right,3,21,1,2,83
+speaker,1.36,1,4,tangram_G.png,small triangle in the bottom right,5,21,1,2,82
+speaker,1.4,1,4,tangram_E.png,2 triangles on top,6,21,1,2,82
+speaker,1.44,1,4,tangram_F.png,man sitting,7,21,1,2,82
+speaker,1.6,2,4,tangram_L.png,man kneeling,9,21,1,2,83
+speaker,1.64,2,4,tangram_F.png,man sitting,10,21,1,2,83
+speaker,1.56,2,4,tangram_G.png,small triangle bottom right,8,21,1,2,83
+speaker,1.68,2,4,tangram_E.png,two triangles up top,11,21,1,2,83
+speaker,1.64,3,4,tangram_F.png,sitting down,12,21,1,2,82
+speaker,1.68,3,4,tangram_L.png,kneeling,13,21,1,2,82
+speaker,1.72,3,4,tangram_E.png,2 triangles on top,14,21,1,2,82
+speaker,1.76,3,4,tangram_G.png,small triangle bottom right,15,21,1,2,82
+speaker,1.24,0,5,tangram_L.png,"square on top, triangle sticking out of middle right",0,21,1,2,84
+speaker,1.28,0,5,tangram_E.png,two triangles on top,1,21,1,2,84
+speaker,1.32,0,5,tangram_G.png,small triangle bottom right,2,21,1,2,84
+speaker,1.36,0,5,tangram_F.png,looks like man sitting,3,21,1,2,84
+speaker,1.36,1,5,tangram_G.png,small trangle bottom right,5,21,1,2,81
+speaker,1.4,1,5,tangram_F.png,man sitting down,6,21,1,2,81
+speaker,1.44,1,5,tangram_L.png,person praying,7,21,1,2,81
+speaker,1.32,1,5,tangram_E.png,2 triangle on top looks like bunny ears,4,21,1,2,81
+speaker,1.56,2,5,tangram_F.png,man sitting,8,21,1,2,84
+speaker,1.64,2,5,tangram_G.png,triangle bottom right,10,21,1,2,84
+speaker,1.64,3,5,tangram_F.png,man sitting,12,21,1,2,81
+speaker,1.68,3,5,tangram_G.png,trangle bottom right,13,21,1,2,81
+speaker,1.72,3,5,tangram_L.png,person praying,14,21,1,2,81
+speaker,1.76,3,5,tangram_E.png,bunny rabbit,15,21,1,2,81
+speaker,1.6,2,5,tangram_L.png,man praying,9,21,1,2,84
+speaker,1.68,2,5,tangram_E.png,two triangles on top,11,21,1,2,84
+listener,0,0,0,tangram_C.png,Ready!,0,22,0,0,88
+speaker,0,0,0,tangram_C.png,It looks like a person falling backwards (to the left),0,22,0,0,86
+listener,0.04,0,0,tangram_B.png,I'm ready!,1,22,0,0,88
+speaker,0.04,0,0,tangram_B.png,It looks like a person kneeling to the right and throwing up in a bowl,1,22,0,0,86
+speaker,0.08,0,0,tangram_D.png,a person facing left standing up holding a bowl out,2,22,0,0,86
+speaker,0.12,0,0,tangram_A.png,a person dancing? kicking one left out ,3,22,0,0,86
+speaker,0.16,1,0,tangram_C.png,Looks like a person falling over to the left,4,22,0,0,88
+speaker,0.2,1,0,tangram_B.png,Someone kneeling down on their knees,5,22,0,0,88
+speaker,0.24,1,0,tangram_D.png,Someone standing completely straight up holding their hand out,6,22,0,0,88
+speaker,0.28,1,0,tangram_A.png,Someone tripping over and falling to the right,7,22,0,0,88
+speaker,0.32,2,0,tangram_C.png,Person falling to the left,8,22,0,0,86
+speaker,0.36,2,0,tangram_A.png,Person tripping and falling to the right,9,22,0,0,86
+speaker,0.4,2,0,tangram_B.png,kneeling person,10,22,0,0,86
+speaker,0.44,2,0,tangram_D.png,standing person,11,22,0,0,86
+speaker,0.48,3,0,tangram_B.png,Person kneeling,12,22,0,0,88
+speaker,0.52,3,0,tangram_C.png,Person falling to the left,13,22,0,0,88
+speaker,0.56,3,0,tangram_A.png,Person stumbling back to the right,14,22,0,0,88
+speaker,0.6,3,0,tangram_D.png,Person standing straight up,15,22,0,0,88
+speaker,0,0,1,tangram_A.png,walking man,0,22,0,0,85
+speaker,0.04,0,1,tangram_B.png,kneeling woman,1,22,0,0,85
+speaker,0.08,0,1,tangram_C.png,flying man,2,22,0,0,85
+speaker,0.12,0,1,tangram_D.png,pointing man,3,22,0,0,85
+speaker,0.16,1,1,tangram_A.png,walking man,4,22,0,0,87
+speaker,0.2,1,1,tangram_B.png,kneeling,5,22,0,0,87
+speaker,0.24,1,1,tangram_C.png,flying,6,22,0,0,87
+speaker,0.28,1,1,tangram_D.png,pointing,7,22,0,0,87
+speaker,0.32,2,1,tangram_C.png,flying,8,22,0,0,85
+speaker,0.36,2,1,tangram_A.png,walking,9,22,0,0,85
+speaker,0.4,2,1,tangram_B.png,kneeling,10,22,0,0,85
+speaker,0.44,2,1,tangram_D.png,pointing,11,22,0,0,85
+speaker,0.48,3,1,tangram_C.png,flying,12,22,0,0,87
+speaker,0.52,3,1,tangram_D.png,pointing,13,22,0,0,87
+speaker,0.56,3,1,tangram_A.png,walking,14,22,0,0,87
+speaker,0.6,3,1,tangram_B.png,kneeling,15,22,0,0,87
+speaker,0.64,0,2,tangram_C.png,flying,0,22,0,1,85
+speaker,0.68,0,2,tangram_B.png,kneeling,1,22,0,1,85
+speaker,0.72,0,2,tangram_D.png,pointing,2,22,0,1,85
+speaker,0.8,1,2,tangram_C.png,flying,4,22,0,1,88
+speaker,0.88,1,2,tangram_D.png,pointing,6,22,0,1,88
+speaker,0.76,0,2,tangram_A.png,walking,3,22,0,1,85
+speaker,0.84,1,2,tangram_B.png,kneeling,5,22,0,1,88
+speaker,0.92,1,2,tangram_A.png,walking,7,22,0,1,88
+speaker,0.96,2,2,tangram_D.png,pointing,8,22,0,1,85
+speaker,1,2,2,tangram_B.png,kneeling,9,22,0,1,85
+speaker,1.04,2,2,tangram_A.png,walking,10,22,0,1,85
+speaker,1.08,2,2,tangram_C.png,flying,11,22,0,1,85
+speaker,1.12,3,2,tangram_B.png,kneeling,12,22,0,1,88
+speaker,1.16,3,2,tangram_C.png,flying,13,22,0,1,88
+speaker,1.2,3,2,tangram_D.png,pointing,14,22,0,1,88
+speaker,1.24,3,2,tangram_A.png,walking,15,22,0,1,88
+speaker,0.64,0,3,tangram_B.png,Looks like a person kneeling facing the right,0,22,0,1,86
+speaker,0.68,0,3,tangram_D.png,A person standing up facing the left,1,22,0,1,86
+speaker,0.8,1,3,tangram_B.png,kneeling person,4,22,0,1,87
+speaker,0.84,1,3,tangram_C.png,falling person,5,22,0,1,87
+speaker,0.72,0,3,tangram_C.png,A person falling backwards to the left,2,22,0,1,86
+speaker,0.76,0,3,tangram_A.png,A person dancing or tripping to the right,3,22,0,1,86
+speaker,0.92,1,3,tangram_D.png,man pointing left,7,22,0,1,87
+speaker,0.88,1,3,tangram_A.png,dancing person,6,22,0,1,87
+speaker,0.96,2,3,tangram_B.png,kneeling person,8,22,0,1,86
+speaker,1.04,2,3,tangram_C.png,falling person,10,22,0,1,86
+speaker,1.12,3,3,tangram_B.png,kneeling,12,22,0,1,87
+speaker,1.16,3,3,tangram_A.png,dancing,13,22,0,1,87
+speaker,1.2,3,3,tangram_C.png,falling,14,22,0,1,87
+speaker,1.24,3,3,tangram_D.png,pointing,15,22,0,1,87
+speaker,1,2,3,tangram_A.png,dancing person,9,22,0,1,86
+speaker,1.08,2,3,tangram_D.png,standing pointing left person,11,22,0,1,86
+speaker,1.28,0,4,tangram_C.png,someone flying or falling to the left,0,22,0,2,88
+speaker,1.36,0,4,tangram_D.png,standing and pointing,2,22,0,2,88
+speaker,1.48,1,4,tangram_B.png,kneeling,5,22,0,2,87
+speaker,1.32,0,4,tangram_A.png,someone walking or stumbling,1,22,0,2,88
+speaker,1.4,0,4,tangram_B.png,kneeling,3,22,0,2,88
+speaker,1.44,1,4,tangram_C.png,flying,4,22,0,2,87
+speaker,1.52,1,4,tangram_D.png,pointing,6,22,0,2,87
+speaker,1.56,1,4,tangram_A.png,walking,7,22,0,2,87
+speaker,1.6,2,4,tangram_C.png,flying,8,22,0,2,88
+speaker,1.68,2,4,tangram_B.png,kneeling,10,22,0,2,88
+speaker,1.76,3,4,tangram_B.png,kneeling,12,22,0,2,87
+speaker,1.84,3,4,tangram_C.png,flying,14,22,0,2,87
+speaker,1.64,2,4,tangram_D.png,pointing,9,22,0,2,88
+speaker,1.72,2,4,tangram_A.png,walking,11,22,0,2,88
+speaker,1.8,3,4,tangram_D.png,pointing,13,22,0,2,87
+speaker,1.88,3,4,tangram_A.png,walking,15,22,0,2,87
+speaker,1.28,0,5,tangram_B.png,a person kneeling looking to the right,0,22,0,2,86
+speaker,1.32,0,5,tangram_C.png,person falling to the left,1,22,0,2,86
+speaker,1.36,0,5,tangram_D.png,person standing pointing to the left,2,22,0,2,86
+speaker,1.4,0,5,tangram_A.png,dancing or tripping person,3,22,0,2,86
+speaker,1.44,1,5,tangram_B.png,kneeling to right,4,22,0,2,85
+speaker,1.48,1,5,tangram_A.png,walking to left,5,22,0,2,85
+speaker,1.52,1,5,tangram_D.png,pointing left,6,22,0,2,85
+speaker,1.56,1,5,tangram_C.png,tripping and falling left,7,22,0,2,85
+speaker,1.64,2,5,tangram_A.png,walking left or dancing,9,22,0,2,86
+speaker,1.76,3,5,tangram_D.png,pointing left,12,22,0,2,85
+speaker,1.6,2,5,tangram_B.png,kneeling to the right,8,22,0,2,86
+speaker,1.68,2,5,tangram_D.png,standing pointing left,10,22,0,2,86
+speaker,1.72,2,5,tangram_C.png,falling backwards to left,11,22,0,2,86
+speaker,1.8,3,5,tangram_C.png,falling left,13,22,0,2,85
+speaker,1.84,3,5,tangram_B.png,kneeling right,14,22,0,2,85
+speaker,1.88,3,5,tangram_A.png,walking left,15,22,0,2,85
+listener,0,0,0,tangram_A.png,hello,0,23,0,0,92
+speaker,0,0,0,tangram_A.png,the picture looks like it is marching with a bird head,0,23,0,0,91
+listener,0,0,1,tangram_A.png,hello,0,23,0,0,89
+listener,0,0,0,tangram_H.png,hi,0,24,2,0,95
+speaker,0,0,0,tangram_H.png,Silent meditation ,0,24,2,0,93
+speaker,0.04,0,0,tangram_I.png,Freaky stance,1,24,2,0,93
+speaker,0.08,0,0,tangram_J.png,Standing with both hands raised ,2,24,2,0,93
+listener,0.12,0,0,tangram_K.png,"it's the same shapes, right? so we have silent meditation, freaky stance, standing with both hands raised, and #4",3,24,2,0,95
+speaker,0.12,0,0,tangram_K.png,Praying with hands stretched ,3,24,2,0,93
+speaker,0.16,1,0,tangram_J.png,standing with both hands stretched,4,24,2,0,95
+speaker,0.16,1,0,tangram_J.png,right angle in the bottom left corner,4,24,2,0,95
+speaker,0.2,1,0,tangram_I.png,freaky stance,5,24,2,0,95
+speaker,0.24,1,0,tangram_H.png,silent meditation,6,24,2,0,95
+speaker,0.28,1,0,tangram_K.png,praying,7,24,2,0,95
+speaker,0.32,2,0,tangram_H.png,Meditation ,8,24,2,0,93
+speaker,0.36,2,0,tangram_I.png,Funky,9,24,2,0,93
+speaker,0.4,2,0,tangram_K.png,Praying ,10,24,2,0,93
+speaker,0.44,2,0,tangram_J.png,Standing arms stretched ,11,24,2,0,93
+speaker,0.48,3,0,tangram_H.png,meditation,12,24,2,0,95
+speaker,0.52,3,0,tangram_J.png,standing,13,24,2,0,95
+speaker,0.56,3,0,tangram_I.png,funk,14,24,2,0,95
+speaker,0.6,3,0,tangram_K.png,prayer,15,24,2,0,95
+speaker,0,0,1,tangram_K.png,begger,0,24,2,0,96
+speaker,0.04,0,1,tangram_J.png,fat with hand up,1,24,2,0,96
+speaker,0.08,0,1,tangram_H.png,fat no limbs,2,24,2,0,96
+speaker,0.12,0,1,tangram_I.png,kicking,3,24,2,0,96
+speaker,0.16,1,1,tangram_H.png,fat no limbs,4,24,2,0,94
+speaker,0.2,1,1,tangram_K.png,beggar,5,24,2,0,94
+speaker,0.24,1,1,tangram_I.png,kicking,6,24,2,0,94
+speaker,0.56,3,1,tangram_H.png,no limbs,14,24,2,0,94
+speaker,0.6,3,1,tangram_J.png,fat with hands up,15,24,2,0,94
+speaker,0.28,1,1,tangram_J.png,fat with hand up,7,24,2,0,94
+speaker,0.32,2,1,tangram_K.png,beggar,8,24,2,0,96
+speaker,0.36,2,1,tangram_H.png,no limbs,9,24,2,0,96
+speaker,0.4,2,1,tangram_I.png,kicker,10,24,2,0,96
+speaker,0.44,2,1,tangram_J.png,fat hand up,11,24,2,0,96
+speaker,0.48,3,1,tangram_K.png,beggar,12,24,2,0,94
+speaker,0.52,3,1,tangram_I.png,kicking,13,24,2,0,94
+listener,0.64,0,2,tangram_I.png,hello,0,24,2,1,95
+speaker,0.68,0,2,tangram_H.png,fat no limbs,1,24,2,1,96
+speaker,0.84,1,2,tangram_K.png,beg,5,24,2,1,95
+speaker,0.64,0,2,tangram_I.png,kicking,0,24,2,1,96
+speaker,0.72,0,2,tangram_K.png,begging,2,24,2,1,96
+speaker,0.76,0,2,tangram_J.png,fat with hand up,3,24,2,1,96
+speaker,0.8,1,2,tangram_I.png,kick,4,24,2,1,95
+speaker,0.88,1,2,tangram_H.png,fat no hand,6,24,2,1,95
+speaker,0.92,1,2,tangram_J.png,fat one hand,7,24,2,1,95
+speaker,0.96,2,2,tangram_H.png,fat no hands,8,24,2,1,96
+speaker,1,2,2,tangram_J.png,fat with hand,9,24,2,1,96
+speaker,1.04,2,2,tangram_I.png,kicking,10,24,2,1,96
+speaker,1.12,3,2,tangram_I.png,kick,12,24,2,1,95
+speaker,1.16,3,2,tangram_J.png,fat one hand,13,24,2,1,95
+speaker,1.08,2,2,tangram_K.png,beggar,11,24,2,1,96
+speaker,1.2,3,2,tangram_K.png,beg,14,24,2,1,95
+speaker,1.24,3,2,tangram_H.png,fat no,15,24,2,1,95
+speaker,0.76,0,3,tangram_J.png,Arms stretched ,3,24,2,1,93
+speaker,0.64,0,3,tangram_K.png,Pray,0,24,2,1,93
+speaker,0.68,0,3,tangram_I.png,Dance,1,24,2,1,93
+speaker,0.72,0,3,tangram_H.png,Kneel,2,24,2,1,93
+speaker,0.8,1,3,tangram_H.png,kneel,4,24,2,1,94
+speaker,0.84,1,3,tangram_J.png,arms out,5,24,2,1,94
+speaker,0.88,1,3,tangram_K.png,pray,6,24,2,1,94
+speaker,1,2,3,tangram_I.png,Jumping ,9,24,2,1,93
+speaker,0.92,1,3,tangram_I.png,dancing ,7,24,2,1,94
+speaker,0.96,2,3,tangram_K.png,Praying ,8,24,2,1,93
+speaker,1.04,2,3,tangram_J.png,Waving ,10,24,2,1,93
+speaker,1.08,2,3,tangram_H.png,Kneeling ,11,24,2,1,93
+speaker,1.12,3,3,tangram_J.png,arms out,12,24,2,1,94
+speaker,1.16,3,3,tangram_I.png,dancing,13,24,2,1,94
+speaker,1.2,3,3,tangram_H.png,pray,14,24,2,1,94
+speaker,1.2,3,3,tangram_K.png,pray,15,24,2,1,94
+speaker,1.28,0,4,tangram_I.png,kicking guy,0,24,2,2,95
+speaker,1.36,0,4,tangram_K.png,beggar pose,2,24,2,2,95
+speaker,1.36,1,4,tangram_I.png,kicking,4,24,2,2,94
+speaker,1.32,0,4,tangram_H.png,fat blob with no hands,1,24,2,2,95
+speaker,1.4,0,4,tangram_J.png,blob with one hand (or the only one we haven't picked),3,24,2,2,95
+speaker,1.44,1,4,tangram_H.png,no limbs,6,24,2,2,94
+speaker,1.48,1,4,tangram_K.png,beggar,7,24,2,2,94
+speaker,1.6,2,4,tangram_H.png,no limbs,8,24,2,2,95
+speaker,1.4,1,4,tangram_J.png,fat with one hand out,5,24,2,2,94
+speaker,1.64,2,4,tangram_J.png,one hand,9,24,2,2,95
+speaker,1.76,3,4,tangram_J.png,fat one hand,14,24,2,2,94
+speaker,1.68,2,4,tangram_K.png,beg,10,24,2,2,95
+speaker,1.72,2,4,tangram_I.png,kick,11,24,2,2,95
+speaker,1.68,3,4,tangram_K.png,beg,12,24,2,2,94
+speaker,1.72,3,4,tangram_I.png,kick,13,24,2,2,94
+speaker,1.8,3,4,tangram_H.png,no limbs,15,24,2,2,94
+speaker,1.28,0,5,tangram_K.png,beggar,0,24,2,2,96
+speaker,1.32,0,5,tangram_J.png,fat one hand,1,24,2,2,96
+speaker,1.4,0,5,tangram_H.png,fat no limbs,3,24,2,2,96
+speaker,1.36,0,5,tangram_I.png,kicking,2,24,2,2,96
+speaker,1.36,1,5,tangram_I.png,Dancing ,4,24,2,2,93
+speaker,1.4,1,5,tangram_J.png,Fat one hand ,5,24,2,2,93
+speaker,1.44,1,5,tangram_H.png,No limb,6,24,2,2,93
+speaker,1.48,1,5,tangram_K.png,Praying ,7,24,2,2,93
+speaker,1.56,2,5,tangram_J.png,fat one hand,8,24,2,2,96
+speaker,1.6,2,5,tangram_K.png,sitting/begging,9,24,2,2,96
+speaker,1.64,2,5,tangram_I.png,kicking,10,24,2,2,96
+speaker,1.68,2,5,tangram_H.png,fat no limbs,11,24,2,2,96
+speaker,1.68,3,5,tangram_I.png,Dancing ,14,24,2,2,93
+speaker,1.64,3,5,tangram_J.png,One hand fat,12,24,2,2,93
+speaker,1.68,3,5,tangram_H.png,Meditation ,13,24,2,2,93
+speaker,1.72,3,5,tangram_K.png,Begging ,15,24,2,2,93
+speaker,0,0,0,tangram_D.png,"Diamond head, hands holding a tray on the left side. Standing up.",0,25,0,0,98
+listener,0,0,0,tangram_D.png,hi,0,25,0,0,97
+speaker,0.04,0,0,tangram_C.png,"Diamond head, looks like he's diving to his left with arms spread.",1,25,0,0,98
+speaker,0.08,0,0,tangram_A.png,"One foot on the ground, one raised. Looks like he's carrying a flag on his back.",2,25,0,0,98
+speaker,0.12,0,0,tangram_B.png,"looks like he's kneeling. Diamond head, facing to the right.",3,25,0,0,98
+speaker,0.12,1,0,tangram_D.png,diamond head standing straight up holding something on left side,4,25,0,0,97
+speaker,0.16,1,0,tangram_C.png,diamond head leaning left with arms raised up,5,25,0,0,97
+speaker,0.2,1,0,tangram_A.png,diamond head on back of body on right with left leg kicking,6,25,0,0,97
+speaker,0.24,1,0,tangram_B.png,diamond head with triangle hanging off it on right side and seems to be sitting or kneeling,7,25,0,0,97
+speaker,0.28,2,0,tangram_D.png,"Diamond head, holding a plate on the left side of your screen. Standing up straight.",8,25,0,0,98
+speaker,0.32,2,0,tangram_A.png,"One leg on ground, other leg raised on left side of your screen. Looks like he's carrying a square object on his back.",9,25,0,0,98
+speaker,0.36,2,0,tangram_C.png,"Diamond head, diving to the left with arms raised.",10,25,0,0,98
+speaker,0.44,3,0,tangram_C.png,arms raised,12,25,0,0,97
+speaker,0.4,2,0,tangram_B.png,"Diamond head, kneeling. Triangle at bottom of diamond head on right side of your screen.",11,25,0,0,98
+speaker,0.44,3,0,tangram_C.png,diamond head leaning left with arm raised,12,25,0,0,97
+speaker,0.48,3,0,tangram_B.png,diamond head kneeling with triangle off the right side of head,13,25,0,0,97
+speaker,0.52,3,0,tangram_D.png,diamond head standing up straight with box on left side,14,25,0,0,97
+speaker,0.56,3,0,tangram_A.png,diamond head with head on right side of body with left leg raised,15,25,0,0,97
+listener,0,0,1,tangram_C.png,hi,0,25,0,0,99
+speaker,0,0,1,tangram_C.png,flying,0,25,0,0,100
+speaker,0.04,0,1,tangram_D.png,one leg on the ground,1,25,0,0,100
+speaker,0.04,0,1,tangram_A.png,marching,2,25,0,0,100
+speaker,0.12,1,1,tangram_A.png,marching,4,25,0,0,99
+listener,0.12,1,1,tangram_A.png,begging with hands together in front,4,25,0,0,100
+speaker,0.12,1,1,tangram_A.png,walking,4,25,0,0,99
+speaker,0.08,0,1,tangram_B.png,kneeling,3,25,0,0,100
+listener,0.12,1,1,tangram_A.png,no,4,25,0,0,100
+speaker,0.12,1,1,tangram_A.png,1 foot up,4,25,0,0,99
+speaker,0.16,1,1,tangram_B.png,praying on knees,5,25,0,0,99
+speaker,0.2,1,1,tangram_D.png,preaching,6,25,0,0,99
+speaker,0.24,1,1,tangram_C.png,flying,7,25,0,0,99
+speaker,0.28,2,1,tangram_A.png,marching,8,25,0,0,100
+speaker,0.32,2,1,tangram_C.png,flying,9,25,0,0,100
+speaker,0.36,2,1,tangram_D.png,preaching,10,25,0,0,100
+speaker,0.4,2,1,tangram_B.png,kneeling,11,25,0,0,100
+speaker,0.44,3,1,tangram_D.png,preaching,12,25,0,0,99
+speaker,0.48,3,1,tangram_C.png,flying,13,25,0,0,99
+speaker,0.52,3,1,tangram_B.png,kneeling,14,25,0,0,99
+speaker,0.56,3,1,tangram_A.png,marching,15,25,0,0,99
+speaker,0.6,0,2,tangram_B.png,kneeling on ground,0,25,0,1,100
+speaker,0.64,0,2,tangram_C.png,flying,1,25,0,1,100
+speaker,0.68,0,2,tangram_D.png,standing and begging,2,25,0,1,100
+speaker,0.72,0,2,tangram_A.png,marching,3,25,0,1,100
+speaker,0.8,1,2,tangram_A.png,"marching - one leg down, other in air",5,25,0,1,98
+speaker,0.84,1,2,tangram_D.png,"Standing straight, holding a plate or something.",6,25,0,1,98
+speaker,0.76,1,2,tangram_C.png,flying,4,25,0,1,98
+speaker,0.88,1,2,tangram_B.png,Kneeling,7,25,0,1,98
+speaker,0.92,2,2,tangram_D.png,holding plate,8,25,0,1,100
+speaker,0.96,2,2,tangram_B.png,kneeling,9,25,0,1,100
+speaker,1.12,3,2,tangram_D.png,"standing straight, holding plate",13,25,0,1,98
+speaker,1,2,2,tangram_A.png,marching,10,25,0,1,100
+speaker,1.04,2,2,tangram_C.png,flying,11,25,0,1,100
+speaker,1.08,3,2,tangram_A.png,marching,12,25,0,1,98
+speaker,1.16,3,2,tangram_C.png,flying,14,25,0,1,98
+speaker,1.2,3,2,tangram_B.png,kneeling,15,25,0,1,98
+speaker,0.6,0,3,tangram_D.png,preaching,0,25,0,1,99
+listener,0.6,0,3,tangram_D.png,is it leaning left?,0,25,0,1,97
+speaker,0.6,0,3,tangram_D.png, no standing with book in hand,0,25,0,1,99
+speaker,0.64,0,3,tangram_A.png,marching,1,25,0,1,99
+speaker,0.68,0,3,tangram_B.png,kneeling,2,25,0,1,99
+speaker,0.8,1,3,tangram_D.png,diamond head standing straight with book on left ,5,25,0,1,97
+speaker,0.72,0,3,tangram_C.png,flying,3,25,0,1,99
+speaker,0.76,1,3,tangram_A.png,diamond head with left leg raised,4,25,0,1,97
+speaker,0.84,1,3,tangram_C.png,diamond head leaning left with arms raised,6,25,0,1,97
+speaker,0.88,1,3,tangram_B.png,kneeling,7,25,0,1,97
+speaker,0.92,2,3,tangram_D.png,standing with book in front,8,25,0,1,99
+speaker,1,2,3,tangram_C.png,flying ,10,25,0,1,99
+speaker,0.96,2,3,tangram_A.png,marching with leg raised,9,25,0,1,99
+speaker,1.04,2,3,tangram_B.png,kneeling,11,25,0,1,99
+speaker,1.08,3,3,tangram_C.png,flying,12,25,0,1,97
+speaker,1.12,3,3,tangram_A.png,left leg raised marching,13,25,0,1,97
+speaker,1.16,3,3,tangram_B.png,kneeling,14,25,0,1,97
+speaker,1.2,3,3,tangram_D.png,standing straight with book left side,15,25,0,1,97
+speaker,1.24,0,4,tangram_B.png,"Diamond head, kneeling",0,25,0,2,98
+speaker,1.32,0,4,tangram_C.png,flying,2,25,0,2,98
+speaker,1.28,0,4,tangram_D.png,"standing straight, holding plate.",1,25,0,2,98
+speaker,1.36,0,4,tangram_A.png,"marching, one foot on ground, one foot up",3,25,0,2,98
+speaker,1.4,1,4,tangram_B.png,kneeling,4,25,0,2,99
+speaker,1.52,1,4,tangram_C.png,flying,7,25,0,2,99
+speaker,1.56,2,4,tangram_B.png,kneeling,8,25,0,2,98
+speaker,1.44,1,4,tangram_A.png,marching 1 leg up,5,25,0,2,99
+speaker,1.48,1,4,tangram_D.png,standing straight w/book,6,25,0,2,99
+speaker,1.6,2,4,tangram_D.png,standing straight,9,25,0,2,98
+speaker,1.64,2,4,tangram_C.png,flying,10,25,0,2,98
+speaker,1.68,2,4,tangram_A.png,"marching, one foot up",11,25,0,2,98
+speaker,1.72,3,4,tangram_D.png,standing straight,12,25,0,2,99
+speaker,1.76,3,4,tangram_B.png,kneeling,13,25,0,2,99
+speaker,1.8,3,4,tangram_A.png,marching 1 foot up,14,25,0,2,99
+speaker,1.84,3,4,tangram_C.png,flying,15,25,0,2,99
+speaker,1.24,0,5,tangram_A.png,marching,0,25,0,2,100
+speaker,1.28,0,5,tangram_C.png,flying,1,25,0,2,100
+speaker,1.32,0,5,tangram_B.png,kneeling,2,25,0,2,100
+speaker,1.4,1,5,tangram_B.png,kneeling,4,25,0,2,97
+speaker,1.36,0,5,tangram_D.png,holding plate,3,25,0,2,100
+speaker,1.44,1,5,tangram_C.png,flying,5,25,0,2,97
+speaker,1.48,1,5,tangram_D.png,holding plate,6,25,0,2,97
+speaker,1.52,1,5,tangram_A.png,marching,7,25,0,2,97
+speaker,1.56,2,5,tangram_B.png,kneeling,8,25,0,2,100
+speaker,1.6,2,5,tangram_C.png,flying,9,25,0,2,100
+speaker,1.64,2,5,tangram_A.png,marching,10,25,0,2,100
+speaker,1.68,2,5,tangram_D.png,holding plate,11,25,0,2,100
+speaker,1.72,3,5,tangram_B.png,kneeling,12,25,0,2,97
+speaker,1.76,3,5,tangram_A.png,marching,13,25,0,2,97
+speaker,1.8,3,5,tangram_D.png,holding plate,14,25,0,2,97
+speaker,1.84,3,5,tangram_C.png,flying,15,25,0,2,97
+listener,0,0,0,tangram_G.png,Hello,0,26,1,0,104
+listener,0,0,0,tangram_F.png,the bunny suit?,1,26,1,0,104
+speaker,0,0,0,tangram_F.png,someone sitting down facing left with their feet stuck out,1,26,1,0,101
+speaker,0,0,0,tangram_G.png,looks like a person in a bunny suit or something facing to the left with his arm behind his back,0,26,1,0,101
+listener,0,0,0,tangram_E.png,again,2,26,1,0,104
+speaker,0.04,0,0,tangram_L.png,person reading a book,3,26,1,0,101
+speaker,0,0,0,tangram_E.png,person facing to the right with 2 triangular ears,2,26,1,0,101
+speaker,0.08,1,0,tangram_F.png,person facing left sitting no ears,4,26,1,0,104
+speaker,0.12,1,0,tangram_E.png,person facing right sitting with ears,5,26,1,0,104
+speaker,0.24,2,0,tangram_F.png,person sitting facing left no ears,8,26,1,0,101
+speaker,0.16,1,0,tangram_L.png,person standing facing right,6,26,1,0,104
+speaker,0.2,1,0,tangram_G.png,person facing left sitting with ears,7,26,1,0,104
+speaker,0.28,2,0,tangram_G.png,dude with one square ear facing left,9,26,1,0,101
+speaker,0.28,2,0,tangram_L.png,person holding a book out,10,26,1,0,101
+speaker,0.32,2,0,tangram_E.png,two triangular ears,11,26,1,0,101
+speaker,0.36,3,0,tangram_G.png,person facing left with twoears sitting,12,26,1,0,104
+speaker,0.4,3,0,tangram_F.png,person sitting facing left with no ears,13,26,1,0,104
+speaker,0.44,3,0,tangram_E.png,person facing right sitting with two ears,14,26,1,0,104
+speaker,0.48,3,0,tangram_L.png,person standing f=acing right with a book,15,26,1,0,104
+listener,0,0,1,tangram_L.png,Hi,0,26,1,0,103
+speaker,0,0,1,tangram_L.png,looks like someone is praying,0,26,1,0,102
+listener,0,0,1,tangram_L.png,Can you please give some clue,0,26,1,0,103
+listener,0.04,0,1,tangram_G.png,next quick pls,1,26,1,0,103
+speaker,0.04,0,1,tangram_G.png,looks like dancing,1,26,1,0,102
+speaker,0.08,0,1,tangram_E.png,someone looks like dancing,2,26,1,0,102
+listener,0.08,0,1,tangram_F.png,quick pls,3,26,1,0,103
+listener,0.08,0,1,tangram_F.png,running out of time,3,26,1,0,103
+speaker,0.08,0,1,tangram_F.png,someone looks like sitting,3,26,1,0,102
+speaker,0.16,1,1,tangram_E.png,someone is reading,5,26,1,0,103
+speaker,0.12,1,1,tangram_L.png,somone is half standing,4,26,1,0,103
+speaker,0.16,1,1,tangram_G.png,some one is dancing,6,26,1,0,103
+speaker,0.16,1,1,tangram_F.png,some one is sitting,7,26,1,0,103
+listener,0.2,2,1,tangram_E.png,quick,8,26,1,0,103
+speaker,0.2,2,1,tangram_E.png,looks like turning  back,8,26,1,0,102
+speaker,0.2,2,1,tangram_G.png,looks like walking very fastly,9,26,1,0,102
+listener,0.2,2,1,tangram_E.png,running out of time,8,26,1,0,103
+speaker,0.24,2,1,tangram_F.png,sitting,10,26,1,0,102
+speaker,0.24,2,1,tangram_L.png,looks like half sitting,11,26,1,0,102
+speaker,0.28,3,1,tangram_G.png,someone is taichi,12,26,1,0,103
+speaker,0.32,3,1,tangram_E.png,someone is sitting,13,26,1,0,103
+speaker,0.32,3,1,tangram_L.png,someone is giving,14,26,1,0,103
+speaker,0.36,3,1,tangram_F.png,someone is seeing down,15,26,1,0,103
+listener,0.36,0,2,tangram_F.png,quick pls,0,26,1,1,103
+speaker,0.52,0,2,tangram_F.png,person sittng facing left with no ears,0,26,1,1,104
+speaker,0.56,0,2,tangram_E.png,person sitting facing right with two ears,1,26,1,1,104
+speaker,0.6,0,2,tangram_G.png,person facing left sitting with two ears,2,26,1,1,104
+speaker,0.52,1,2,tangram_F.png,someone is facing left with hands down,4,26,1,1,103
+speaker,0.64,0,2,tangram_L.png,person standing facing right holding a book,3,26,1,1,104
+speaker,0.52,1,2,tangram_E.png,someone is facing right and sitting,5,26,1,1,103
+speaker,0.56,1,2,tangram_G.png,some one is facing left and getting up,6,26,1,1,103
+speaker,0.56,1,2,tangram_L.png,somone is half sitting,7,26,1,1,103
+speaker,0.76,2,2,tangram_G.png,sitting down facing left with two ears,8,26,1,1,104
+listener,0.6,2,2,tangram_G.png,quick pls,8,26,1,1,103
+speaker,0.8,2,2,tangram_L.png,standing facing right holding a book,9,26,1,1,104
+speaker,0.84,2,2,tangram_E.png,sitting facing right with two ears,10,26,1,1,104
+speaker,0.88,2,2,tangram_F.png,sitting facing left with no ears,11,26,1,1,104
+speaker,0.76,3,2,tangram_E.png,someone facing right with two ears,12,26,1,1,103
+speaker,0.84,3,2,tangram_L.png,some one standing right with no ears,14,26,1,1,103
+speaker,0.8,3,2,tangram_G.png,some one facing left with two ears,13,26,1,1,103
+speaker,0.88,3,2,tangram_F.png,someone sitting left with no ears,15,26,1,1,103
+speaker,0.36,0,3,tangram_L.png,looks like reading,0,26,1,1,102
+speaker,0.44,0,3,tangram_G.png,looks like dancing,2,26,1,1,102
+speaker,0.4,0,3,tangram_F.png,looks sitting,1,26,1,1,102
+speaker,0.48,0,3,tangram_E.png,looks like turning back,3,26,1,1,102
+speaker,0.68,1,3,tangram_G.png,dancing,4,26,1,1,101
+speaker,0.68,1,3,tangram_E.png,two triangles on top,5,26,1,1,101
+speaker,0.72,1,3,tangram_L.png,reading,6,26,1,1,101
+speaker,0.76,1,3,tangram_F.png,sitting,7,26,1,1,101
+speaker,0.64,2,3,tangram_F.png,sitting in general,9,26,1,1,102
+speaker,0.68,2,3,tangram_E.png,turning back,10,26,1,1,102
+speaker,0.64,2,3,tangram_L.png,half sitting,8,26,1,1,102
+speaker,0.72,2,3,tangram_G.png,dancing,11,26,1,1,102
+speaker,0.92,3,3,tangram_F.png,sitting,12,26,1,1,101
+speaker,0.92,3,3,tangram_E.png,turning back,13,26,1,1,101
+speaker,0.96,3,3,tangram_G.png,dancing with one square ear on top and an arm stuck behind him,14,26,1,1,101
+speaker,1,3,3,tangram_L.png,reading a book,15,26,1,1,101
+speaker,0.88,0,4,tangram_E.png,Reading book,0,26,1,2,102
+speaker,0.88,0,4,tangram_G.png,Looks dancing,1,26,1,2,102
+listener,1.08,0,4,tangram_F.png,facing left or right,2,26,1,2,104
+speaker,0.88,0,4,tangram_F.png,facing left,2,26,1,2,102
+speaker,0.88,0,4,tangram_L.png,half sitting,3,26,1,2,102
+speaker,0.88,0,4,tangram_F.png,sitting,2,26,1,2,102
+speaker,1.12,1,4,tangram_F.png,sitting facing left with no ears,5,26,1,2,104
+speaker,1.16,1,4,tangram_E.png,sitting facing right with two ears,6,26,1,2,104
+speaker,1.12,1,4,tangram_G.png,sitting facing left with two ears,4,26,1,2,104
+speaker,1.16,1,4,tangram_L.png,standing facing left holding a book,7,26,1,2,104
+speaker,0.96,2,4,tangram_G.png,Hick foot ball,8,26,1,2,102
+listener,1.16,2,4,tangram_G.png,facing which way and how many ears,8,26,1,2,104
+speaker,0.96,2,4,tangram_G.png,facing left,8,26,1,2,102
+speaker,0.96,2,4,tangram_L.png,reading books,9,26,1,2,102
+speaker,0.96,2,4,tangram_G.png,one,8,26,1,2,102
+listener,1.16,2,4,tangram_G.png,how many ears,8,26,1,2,104
+speaker,1,2,4,tangram_E.png,dancing,11,26,1,2,102
+speaker,1,2,4,tangram_F.png,general sitting,10,26,1,2,102
+speaker,1.2,3,4,tangram_L.png,standing facing right reading a book,12,26,1,2,104
+speaker,1.24,3,4,tangram_E.png,sitting facing right with two ears,13,26,1,2,104
+speaker,1.28,3,4,tangram_G.png,sitting facing left with two ears,14,26,1,2,104
+speaker,1.32,3,4,tangram_F.png,sitting facing left with no ears,15,26,1,2,104
+speaker,0.92,0,5,tangram_L.png,someone standing with no ears,0,26,1,2,103
+speaker,1,0,5,tangram_E.png,some facing right with two ears,2,26,1,2,103
+speaker,0.96,0,5,tangram_F.png,some facing left with no ears,1,26,1,2,103
+speaker,1.04,0,5,tangram_G.png,someone facing left with two ears,3,26,1,2,103
+listener,1.08,1,5,tangram_E.png,quick pls,4,26,1,2,103
+speaker,1.24,1,5,tangram_L.png,standing with no ears pointing right,5,26,1,2,101
+speaker,1.28,1,5,tangram_F.png,sitting facing left no ears,6,26,1,2,101
+speaker,1.2,1,5,tangram_E.png,sitting facing right with two triangle ears,4,26,1,2,101
+speaker,1.24,2,5,tangram_L.png,someone standing right with no ears,8,26,1,2,103
+speaker,1.32,1,5,tangram_G.png,sitting facing left with one square ear and one triangle ear,7,26,1,2,101
+speaker,1.28,2,5,tangram_G.png,someone sitting left with two ears,9,26,1,2,103
+speaker,1.32,2,5,tangram_F.png,someone sitting left with no ears,10,26,1,2,103
+speaker,1.36,2,5,tangram_E.png,someone facing right with two ears,11,26,1,2,103
+speaker,1.52,3,5,tangram_L.png,standing pointing right no ears,12,26,1,2,101
+speaker,1.56,3,5,tangram_E.png,sitting facing right two triangle ears,13,26,1,2,101
+speaker,1.64,3,5,tangram_F.png,sitting facing left no ears,15,26,1,2,101
+speaker,1.6,3,5,tangram_G.png,sitting facing left one square ear one triangle ear,14,26,1,2,101
+speaker,0,0,0,tangram_F.png,"A man sitting, facing left.",0,27,1,0,105
+speaker,0,0,0,tangram_F.png,The man is fat,0,27,1,0,105
+speaker,0.04,0,0,tangram_G.png,"A rabbit sitting, facing left",1,27,1,0,105
+speaker,0.04,0,0,tangram_E.png,"A rabbit facing right, sitting",2,27,1,0,105
+speaker,0.04,0,0,tangram_G.png,The rabbit looks like he's going to lie down,1,27,1,0,105
+speaker,0.04,0,0,tangram_L.png,A woman in a dress not sitting,3,27,1,0,105
+speaker,0.04,0,0,tangram_L.png,The woman is facing right,3,27,1,0,105
+speaker,0.04,0,0,tangram_L.png,She looks like she's holding a plate,3,27,1,0,105
+speaker,0.04,0,0,tangram_L.png,Or a tray,3,27,1,0,105
+speaker,0.04,0,0,tangram_L.png,The woman looks like she's holding a tray,3,27,1,0,105
+speaker,0.08,1,0,tangram_E.png,a woman with two high ponytais,4,27,1,0,107
+speaker,0.12,1,0,tangram_F.png,a man sitting with his back against the wall,5,27,1,0,107
+speaker,0.12,1,0,tangram_F.png,with his knees to his chest,5,27,1,0,107
+speaker,0.16,1,0,tangram_G.png,a person with a triangular hood and tail,6,27,1,0,107
+speaker,0.16,1,0,tangram_L.png,a person bending their knees and holding a tray,7,27,1,0,107
+speaker,0.24,2,0,tangram_F.png,"A man sitting against a wall, his knees high to his chest",9,27,1,0,105
+speaker,0.2,2,0,tangram_E.png,a person with two high ponytails sitting upright,8,27,1,0,105
+speaker,0.28,2,0,tangram_L.png,"A woman, her knees bent, holding a tray",10,27,1,0,105
+speaker,0.24,2,0,tangram_F.png,He's slumped,9,27,1,0,105
+speaker,0.24,2,0,tangram_F.png,He's a little fat,9,27,1,0,105
+speaker,0.32,2,0,tangram_G.png,This person is leaning lower than the other three,11,27,1,0,105
+speaker,0.32,2,0,tangram_G.png,"One ponytail is a diamond, the other is like a triangle falling off her head",11,27,1,0,105
+speaker,0.32,3,0,tangram_E.png,this girl has two high ponytails,12,27,1,0,107
+speaker,0.32,2,0,tangram_G.png,And her ponytails are slanted,11,27,1,0,105
+listener,0.36,3,0,tangram_G.png,Hello?,13,27,1,0,105
+speaker,0.36,3,0,tangram_G.png,this person has their legs flat against the floor,13,27,1,0,107
+speaker,0.4,3,0,tangram_F.png,"this man has their knees bent, and is sitting",14,27,1,0,107
+speaker,0.44,3,0,tangram_L.png,"bending their knees, holding a tray",15,27,1,0,107
+speaker,0,0,1,tangram_E.png,It looks like it has bunny ears,0,27,1,0,106
+listener,0.04,0,1,tangram_G.png,next,1,27,1,0,108
+speaker,0.04,0,1,tangram_G.png,"a square is to the left on the top, left corner and a triangle is at the bottom right corner",1,27,1,0,106
+speaker,0.04,0,1,tangram_L.png,kinda looks like a ghost,2,27,1,0,106
+speaker,0.04,0,1,tangram_F.png,looks like someone sitting with their legs to the left,3,27,1,0,106
+speaker,0.08,1,1,tangram_E.png,Bunny ears,4,27,1,0,108
+speaker,0.12,1,1,tangram_F.png,sitting with legs out,5,27,1,0,108
+speaker,0.16,1,1,tangram_L.png,kneeling with a  book,7,27,1,0,108
+speaker,0.2,2,1,tangram_G.png,jumbled mess,8,27,1,0,106
+speaker,0.24,2,1,tangram_L.png,kneeling,9,27,1,0,106
+speaker,0.12,1,1,tangram_G.png,jumbled mess,6,27,1,0,108
+speaker,0.32,2,1,tangram_E.png,bunny,11,27,1,0,106
+speaker,0.28,2,1,tangram_F.png,sitting with legs to the left,10,27,1,0,106
+speaker,0.36,3,1,tangram_L.png,kneeling,12,27,1,0,108
+speaker,0.4,3,1,tangram_E.png,bunny,13,27,1,0,108
+speaker,0.44,3,1,tangram_G.png,jumbled mess,14,27,1,0,108
+speaker,0.48,3,1,tangram_F.png,sitting with legs to left,15,27,1,0,108
+speaker,0.52,0,2,tangram_L.png,"this person has their legs bent, and holding out a tray",1,27,1,1,107
+speaker,0.48,0,2,tangram_F.png,this person is sitting on the floor with their knees bent,0,27,1,1,107
+speaker,0.56,0,2,tangram_G.png,"this person is sitting with their legs flat on the ground, slated head",2,27,1,1,107
+speaker,0.56,0,2,tangram_E.png,this lady has two high ponytails,3,27,1,1,107
+speaker,0.6,1,2,tangram_L.png,kneeling holding tray,4,27,1,1,108
+speaker,0.64,1,2,tangram_F.png,sitting on ground holding ankles,5,27,1,1,108
+speaker,0.68,1,2,tangram_E.png,square head looks like bunny,6,27,1,1,108
+speaker,0.72,1,2,tangram_G.png,weird looking head piece hanging off of back,7,27,1,1,108
+speaker,0.72,2,2,tangram_F.png,sitting holding ankles,8,27,1,1,107
+speaker,0.76,2,2,tangram_L.png,bending holding tray,9,27,1,1,107
+speaker,0.8,2,2,tangram_G.png,something hanging from back and bottom,10,27,1,1,107
+speaker,0.84,2,2,tangram_E.png,"back against wall, legs out flat on floor",11,27,1,1,107
+speaker,0.96,3,2,tangram_L.png,kneeling holding tray,13,27,1,1,108
+speaker,1,3,2,tangram_E.png,looks like bunny ears with a square head,14,27,1,1,108
+speaker,1.04,3,2,tangram_F.png,sitting on floor holding ankles,15,27,1,1,108
+speaker,0.92,3,2,tangram_G.png,piece hanging off back of and head and back of shoulders,12,27,1,1,108
+speaker,0.48,0,3,tangram_G.png,This person has their legs flat against the floor,0,27,1,1,105
+speaker,0.52,0,3,tangram_L.png,"The woman is bending her knees, holding a tray",1,27,1,1,105
+speaker,0.56,0,3,tangram_F.png,"The man is slumped against a wall, sitting",2,27,1,1,105
+speaker,0.68,1,3,tangram_G.png,flat legs,4,27,1,1,106
+speaker,0.6,0,3,tangram_E.png,"The person is sitting upright, their ponytails are high",3,27,1,1,105
+speaker,0.72,1,3,tangram_F.png,back against the wall,5,27,1,1,106
+speaker,0.8,1,3,tangram_E.png,pony tails,7,27,1,1,106
+speaker,0.8,2,3,tangram_G.png,flat legs,8,27,1,1,105
+speaker,0.76,1,3,tangram_L.png,woman with tray,6,27,1,1,106
+speaker,0.84,2,3,tangram_L.png,woman with tray,9,27,1,1,105
+speaker,0.88,2,3,tangram_E.png,high ponytails,10,27,1,1,105
+speaker,0.92,2,3,tangram_F.png,slumped against the wall,11,27,1,1,105
+speaker,1,3,3,tangram_E.png,pony tails,12,27,1,1,106
+speaker,1.04,3,3,tangram_F.png,slumped against wall,13,27,1,1,106
+speaker,1.08,3,3,tangram_L.png,woman with tray,14,27,1,1,106
+speaker,1.12,3,3,tangram_G.png,flat legs,15,27,1,1,106
+speaker,1.04,0,4,tangram_F.png,"man sitting on ground with knees bent, holding ankles",0,27,1,2,107
+speaker,1.08,0,4,tangram_E.png,lady with two high pony tails with back against wall,1,27,1,2,107
+speaker,1.16,0,4,tangram_G.png,"man with head bowed, and two things hanging off shoulders and bottom",3,27,1,2,107
+speaker,1.32,1,4,tangram_F.png,man sitting legs to the left,4,27,1,2,106
+speaker,1.36,1,4,tangram_G.png,doing some weird dance with a fat left leg,5,27,1,2,106
+speaker,1.12,0,4,tangram_L.png,man bending knees holding a tray,2,27,1,2,107
+speaker,1.4,1,4,tangram_E.png,high pony tails,6,27,1,2,106
+speaker,1.44,1,4,tangram_L.png,holding a tray,7,27,1,2,106
+speaker,1.36,2,4,tangram_F.png,"man sitting with bent knees, holding his ankles",8,27,1,2,107
+speaker,1.36,2,4,tangram_E.png,lady with two high pony tails,9,27,1,2,107
+speaker,1.44,2,4,tangram_L.png,knees bent holding tray,11,27,1,2,107
+speaker,1.64,3,4,tangram_E.png,high pony tails,13,27,1,2,106
+speaker,1.4,2,4,tangram_G.png,man slouching with weird things hanging off him,10,27,1,2,107
+speaker,1.6,3,4,tangram_F.png,man sitting legs to left,12,27,1,2,106
+speaker,1.68,3,4,tangram_G.png,weird one with things hanging off,14,27,1,2,106
+speaker,1.72,3,4,tangram_L.png,holding a tray,15,27,1,2,106
+speaker,1.08,0,5,tangram_F.png,sitting on floor holding ankles,0,27,1,2,108
+speaker,1.12,0,5,tangram_L.png,kneeling holding book,1,27,1,2,108
+speaker,1.16,0,5,tangram_G.png,piece hanging of back of head and a piece hanging of the back of the shoulders,3,27,1,2,108
+speaker,1.24,1,5,tangram_L.png,"woman bending knees, holding a tray",5,27,1,2,105
+speaker,1.12,0,5,tangram_E.png,looks like bunny with a square head,2,27,1,2,108
+speaker,1.24,1,5,tangram_F.png,man sitting slumped against a wall. He's fat.,4,27,1,2,105
+speaker,1.28,1,5,tangram_E.png,person with high ponytails sitting upright.,6,27,1,2,105
+speaker,1.32,1,5,tangram_G.png,"low ponytails leaning back, legs flat on the floor",7,27,1,2,105
+speaker,1.32,2,5,tangram_L.png,kneeling holding book,8,27,1,2,108
+speaker,1.36,2,5,tangram_G.png,piece hanging of back of head and another back of shoulders,9,27,1,2,108
+speaker,1.4,2,5,tangram_E.png,looks like bunny with a square head,10,27,1,2,108
+speaker,1.44,2,5,tangram_F.png,sitting on floor holding ankles,11,27,1,2,108
+speaker,1.64,3,5,tangram_F.png,holding ankles,15,27,1,2,105
+speaker,1.56,3,5,tangram_G.png,flat legs,13,27,1,2,105
+speaker,1.52,3,5,tangram_E.png,bunny square head,12,27,1,2,105
+speaker,1.6,3,5,tangram_L.png,holding book,14,27,1,2,105
+speaker,0,0,0,tangram_C.png,Open arms and falling,0,28,0,0,111
+speaker,0,0,0,tangram_C.png,at an angle,0,28,0,0,111
+speaker,0,0,0,tangram_C.png,head by arm,0,28,0,0,111
+speaker,0,0,0,tangram_C.png,off balance,0,28,0,0,111
+speaker,0.04,0,0,tangram_A.png,Looks like a zombie,1,28,0,0,111
+speaker,0.08,0,0,tangram_D.png,looks like holding a plate,2,28,0,0,111
+speaker,0.04,0,0,tangram_A.png,arms together,1,28,0,0,111
+speaker,0.12,0,0,tangram_B.png,arms straight out,3,28,0,0,111
+speaker,0.12,0,0,tangram_B.png,kneeled down,3,28,0,0,111
+speaker,0.16,1,0,tangram_A.png,arms together,4,28,0,0,112
+speaker,0.16,1,0,tangram_A.png,raised up,4,28,0,0,112
+speaker,0.2,1,0,tangram_C.png,arms raised,5,28,0,0,112
+speaker,0.2,1,0,tangram_C.png,head by arm,5,28,0,0,112
+speaker,0.28,1,0,tangram_B.png,kneeling,7,28,0,0,112
+speaker,0.32,2,0,tangram_A.png,arms together,8,28,0,0,111
+speaker,0.24,1,0,tangram_D.png,looks like holding a plate,6,28,0,0,112
+speaker,0.28,1,0,tangram_B.png,arms outstretched,7,28,0,0,112
+speaker,0.32,2,0,tangram_A.png,head back,8,28,0,0,111
+speaker,0.4,2,0,tangram_D.png,looks like they are carrying something,10,28,0,0,111
+speaker,0.44,2,0,tangram_B.png,kneeling down with arms out,11,28,0,0,111
+speaker,0.48,3,0,tangram_A.png,arms together and raised like a zombie,12,28,0,0,112
+speaker,0.52,3,0,tangram_B.png,arms outstretched and kneeling,13,28,0,0,112
+speaker,0.36,2,0,tangram_C.png,arms out and head to the side,9,28,0,0,111
+speaker,0.56,3,0,tangram_D.png,looks like holding something,14,28,0,0,112
+speaker,0.6,3,0,tangram_C.png,arms raised head near arm,15,28,0,0,112
+listener,0,0,1,tangram_C.png,ok,0,28,0,0,113
+speaker,0,0,1,tangram_C.png,Looks like he's saying I don't know,0,28,0,0,110
+speaker,0,0,1,tangram_C.png,This looks like a shoulder shrug.,0,28,0,0,110
+listener,0,0,1,tangram_C.png,more specific?,0,28,0,0,113
+listener,0,0,1,tangram_C.png,not arms wide open,0,28,0,0,113
+speaker,0,0,1,tangram_C.png,Yes,0,28,0,0,110
+speaker,0.04,0,1,tangram_B.png,Kneeling and praying,1,28,0,0,110
+speaker,0.08,0,1,tangram_A.png,marching forward one leg in the air.,2,28,0,0,110
+speaker,0.12,0,1,tangram_D.png,Hands out in front head looking up,3,28,0,0,110
+listener,0.12,0,1,tangram_D.png,arms wide open?,3,28,0,0,113
+speaker,0.12,0,1,tangram_D.png,No,3,28,0,0,110
+listener,0.12,0,1,tangram_D.png,holding a bowl?,3,28,0,0,113
+speaker,0.12,0,1,tangram_D.png,yes ,3,28,0,0,110
+speaker,0.16,1,1,tangram_C.png,arms wide open,4,28,0,0,113
+speaker,0.2,1,1,tangram_A.png,standing on one leg,5,28,0,0,113
+speaker,0.24,1,1,tangram_B.png,kneeling and praying,6,28,0,0,113
+speaker,0.36,2,1,tangram_B.png,kneeling and praying,9,28,0,0,110
+speaker,0.28,1,1,tangram_D.png,holding a bowl,7,28,0,0,113
+speaker,0.32,2,1,tangram_C.png,arms wide open,8,28,0,0,110
+speaker,0.4,2,1,tangram_D.png,Holding a bowl,10,28,0,0,110
+speaker,0.44,2,1,tangram_A.png,One leg up ,11,28,0,0,110
+speaker,0.48,3,1,tangram_D.png,holding a bowl,12,28,0,0,113
+speaker,0.6,3,1,tangram_A.png,standing on one leg,15,28,0,0,113
+speaker,0.52,3,1,tangram_C.png,arms wide open,13,28,0,0,113
+speaker,0.56,3,1,tangram_B.png,kneeling and praying,14,28,0,0,113
+speaker,0.64,0,2,tangram_A.png,One leg up,0,28,0,1,110
+speaker,0.68,0,2,tangram_C.png,Arms wide open,1,28,0,1,110
+speaker,0.68,0,2,tangram_B.png,Kneeling and praying,2,28,0,1,110
+speaker,0.8,1,2,tangram_C.png,arms out and head to the side,6,28,0,1,111
+speaker,0.76,1,2,tangram_A.png,one leg up,4,28,0,1,111
+speaker,0.84,1,2,tangram_D.png,carrying a bowl,7,28,0,1,111
+speaker,0.72,0,2,tangram_D.png,Holding a bowl,3,28,0,1,110
+speaker,0.8,1,2,tangram_B.png,arms out and praying,5,28,0,1,111
+speaker,0.88,2,2,tangram_A.png,One leg up,8,28,0,1,110
+speaker,0.92,2,2,tangram_C.png,arms wide open head to the side,9,28,0,1,110
+speaker,0.96,2,2,tangram_D.png,Holding a bowl,10,28,0,1,110
+speaker,1.12,3,2,tangram_D.png,carrying a plate,14,28,0,1,111
+speaker,1.04,3,2,tangram_A.png,like a zombie and leg up,12,28,0,1,111
+speaker,1.08,3,2,tangram_B.png,kneeling,13,28,0,1,111
+speaker,1.16,3,2,tangram_C.png,arms out like they are falling,15,28,0,1,111
+speaker,1,2,2,tangram_B.png,Kneeling down and praying,11,28,0,1,110
+speaker,0.64,0,3,tangram_A.png,no closed,0,28,0,1,112
+speaker,0.64,0,3,tangram_A.png,yes,0,28,0,1,112
+speaker,0.68,0,3,tangram_C.png,arms wide and raised ,1,28,0,1,112
+listener,0.64,0,3,tangram_A.png,standing on one leg?,0,28,0,1,113
+speaker,0.64,0,3,tangram_A.png,arms together and raised,0,28,0,1,112
+listener,0.64,0,3,tangram_A.png,arms wide open?,0,28,0,1,113
+listener,0.72,0,3,tangram_D.png,holding a bowl?,2,28,0,1,113
+speaker,0.72,0,3,tangram_D.png,arms together and looks like to be holding something,2,28,0,1,112
+speaker,0.72,0,3,tangram_D.png,yes,2,28,0,1,112
+speaker,0.76,0,3,tangram_B.png,arms outstretched and kneeling,3,28,0,1,112
+speaker,0.88,1,3,tangram_D.png,holding a bowl,6,28,0,1,113
+listener,0.76,0,3,tangram_B.png,kneeling and praying?,3,28,0,1,113
+speaker,0.8,1,3,tangram_A.png,standing on one leg,4,28,0,1,113
+speaker,0.84,1,3,tangram_B.png,kneeling and praying,5,28,0,1,113
+speaker,0.76,0,3,tangram_B.png,yes,3,28,0,1,112
+speaker,0.92,1,3,tangram_C.png,arms wide open,7,28,0,1,113
+speaker,0.96,2,3,tangram_A.png,standing on one leg,8,28,0,1,112
+speaker,1,2,3,tangram_C.png,arms outstretched raised,9,28,0,1,112
+speaker,1.04,2,3,tangram_B.png,kneeling and praying,10,28,0,1,112
+speaker,1.08,2,3,tangram_D.png,holding a bowl,11,28,0,1,112
+speaker,1.16,3,3,tangram_B.png,kneeling and praying,13,28,0,1,113
+speaker,1.12,3,3,tangram_C.png,arms wide open,12,28,0,1,113
+speaker,1.2,3,3,tangram_D.png,holding a bowl,14,28,0,1,113
+speaker,1.24,3,3,tangram_A.png,standing on one leg,15,28,0,1,113
+speaker,1.2,0,4,tangram_A.png,one leg up,0,28,0,2,111
+speaker,1.24,0,4,tangram_B.png,kneeling and arms out,1,28,0,2,111
+speaker,1.32,0,4,tangram_C.png,head to one side,3,28,0,2,111
+speaker,1.32,0,4,tangram_C.png,yes,3,28,0,2,111
+speaker,1.44,1,4,tangram_B.png,kneeling and praying,4,28,0,2,113
+speaker,1.52,1,4,tangram_D.png,holding a bowl,6,28,0,2,113
+speaker,1.28,0,4,tangram_D.png,carrying something,2,28,0,2,111
+speaker,1.32,0,4,tangram_C.png,arms out,3,28,0,2,111
+listener,1.4,0,4,tangram_C.png,arms wide open?,3,28,0,2,113
+speaker,1.48,1,4,tangram_C.png,arms wide open,5,28,0,2,113
+speaker,1.56,1,4,tangram_A.png,standing on one leg,7,28,0,2,113
+speaker,1.56,2,4,tangram_C.png,arms open and leaning back,9,28,0,2,111
+speaker,1.64,2,4,tangram_B.png,kneeling and praying,11,28,0,2,111
+speaker,1.76,3,4,tangram_D.png,carrying a bowl,12,28,0,2,113
+speaker,1.52,2,4,tangram_D.png,carrying a bowl,8,28,0,2,111
+speaker,1.6,2,4,tangram_A.png,looks like a zombie and standing on one leg,10,28,0,2,111
+speaker,1.8,3,4,tangram_A.png,standing on one leg,13,28,0,2,113
+speaker,1.84,3,4,tangram_C.png,arms wide open,14,28,0,2,113
+speaker,1.88,3,4,tangram_B.png,kneeling and praying,15,28,0,2,113
+listener,1.76,3,4,tangram_C.png,head to side,14,28,0,2,111
+speaker,1.84,3,4,tangram_C.png,yes,14,28,0,2,113
+speaker,1.28,0,5,tangram_B.png,arms outstretched and kneeling,0,28,0,2,112
+speaker,1.28,0,5,tangram_D.png,looks to be holding something,1,28,0,2,112
+speaker,1.32,0,5,tangram_A.png,standing on one leg,2,28,0,2,112
+speaker,1.32,1,5,tangram_A.png,Pyramid Head,4,28,0,2,110
+speaker,1.36,0,5,tangram_C.png,arms raised and stretched wide,3,28,0,2,112
+speaker,1.32,1,5,tangram_C.png,arms stretched wide head to side,5,28,0,2,110
+speaker,1.36,1,5,tangram_B.png,kneeling and praying,6,28,0,2,110
+speaker,1.52,2,5,tangram_B.png,kneeling and praying,8,28,0,2,112
+speaker,1.4,1,5,tangram_D.png,holding a bowl,7,28,0,2,110
+speaker,1.6,2,5,tangram_D.png,holding a bowl,10,28,0,2,112
+speaker,1.6,3,5,tangram_D.png,Holding a bowl,12,28,0,2,110
+speaker,1.68,3,5,tangram_B.png,looks like a person on their knees praying,14,28,0,2,110
+speaker,1.56,2,5,tangram_A.png,leg raised,9,28,0,2,112
+speaker,1.64,2,5,tangram_C.png,arms raised head to side,11,28,0,2,112
+speaker,1.64,3,5,tangram_C.png,with arms wide open,13,28,0,2,110
+speaker,1.72,3,5,tangram_A.png,Looks like a zombie doing a crane kick,15,28,0,2,110
+listener,0,0,0,tangram_B.png,Hello,0,29,0,0,114
+speaker,0,0,0,tangram_B.png,square head triangle on back,0,29,0,0,117
+speaker,0.04,0,0,tangram_A.png,looks like they have square on back,1,29,0,0,117
+listener,0.04,0,0,tangram_A.png,ready,1,29,0,0,114
+listener,0.04,0,0,tangram_A.png,does it look like one leg is lifted up,1,29,0,0,114
+speaker,0.04,0,0,tangram_A.png,yes,1,29,0,0,117
+speaker,0.08,0,0,tangram_C.png,hands lifted up,2,29,0,0,117
+listener,0.08,0,0,tangram_C.png,lifted up like they are flying?,2,29,0,0,114
+speaker,0.16,1,0,tangram_A.png,Square on the back with one leg lifted,4,29,0,0,114
+speaker,0.08,0,0,tangram_C.png,yes,2,29,0,0,117
+speaker,0.12,0,0,tangram_D.png,"look like holding something out, standing",3,29,0,0,117
+speaker,0.2,1,0,tangram_D.png,Diamond head with hands out like holding a large bowl,5,29,0,0,114
+listener,0.2,1,0,tangram_D.png,standing?,5,29,0,0,117
+speaker,0.24,1,0,tangram_C.png,hands out like it is flying,7,29,0,0,114
+speaker,0.2,1,0,tangram_B.png,the same one that was just choosen. kneeling with a triangle on back,6,29,0,0,114
+speaker,0.28,2,0,tangram_D.png,standing with both feet on ground,8,29,0,0,117
+speaker,0.32,2,0,tangram_A.png,looks like kicking,9,29,0,0,117
+speaker,0.36,2,0,tangram_B.png,kneeling,10,29,0,0,117
+speaker,0.44,3,0,tangram_B.png,kneeling with triangle on back,12,29,0,0,114
+speaker,0.4,2,0,tangram_C.png,flying,11,29,0,0,117
+speaker,0.48,3,0,tangram_C.png,flying,13,29,0,0,114
+speaker,0.52,3,0,tangram_D.png,"standing, not kicking",14,29,0,0,114
+speaker,0.56,3,0,tangram_A.png,kicking,15,29,0,0,114
+listener,0,0,1,tangram_C.png,Hello,0,29,0,0,115
+speaker,0,0,1,tangram_C.png,The one that looks like a preacher,0,29,0,0,116
+speaker,0,0,1,tangram_D.png,Nope,1,29,0,0,116
+speaker,0,0,1,tangram_D.png,arms raised to the sky,1,29,0,0,116
+speaker,0,0,1,tangram_B.png,Left,2,29,0,0,116
+speaker,0,0,1,tangram_B.png,praying figure,2,29,0,0,116
+listener,0,0,1,tangram_B.png,facing which way?,2,29,0,0,115
+speaker,0,0,1,tangram_A.png,I,3,29,0,0,116
+speaker,0,0,1,tangram_A.png,kneeling,3,29,0,0,116
+speaker,0,1,1,tangram_C.png,Arms raised in the sky. Leaning to the left of the screen,4,29,0,0,115
+speaker,0.04,1,1,tangram_D.png,Facing left with hands/arms pointing straight out. Looks like a person in a long robe or coat,5,29,0,0,115
+speaker,0.12,1,1,tangram_A.png,Looks like a person that is lifting one leg. Facing left,7,29,0,0,115
+speaker,0.16,2,1,tangram_B.png,Person kneeling facing left,8,29,0,0,116
+speaker,0.2,2,1,tangram_C.png,Left 45°,9,29,0,0,116
+speaker,0.08,1,1,tangram_B.png,The one with the widest base (bottom).,6,29,0,0,115
+speaker,0.2,2,1,tangram_C.png,Leaning left,9,29,0,0,116
+speaker,0.24,2,1,tangram_D.png,in a robe facing left arms out,11,29,0,0,116
+speaker,0.2,2,1,tangram_A.png,Yes,10,29,0,0,116
+speaker,0.2,2,1,tangram_A.png,The one walking like a zombie,10,29,0,0,116
+listener,0.2,2,1,tangram_A.png,do they look like they have one leg lifted?,10,29,0,0,115
+speaker,0.28,3,1,tangram_B.png,widest base (bottom),12,29,0,0,115
+speaker,0.32,3,1,tangram_D.png,person in robe standing. facing left with hands/arms out,13,29,0,0,115
+speaker,0.36,3,1,tangram_C.png,person with arms raised in the air leaning to the left,14,29,0,0,115
+speaker,0.4,3,1,tangram_A.png,one leg lifted. facing left,15,29,0,0,115
+speaker,0.44,0,2,tangram_C.png,looks like a person leaning very far to the left. arms raised to the sky,0,29,0,1,115
+listener,0.68,0,2,tangram_B.png,kneeling with a triangle on back or front?,2,29,0,1,114
+speaker,0.48,0,2,tangram_A.png,looks like a person lifting one leg. facing the left,1,29,0,1,115
+speaker,0.52,0,2,tangram_B.png,the one with the widest base (bottom),2,29,0,1,115
+speaker,0.52,0,2,tangram_B.png,kind of kneeling. triangle on the back,2,29,0,1,115
+speaker,0.56,0,2,tangram_D.png,"looks like a person in a robe, hands/arms out straight and facing the left",3,29,0,1,115
+speaker,0.76,1,2,tangram_A.png,looks like a person with arms raised and one leg extended ,4,29,0,1,114
+speaker,0.8,1,2,tangram_C.png,looks like a person flying,5,29,0,1,114
+listener,0.64,1,2,tangram_C.png,are they leaning very far to the left?,5,29,0,1,115
+speaker,0.84,1,2,tangram_D.png,the one that looks like a person wearing a robe,6,29,0,1,114
+speaker,0.88,1,2,tangram_B.png,The one that is kind of kneeling with a triangle on back,7,29,0,1,114
+speaker,0.8,1,2,tangram_C.png,yes arms  extended up,5,29,0,1,114
+speaker,0.76,2,2,tangram_C.png,person leaning very far to the left. arms raised in the sky,8,29,0,1,115
+speaker,0.84,2,2,tangram_B.png,kneeling with triangle on back,10,29,0,1,115
+speaker,0.8,2,2,tangram_A.png,one leg lifted,9,29,0,1,115
+speaker,0.88,2,2,tangram_D.png,robe,11,29,0,1,115
+speaker,1.08,3,2,tangram_C.png,the flying person arms raised to the sky,12,29,0,1,114
+speaker,1.2,3,2,tangram_B.png,kneeling with triangle on back,15,29,0,1,114
+speaker,1.12,3,2,tangram_A.png,one leg extended,13,29,0,1,114
+speaker,1.16,3,2,tangram_D.png,wearing a robe,14,29,0,1,114
+speaker,0.44,0,3,tangram_D.png,Wearing a robe facing left arms out,0,29,0,1,116
+speaker,0.44,0,3,tangram_B.png,knees on the ground praying facing left ,1,29,0,1,116
+speaker,0.48,0,3,tangram_C.png,leaning left at 45° arms out,2,29,0,1,116
+speaker,0.52,0,3,tangram_A.png,Looks like a zombie one leg in the air,3,29,0,1,116
+speaker,0.76,1,3,tangram_A.png,kicking,5,29,0,1,117
+speaker,0.84,1,3,tangram_D.png,standing with both feet on ground,7,29,0,1,117
+speaker,0.72,1,3,tangram_B.png,appears to kneel,4,29,0,1,117
+speaker,0.8,1,3,tangram_C.png,looks like flying,6,29,0,1,117
+speaker,0.8,2,3,tangram_B.png,knees on the ground praying facing left,10,29,0,1,116
+speaker,0.84,2,3,tangram_C.png,leaning left at 45° arms in the air,11,29,0,1,116
+speaker,0.72,2,3,tangram_A.png,Looks like a zombie one leg in the air,8,29,0,1,116
+speaker,0.76,2,3,tangram_D.png,Both legs on the ground standing,9,29,0,1,116
+speaker,1.04,3,3,tangram_B.png,looks like kneeling,12,29,0,1,117
+speaker,1.12,3,3,tangram_A.png,appears to be kicking,14,29,0,1,117
+speaker,1.16,3,3,tangram_D.png,standing with both feet on ground,15,29,0,1,117
+speaker,1.08,3,3,tangram_C.png,looks like flying,13,29,0,1,117
+speaker,1.24,0,4,tangram_C.png,the figure that seems to be flying with arms to the sky,0,29,0,2,114
+speaker,1.28,0,4,tangram_D.png,the figure that seems to be wearing a robe with arms extended in front,1,29,0,2,114
+speaker,1.2,1,4,tangram_A.png,One leg in air,4,29,0,2,116
+speaker,1.36,0,4,tangram_B.png,kneeling with a triangle on back,3,29,0,2,114
+speaker,1.32,0,4,tangram_A.png,has one leg extended,2,29,0,2,114
+speaker,1.32,1,4,tangram_B.png,Triangle on back,7,29,0,2,116
+speaker,1.24,1,4,tangram_D.png,Standing wearing a robe,5,29,0,2,116
+speaker,1.56,2,4,tangram_C.png,flying figure,8,29,0,2,114
+speaker,1.64,2,4,tangram_D.png,wearing a robe,10,29,0,2,114
+speaker,1.52,3,4,tangram_A.png,One leg in the air,12,29,0,2,116
+speaker,1.28,1,4,tangram_C.png,Looks like flying,6,29,0,2,116
+speaker,1.6,2,4,tangram_A.png,one leg extended,9,29,0,2,114
+speaker,1.68,2,4,tangram_B.png,kneeling with triangle on back,11,29,0,2,114
+speaker,1.56,3,4,tangram_B.png,Triangle on back,13,29,0,2,116
+speaker,1.6,3,4,tangram_D.png,Standing wearing robe,14,29,0,2,116
+speaker,1.64,3,4,tangram_C.png,Looks like flying,15,29,0,2,116
+speaker,1.12,0,5,tangram_C.png,looks like a person with their arms raised high. leaning very far to the left,1,29,0,2,115
+speaker,1.08,0,5,tangram_D.png,looks like a person standing wearing a long robe. they are holding their hands/arms out straight.,0,29,0,2,115
+speaker,1.16,0,5,tangram_A.png,looks like a person lifting one leg. facing the left,2,29,0,2,115
+speaker,1.2,0,5,tangram_B.png,the one with the widest base (bottom),3,29,0,2,115
+speaker,1.36,1,5,tangram_A.png,looks like a person kicking,4,29,0,2,117
+speaker,1.4,1,5,tangram_C.png,looks like they are flying ,5,29,0,2,117
+speaker,1.44,1,5,tangram_B.png,appears to be kneeling,6,29,0,2,117
+speaker,1.44,1,5,tangram_B.png,yes,6,29,0,2,117
+speaker,1.44,2,5,tangram_C.png,flying,9,29,0,2,115
+listener,1.32,1,5,tangram_B.png,is there a triangle on their back?,6,29,0,2,115
+speaker,1.48,1,5,tangram_D.png,standing with both feet on ground,7,29,0,2,117
+listener,1.36,1,5,tangram_D.png,robe?,7,29,0,2,115
+speaker,1.68,3,5,tangram_C.png,flying,12,29,0,2,117
+speaker,1.48,1,5,tangram_D.png,yes,7,29,0,2,117
+speaker,1.4,2,5,tangram_A.png,one leg lifted,8,29,0,2,115
+speaker,1.48,2,5,tangram_D.png,robe,10,29,0,2,115
+speaker,1.52,2,5,tangram_B.png,kneeling with triangle on back,11,29,0,2,115
+speaker,1.72,3,5,tangram_B.png,kneeling with triangle on back,13,29,0,2,117
+speaker,1.76,3,5,tangram_A.png,one leg lifted,14,29,0,2,117
+speaker,1.8,3,5,tangram_D.png,robe,15,29,0,2,117
+speaker,0,0,0,tangram_E.png,2,0,30,1,0,121
+speaker,0,0,0,tangram_E.png,1,0,30,1,0,121
+speaker,0,0,0,tangram_E.png,2,0,30,1,0,121
+listener,0,0,0,tangram_E.png,hello,0,30,1,0,120
+speaker,0,0,0,tangram_E.png,2,0,30,1,0,121
+speaker,0,0,0,tangram_E.png,Hi,0,30,1,0,121
+listener,0,0,0,tangram_E.png,"you are supposed to describe the picture for me to select, correct?",0,30,1,0,120
+speaker,0,0,0,tangram_E.png,What is your name,0,30,1,0,121
+speaker,0,0,0,tangram_E.png,The third picture is looks good and it look like man in sitting position.,0,30,1,0,121
+speaker,0,0,0,tangram_G.png,Hello,1,30,1,0,121
+listener,0,0,0,tangram_G.png,"hi, what does the picture look like?",1,30,1,0,120
+speaker,0,0,0,tangram_G.png,The third picture is looks like a man in sitting position.,1,30,1,0,121
+listener,0,0,0,tangram_G.png,with big ears or a hat?,1,30,1,0,120
+listener,0,0,0,tangram_G.png,cuz i see 2 pictures with people sitting,1,30,1,0,120
+speaker,0,0,0,tangram_G.png,hat,1,30,1,0,121
+listener,0,0,0,tangram_L.png,ok i think i can get this one right this time,2,30,1,0,120
+speaker,0,0,0,tangram_L.png,The picture looks like stand position and like begging.,2,30,1,0,121
+listener,0,0,0,tangram_G.png,ok cool,1,30,1,0,120
+speaker,0.04,0,0,tangram_F.png,The picture looks like sitting position and no hats.,3,30,1,0,121
+listener,0.08,1,0,tangram_E.png,don't select any of tis.,4,30,1,0,121
+listener,0.04,0,0,tangram_F.png,what do you see,3,30,1,0,120
+speaker,0.08,1,0,tangram_E.png,sitting person with a hat looks like bunny ears,4,30,1,0,120
+listener,0.08,1,0,tangram_E.png,Don't select any of this.,4,30,1,0,121
+speaker,0.08,1,0,tangram_L.png,looking like a person kneeling and about to start begging or praying,5,30,1,0,120
+listener,0.16,2,0,tangram_E.png,i see it,8,30,1,0,120
+listener,0.12,1,0,tangram_F.png,hi,6,30,1,0,121
+speaker,0.16,1,0,tangram_G.png,kind of looks like a high heeled shoe,7,30,1,0,120
+speaker,0.16,2,0,tangram_E.png,The person look like long hat and leg look like thunder.,8,30,1,0,121
+listener,0.2,2,0,tangram_L.png,"good day, i see it! well done",9,30,1,0,120
+speaker,0.24,2,0,tangram_F.png,The position looks sitting with no hat ,10,30,1,0,121
+listener,0.28,2,0,tangram_G.png,i think we are starting to understand one another,11,30,1,0,120
+speaker,0.12,1,0,tangram_F.png,looks like a guy with a box for a head sitting down with knees to chest,6,30,1,0,120
+listener,0.16,1,0,tangram_G.png,told me,7,30,1,0,121
+listener,0.16,2,0,tangram_E.png,what do ya see there director ,8,30,1,0,120
+speaker,0.2,2,0,tangram_L.png,The position look like begging.,9,30,1,0,121
+listener,0.28,2,0,tangram_G.png,gimme a good one,11,30,1,0,120
+speaker,0.28,3,0,tangram_F.png,"box head, sitting knees to chest",12,30,1,0,120
+speaker,0.28,2,0,tangram_G.png,The position looks wired,11,30,1,0,121
+speaker,0.32,3,0,tangram_L.png,or praying,13,30,1,0,120
+listener,0.28,2,0,tangram_G.png,can u be more specific,11,30,1,0,120
+speaker,0.28,2,0,tangram_G.png,hat in different position,11,30,1,0,121
+speaker,0.32,3,0,tangram_L.png,begging for food or some change,13,30,1,0,120
+speaker,0.36,3,0,tangram_E.png,native american indian guy sitting down big hat,14,30,1,0,120
+speaker,0.4,3,0,tangram_G.png,"the one we keep struggling with, big white triangle in the right bottom ",15,30,1,0,120
+speaker,0,0,1,tangram_E.png,This one looks like a rabbit sitting down facing the right.,0,30,1,0,118
+speaker,0.04,0,1,tangram_L.png,This one looks like a person kneeling with his arm outstretched.,1,30,1,0,118
+speaker,0.08,0,1,tangram_G.png,This one looks like a rabbit laying down facing the left.,2,30,1,0,118
+speaker,0,0,1,tangram_E.png,It has a square head and two triangles that look like ears.,0,30,1,0,118
+speaker,0.08,0,1,tangram_G.png,One of his ears is a square.,2,30,1,0,118
+speaker,0.16,1,1,tangram_E.png,This one looks like it has bunny ears,4,30,1,0,119
+speaker,0.12,0,1,tangram_F.png,This one looks like a person sitting down facing the left.,3,30,1,0,118
+speaker,0.2,1,1,tangram_L.png,Looks like someone kneeling down to pray,5,30,1,0,119
+speaker,0.28,1,1,tangram_F.png,Square head looking down,7,30,1,0,119
+speaker,0.32,2,1,tangram_L.png,This one looks like a man kneeling with his arms out.,8,30,1,0,118
+speaker,0.24,1,1,tangram_G.png,looks like it has a square ear,6,30,1,0,119
+speaker,0.36,2,1,tangram_E.png,A bunny sitting down facing the right,9,30,1,0,118
+speaker,0.44,2,1,tangram_F.png,A man sitting down facing the left,11,30,1,0,118
+speaker,0.48,3,1,tangram_E.png,Bunny ears ,12,30,1,0,119
+speaker,0.52,3,1,tangram_G.png,Square ear,13,30,1,0,119
+speaker,0.4,2,1,tangram_G.png,A rabbit with a square ear facing the left.,10,30,1,0,118
+speaker,0.56,3,1,tangram_L.png,Person kneeling down to pray,14,30,1,0,119
+speaker,0.6,3,1,tangram_F.png,Suare head looking down,15,30,1,0,119
+speaker,0.48,0,2,tangram_F.png,"person sitting with knees to stomach, big box head, no ears and no hat",1,30,1,1,120
+speaker,0.8,1,2,tangram_F.png,Big box head,4,30,1,1,119
+listener,0.6,1,2,tangram_F.png,sitting knees in?,4,30,1,1,120
+speaker,0.52,0,2,tangram_G.png,"big white triangle in corner, kind of looks like a high heeled womens shoe facing left",2,30,1,1,120
+listener,0.6,1,2,tangram_F.png,good job!,4,30,1,1,120
+speaker,0.8,1,2,tangram_F.png,thank you youtoo!,4,30,1,1,119
+speaker,0.8,1,2,tangram_F.png,yes,4,30,1,1,119
+speaker,0.84,1,2,tangram_L.png,Oliver Twist,5,30,1,1,119
+speaker,0.44,0,2,tangram_L.png,person begging like please sir may I have some more,0,30,1,1,120
+speaker,0.56,0,2,tangram_E.png,sitting criss cross style with big hat on box head,3,30,1,1,120
+listener,0.72,1,2,tangram_E.png,on a role! heck yeah,7,30,1,1,120
+speaker,1.16,3,2,tangram_F.png,Box head knees up,13,30,1,1,119
+listener,0.64,1,2,tangram_L.png,lol nice!,5,30,1,1,120
+speaker,0.88,1,2,tangram_G.png,Woman's shoe,6,30,1,1,119
+speaker,0.76,2,2,tangram_G.png,womens shoe,8,30,1,1,120
+speaker,0.8,2,2,tangram_F.png,box head no hat,9,30,1,1,120
+speaker,0.84,2,2,tangram_E.png,box head sitting big hat,10,30,1,1,120
+speaker,1.12,3,2,tangram_E.png,Hat head,12,30,1,1,119
+speaker,0.92,1,2,tangram_E.png,Box head wearing the hat,7,30,1,1,119
+speaker,0.88,2,2,tangram_L.png,oliver twist,11,30,1,1,120
+speaker,1.2,3,2,tangram_G.png,Woman's shoe,14,30,1,1,119
+listener,1.04,3,2,tangram_L.png,yes!,15,30,1,1,120
+listener,1.04,3,2,tangram_L.png,one more for perfection!,15,30,1,1,120
+speaker,1.24,3,2,tangram_L.png,Oliver Twist,15,30,1,1,119
+speaker,0.68,0,3,tangram_F.png,This one looks like a man laying down looking left.,2,30,1,1,118
+speaker,0.64,0,3,tangram_E.png,This one looks like a bunny rabbit facing the left and sitting down,0,30,1,1,118
+speaker,0.64,0,3,tangram_G.png,This one looks like a rabbit with a square ear looking left.,1,30,1,1,118
+speaker,0.68,0,3,tangram_L.png,This one looks like a man kneeling with his arms outstretched.,3,30,1,1,118
+speaker,0.56,1,3,tangram_G.png,It looks wired position,5,30,1,1,121
+speaker,0.56,1,3,tangram_L.png,It looks like beggar position,6,30,1,1,121
+speaker,0.6,1,3,tangram_E.png,The position with big hat ,7,30,1,1,121
+speaker,0.52,1,3,tangram_F.png,The man sitting down with no hat,4,30,1,1,121
+speaker,0.84,2,3,tangram_G.png,"This one looks like a weird position, with a square facing the left.",8,30,1,1,118
+speaker,0.88,2,3,tangram_E.png,A person wearing a hat facing the right.,9,30,1,1,118
+speaker,0.92,2,3,tangram_F.png,A man laying down facing the left,10,30,1,1,118
+speaker,0.96,2,3,tangram_L.png,A person begging.,11,30,1,1,118
+speaker,0.8,3,3,tangram_F.png,The person lying down with no hot,12,30,1,1,121
+speaker,0.84,3,3,tangram_G.png,The position is wired ,13,30,1,1,121
+speaker,0.88,3,3,tangram_E.png,The position is with big hat,14,30,1,1,121
+speaker,0.92,3,3,tangram_L.png,begging position,15,30,1,1,121
+speaker,1.16,0,4,tangram_F.png,This looks like a person sitting down and facing the left with a square head,0,30,1,2,118
+listener,1.12,0,4,tangram_L.png,please sir may I have some more?,1,30,1,2,120
+speaker,1.24,0,4,tangram_G.png,"This looks like a person with a weird square head facing the left with a triangle arm behind hi,",2,30,1,2,118
+speaker,1.24,0,4,tangram_E.png,This looks like a person wearing bunny ears facing the right,3,30,1,2,118
+speaker,1.24,1,4,tangram_E.png,person sitting cross legged with a big hat on their boxed head,5,30,1,2,120
+speaker,1.2,0,4,tangram_L.png,This looks like a person begging,1,30,1,2,118
+speaker,1.2,1,4,tangram_L.png,begging person,4,30,1,2,120
+speaker,1.24,1,4,tangram_E.png,bunny ears,5,30,1,2,120
+speaker,1.28,1,4,tangram_G.png,the other bunny ears ones but i think it looks like a womens high heeled shoes facing left,6,30,1,2,120
+speaker,1.32,1,4,tangram_F.png,box head no hat sitting down knees to chest,7,30,1,2,120
+speaker,1.44,2,4,tangram_G.png,Weird bunny ears one that's facing to the left.,8,30,1,2,118
+speaker,1.44,2,4,tangram_G.png,Yup,8,30,1,2,118
+speaker,1.56,2,4,tangram_F.png,The man sitting down with a box head.,11,30,1,2,118
+speaker,1.52,3,4,tangram_G.png,womens shoe,12,30,1,2,120
+speaker,1.48,2,4,tangram_L.png,The beggar.,9,30,1,2,118
+speaker,1.6,3,4,tangram_E.png,native american big ears no the womens shoe,14,30,1,2,120
+speaker,1.64,3,4,tangram_F.png,box head knees to chest,15,30,1,2,120
+listener,1.36,2,4,tangram_G.png,the womens shoe,8,30,1,2,120
+speaker,1.52,2,4,tangram_E.png,The bunny ears hat facing the right,10,30,1,2,118
+listener,1.44,2,4,tangram_E.png,"sorry i got the one wrong, I owe you 4 cents, lol",10,30,1,2,120
+speaker,1.56,3,4,tangram_L.png,oliver twist,13,30,1,2,120
+speaker,1.04,0,5,tangram_F.png,lying down no hat,2,30,1,2,121
+speaker,1.56,1,5,tangram_E.png,Big hat,7,30,1,2,119
+speaker,1.28,2,5,tangram_L.png,begging,8,30,1,2,121
+speaker,1.32,2,5,tangram_E.png,big hat,9,30,1,2,121
+speaker,0.96,0,5,tangram_L.png,begging position,0,30,1,2,121
+speaker,1.08,0,5,tangram_E.png,position with big hat,3,30,1,2,121
+speaker,1.48,1,5,tangram_G.png,Weird position,5,30,1,2,119
+speaker,1.4,2,5,tangram_G.png,wired,11,30,1,2,121
+speaker,1,0,5,tangram_G.png,wired position,1,30,1,2,121
+speaker,1.44,1,5,tangram_L.png,Begging person,4,30,1,2,119
+speaker,1.52,1,5,tangram_F.png,Sitting box head no hat,6,30,1,2,119
+speaker,1.36,2,5,tangram_F.png,lying down,10,30,1,2,121
+speaker,1.76,3,5,tangram_L.png,begging,12,30,1,2,119
+speaker,1.8,3,5,tangram_E.png,big hat,13,30,1,2,119
+speaker,1.88,3,5,tangram_F.png,lying down,15,30,1,2,119
+speaker,1.84,3,5,tangram_G.png,weird,14,30,1,2,119
+speaker,0,0,0,tangram_J.png,The upper left hand and bottom left hand corners me a right angle and the top has a diamond on top,0,31,2,0,123
+speaker,0.04,0,0,tangram_K.png,"The top diamond looks like it is sitting on another diamond, and on the righthand side there is a big v indent",1,31,2,0,123
+listener,0,0,0,tangram_J.png,Hi,0,31,2,0,122
+listener,0,0,0,tangram_J.png,which image should i pick?,0,31,2,0,122
+speaker,0.12,0,0,tangram_H.png,Top triangle looks like it is sitting on a triangle top square with the shape pointing to the right,3,31,2,0,123
+speaker,0.08,0,0,tangram_I.png,This looks like a diamond sitting ontop of two triangles and there is a column,2,31,2,0,123
+speaker,0.12,0,0,tangram_H.png,Could look like a person sitting also,3,31,2,0,123
+speaker,0.16,1,0,tangram_J.png,A person standing with horizontal left side,4,31,2,0,122
+speaker,0.2,1,0,tangram_K.png,kneel down in a prayer position,5,31,2,0,122
+speaker,0.2,1,0,tangram_I.png,a belly dancer,6,31,2,0,122
+listener,0.2,1,0,tangram_I.png,are their arms extended,6,31,2,0,123
+speaker,0.2,1,0,tangram_I.png,yes,6,31,2,0,122
+speaker,0.2,1,0,tangram_H.png,sitting down,7,31,2,0,122
+speaker,0.28,2,0,tangram_I.png,Diamond on top of two triangles that also has a long column,9,31,2,0,123
+speaker,0.24,2,0,tangram_J.png,Triangle with both upper and bottom left right angles with straight line along with it forming a straight line across,8,31,2,0,123
+speaker,0.32,2,0,tangram_K.png,Diamond ontop of another diamond and it looks like a big V missing from Right side,10,31,2,0,123
+speaker,0.36,2,0,tangram_H.png,Person sitting ,11,31,2,0,123
+speaker,0.04,0,1,tangram_J.png,candle,1,31,2,0,124
+listener,0.08,0,1,tangram_H.png,great hints,2,31,2,0,125
+speaker,0.08,0,1,tangram_I.png,standing on one leg,3,31,2,0,124
+speaker,0.16,1,1,tangram_I.png,standing on one leg,5,31,2,0,125
+listener,0,0,1,tangram_K.png,Hi,0,31,2,0,125
+speaker,0,0,1,tangram_K.png,kneeling,0,31,2,0,124
+speaker,0.08,0,1,tangram_H.png,duck facing left,2,31,2,0,124
+speaker,0.12,1,1,tangram_K.png,kneeling,4,31,2,0,125
+speaker,0.2,1,1,tangram_H.png,sitting on his legs,6,31,2,0,125
+speaker,0.2,1,1,tangram_J.png,candle,7,31,2,0,125
+speaker,0.4,3,1,tangram_K.png,kneeling,12,31,2,0,125
+speaker,0.44,3,1,tangram_H.png,sitting down,13,31,2,0,125
+speaker,0.24,2,1,tangram_K.png,kneeling,8,31,2,0,124
+speaker,0.36,2,1,tangram_H.png,duckling facing left,11,31,2,0,124
+speaker,0.44,3,1,tangram_J.png,candle,14,31,2,0,125
+speaker,0.28,2,1,tangram_I.png,standing on one leg,9,31,2,0,124
+speaker,0.32,2,1,tangram_J.png,candle,10,31,2,0,124
+speaker,0.48,3,1,tangram_I.png,standing on one leg,15,31,2,0,125
