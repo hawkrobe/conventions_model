@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+
+clicks <- read_csv('../data/clicks.csv')
+messages <- read_csv('../data/messages.csv')
+```
+
+```{r}
+completeNetworks <- clicks %>% filter(type == "clickedObj") %>% distinct() %>% group_by(networkid) %>% tally() %>% filter(n == 96) %>% pull(networkid)
+length(completeNetworks)
+
+relevantMessages <- messages %>% 
+  filter(role == "speaker") %>%
+  filter(networkid %in% completeNetworks) %>%
+  mutate(uttLength = str_count(content, " ") +1,
+         repnum = floor(trialnum / 4)) %>%
+  rowwise() %>%
+  mutate(repnum = repnum + 1) %>%
+  group_by(participantid, partnernum) %>%
+  mutate(ordinalrep = ifelse(repnum == min(repnum), 'first', 'second')) %>%
+  group_by(participantid, networkid, roomid, target, partnernum, repnum, ordinalrep) %>%
+  summarize(m = sum(uttLength)) 
+```
+
+```{r}
+relevantMessages %>%
+  mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
+  group_by(partnerlabel, repnum) %>% 
+  tidyboot::tidyboot_mean(column = m) %>%
+  ggplot(aes(x = repnum, y = empirical_stat)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2) +
+    facet_wrap(~ partnerlabel) +
+    theme_few() +
+    ylim(0,NA) +
+    ylab("mean # words") +
+    xlab("repetition with partner")
+
+ggsave("reduction_across_partners.pdf", width = 5, height = 3, units = 'in')
+
+
+relevantMessages %>%
+  group_by(partnernum, ordinalrep) %>% 
+  tidyboot::tidyboot_mean(column = m) %>%
+  ggplot(aes(x = ordinalrep, y = empirical_stat)) +
+    geom_bar(stat = 'identity') +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2) +
+    facet_wrap(~ partnerlabel) +
+    theme_few() +
+    ylim(0,NA) +
+    ylab("mean # words") +
+    xlab("repetition with partner")
+```
+
+```{r}
+library(lme4)
+library(brms)
+library(lmerTest)
+summary(lmer(m ~  poly(partnernum, 1) + ordinalrep + (1 + poly(partnernum) | participantid) + ( 1 + poly(partnernum) | target), data = relevantMessages))
+
+library(optimx)
+mod.out <- summary(lmer(m ~ poly(partnernum, 1) + 
+               (1 +  poly(partnernum, 1) | participantid) + 
+               (1 +  poly(partnernum, 1) | target), 
+             data = relevantMessages %>% filter(ordinalrep == "first")))
+
+coef(mod.out)[, 3]
+```
+
+```{r}
+summary(lmer(m ~ 1 + (1  | participantid) , data = relevantMessages %>% 
+         ungroup() %>%
+         select(-repnum, -roomid) %>%
+         unite("key", partnernum, ordinalrep) %>%
+         group_by(participantid) %>%
+         spread(key, m) %>% 
+         mutate(firstjump = `1_first` - `0_second`, secondjump = `2_first` - `1_second`) %>% 
+         gather(jump, m, firstjump, secondjump)))
+```
+
+```{r}
+acc.toplot <- clicks %>% 
+  filter(networkid %in% completeNetworks) %>%
+  mutate(correct = object_id == 'target') %>%
+  group_by(trialnum, partnernum) %>%
+  tidyboot::tidyboot_mean(correct)
+  
+ggplot(acc.toplot, aes(x = trialnum, y = empirical_stat)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.1) +
+    facet_wrap(~ partnernum)
+```
+
+```{r}
+
+disconnects <- read_csv('../data/pilot/info.csv') %>%
+  rbind(read_csv('../data/pilot1/info.csv')) %>% 
+  filter(contents == 'disconnect') %>% pull(details) %>% map_dfr(jsonlite::fromJSON) %>% pull(wID) %>% unique()
+
+disconnects
+```
