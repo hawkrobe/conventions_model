@@ -16,7 +16,8 @@ messages2 <- read_csv('../data/live13/info.csv') %>%
 
 messages <- rbind(messages1, messages2) %>%
   select(-aID, -wID, -type) %>%
-  arrange(networkid, roomid) 
+  arrange(networkid, roomid) %>%
+  mutate(bonus = round(bonus, 2))
 
 write_csv(messages, './data/messages.csv')
 
