@@ -2,18 +2,59 @@ var _ = require('lodash');
 var fs = require('fs');
 var babyparse = require('babyparse');
 
-var utterances = ['word1', 'word2']
-var states = ['object1', 'object2']
+function k_combinations(set, k) {
+  var i, j, combs, head, tailcombs;
+  
+  // There is no way to take e.g. sets of 5 elements from
+  // a set of 4.
+  if (k > set.length || k <= 0) {
+    return [];
+  }
+  
+  // K-sized set has only one K-sized subset.
+  if (k == set.length) {
+    return [set];
+  }
+  
+  // There is N 1-sized subsets in a N-sized set.
+  if (k == 1) {
+    combs = [];
+    for (i = 0; i < set.length; i++) {
+      combs.push([set[i]]);
+    }
+    return combs;
+  }
+  
+  combs = [];
+  for (i = 0; i < set.length - k + 1; i++) {
+    // head is a list that includes only our current element.
+    head = set.slice(i, i + 1);
+    // We take smaller combinations from the subsequent elements
+    tailcombs = k_combinations(set.slice(i + 1), k - 1);
+    // For each (k-1)-combination we join it with the current
+    // and store it to the set of k-combinations.
+    for (j = 0; j < tailcombs.length; j++) {
+      combs.push(head.concat(tailcombs[j]));
+    }
+  }
+  return combs;
+}
 
 var normalize = function(truth, sum) {
   return ad.scalar.sub(truth, ad.scalar.log(sum));
 };
 
-var getLexiconElement = function(lexicon, utt, target) {
-  var utt_i = _.indexOf(utterances, utt);
-  var target_i = _.indexOf(states, target);
-  var lexiconElement = T.get(lexicon, utt_i * states.length + target_i);
-  return lexiconElement;
+var getLexiconElement = function(utt, target, params) {
+  var components = utt.split('_');
+  if(components.length == 1) {
+    var utt_i = _.indexOf(params.primitiveUtterances, utt);
+    var target_i = _.indexOf(params.states, target);
+    var lexiconElement = T.get(params.lexicon, utt_i * params.states.length + target_i);
+    return ad.scalar.sigmoid(lexiconElement);
+  } else {
+    return ad.scalar.mul(getLexiconElement(components[0], target, params),
+                         getLexiconElement(components[1], target, params));
+  }
 };
 
 // We directly implement RSA without webppl to avoid overhead
@@ -22,23 +63,31 @@ var getLexiconElement = function(lexicon, utt, target) {
 var getL0score = function(target, utt, params) {
   var scores = [];
   var sum = 0;
-  var truth = getLexiconElement(params.lexicon, utt, target);
+  var truth = getLexiconElement(utt, target, params);
   for(var i=0; i<params.context.length; i++){
     sum = ad.scalar.add(
       sum,
-      ad.scalar.exp(getLexiconElement(params.lexicon, utt, params.context[i]))
+      ad.scalar.exp(getLexiconElement(utt, params.context[i], params))
     );
   }
   return normalize(truth, sum);
 };
 
-// return log P(u | o, c, l)
+// return alpha * log P(u | o, c, l) - 
 var getSpeakerScore = function(utt, targetObj, params) {
+  var utility = function(possibleUtt) {
+    return ad.scalar.sub(
+      ad.scalar.mul(params.alpha, getL0score(targetObj, possibleUtt, params)),
+      ad.scalar.mul(params.costWeight, possibleUtt.split('_').length)
+    );
+  };
   var scores = [];
   var sum = 0;
-  var truth = getL0score(targetObj, utt, params);
-  for(var i=0; i< utterances.length; i++){
-    var informativity = getL0score(targetObj, utterances[i], params);
+  var truth = utility(utt);
+  // console.log('truth')
+  // console.log(truth);
+  for(var i=0; i< params.utterances.length; i++){
+    var informativity = utility(params.utterances[i]);
     sum = ad.scalar.add(
       sum,
       ad.scalar.exp(informativity)
@@ -106,6 +155,6 @@ var supportWriter = function(s, handle) {
 };
 
 module.exports = {
-  getL0score, getSpeakerScore, getListenerScore, getLexiconElement, 
+  getL0score, getSpeakerScore, getListenerScore, getLexiconElement, k_combinations,
   reformatData, bayesianErpWriter, readCSV
 };
