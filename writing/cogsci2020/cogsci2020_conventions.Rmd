@@ -37,13 +37,20 @@ clicks <- read_csv('../../data/clicks.csv')
 messages <- read_csv('../../data/messages.csv')
 
 completeNetworks <- clicks %>% 
-  distinct() %>% group_by(networkid) %>% tally() %>% filter(n == 96) %>% pull(networkid)
+  distinct() %>% 
+  group_by(networkid) %>% 
+  tally() %>%
+  filter(n == 96) %>% 
+  pull(networkid)
 
+numParticipantsRecruited <- length(unique(clicks$participantid))
 numNetworks <- length(completeNetworks)
 
 relevantMessages <- messages %>% 
-  filter(role == "speaker") %>%
   filter(networkid %in% completeNetworks) %>%
+  filter(role == "speaker") %>%
+  group_by_at(vars(-content)) %>%
+  summarize(content = first(content)) %>%
   mutate(uttLength = str_count(content, " ") +1,
          repnum = floor(trialnum / 4)) %>%
   rowwise() %>%
@@ -55,20 +62,36 @@ relevantMessages <- messages %>%
 ```
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
-These meanings are *conventional* in the sense that they are sustained primarily by the expectations each agent has about others [@lewis_convention:_1969]. 
-A key property of linguistic conventions is that they hold over an entire population, or community, allowing agents to communicate efficiently even with partners they've never met before. 
-But exactly how do agents make the inferential leap to population-level expectations from their individual experiences with specific partners? 
-Is this generalization made in one step, with agents assuming that any conventional meanings established with one partner will automatically be shared with others? 
-Or does it require experience with multiple partners? 
+These meanings are *conventional* in the sense that they are sustained primarily by the expectations each agent has about others [@lewis_convention:_1969; @bicchieri_grammar_2006]. 
+A key property of linguistic conventions is that they hold over entire communities allowing agents to communicate efficiently even with partners they've never met before. 
+But exactly how do agents make the inferential leap to community-wide expectations from their experiences with specific partners? 
+Grounding collective convention formation in individual cognitive mechanisms requires an explicit *theory of generalization* capturing how agents transfer what they have learned about one partner to new partners.
 
-Influential accounts of convention formation have appealed to simple, which may over time lead to emergent collective consensus [@baronchelli_emergence_2018, @fay_interactive_2010, @garrod_conversation_1994]. 
+One influential theory is that speakers simply ignore the identity of different partners and update a single monolithic representation after every interaction [@steels_self-organizing_1995; @barr_establishing_2004; @young_evolution_2015; @baronchelli_emergence_2018]. 
+We call this a *complete-pooling* theory [@gelman2006data] because data from each partner is collapsed into an undifferentiated pool of evidence. 
+Complete-pooling models have been remarkably successful at predicting collective behavior on networks, but have typically been evaluated only in settings where anonymity is enforced. 
+For example, @centola_spontaneous_2015 asked how large networks of participants coordinated on conventional names for novel faces.
+On each trial, participants were paired with a random neighbors but were not informed of their partner's identity, or even the total number of different possible neighbors. 
 
-We propose
-assumes that each agent has uncertainty over the system of meaning their current partner is using, and that they use Bayesian inference to update their beliefs about these meanings given observations of their partner’s language use and understanding. Critically, we also assume agents’ beliefs have hierarchical structure: the meanings used by different partners are expected to be sampled from a shared population-level distribution but may also differ from one another in meaningful ways. This structure provides an inductive pathway for abstract population-level expectations to be gradually distilled from partner-specific expectations. In other words, conventions result from solving a meta-learning problem.
+Complete-pooling is appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway. 
+In everyday communicative settings, however, it is less tenable. 
+Knowledge about a partner's identity is both available and relevant for conversation [@eckert_three_2012].
+Extensive evidence from psycholinguistic studies has demonstrated the *partner-specificity* of our language use [@clark_using_1996;@brennan_partner-specific_2009; @horton_revisiting_2016]. 
+Because meaning is grounded in the evolving `common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessary transfered to other partners [@wilkes-gibbs_coordinating_1992; @metzing_when_2003]. 
+Partner-specificity poses clear problems for complete-pooling theories but can be easily explained by a simple *no-pooling* model where agents maintain distinct representations of meaning for each partner. 
+The problem with a no-pooling model, of course, is that it forces agents to start from scratch with each partner.
+Community-level expectations can never get off the ground. 
 
+What theory of generalization, then, can explain partner-specific meaning but also allow conventions to spread through communities? 
+We propose a *partial-pooling* account that satisfies these requirements. 
+This account assumes that each agent has uncertainty over the system of meaning their current partner is using and updates partner-specific beliefs given observations of their partner’s language use and understanding. 
+Critically, unlike complete-pooling or no-pooling models, we also assume agents' uncertainty has hierarchical structure. 
+The meanings used by different partners are expected to be drawn from a shared community-wide prior distribution but are also allowed to differ from one another in systematic, partner-specific ways. 
+This structure also provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience [see also @KleinschmidtJaeger15_RobustSpeechPerception; @tenenbaum_how_2011 for hierarchical accounts of abstract knowledge in other domains]. 
+In other words, we suggest that shared meanings result from agents solving a meta-learning problem.
+
+We begin by formalizing this account in a Bayesian model of communication. 
 While it has been frequently observed that messages reduce in length across repetitions with a single partner as the two partners establish local conventions through common ground, different accounts make different predictions at the partner boundary. 
-Many previous agent-based models assume that agents do not distinguish one partner from another and completely transfer expectations from one partner to the next, which should result in no change in the number of words when a new partner is introduced. 
-Another possibility is that there is no pooling across partners at all. 
 This account predicts that agents must start from scratch establishing new partner-specific conventions with each new partner, resetting the initial description length anew with each interlocutor and never generalizing to the population-level. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another. 
 Preliminary support for this signature was reported by [@fay_interactive_2010] in a Pictionary task where participants used sketches to communicate verbal concepts instead of using words to refer to visual targets, and the measure of interest was the complexity of the drawings [see also @garrod_conversation_1994].
@@ -80,7 +103,29 @@ Preliminary support for this signature was reported by [@fay_interactive_2010] i
 knitr::include_graphics("figs/task1_model.pdf")
 ```
 
+In this section, we provide an explicit computational account of the cognitive mechanisms driving this shift.
+The key predictions distinguishing our model concern the pattern of generalization across partners.
+First, we show that our model accounts for the \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
+Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
 
+This hierarchical structure, however, leads to a further prediction: after interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
+In other words, the partner-specific expectations agents form within an interaction to solve a novel communication problem should gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
+These expectations should manifest in an increasing willingness to use short labels with novel partners, leading to the emergent consequence of lending additional evidence for that structure. 
+
+
+```{r model_results, fig.env = "figure", fig.pos = "t", fig.width=4, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Simulation results."}
+read_csv('../../simulations/hierarchical/hierarchicalSimulationOutput.csv') %>%
+  ggplot(aes(x = time, y = prediction, color = factor(partnerID), group = factor(partnerID))) +
+    geom_point() +
+    geom_line() +
+    geom_hline(yintercept = .5) +
+    geom_hline(yintercept = .5) +
+    theme_few() +
+    xlab('time') +
+    ylab("P(target)") +
+    scale_x_continuous(breaks = c(1,4,7,10)) +
+    theme(aspect.ratio = 1)
+```
 
 # Experiment
 
@@ -92,7 +137,8 @@ knitr::include_graphics("figs/design.pdf")
 
 ### Participants 
 
-92 participants from Amazon Mechanical Turk were placed into `r numNetworks` fully-connected four-person networks. 
+We recruited  participants from Amazon Mechanical Turk to play an interactive, natural-language reference game using the Dallinger platform\footnote{http://docs.dallinger.io/}.
+Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities. 
 
 ### Stimuli and procedure
 
