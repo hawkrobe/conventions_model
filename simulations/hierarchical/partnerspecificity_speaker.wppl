@@ -1,0 +1,142 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
+
+var numUtterances = 4;
+var numStates = 2;
+var lexDims = [numUtterances, numStates];
+
+var primitiveUtterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
+var states = map(function(i) {return 'object' + i;}, _.range(1, numStates+1));
+
+// 7 -> 2 works, but has a weird blip at the beginning where it starts low-ish then rises then falls...
+// TODO: run grid with diff alpha & costWeight (and maybe also hyper-prior sigma?)
+var params = {
+  alpha : 10,
+  costWeight: 5,
+  context: ['object1', 'object2'],
+  primitiveUtterances: primitiveUtterances,
+  states : states,
+  utterances : (['word1_word2', 'word3_word4'])
+                .concat(primitiveUtterances)
+};
+console.log(params);
+
+var tensorSoftplus = function(x) {
+  return T.log(T.add(T.exp(x), 1));
+};
+
+var partnerGuide = function(paramName) {
+  return function() {
+    return DiagCovGaussian({
+      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(dims) {
+        return T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25);
+      }}),
+      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
+    });
+  };
+};
+
+var sampleLexicon = function(i) {
+  var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
+                                         sigma: T.mul(ones(lexDims), 1)}),
+			{guide: partnerGuide('hyper')});
+  return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
+		{guide: partnerGuide(i)});
+};
+
+// listener marginalizing over lexicons ("guide: true" samples from posterior instead of prior)
+var L1_uncertain = function(state, utt, partnerID) {
+};
+
+var S = function(state, partnerID) {
+  return Infer({method: "enumerate"}, function() {
+    var utt = uniformDraw(params.utterances);
+    var utility = expectation(Infer({method:"forward", samples: 50000, guide:true}, function(){
+      var lexicon = sampleLexicon(partnerID);
+      return (params.alpha * refModule.getListenerScore(state, utt, extend(params, {lexicon: lexicon}))
+              - params.costWeight * utt.split('_').length);
+    }));
+    display(utt);
+    display(utility);
+    factor(utility);
+    return utt;
+  });
+};
+var observeRound = function(llex, datum) {
+  factor(refModule.getListenerScore(
+    datum.clickedName, datum.wordID, extend({}, params, {lexicon: llex})
+  ));
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(outputFile, remainingTrials, dataSoFar) {
+  console.log('iterating with ' + JSON.stringify(dataSoFar));
+  // run VI on current data
+  if(!_.isEmpty(dataSoFar)) {
+    Optimize({
+      steps: 100000, verbose: false, optMethod: {adam: {stepSize: 0.001}},
+      model: function() {
+	var lexica = {
+          1 : sampleLexicon(1),
+	  2 : sampleLexicon(2),
+	  3 : sampleLexicon(3),
+	  4 : sampleLexicon(4)
+        };
+	mapData({data: dataSoFar}, function(trialDatum) {
+	  var i = trialDatum.partnerID;
+	  var lexicon = lexica[i];
+	  observeRound(lexicon, trialDatum);
+	});
+      }
+    });
+  }
+
+  // get marginal prediction of next data point over lexicon posterior
+  var currTrial = first(remainingTrials);
+  if(currTrial.t > 1) {
+    // display('word1:obj1: ' + T.get(param({name: 'muhyper', dims : lexDims}), 0));
+    // display('word2:obj1: ' + T.get(param({name: 'muhyper', dims : lexDims}), 1));
+    // display('mu1:word1:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 0));
+    // display('mu1:word2:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 1));        
+    // display('mu2:word1:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 0));
+    // display('mu2:word2:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 1));        
+
+
+  }
+  var speakerOutput = S(currTrial.target, currTrial.partnerID);
+  console.log(JSON.stringify(speakerOutput));
+  var nextUtt = sample(speakerOutput);
+  console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
+  csv.writeLine([currTrial.t, currTrial.partnerID, speakerOutput.score('word1_word2')].join(','), outputFile);
+  if(!_.isEmpty(rest(remainingTrials))) {
+    iterate(outputFile, rest(remainingTrials), dataSoFar.concat({
+      partnerID: currTrial.partnerID,
+      target: currTrial.target,
+      clickedName: currTrial.target,   // assume for now listener always guesses correct
+      t: currTrial.t,
+      wordID: nextUtt
+    }));
+  }
+};
+
+var trials = [{t: 1, partnerID: 1, target: 'object1'},
+	      {t: 2, partnerID: 1, target: 'object1'},
+	      {t: 3, partnerID: 1, target: 'object1'},
+	      {t: 4, partnerID: 1, target: 'object1'},
+	      {t: 6, partnerID: 2, target: 'object1'},
+	      {t: 6, partnerID: 2, target: 'object1'},
+	      {t: 7, partnerID: 2, target: 'object1'},
+	      {t: 8, partnerID: 2, target: 'object1'},
+	      {t: 9, partnerID: 3, target: 'object1'},                                                        
+	    // {partnerID: 2, target: 'object1', clickedName: 'object1', wordID: 'word1'},
+	    // {partnerID: 2, target: 'object1', clickedName: 'object1', wordID: 'word1'},
+	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
+	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
+	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
+	    //{partnerID: 4, target: 'object1', clickedName: 'object1', wordID: 'word1'}
+           ];
+
+var f = csv.open('speakerOutput.csv');
+csv.writeLine('time,partnerID,prediction',f);
+iterate(f, trials, []);
+csv.close(f);
