@@ -8,7 +8,7 @@ var states = map(function(i) {return 'object' + i;}, _.range(1, numUtterances+1)
 var lexDims = [numUtterances, numStates];
 
 var params = {
-  alpha : 5,
+  alpha : 3,
   costWeight:0.5,
   context: ['object1', 'object2'],
   primitiveUtterances: utterances,
@@ -38,11 +38,11 @@ var partnerGuide = function(paramName) {
 
 var sampleLexicon = function(i) {
   var hyperLex = sample(DiagCovGaussian({mu: zeros(lexDims),
-					 sigma: T.mul(ones(lexDims), 5)}),
+					 sigma: T.mul(ones(lexDims), 1)}),
 			{guide: partnerGuide('hyper')});
   return sample(DiagCovGaussian({mu: hyperLex,
 				 sigma: T.mul(ones(lexDims), 1)}),
-		{guide: partnerGuide(i)});
+		          {guide: partnerGuide(i)});
 };
 
 var observeRound = function(llex, datum) {
@@ -54,12 +54,12 @@ var observeRound = function(llex, datum) {
 };
 
 // literal listener (using real-valued lexicon)
-var L0 = function(utt, context, partner) {
+var L2 = function(utt, context, partner) {
   var lexicon = sampleLexicon(partner);
   
   return Infer({method:"enumerate"}, function(){
     var state = uniformDraw(context);
-    var score = refModule.getLexiconElement(utt, state, extend(params, {lexicon: lexicon}));
+    var score = refModule.getSpeakerScore(utt, state, extend(params, {lexicon: lexicon}));
     factor(score);
     return state;
   });
@@ -71,13 +71,16 @@ var iterate = function(outputFile, data) {
     // grab data up to this point
     var dataSoFar = data.slice(0,t);
     // run VI on current data
+
     Optimize({
-      steps: 10000, verbose: false, optMethod: {adam: {stepSize: 0.0001}},
+      steps: 50000, verbose: true, optMethod: {adam: {stepSize: 0.0005}},
       model: function() {
 	var lexica = {1 : sampleLexicon(1),
 		      2 : sampleLexicon(2),
 		      3 : sampleLexicon(3),
 		      4 : sampleLexicon(4)};
+        // display('hyper' + param({name: 'muhyper', dims : lexDims}));
+        // display('mu1' + param({name: 'mu1', dims : lexDims}));        
 	mapData({data: dataSoFar}, function(trialDatum) {
 	  var i = trialDatum.partnerID;
 	  var lexicon = lexica[i];
@@ -89,9 +92,9 @@ var iterate = function(outputFile, data) {
     // get marginal prediction of next data point
     var nextDataPoint = data[t];
     var prediction = expectation(Infer({model: function() {
-      var L = L0(nextDataPoint.wordID, ['object1', 'object2'],nextDataPoint.partnerID);
+      var L = L2(nextDataPoint.wordID, ['object1', 'object2'],nextDataPoint.partnerID);
       return Math.exp(L.score(nextDataPoint.clickedName));
-    }, method: 'forward', samples: 50000, guide: true}));
+    }, method: 'forward', samples: 100000, guide: true}));
     csv.writeLine([t, nextDataPoint.partnerID, prediction].join(','), outputFile);
   }, _.range(data.length ));
 };
