@@ -90,7 +90,6 @@ In other words, we suggest that conventional meanings result from agents solving
 
 We begin by formalizing this account in a probabilistic model of communication. 
 We present simulations showing the pattern of listener and speaker behavior within and across partners. 
-\todo[inline]{Add description of experiment and results}
 
 # Hierarchical Bayesian model of generalization
 
@@ -119,7 +118,7 @@ In other words, the partner-specific expectations agents form within an interact
 These expectations should manifest in an increasing willingness to use short labels with novel partners, leading to the emergent consequence of lending additional evidence for that structure. 
 
 
-```{r model_results, fig.env = "figure*", fig.pos = "t", fig.width=8, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Listener model expectations across a series of different partners."}
+```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=8, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -157,7 +156,7 @@ knitr::include_graphics("figs/design.pdf")
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, however, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
 Each  blocks was a full repeated reference game, where participants had to coordinate on an ad hoc convention, or *pact*, for how to refer to reoccuring target objects with their partner.
-While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992,@weber_cultural_2003], we are interested in the effect at subsequent partner boundaries. 
+While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992;@weber_cultural_2003], we are interested in the effect at subsequent partner boundaries. 
 Complete-pooling accounts predict no change in the number of words when a new partner is introduced.  
 No-pooling accounts predict that the same increase in initial description length will occur with every interlocutor. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
