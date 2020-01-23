@@ -37,7 +37,8 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(i) {
-  var hyperLex = sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 2)}),
+  var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
+                                         sigma: T.mul(ones(lexDims), 1)}),
 			{guide: partnerGuide('hyper')});
   return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
 		{guide: partnerGuide(i)});
