@@ -41,8 +41,19 @@ function k_combinations(set, k) {
 }
 
 var normalize = function(truth, sum) {
-  return ad.scalar.sub(truth, ad.scalar.log(sum));
+  return ad.scalar.sub(truth, sum);
 };
+
+// var getLexiconElement = function(utt, target, params) {
+//   var utt_i = _.indexOf(params.utterances, utt);
+//   var target_i = _.indexOf(params.states, target);
+//   var lexiconElement = T.get(params.lexicon, utt_i * params.states.length + target_i);
+//   return lexiconElement;
+// };
+
+var logit = function(p) {
+  return ad.scalar.sub(ad.scalar.log(p), ad.scalar.log(ad.scalar.sub(1, p)));
+}
 
 var getLexiconElement = function(utt, target, params) {
   var components = utt.split('_');
@@ -50,25 +61,24 @@ var getLexiconElement = function(utt, target, params) {
     var utt_i = _.indexOf(params.primitiveUtterances, utt);
     var target_i = _.indexOf(params.states, target);
     var lexiconElement = T.get(params.lexicon, utt_i * params.states.length + target_i);
-    return ad.scalar.sigmoid(lexiconElement);
+    // console.log(utt)
+    // console.log(target)
+    // console.log(lexiconElement)
+    return lexiconElement;
   } else {
-    return ad.scalar.mul(getLexiconElement(components[0], target, params),
-                         getLexiconElement(components[1], target, params));
+    return logit(ad.scalar.mul(ad.scalar.sigmoid(getLexiconElement(components[0], target, params)),
+                               ad.scalar.sigmoid(getLexiconElement(components[1], target, params))));
   }
 };
 
 // We directly implement RSA without webppl to avoid overhead
-// P(t | utt) \propto L(t, utt)
-// => log(p) = log ( L(t, utt)) - log(\sum_{i} L(t_i, utt))
-var getL0score = function(target, utt, params) {
-  var scores = [];
-  var sum = 0;
+// P(t | utt) \propto e^L(t, utt)
+// => log(p) = L(t, utt) - log(\sum_{i} e^L(t_i, utt))
+var getL0Score = function(target, utt, params) {
   var truth = getLexiconElement(utt, target, params);
-  for(var i=0; i<params.context.length; i++){
-    sum = ad.scalar.add(
-      sum,
-      ad.scalar.exp(getLexiconElement(utt, params.context[i], params))
-    );
+  var sum = getLexiconElement(utt, params.context[0], params);
+  for(var i=1; i<params.context.length; i++){
+    sum = numeric.logaddexp(sum, getLexiconElement(utt, params.context[i], params));
   }
   return normalize(truth, sum);
 };
@@ -77,21 +87,15 @@ var getL0score = function(target, utt, params) {
 var getSpeakerScore = function(utt, targetObj, params) {
   var utility = function(possibleUtt) {
     return ad.scalar.sub(
-      ad.scalar.mul(params.alpha, getL0score(targetObj, possibleUtt, params)),
+      ad.scalar.mul(params.alpha, getL0Score(targetObj, possibleUtt, params)),
       ad.scalar.mul(params.costWeight, possibleUtt.split('_').length)
     );
   };
-  var scores = [];
-  var sum = 0;
   var truth = utility(utt);
-  // console.log('truth')
-  // console.log(truth);
-  for(var i=0; i< params.utterances.length; i++){
-    var informativity = utility(params.utterances[i]);
-    sum = ad.scalar.add(
-      sum,
-      ad.scalar.exp(informativity)
-    );
+
+  var sum = utility(params.utterances[0]);
+  for(var i=1; i< params.utterances.length; i++){
+    sum = numeric.logaddexp(sum, utility(params.utterances[i]));
   }
   return normalize(truth, sum);
 };
@@ -99,15 +103,11 @@ var getSpeakerScore = function(utt, targetObj, params) {
 // if P(o | u, c, l) = P(u | o, c, l) P(u | c, l) / sum_o P(u | o, c, l)
 // then log(o | u, c, l) = log P(u | o, c, l) - log(sum_{o in context} P(u | o, c, l))
 var getListenerScore = function(trueObj, utt, params) {
-  var scores = [];
-  var sum = 0;
   var truth = getSpeakerScore(utt, trueObj, params);
-  for(var i=0; i< params.context.length; i++){
-    var prob = getSpeakerScore(utt, params.context[i], params);
-    sum = ad.scalar.add(
-      sum,
-      ad.scalar.exp(prob)
-    );
+  
+  var sum = getSpeakerScore(utt, params.context[0], params);
+  for(var i=1; i< params.context.length; i++){
+    sum = numeric.logaddexp(sum, getSpeakerScore(utt, params.context[i], params));
   }
   return normalize(truth, sum);
 };
@@ -155,6 +155,6 @@ var supportWriter = function(s, handle) {
 };
 
 module.exports = {
-  getL0score, getSpeakerScore, getListenerScore, getLexiconElement, k_combinations,
+  getL0Score, getSpeakerScore, getListenerScore, getLexiconElement, k_combinations,
   reformatData, bayesianErpWriter, readCSV
 };
