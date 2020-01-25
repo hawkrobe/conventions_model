@@ -26,6 +26,7 @@ output: cogsci2016::cogsci_paper
 #final-submission: \cogscifinalcopy
 ---
 
+
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F, 
                       fig.pos = "tb", fig.path='figs/',
@@ -69,10 +70,10 @@ relevantMessages <- messages %>%
 ```
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
-These meanings are *conventional* in the sense that they are sustained primarily by the expectations each agent has about others [@lewis_convention:_1969; @bicchieri_grammar_2006]. 
-A key property of linguistic conventions is that they hold over entire communities allowing agents to communicate efficiently even with partners they've never met before. 
-But exactly how do agents make the inferential leap to community-wide expectations from their experiences with specific partners? 
-Grounding collective convention formation in individual cognitive mechanisms requires an explicit *theory of generalization* capturing how agents transfer what they have learned about one partner to new partners.
+These meanings are *conventional* in the sense that they are sustained by the expectations each person has about others [@lewis_convention:_1969; @bicchieri_grammar_2006]. 
+A key property of linguistic conventions is that they hold over entire communities, allowing us to communicate efficiently even with people we've never met before. 
+But exactly how do we make the inferential leap to community-wide expectations from our experiences with specific partners? 
+Grounding collective convention formation in individual cognition requires an explicit *theory of generalization* capturing how people transfer what they have learned from one partner to the next.
 
 One influential theory is that speakers simply ignore the identity of different partners and update a single monolithic representation after every interaction [@steels_self-organizing_1995; @barr_establishing_2004; @young_evolution_2015; @baronchelli_emergence_2018]. 
 We call this a *complete-pooling* theory [@gelman2006data] because data from each partner is collapsed into an undifferentiated pool of evidence. 
@@ -134,64 +135,10 @@ This inductive pathway allows new data from individual partners to systematicall
 Given weak expectations about $\Theta$, a partner's behavior may at first be more parsimoniously explained as a partner-specific meaning.
 After multiple partners are inferred to have a similar system of meaning, however, it becomes more likely that a novel partner will share it as well: beliefs about $\Theta$ will shift to represent this commonality.
 This transfer is sometimes referred to as a "sharing of statistical strength" across partners.
-We investigate the qualitative predictions of this idea under three increasingly complex reference games scenarios. 
 
-### Simulation 1: Listeners generalize across speakers
+## Model simulations
 
-The key predictions distinguishing our model concern the pattern of generalization across partners.
-In our first simulation, we consider the  used the same simple scenario with two objects and two words as we used to test adaptation to a single partner.
-As our measure of interest, we focus on a listener agent's shifting expectations about which target is being referred to as they adapt their semantic representations.
-Instead of presenting a stream of data from a single partner, however, we swap in a new partner every $k$ rounds of the reference game.
-
-Our likelihood $P(D_i | \theta_i)$ is given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity \cite{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}
-A pragmatic speaker $S_1$ attempts to be informative in context while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
-The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, which uses their lexicon $\mathcal{L}_{\theta_i}$ to interpret a given utterance. 
-This model can be formally specified as follows:
-$$
-\begin{array}{rcl}
-L_0(o_i | w, \mathcal{L}^t) &\propto  & \exp\{\mathcal{L}^t(w,o_i)\} \\
-S_1(w | o_i, \mathcal{L}^t) &\propto & \exp\{\ln L_0(o_i | w, \mathcal{L}^t)\} \\
-L_1(o_i | w, \mathcal{L}^t) &\propto  & S_1(w | o_i, \mathcal{L}^t) P(o_i) 
-\end{array}
-$$
-
-
-To derive quantitive behavior in this scenario, we must concretely specify the agent's lexical priors and a method to perform inference.
-We used independent Gaussian distributions for each $\theta_{ij} \in \Theta$ as a hyper-prior and centered our partner-specific prior $\ell_{ij} \in \mathcal{L}$ at the shared value for a particular partner:
-$$\begin{array}{rcl}
-P(\theta_{ij}) & \sim & \mathcal{N}(0, 5)\\
-P(\ell_{ij}) & \sim & \mathcal{N}(\theta_{ij}, 1)
-\end{array}$$
-The variances chosen in these priors are assumptions about how strongly adaptation is regularized. 
-Using a higher variance for the hyper-prior than for the partner-specific prior corresponds to the assumption that the agent has substantial uncertainty over the population-level lexicon, but that individuals in the population shouldn't vary too much from whatever that lexicon is.
-
-We used a variational method \cite<VI;>{RanganathGerrishBlei13_BlackBoxVariationalInference,blei_variational_2017} to perform inference in our model.
-Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
-Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable in the lexicon.
-We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>[for more details]{murphy2012machine}.
-To examine how inferences change over time, we amortize inference. 
-We run 10,000 steps of gradient descent on the first observation to obtain a lexical posterior, compute the listener's marginal prediction for the next observation, then continue running gradient descent on the same stored parameters after including the new observation in the data.
-
-Our simulation results are shown in Fig. \ref{fig:specificity}.
-To observe behavior in the simplest case, we feed the model the same object-target pair ($\{o_1, w_1\}$) on every trial.  
-We find that the adapting listener begins at chance because of its uninformative prior, but after interacting with that partner for several rounds, it adapts its semantics to select the target well above chance. 
-When a new partner is introduced, however, it reverts nearly to its original state: because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
-After adapting similarly to the second partner, however, it begins its interaction with a third partner with nearly the accuracy at the end of its interaction with the first partner.
-Thus, expectations about an individual partners' semantics are gradually being incorporated into community-level expectations.
-
-### Speaker simulation
-
-Next, we show that our model accounts for the speaker's \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
-Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
-This hierarchical structure, however, leads to a further prediction: after interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
-In other words, the partner-specific expectations agents form within an interaction to solve a novel communication problem should gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
-These expectations should manifest in an increasing willingness to use short labels with novel partners, which then lends additional evidence for that structure. 
-
-
-
-### Network simulation
-
-```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Listener model expectations across a series of different partners."}
+```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -233,6 +180,70 @@ model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %
 #ggsave('grid_search.pdf', height = 10, width = 10, unit = 'in')
 grid.arrange(model.plt1, model.plt2, ncol = 2)
 ```
+
+We investigate the qualitative predictions of this model under three increasingly complex reference games scenarios. 
+In all of these scenarios, speaker and listener agents are shown a set of two objects $\{o_1, o_2\}$.
+One of these objects is designated for the speaker as the *target*, and they must select an utterance $u_j$ to convey the identity of the target to the listener.
+Upon hearing this utterance, the listener must select which of the objects they believe to be the target. 
+Thus, the available data $D_i$ from an interaction with partner $i$ consists of utterance-object pairs $\{(u, o)_t\}$ for each trial of the task.
+
+Given this concrete setting, we can now explicitly specify forms of the likelihood and prior terms. 
+We consider a likelihood $P(D_i | \theta_i)$ given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS;@FrankeJager16_ProbabilisticPragmatics].
+A pragmatic speaker $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
+The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, which looks up the meaning in a parameterized lexicon $\mathcal{L}_{\theta}$. 
+This model can be formally specified as follows:
+$$
+\begin{array}{rcl}
+L_0(o_i | u_j, \theta) &\propto  & \exp\{\mathcal{L}_{\theta}(u_j,o_i)\} \\
+S_1(u_j | o_i, \theta) &\propto &  \exp\{w_I \cdot \log L_0(o_i | u_j, \theta) - w_C \cdot \textrm{cost}(u_j)\}   \\
+L_1(o_i | u_j, \theta) &\propto  & S_1(w | o_i, \theta) P(o_i) 
+\end{array}
+$$
+where $w_I$ and $w_C$ are free parameters controlling the relative weights on the informativity and cost term, respectively.
+
+Finally, to derive the model's behavior, we must also specify the form of the lexical prior and a method to perform inference.
+We assume $\Theta$ is an $N \times M$ matrix with an entry for each utterance-object pair, and use independent Gaussian distributions for each $\Theta_{ij} \in \Theta$ as a hyper-prior.
+We then centered our partner-specific prior $\theta_{ij} \in \theta$ at the shared value for a particular partner:
+$$\begin{array}{rcl}
+P(\Theta{ij}) & \sim & \mathcal{N}(0, 1)\\
+P(\theta{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
+\end{array}$$
+The variances chosen in these priors represent assumptions about how strongly adaptation is regularized. 
+
+For all simulations, we used variational inference [VI; @RanganathGerrishBlei13_BlackBoxVariationalInference] to perform inference. 
+Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
+Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable in the lexicon.
+We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective [see @murphy2012machine for more details].
+In particular, variational inference allows us to amortize inference as additional data is observed. 
+We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation, then continue running gradient descent on the same stored parameters after including the new observation in the data.
+
+### Simulation 1: Listener accuracy across partners
+
+The key predictions of our model concern the pattern of generalization across partners.
+In our first simulation, we consider a listener agent's shifting expectations about which target is being referred to as they adapt their semantic representations.  used the same simple scenario with two objects and two words as we used to test adaptation to a single partner.
+As our measure of interest, we focus on 
+Instead of presenting a stream of data from a single partner, however, we swap in a new partner every $k$ rounds of the reference game.
+
+Our simulation results are shown in Fig. \ref{fig:simulations}A.
+To observe behavior in the simplest case, we feed the model the same object-target pair ($\{o_1, w_1\}$) on every trial.  
+We find that the adapting listener begins at chance because of its uninformative prior, but after interacting with that partner for several rounds, it adapts its semantics to select the target well above chance. 
+When a new partner is introduced, however, it reverts nearly to its original state: because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
+After adapting similarly to the second partner, however, it begins its interaction with a third partner with nearly the accuracy at the end of its interaction with the first partner.
+Thus, expectations about an individual partners' semantics are gradually being incorporated into community-level expectations.
+
+### Simulation 2: speaker utterance length across partners
+
+Next, we show that our model accounts for the speaker's \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
+Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
+This hierarchical structure, however, leads to a further prediction: after interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
+In other words, the partner-specific expectations agents form within an interaction to solve a novel communication problem should gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
+These expectations should manifest in an increasing willingness to use short labels with novel partners, which then lends additional evidence for that structure. 
+
+
+
+### Network simulation
+
+
 
 # Experiment: Conventions on a network
 
