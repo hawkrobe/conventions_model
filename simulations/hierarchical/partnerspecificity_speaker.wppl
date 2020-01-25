@@ -89,16 +89,6 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 
   // get marginal prediction of next data point over lexicon posterior
   var currTrial = first(remainingTrials);
-  if(currTrial.t > 1) {
-    // display('word1:obj1: ' + T.get(param({name: 'muhyper', dims : lexDims}), 0));
-    // display('word2:obj1: ' + T.get(param({name: 'muhyper', dims : lexDims}), 1));
-    // display('mu1:word1:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 0));
-    // display('mu1:word2:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 1));        
-    // display('mu2:word1:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 0));
-    // display('mu2:word2:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 1));        
-
-
-  }
   var speakerOutput = S(currTrial.target, currTrial.partnerID);
   console.log(JSON.stringify(speakerOutput));
   var nextUtt = sample(speakerOutput);
@@ -124,14 +114,12 @@ var trials = [{t: 1, partnerID: 1, target: 'object1'},
 	      {t: 6, partnerID: 2, target: 'object1'},
 	      {t: 7, partnerID: 2, target: 'object1'},
 	      {t: 8, partnerID: 2, target: 'object1'},
-	      {t: 9, partnerID: 3, target: 'object1'},                                                        
-	    // {partnerID: 2, target: 'object1', clickedName: 'object1', wordID: 'word1'},
-	    // {partnerID: 2, target: 'object1', clickedName: 'object1', wordID: 'word1'},
-	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
-	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
-	    // {partnerID: 3, target: 'object1', clickedName: 'object1', wordID: 'word1'},
-	    //{partnerID: 4, target: 'object1', clickedName: 'object1', wordID: 'word1'}
-           ];
+	      {t: 9, partnerID: 3, target: 'object1'},
+	      {t: 10, partnerID: 3, target: 'object1'},
+              {t: 11, partnerID: 3, target: 'object1'},
+              {t: 12, partnerID: 3, target: 'object1'},
+              {t: 14, partnerID: 4, target: 'object1'},                                                        
+             ];
 
 var f = csv.open('speakerOutput' + argv.chainNum + '.csv');
 csv.writeLine('alpha,costWeight,priorSigma,time,partnerID,prediction',f);

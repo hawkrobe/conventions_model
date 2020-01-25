@@ -8,8 +8,8 @@ var states = map(function(i) {return 'object' + i;}, _.range(1, numUtterances+1)
 var lexDims = [numUtterances, numStates];
 
 var params = {
-  alpha : 3,
-  costWeight:0.5,
+  alpha : argv.alpha,
+  costWeight: argv.costWeight,
   context: ['object1', 'object2'],
   primitiveUtterances: utterances,
   states : states,
@@ -38,7 +38,7 @@ var partnerGuide = function(paramName) {
 
 var sampleLexicon = function(i) {
   var hyperLex = sample(DiagCovGaussian({mu: zeros(lexDims),
-					 sigma: T.mul(ones(lexDims), 1)}),
+					 sigma: T.mul(ones(lexDims), argv.priorSigma)}),
 			{guide: partnerGuide('hyper')});
   return sample(DiagCovGaussian({mu: hyperLex,
 				 sigma: T.mul(ones(lexDims), 1)}),
@@ -73,14 +73,12 @@ var iterate = function(outputFile, data) {
     // run VI on current data
 
     Optimize({
-      steps: 50000, verbose: true, optMethod: {adam: {stepSize: 0.0005}},
+      steps: 50000, verbose: true, optMethod: {adam: {stepSize: 0.001}},
       model: function() {
 	var lexica = {1 : sampleLexicon(1),
 		      2 : sampleLexicon(2),
 		      3 : sampleLexicon(3),
 		      4 : sampleLexicon(4)};
-        // display('hyper' + param({name: 'muhyper', dims : lexDims}));
-        // display('mu1' + param({name: 'mu1', dims : lexDims}));        
 	mapData({data: dataSoFar}, function(trialDatum) {
 	  var i = trialDatum.partnerID;
 	  var lexicon = lexica[i];
@@ -110,7 +108,7 @@ var data = [{partnerID: 1, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 4, clickedName: 'object1', wordID: 'word1'}];
 
-var f = csv.open('hierarchicalSimulationOutput.csv');
+var f = csv.open('listenerOutput.csv');
 csv.writeLine('time,partnerID,prediction',f);
 iterate(f, data);
 csv.close(f);
