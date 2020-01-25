@@ -1,19 +1,26 @@
 ---
-title: "Generalizing from individuals to populations: \\\ Hierarchical inference supports convention formation"
+title: |
+    | Generalizing from individuals to populations:
+    | Hierarchical inference supports convention formation on networks
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
 
 author-information: > 
+    \vspace{-3em}
     \author{{\large \bf Morton Ann Gernsbacher (MAG@Macc.Wisc.Edu)} \\ Department of Psychology, 1202 W. Johnson Street \\ Madison, WI 53706 USA
     \AND {\large \bf Sharon J.~Derry (SDJ@Macc.Wisc.Edu)} \\ Department of Educational Psychology, 1025 W. Johnson Street \\ Madison, WI 53706 USA}
 
 abstract: >
-   In this study, we collected experimental data showing how people conventionalize referring expressions in a series of interactive reference games with different partners in a small community. 
+   Linguistic conventions allow us to communicate efficiently even with novel members of our community.
+   At the same time, much of our intended meaning is partner-specific.  
+   Exactly how do agents make the inferential leap to community-wide expectations from their experiences with specific partners?
+   We propose a hierarchical Bayesian model that explains how partner-specific pacts may gradually spread through a network. 
+   We collected experimental data showing how people conventionalize referring expressions in a series of interactive reference games with different partners in a small community. 
    Results were used to evaluate a hierarchical Bayesian cognitive model formalizing a theory of the generalization mechanisms underlying convention formation. 
     
 keywords: >
-    Add your choice of indexing terms or keywords; kindly use a semi-colon; between each term.
+   convention; generalization; 
     
 output: cogsci2016::cogsci_paper
 #final-submission: \cogscifinalcopy
@@ -71,54 +78,120 @@ One influential theory is that speakers simply ignore the identity of different 
 We call this a *complete-pooling* theory [@gelman2006data] because data from each partner is collapsed into an undifferentiated pool of evidence. 
 Complete-pooling models have been remarkably successful at predicting collective behavior on networks, but have typically been evaluated only in settings where anonymity is enforced. 
 For example, @centola_spontaneous_2015 asked how large networks of participants coordinated on conventional names for novel faces.
-On each trial, participants were paired with a random neighbors but were not informed of their partner's identity, or even the total number of different possible neighbors. 
+On each trial, participants were paired with a random neighbor but were not informed of that neighbor's identity, or even the total number of different possible neighbors. 
 
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings. 
 Knowledge about a partner's identity is both available and relevant for conversation [@eckert_three_2012].
-Extensive evidence from psycholinguistic studies has demonstrated the *partner-specificity* of our language use [@clark_using_1996;@brennan_partner-specific_2009; @horton_revisiting_2016]. 
+Extensive evidence from psycholinguistics has demonstrated the *partner-specificity* of our language use [@clark_using_1996;@brennan_partner-specific_2009]. 
 Because meaning is grounded in the evolving `common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessary transfered to other partners [@wilkes-gibbs_coordinating_1992; @metzing_when_2003]. 
-Partner-specificity poses clear problems for complete-pooling theories but can be easily explained by a simple *no-pooling* model where agents maintain distinct representations of meaning for each partner. 
-The problem with a no-pooling model, of course, is that it forces agents to start from scratch with each partner.
-Community-level expectations can never get off the ground. 
+Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner. 
+We call this a *no-pooling* model. 
+The problem with no-pooling, of course, is that agents are forced to start from scratch with each partner.
+Community-level expectations never get off the ground. 
 
 What theory of generalization, then, can explain partner-specific meaning but also allow conventions to spread through communities? 
 We propose a *partial-pooling* account that offers a compromise between these extremes. 
 Unlike complete-pooling and no-pooling models, we propose that beliefs about meaning have hierarchical structure. 
 That is, the meanings used by different partners are expected to be drawn from a shared community-wide distribution but are also allowed to differ from one another in systematic, partner-specific ways. 
-This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience [see also @KleinschmidtJaeger15_RobustSpeechPerception; @tenenbaum_how_2011 for hierarchical accounts of abstraction in other domains]. 
+This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience [see also @KleinschmidtJaeger15_RobustSpeechPerception; @tenenbaum_how_2011]. 
 In other words, we suggest that conventional meanings result from agents solving a meta-learning problem, adapting to each partner along the way.
 
-We begin by formalizing this account in a probabilistic model of communication. 
-We present simulations showing the pattern of listener and speaker behavior within and across partners. 
+We begin by formalizing this account in a probabilistic model of communication and presenting several simulations of listener and speaker behavior within and across partners. 
+Next, we test the qualitative predictions of this model in a behavioral experiment.
+Participants were paired for a series of extended reference games with each neighbor in small networks. 
+Our results showed signatures of *ad hoc* convention formation within dyads, but also gradual generalization of these local pacts across subsequent partners as the network converged. 
+Taken together, this work suggests that local partner-specific learning is not only compatible with global convention formation but may facilitate it when coupled with a powerful hierachical inductive mechanism. 
 
-# Hierarchical Bayesian model of generalization
+# A hierarchical Bayesian model of convention
 
-```{r model_schematic, fig.env = "figure", fig.pos = "t", out.width = "225px", fig.height=1, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Schematic of hierachical Bayesian model."}
+```{r model_schematic, fig.env = "figure", fig.pos = "t", out.width = "225px", fig.height=1, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:task1model} Schematic of hierachical Bayesian model."}
 knitr::include_graphics("figs/task1_model.pdf")
 ```
 
-In this section, we provide an explicit computational account of the cognitive mechanisms driving this shift.
-Specifically, we extend the dyadic convention formation model of @hawkins_convention-formation_2017 with a mechanism for generalization.
-This model begins with the idea that knowledge about meanings can be represented probabilistically: agents have *lexical uncertainty* over what meaning their partner is using [@]. 
-At the highest level is a \emph{task-general} variable $\Theta$ which parameterizes the agent's task-specific prior expectations $P(\theta_{i} | \Theta)$ where $\theta_i$ represents the semantics used by a novel partner $i$. 
-Given observations $D_i$ from communicative interactions in that context, an agent can update their \emph{task-specific} model using Bayes rule:
-\begin{equation}
-	P(\theta_i | D_i, \Theta)  \propto P(D_i | \theta_i) P(\theta_i | \Theta)
-\end{equation}
-The Bayesian formulation thus decomposes the problem of task-specific adaptation into two terms, a prior term $P(\theta_i | \Theta)$ and a likelihood term$P(D_i | \theta_i)$.
-The prior captures the idea that different language tasks share some task-general structure in common: in the absence of strong information about usage departing from this common structure, the agent ought to be regularized toward their task-general knowledge.
+In this section, we provide an explicit computational account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
+Specifically, we show how the dyadic convention formation model of @hawkins_convention-formation_2017 can be extended with a principled mechanism for generalization across multiple partners.
+This model begins with the idea that knowledge about meanings can be represented probabilistically: agents have uncertainty about what lexical meaning their current partner is using [@bergen_pragmatic_2016]. 
+In our hierarchical model, this lexical uncertainty is represented by a multi-level prior. 
 
-Our proposal assumes that each agent has uncertainty over the system of meaning their current partner is using, and that they use Bayesian inference to update their beliefs about these meanings given observations of their partner’s language use and understanding.
+At the highest level of the hierarchy is a *community-level* variable $\Theta$ parameterizing the agent's *partner-specific* expectations $P(\theta_{i} | \Theta)$, where $\theta_i$ represents the latent system of meanings used by partner $i$ (see Fig. \ref{fig:task1model}). 
+Given observations $D_i$ from repeated communicative interactions with a specific partner $i$, the agent update their beliefs about the latent system of meaning using Bayes rule:
+$$\begin{array}{rcl}
+P(\theta_i, \Theta | D_i)  & \propto &  P(D_i | \theta_i, \Theta) P(\theta_i, \Theta) \\
+                           & =   & P(D_i | \theta_i) P(\theta_i | \Theta) P(\Theta)
+\end{array}$$
+
+This inference decomposes the problem of partner-specific learning into two terms, a prior term $P(\theta_i | \Theta)P(\Theta)$ and a likelihood term $P(D_i | \theta_i)$.
+The prior captures the idea that different partners will share some aspects of meaning in common.
+In the absence of strong information about language use departing from this common structure, the agent ought to be regularized toward generalizable knowledge of their community's conventions.
+The likelihood represents predictions about how a partner using a particular system of meaning will use language, which we specify in more detail below. 
+
+Critically, in addition to allowing agents to update partner-specific expectations and adapt to their partner as an interaction continues, agents may also update their community-level expectations by marginalizing over data accumulated from different partners:
+$$
+P(\Theta | D) = P(\Theta)\int_{\theta_i} P(D_i | \theta_i) P(\theta_i | \Theta) 
+$$
+where $D = \bigcup_{i=1}^k D_i$. 
+This inductive pathway allows new data from individual partners to systematically inform beliefs about community-wide conventions.
+Given weak expectations about $\Theta$, a partner's behavior may at first be more parsimoniously explained as a partner-specific meaning.
+After multiple partners are inferred to have a similar system of meaning, however, it becomes more likely that a novel partner will share it as well: beliefs about $\Theta$ will shift to represent this commonality.
+This transfer is sometimes referred to as a "sharing of statistical strength" across partners.
+We investigate the qualitative predictions of this idea under three increasingly complex reference games scenarios. 
+
+### Simulation 1: Listeners generalize across speakers
+
 The key predictions distinguishing our model concern the pattern of generalization across partners.
-First, we show that our model accounts for the \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
-Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
+In our first simulation, we consider the  used the same simple scenario with two objects and two words as we used to test adaptation to a single partner.
+As our measure of interest, we focus on a listener agent's shifting expectations about which target is being referred to as they adapt their semantic representations.
+Instead of presenting a stream of data from a single partner, however, we swap in a new partner every $k$ rounds of the reference game.
 
+Our likelihood $P(D_i | \theta_i)$ is given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity \cite{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}
+A pragmatic speaker $S_1$ attempts to be informative in context while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
+The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, which uses their lexicon $\mathcal{L}_{\theta_i}$ to interpret a given utterance. 
+This model can be formally specified as follows:
+$$
+\begin{array}{rcl}
+L_0(o_i | w, \mathcal{L}^t) &\propto  & \exp\{\mathcal{L}^t(w,o_i)\} \\
+S_1(w | o_i, \mathcal{L}^t) &\propto & \exp\{\ln L_0(o_i | w, \mathcal{L}^t)\} \\
+L_1(o_i | w, \mathcal{L}^t) &\propto  & S_1(w | o_i, \mathcal{L}^t) P(o_i) 
+\end{array}
+$$
+
+
+To derive quantitive behavior in this scenario, we must concretely specify the agent's lexical priors and a method to perform inference.
+We used independent Gaussian distributions for each $\theta_{ij} \in \Theta$ as a hyper-prior and centered our partner-specific prior $\ell_{ij} \in \mathcal{L}$ at the shared value for a particular partner:
+$$\begin{array}{rcl}
+P(\theta_{ij}) & \sim & \mathcal{N}(0, 5)\\
+P(\ell_{ij}) & \sim & \mathcal{N}(\theta_{ij}, 1)
+\end{array}$$
+The variances chosen in these priors are assumptions about how strongly adaptation is regularized. 
+Using a higher variance for the hyper-prior than for the partner-specific prior corresponds to the assumption that the agent has substantial uncertainty over the population-level lexicon, but that individuals in the population shouldn't vary too much from whatever that lexicon is.
+
+We used a variational method \cite<VI;>{RanganathGerrishBlei13_BlackBoxVariationalInference,blei_variational_2017} to perform inference in our model.
+Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
+Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable in the lexicon.
+We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>[for more details]{murphy2012machine}.
+To examine how inferences change over time, we amortize inference. 
+We run 10,000 steps of gradient descent on the first observation to obtain a lexical posterior, compute the listener's marginal prediction for the next observation, then continue running gradient descent on the same stored parameters after including the new observation in the data.
+
+Our simulation results are shown in Fig. \ref{fig:specificity}.
+To observe behavior in the simplest case, we feed the model the same object-target pair ($\{o_1, w_1\}$) on every trial.  
+We find that the adapting listener begins at chance because of its uninformative prior, but after interacting with that partner for several rounds, it adapts its semantics to select the target well above chance. 
+When a new partner is introduced, however, it reverts nearly to its original state: because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
+After adapting similarly to the second partner, however, it begins its interaction with a third partner with nearly the accuracy at the end of its interaction with the first partner.
+Thus, expectations about an individual partners' semantics are gradually being incorporated into community-level expectations.
+
+### Speaker simulation
+
+Next, we show that our model accounts for the speaker's \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
+Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
 This hierarchical structure, however, leads to a further prediction: after interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
 In other words, the partner-specific expectations agents form within an interaction to solve a novel communication problem should gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
-These expectations should manifest in an increasing willingness to use short labels with novel partners, leading to the emergent consequence of lending additional evidence for that structure. 
+These expectations should manifest in an increasing willingness to use short labels with novel partners, which then lends additional evidence for that structure. 
 
 
-```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=8, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Listener model expectations across a series of different partners."}
+
+### Network simulation
+
+```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -127,38 +200,52 @@ model.plt1 <- read_csv('../../simulations/hierarchical/hierarchicalSimulationOut
     geom_point() +
     geom_line() +
     geom_hline(yintercept = .5) +
-    geom_hline(yintercept = .5) +
     theme_few() +
     xlab('time') +
     ylab("P(target)") +
     scale_x_continuous(breaks = c(1,4,7,10)) +
-    theme(aspect.ratio = 1)
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    guides(color = FALSE) +
+    ggtitle("Listener behavior") +
+    theme(aspect.ratio = 2/3)
 
-model.plt2 <- read_csv('../../simulations/hierarchical/speakerOutput.csv') %>%
-  ggplot(aes(x = time, y = exp(prediction), color = factor(partnerID), group = factor(partnerID))) +
+model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %>%
+  mutate(expectedNumWords = 2 * exp(prediction) + 1 * (1 - exp(prediction))) %>%
+  group_by(time, partnerID) %>%
+  tidyboot_mean(expectedNumWords) %>%
+  ggplot(aes(x = time, y = empirical_stat, fill = factor(partnerID), color = factor(partnerID), group = factor(partnerID))) +
     geom_point() +
     geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.3, color=NA) +
     theme_few() +
+    ylim(1, 2) +
+    geom_hline(yintercept = 1) +
     xlab('time') +
-    ylab("P(long utterance)") +
-    scale_x_continuous(breaks = c(1,4,7,10)) +
-    theme(aspect.ratio = 1)
+    ylab("Expected # words") +
+    scale_x_continuous(breaks = c(1,3, 5,7,9)) +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    scale_fill_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    guides(color = FALSE, fill = FALSE) +
+    ggtitle("Speaker behavior") +
+    theme(aspect.ratio = 2/3)
 
+#ggsave('grid_search.pdf', height = 10, width = 10, unit = 'in')
 grid.arrange(model.plt1, model.plt2, ncol = 2)
 ```
 
 # Experiment: Conventions on a network
 
-```{r task_display, fig.env = "figure*", fig.pos = "h", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
+```{r task_display, fig.env = "figure*", fig.pos = "t", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
 ```
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, however, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
-Each  blocks was a full repeated reference game, where participants had to coordinate on an ad hoc convention, or *pact*, for how to refer to reoccuring target objects with their partner.
-While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992;@weber_cultural_2003], we are interested in the effect at subsequent partner boundaries. 
-Complete-pooling accounts predict no change in the number of words when a new partner is introduced.  
-No-pooling accounts predict that the same increase in initial description length will occur with every interlocutor. 
+Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner.
+While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992], we were interested in the effect at subsequent partner boundaries. 
+Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992.  
+No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
 
 ## Methods
@@ -169,11 +256,6 @@ We recruited  participants from Amazon Mechanical Turk to play an interactive, n
 Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities. 
 
 ### Stimuli and procedure
-
-<!-- One player (the speaker) provided descriptions target objects such that their partner (the listener) could choose it from an array of distractors.  -->
-<!-- Each network was assigned four abstract tangram shapes taken from Clark & Wilkes-Gibbs (1986), and the trial sequence for a given partner was blocked so that each of the four objects appeared as the target four times.  -->
-<!-- After completing all 16 trials with one partner, participants were introduced to a new partner and asked to play the same reference game again.  -->
-<!-- This procedure was repeated until each participant had partnered with all three of their neighbors.  -->
 
 Participants were paired with each of their three neighbors for a series of dyadic interactions. 
 In each interaction, they played a real-time, natural-language reference game where they repeatedly referred to a set of four abstract tangram shapes taken from [@clark_referring_1986; see Fig. \ref{fig:task1_display}].
@@ -186,7 +268,7 @@ The trial sequence for a given partner was constructed so that each of four targ
 
 After completing 24 trials with one partner, they were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
 Each participant in a network was assigned a distinct avatar so that participants were clear they were speaking to distinct partners.
-This process repeated until each participant had partnered with all five neighbors.
+This process repeated until each participant had partnered with all three neighbors.
 Players were given full feedback on each about their partner's choice and received bonus payment for each correct response. 
 Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
 
@@ -195,7 +277,7 @@ Because some pairs within the network took longer than others to complete the tr
 
 ### Utterance length
 
-```{r reduction, cache=T, fig.env = "figure", fig.pos = "h", fig.width=3, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
+```{r reduction, cache=T, fig.env = "figure", fig.pos = "t", fig.width=3, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 relevantMessages %>%
   mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
   group_by(partnerlabel, repnum) %>% 
@@ -220,7 +302,7 @@ We tested these predictions using mixed-effects regressions of partner number an
 
 1. Other advantages of hierarchical model. e.g. it's more robust to deviations than complete-pooling; if we have a lot of interactions with idiosyncratic speakers (e.g. children), we don't replace our conventional community-level expectations. But agent-based models with a memory window or single representation predict this. Also, 
 
-2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt], and 
+2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt; @horton_revisiting_2016], and 
 
 # Acknowledgements
 
