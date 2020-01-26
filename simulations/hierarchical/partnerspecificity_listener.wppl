@@ -100,12 +100,15 @@ var iterate = function(outputFile, data) {
 var data = [{partnerID: 1, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},
+	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},            
 	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
+	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},            
 	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
+	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},            
 	    {partnerID: 4, clickedName: 'object1', wordID: 'word1'}];
 
 var f = csv.open('listenerOutput.csv');
