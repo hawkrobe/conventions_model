@@ -35,7 +35,7 @@ var partnerGuide = function(paramName) {
 
 var sampleLexicon = function(agentID, partnerID) {
   var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
-                                         sigma: T.mul(ones(lexDims), argv.priorSigma)}),
+                                         sigma: T.mul(ones(lexDims), 1)}),
 			{guide: partnerGuide('hyper-' + agentID)});
   return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
 		{guide: partnerGuide(agentID + '-' + partnerID)});
@@ -86,8 +86,8 @@ var update = function(role, agentID, dataSoFar) {
 	var lex = lexica[i];
         var score = (
           role == 'speaker' ?
-            refModule.getListenerScore(trial.clickedName, trial.wordID, extend(params, {lexicon: lex})) :
-            refModule.getSpeakerScore(trial.wordID, trial.clickedName, extend(params, {lexicon: lex}))
+            refModule.getListenerScore(trial.target, trial.wordID, extend(params, {lexicon: lex})) :
+            refModule.getSpeakerScore(trial.wordID, trial.target, extend(params, {lexicon: lex}))
         );
         factor(score);
       });
@@ -106,16 +106,18 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   } 
 
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.target, currTrial.partnerID, currTrial.listenerID);
+  var speakerOutput = S(currTrial.target, currTrial.speakerID, currTrial.partnerID);
+  var hypotheticalPartnerOutput = S(currTrial.target, currTrial.listenerID, currTrial.partnerID);  
   var nextUtt = sample(speakerOutput);
-  var listenerOutput = L(nextUtt, currTrial.partnerID, currTrial.speakerID);
+  var listenerOutput = L(nextUtt, currTrial.listenerID, currTrial.partnerID);
   var nextChoice = sample(listenerOutput);
   
   console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
   console.log('chosen object for partner ' + currTrial.partnerID + ' is: ' + nextChoice);  
-  csv.writeLine([params.alpha, params.costWeight, argv.priorSigma, currTrial.t,
+  csv.writeLine([argv.chainNum, params.alpha, params.costWeight, currTrial.t,
                  currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
                  nextUtt, speakerOutput.score('word1_word2'),
+                 speakerOutput.score('word1'), hypotheticalPartnerOutput.score('word1'),
                  nextChoice, listenerOutput.score('object1')].join(','), outputFile);
 
   var trialPacket = {
@@ -167,6 +169,6 @@ var trials = [
 ];
 
 var f = csv.open('networkOutput' + argv.chainNum + '.csv');
-csv.writeLine('alpha,costWeight,priorSigma,time,speakerID,listenerID,partnerID,utt,longUttScore,object,object1Score',f);
+csv.writeLine('chainNum,alpha,costWeight,time,speakerID,listenerID,partnerID,utt,longUttScore,word1Score,objectPicked,object1Score',f);
 iterate(f, trials, {1: [], 2: [], 3: [], 4: []});
 csv.close(f);
