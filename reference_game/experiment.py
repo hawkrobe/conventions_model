@@ -253,8 +253,8 @@ class RefGameServer(Experiment):
 
         # keep track of bonuses server-side
         if msg['object_id'] == "target" :
-            self.participant_bonuses[curr_room.players[0]] += 0.03
-            self.participant_bonuses[curr_room.players[1]] += 0.03
+            self.participant_bonuses[curr_room.players[0]] += 0.04
+            self.participant_bonuses[curr_room.players[1]] += 0.04
         
         # after final trial, we assign a next partner; otherwise, schedule next trial
         if curr_room.trialNum + 1 >= curr_room.numTrials :
