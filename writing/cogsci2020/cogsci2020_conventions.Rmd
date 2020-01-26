@@ -138,7 +138,7 @@ This transfer is sometimes referred to as a "sharing of statistical strength" ac
 
 ## Model simulations
 
-```{r model_results, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
+```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -214,36 +214,35 @@ For all simulations, we used variational inference [VI; @RanganathGerrishBlei13_
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
 Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable in the lexicon.
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective [see @murphy2012machine for more details].
-In particular, variational inference allows us to amortize inference as additional data is observed. 
-We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation, then continue running gradient descent on the same stored parameters after including the new observation in the data.
+Variational inference allows us to amortize inference as additional data is observed. 
+We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from this posterior, then continue running gradient descent on the same parameters after adding the new observation in the data.
 
 ### Simulation 1: Listener accuracy across partners
 
 The key predictions of our model concern the pattern of generalization across partners.
-In our first simulation, we consider a listener agent's shifting expectations about which target is being referred to as they adapt their semantic representations.  used the same simple scenario with two objects and two words as we used to test adaptation to a single partner.
-As our measure of interest, we focus on 
-Instead of presenting a stream of data from a single partner, however, we swap in a new partner every $k$ rounds of the reference game.
+In our first simulation, we consider the partner-specificity of a listener's expectations about which object is being referred to.
+To observe the model's behavior in the simplest case, we assume the speaker can choose from two utterances $\{u_1, u_2\}$ and feed the model the same utterance-object pair ($\{o_1, u_1\}$) on every trial.
+Instead of presenting this stream of data from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
 
 Our simulation results are shown in Fig. \ref{fig:simulations}A.
-To observe behavior in the simplest case, we feed the model the same object-target pair ($\{o_1, w_1\}$) on every trial.  
-We find that the adapting listener begins at chance because of its uninformative prior, but after interacting with that partner for several rounds, it adapts its semantics to select the target well above chance. 
-When a new partner is introduced, however, it reverts nearly to its original state: because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
-After adapting similarly to the second partner, however, it begins its interaction with a third partner with nearly the accuracy at the end of its interaction with the first partner.
-Thus, expectations about an individual partners' semantics are gradually being incorporated into community-level expectations.
+We find that the listener begins at chance due to its uninformative prior, but after several trials with the same partner, it updates its beliefs to be highly accurate at guessing the target.
+When a new partner is introduced, we find that it reverts nearly to its original state. 
+Because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
+After adapting to multiple partners, however, we find that it brings stronger expectations into its interaction with a fourth partner. 
+Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
 
-### Simulation 2: speaker utterance length across partners
+### Simulation 2: Speaker utterance length across partners
 
-Next, we show that our model accounts for the speaker's \emph{partner-specificity} of ad hoc conventions as a consequence of hierarchical structure. 
+Next, we show that our model accounts for the speaker's \emph{partner-specificity}. 
+To test utterance length, we supplement the utterance space with multi-word utterances built from a set of four primitives: $\{u_1, u_2, u_3, u_4\}$.
 Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
-This hierarchical structure, however, leads to a further prediction: after interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
-In other words, the partner-specific expectations agents form within an interaction to solve a novel communication problem should gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
-These expectations should manifest in an increasing willingness to use short labels with novel partners, which then lends additional evidence for that structure. 
+fter interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
+In other words, the partner-specific expectations agents form within an interaction to solve novel communication problems gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
+These expectations manifest in an increasing willingness to use shorter labels with novel partners.
 
+### Simulation 3: Network convergence
 
-
-### Network simulation
-
-
+TODO.
 
 # Experiment: Conventions on a network
 
@@ -252,10 +251,10 @@ knitr::include_graphics("figs/design.pdf")
 ```
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
-Rather than anonymizing partners, however, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
+Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
 Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner.
 While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992], we were interested in the effect at subsequent partner boundaries. 
-Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992.  
+Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992. 
 No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
 
@@ -288,7 +287,7 @@ Because some pairs within the network took longer than others to complete the tr
 
 ### Utterance length
 
-```{r reduction, cache=T, fig.env = "figure", fig.pos = "t", fig.width=3, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
+```{r reduction, cache=T, fig.env = "figure", fig.pos = "b", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 relevantMessages %>%
   mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
   group_by(partnerlabel, repnum) %>% 
