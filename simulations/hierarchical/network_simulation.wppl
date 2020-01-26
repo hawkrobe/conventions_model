@@ -1,0 +1,172 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
+
+var numUtterances = 4;
+var numStates = 2;
+var lexDims = [numUtterances, numStates];
+
+var primitiveUtterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
+var states = map(function(i) {return 'object' + i;}, _.range(1, numStates+1));
+
+var params = {
+  alpha : argv.alpha,
+  costWeight: argv.costWeight,
+  context: ['object1', 'object2'],
+  primitiveUtterances: primitiveUtterances,
+  states : states,
+  utterances : (['word1_word2', 'word3_word4'])
+                .concat(primitiveUtterances)
+};
+console.log(params);
+var tensorSoftplus = function(x) {
+  return T.log(T.add(T.exp(x), 1));
+};
+
+var partnerGuide = function(paramName) {
+  return function() {
+    return DiagCovGaussian({
+      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(dims) {
+        return T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25);
+      }}),
+      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
+    });
+  };
+};
+
+var sampleLexicon = function(agentID, partnerID) {
+  var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
+                                         sigma: T.mul(ones(lexDims), argv.priorSigma)}),
+			{guide: partnerGuide('hyper-' + agentID)});
+  return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
+		{guide: partnerGuide(agentID + '-' + partnerID)});
+};
+
+var S = function(state, agentID, partnerID) {
+  return Infer({method: "enumerate"}, function() {
+    var utt = uniformDraw(params.utterances);
+    var utility = expectation(Infer({method:"forward", samples: 40000, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID, partnerID);
+      return (params.alpha * refModule.getListenerScore(state, utt, extend(params, {lexicon: lexicon}))
+              - params.costWeight * utt.split('_').length);
+    }));
+    display(utt);
+    display(utility);
+    factor(utility);
+    return utt;
+  });
+};
+
+var L = function(utt, agentID, partnerID) {
+  return Infer({method: "enumerate"}, function() {
+    var state = uniformDraw(params.states);
+    var utility = expectation(Infer({method:"forward", samples: 40000, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID, partnerID);
+      return Math.exp(refModule.getListenerScore(state, utt, extend(params, {lexicon: lexicon})));
+    }));
+    display(state);
+    display(utility);
+    factor(Math.log(utility));
+    return state;
+  });
+};
+
+var update = function(role, agentID, dataSoFar) {
+  console.log('updating on', dataSoFar);
+  Optimize({
+    steps: 50000, verbose: false, optMethod: {adam: {stepSize: 0.001}},
+    model: function() {
+      var lexica = {
+        1 : sampleLexicon(agentID, 1),
+	2 : sampleLexicon(agentID, 2),
+	3 : sampleLexicon(agentID, 3),
+	4 : sampleLexicon(agentID, 4)
+      };
+      mapData({data: dataSoFar}, function(trial) {
+	var i = trial.partnerID;
+	var lex = lexica[i];
+        var score = (
+          role == 'speaker' ?
+            refModule.getListenerScore(trial.clickedName, trial.wordID, extend(params, {lexicon: lex})) :
+            refModule.getSpeakerScore(trial.wordID, trial.clickedName, extend(params, {lexicon: lex}))
+        );
+        factor(score);
+      });
+    }
+  });
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(outputFile, remainingTrials, dataSoFar) {
+  var currTrial = first(remainingTrials);
+  
+  // run VI on current data
+  if(!_.isEmpty(dataSoFar[currTrial.speakerID])) {
+    update('speaker', currTrial.speakerID, dataSoFar[currTrial.speakerID]);
+    update('listener', currTrial.listenerID, dataSoFar[currTrial.listenerID]);
+  } 
+
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOutput = S(currTrial.target, currTrial.partnerID, currTrial.listenerID);
+  var nextUtt = sample(speakerOutput);
+  var listenerOutput = L(nextUtt, currTrial.partnerID, currTrial.speakerID);
+  var nextChoice = sample(listenerOutput);
+  
+  console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
+  console.log('chosen object for partner ' + currTrial.partnerID + ' is: ' + nextChoice);  
+  csv.writeLine([params.alpha, params.costWeight, argv.priorSigma, currTrial.t,
+                 currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
+                 nextUtt, speakerOutput.score('word1_word2'),
+                 nextChoice, listenerOutput.score('object1')].join(','), outputFile);
+
+  var trialPacket = {
+    partnerID: currTrial.partnerID,
+    target: currTrial.target,
+    t: currTrial.t,
+    wordID: nextUtt,
+    clickedName: nextChoice
+  };
+
+  var newDataSoFar = _.zipObject(_.range(1, 5), map(function(id) {
+    if(id == currTrial.speakerID || id == currTrial.listenerID) {
+      return dataSoFar[id].concat(trialPacket);
+    } else {
+      return dataSoFar[id];
+    }
+  }, _.range(1, 5)));
+
+  if(!_.isEmpty(rest(remainingTrials))) {
+    iterate(outputFile, rest(remainingTrials), newDataSoFar);
+  }
+};
+
+var trials = [
+  {t: 1, speakerID: 1, listenerID: 2, partnerID: 1, target: 'object1'},
+  {t: 2, speakerID: 2, listenerID: 1, partnerID: 1, target: 'object1'},
+  {t: 3, speakerID: 1, listenerID: 2, partnerID: 1, target: 'object1'},
+  {t: 4, speakerID: 2, listenerID: 1, partnerID: 1, target: 'object1'},
+  {t: 1, speakerID: 3, listenerID: 4, partnerID: 1, target: 'object1'},
+  {t: 2, speakerID: 4, listenerID: 3, partnerID: 1, target: 'object1'},
+  {t: 3, speakerID: 3, listenerID: 4, partnerID: 1, target: 'object1'},
+  {t: 4, speakerID: 4, listenerID: 3, partnerID: 1, target: 'object1'},
+  {t: 5, speakerID: 1, listenerID: 3, partnerID: 2, target: 'object1'},
+  {t: 6, speakerID: 3, listenerID: 1, partnerID: 2, target: 'object1'},
+  {t: 7, speakerID: 1, listenerID: 3, partnerID: 2, target: 'object1'},
+  {t: 8, speakerID: 3, listenerID: 1, partnerID: 2, target: 'object1'},
+  {t: 5, speakerID: 2, listenerID: 4, partnerID: 2, target: 'object1'},
+  {t: 6, speakerID: 4, listenerID: 2, partnerID: 2, target: 'object1'},
+  {t: 7, speakerID: 2, listenerID: 4, partnerID: 2, target: 'object1'},
+  {t: 8, speakerID: 4, listenerID: 2, partnerID: 2, target: 'object1'},
+  {t: 9, speakerID: 1, listenerID: 4, partnerID: 3, target: 'object1'},
+  {t: 10, speakerID: 4, listenerID: 1, partnerID: 3, target: 'object1'},
+  {t: 11, speakerID: 1, listenerID: 4, partnerID: 3, target: 'object1'},
+  {t: 12, speakerID: 4, listenerID: 1, partnerID: 3, target: 'object1'},
+  {t: 9, speakerID: 2, listenerID: 3, partnerID: 3, target: 'object1'},
+  {t: 10, speakerID: 3, listenerID: 2, partnerID: 3, target: 'object1'},
+  {t: 11, speakerID: 2, listenerID: 3, partnerID: 3, target: 'object1'},
+  {t: 12, speakerID: 3, listenerID: 2, partnerID: 3, target: 'object1'}
+];
+
+var f = csv.open('networkOutput' + argv.chainNum + '.csv');
+csv.writeLine('alpha,costWeight,priorSigma,time,speakerID,listenerID,partnerID,utt,longUttScore,object,object1Score',f);
+iterate(f, trials, {1: [], 2: [], 3: [], 4: []});
+csv.close(f);
