@@ -138,11 +138,11 @@ This transfer is sometimes referred to as a "sharing of statistical strength" ac
 
 ## Model simulations
 
-```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
+```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=6, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
-model.plt1 <- read_csv('../../simulations/hierarchical/hierarchicalSimulationOutput.csv') %>%
+model.plt1 <- read_csv('../../simulations/hierarchical/listenerOutput.csv') %>%
   ggplot(aes(x = time, y = prediction, color = factor(partnerID), group = factor(partnerID))) +
     geom_point() +
     geom_line() +
@@ -176,6 +176,21 @@ model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %
     guides(color = FALSE, fill = FALSE) +
     ggtitle("Speaker behavior") +
     theme(aspect.ratio = 2/3)
+
+model.plt1 <- read_csv('../../simulations/hierarchical/networkOutput1.csv') %>%
+  ggplot(aes(x = time, y = prediction, color = factor(partnerID), group = factor(partnerID))) +
+    geom_point() +
+    geom_line() +
+    geom_hline(yintercept = .5) +
+    theme_few() +
+    xlab('time') +
+    ylab("P(target)") +
+    scale_x_continuous(breaks = c(1,4,7,10)) +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    guides(color = FALSE) +
+    ggtitle("Listener behavior") +
+    theme(aspect.ratio = 2/3)
+
 
 #ggsave('grid_search.pdf', height = 10, width = 10, unit = 'in')
 grid.arrange(model.plt1, model.plt2, ncol = 2)
@@ -226,29 +241,37 @@ Instead of presenting this stream of data from a single partner, or randomly cho
 
 Our simulation results are shown in Fig. \ref{fig:simulations}A.
 We find that the listener begins at chance due to its uninformative prior, but after several trials with the same partner, it updates its beliefs to be highly accurate at guessing the target.
-When a new partner is introduced, we find that it reverts nearly to its original state. 
+When a new partner is introduced, we find that it reverts nearly to its original state.
 Because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
 After adapting to multiple partners, however, we find that it brings stronger expectations into its interaction with a fourth partner. 
 Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
 
 ### Simulation 2: Speaker utterance length across partners
 
-Next, we show that our model accounts for the speaker's \emph{partner-specificity}. 
-To test utterance length, we supplement the utterance space with multi-word utterances built from a set of four primitives: $\{u_1, u_2, u_3, u_4\}$.
+Next, we show that our model accounts for the \emph{partner-specificity} of the speaker's referring expressions [@wilkes-gibbs_coordinating_1992]. 
+We supplement the utterance space with multi-word utterances built from a set of four primitives: $\{u_1, u_2, u_3, u_4\}$.
 Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
-fter interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
+After interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
 In other words, the partner-specific expectations agents form within an interaction to solve novel communication problems gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
 These expectations manifest in an increasing willingness to use shorter labels with novel partners.
 
 ### Simulation 3: Network convergence
 
-TODO.
+The first two simulations presented a single agent with a fixed sequence of data to understand its gradient of generalization within and across partners. 
+Here, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
+How does the network as a whole coordinate?
+Do agents come to share a similar $\Theta$, suggesting that community-wide conventions have formed?
 
-# Experiment: Conventions on a network
+We used a round-robin scheme to schedule four agents into three blocks of interaction, with agents taking turns in the speaker and listener roles. 
+From each individual agent's perspective, this experiment is identical to the earlier simulation (i.e. a series of 3 partners).
+Now that all agents are updating contingent on the other's behavior, however, additional dependencies are introduced.
+For example, in the first block, agent 1 and 2 may coordinate on using $u_1$ while agent 3 and 4 coordinate no using $u_2$. 
+Once they swap partners, they must re-negotiate this potential miscoordination. 
 
-```{r task_display, fig.env = "figure*", fig.pos = "t", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
+```{r task_display, fig.env = "figure*", fig.pos = "t!", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
 ```
+# Experiment: Conventions on a network
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
@@ -287,7 +310,7 @@ Because some pairs within the network took longer than others to complete the tr
 
 ### Utterance length
 
-```{r reduction, cache=T, fig.env = "figure", fig.pos = "b", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
+```{r reduction, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 relevantMessages %>%
   mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
   group_by(partnerlabel, repnum) %>% 
@@ -304,16 +327,19 @@ relevantMessages %>%
 
 The key empirical predictions distinguishing our model from alternatives concern behavior across partner boundaries.
 We operationalized the degree of conventionalization as the mean number of words used per description, a standard measure of coding efficiency in reference games . 
-We tested these predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level. We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. These results suggest that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level.
+We tested these predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level. We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. 
 
 ### Convergence 
 
 # Discussion
 
-1. Other advantages of hierarchical model. e.g. it's more robust to deviations than complete-pooling; if we have a lot of interactions with idiosyncratic speakers (e.g. children), we don't replace our conventional community-level expectations. But agent-based models with a memory window or single representation predict this. Also, 
+1. Other advantages of hierarchical model. e.g. it's more robust to deviations than complete-pooling; if we have a lot of interactions with idiosyncratic speakers (e.g. children), we don't replace our conventional community-level expectations. But agent-based models with a memory window or single representation predict this. Also there are other kinds of partner-specific information that may need to be tracked (e.g. visual access/knowledge, e.g. if you know someone is an expert in an area). 
 
 2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt; @horton_revisiting_2016], and 
 
+3. Suggest ideas about different communities and code-switching as targets of future work. 
+
+4. Summary: More broadly, hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level while maintaining flexibility within interactions.
 # Acknowledgements
 
 Place acknowledgments (including funding information) in a section at
