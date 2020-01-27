@@ -71,7 +71,8 @@ relevantMessages <- messages %>%
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
 These meanings are *conventional* in the sense that they are sustained by the expectations each person has about others [@lewis_convention:_1969; @bicchieri_grammar_2006]. 
-A key property of linguistic conventions is that they hold over entire communities, allowing us to communicate efficiently even with people we've never met before. 
+A key property of linguistic conventions is that they hold over an entire community of speakers, allowing us to communicate efficiently even with people we've never met before. 
+\aeg{changed "over entire communities" to "an entire community of speakers" since I think the latter better conveys your intended meaning to be a community who share their conventions; that is,  we ultimately keep some partial-pooling since we adapt to communities of "english speakers" but also "psychologists" "HS friends" "a single child." the experiment isn't designed to create socially relevant sub-communities but the word "community" is often used to convey this type of subgroup ('my community'; 'community-center'; 'community of like-minded pps').   Do we mention ways to retain partial pooling?}
 But exactly how do we make the inferential leap to community-wide expectations from our experiences with specific partners? 
 Grounding collective convention formation in individual cognition requires an explicit *theory of generalization* capturing how people transfer what they have learned from one partner to the next.
 
@@ -96,6 +97,7 @@ Unlike complete-pooling and no-pooling models, we propose that beliefs about mea
 That is, the meanings used by different partners are expected to be drawn from a shared community-wide distribution but are also allowed to differ from one another in systematic, partner-specific ways. 
 This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience [see also @KleinschmidtJaeger15_RobustSpeechPerception; @tenenbaum_how_2011]. 
 In other words, we suggest that conventional meanings result from agents solving a meta-learning problem, adapting to each partner along the way.
+
 
 We begin by formalizing this account in a probabilistic model of communication and presenting several simulations of listener and speaker behavior within and across partners. 
 Next, we test the qualitative predictions of this model in a behavioral experiment.
@@ -246,6 +248,7 @@ Given this concrete setting, we can now explicitly specify forms of the likeliho
 We consider a likelihood $P(D_i | \theta_i)$ given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS;@FrankeJager16_ProbabilisticPragmatics].
 A pragmatic speaker $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
 The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, which looks up the meaning in a parameterized lexicon $\mathcal{L}_{\theta}$. 
+\aeg{I'm not wild about "looking up" meaning in a "parameterized lexicon", preferring "a literal listener, L0, who identifies an intended meaning from their content-addressible memory which may include information about individual speakers or subgroups of speakers as well as phonological, contextual, and interpretative information" but for current purposes, fine!}
 This model can be formally specified as follows:
 $$
 \begin{array}{rcl}
@@ -264,6 +267,7 @@ P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
 P(\theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
 \end{array}$$
 The variances chosen in these priors represent assumptions about how strongly adaptation is regularized. 
+\aeg{this is the first time you've mentioned 'adaptation' or 'regularized' do you mean, "how strongly the partner-specific prior is adjusted toward the community-wide value"?}.
 
 For all simulations, we used variational inference [VI; @RanganathGerrishBlei13_BlackBoxVariationalInference] to perform inference. 
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
@@ -277,6 +281,7 @@ We run 50,000 steps of gradient descent on the first observation to obtain a pos
 The key predictions of our model concern the pattern of generalization across partners.
 In our first simulation, we consider the partner-specificity of a listener's expectations about which object is being referred to.
 To observe the model's behavior in the simplest case, we assume the speaker can choose from two utterances $\{u_1, u_2\}$ and feed the model the same utterance-object pair ($\{o_1, u_1\}$) on every trial.
+\aeg{did I miss why there is a choice between two utterances?}
 Instead of presenting this stream of data from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
 
 Our simulation results are shown in Fig. \ref{fig:simulations}A.
@@ -284,6 +289,7 @@ We find that the listener begins at chance due to its uninformative prior, but a
 When a new partner is introduced, we find that it reverts nearly to its original state.
 Because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
 After adapting to multiple partners, however, we find that it brings stronger expectations into its interaction with a fourth partner. 
+\aeg{change to 'by its fourth partner'?}
 Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
 
 ### Simulation 2: Speaker utterance length across partners
@@ -317,17 +323,21 @@ knitr::include_graphics("figs/design.pdf")
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
 Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner.
-While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply jump revert to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992], we were interested in the effect at subsequent partner boundaries. 
+\aeg{add ref to Brennan and Clark 1996 to mention of pact: Brennan, S. E., & Clark, H. H. (1996). Conceptual pacts and lexical choice in conversation. Journal of Experimental Psychology: Learning, Memory, and Cognition, 22(6), 1482.}
+While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and have beeen reported to sharply jump back to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992], we were interested in the effect at subsequent partner boundaries. 
 Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992. 
 No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
+\aeg{Nice!}
 
 ## Methods
 
 ### Participants 
 
 We recruited  participants from Amazon Mechanical Turk to play an interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
-Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities. 
+Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors.' 
+
+\aeg{how many ppts?]
 
 ### Stimuli and procedure
 
@@ -336,14 +346,14 @@ In each interaction, they played a real-time, natural-language reference game wh
 These stimuli have been used extensively in the literature on coordination and common ground.
 They were designed such that participants will not already have strong pre-existing lexical conventions for how to refer to them (unlike photographs of common objects), but are structured enough to support many possible descriptions (unlike images of white noise).
 
-On each trial of a reference game, one of these four shapes was highlighted as the \emph{target object} for the "speaker" who was instructed to use a chatbox to communicate the identity of this object to their partner, the "listener".
+On each trial in a reference game, one of these four shapes was highlighted as the \emph{target object} for the "speaker" who was instructed to use a chatbox to communicate the identity of this object to their partner, the "listener".
 The listener could reply through the chatbox but must ultimately make a selection from the array. 
-The trial sequence for a given partner was constructed so that each of four targets appear six times each, spread evenly across the session, for a total of 24 trials.
+The trial sequence for a given partner was constructed so that each of four targets appeared six times each, spread evenly across the session, for a total of 24 trials.
 
-After completing 24 trials with one partner, they were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
-Each participant in a network was assigned a distinct avatar so that participants were clear they were speaking to distinct partners.
+After completing 24 trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
+Each participant in a network was assigned a distinct avatar so that participants could tell they were speaking to distinct partners.
 This process repeated until each participant had partnered with all three neighbors.
-Players were given full feedback on each about their partner's choice and received bonus payment for each correct response. 
+Players were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
 Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
 
 
@@ -371,8 +381,11 @@ relevantMessages %>%
 ```
 
 The key empirical predictions distinguishing our model from alternatives concern behavior across partner boundaries.
-We operationalized the degree of conventionalization as the mean number of words used per description, a standard measure of coding efficiency in reference games . 
-We tested these predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level. We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. 
+We operationalized the degree of conventionalization as the mean number of words used per description, a standard measure of coding efficiency in reference games. 
+We tested predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level.
+\aeg{by-item, by-subject slopes and intercepts for partner # and repetition #?}
+We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. 
+\aeg{why t-test and not intercepts?}
 
 ### Network convergence 
 
@@ -446,6 +459,7 @@ matches.summary %>%
 2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt; @horton_revisiting_2016], and 
 
 3. Suggest ideas about different communities and code-switching as targets of future work. 
+\aeg{good! Maybe, something like:  The current work captures and quantifies  incremental convergence within communities of 4 unfamiliar English speakers towards a set of shared language conventions.  We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. For example, we use largely overlapping but partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we comprehend certain conventions that we do not use ourselves. To model the full scale of an individual's network of communities, social factors and cues are required. But the current work suggests that hierarchical generalization... [can finish this with sentence below] }
 
 4. Summary: More broadly, hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level while maintaining flexibility within interactions.
 # Acknowledgements
