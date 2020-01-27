@@ -174,7 +174,7 @@ modelconvergence.toPlot <- modelNetworks %>%
   tidyboot_mean(match) 
 ```
 
-```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
+```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Model predictions across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -190,7 +190,7 @@ model.plt1 <- read_csv('../../simulations/hierarchical/listenerOutput.csv') %>%
     scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE) +
     ggtitle("Listener behavior") +
-    theme(aspect.ratio = 2/3)
+    theme(aspect.ratio = 4/5)
 
 model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %>%
   mutate(expectedNumWords = 2 * exp(prediction) + 1 * (1 - exp(prediction))) %>%
@@ -211,7 +211,7 @@ model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %
     scale_fill_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE, fill = FALSE) +
     ggtitle("Speaker behavior") +
-    theme(aspect.ratio = 2/3)
+    theme(aspect.ratio = 4/5)
 
 model.plt3 <- modelconvergence.toPlot %>%
   ungroup() %>%
@@ -230,7 +230,7 @@ model.plt3 <- modelconvergence.toPlot %>%
     annotate(geom="text", x=1, hjust = 0, y=.9, label="within dyads", color="#08519C") +
     annotate(geom="text", x=1, hjust = 0, y=.4, label="across dyads", color="black") +
     guides(color = FALSE) +
-    theme(aspect.ratio = 2/3)
+    theme(aspect.ratio = 4/5)
 
 #ggsave('grid_search.pdf', height = 10, width = 10, unit = 'in')
 gridExtra::grid.arrange(model.plt1, model.plt2, model.plt3, ncol = 3)
@@ -260,8 +260,8 @@ Finally, to derive the model's behavior, we must also specify the form of the le
 We assume $\Theta$ is an $N \times M$ matrix with an entry for each utterance-object pair, and use independent Gaussian distributions for each $\Theta_{ij} \in \Theta$ as a hyper-prior.
 We then centered our partner-specific prior $\theta_{ij} \in \theta$ at the shared value for a particular partner:
 $$\begin{array}{rcl}
-P(\Theta{ij}) & \sim & \mathcal{N}(0, 1)\\
-P(\theta{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
+P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
+P(\theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
 \end{array}$$
 The variances chosen in these priors represent assumptions about how strongly adaptation is regularized. 
 
@@ -293,7 +293,7 @@ We supplement the utterance space with multi-word utterances built from a set of
 Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
 After interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
 In other words, the partner-specific expectations agents form within an interaction to solve novel communication problems gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
-These expectations manifest in an increasing willingness to use shorter labels with novel partners.
+These expectations manifest in an increasing willingness to use shorter labels with novel partners (Fig. \ref{fig:simulations}B).
 
 ### Simulation 3: Network convergence
 
@@ -301,17 +301,18 @@ The first two simulations presented a single agent with a fixed sequence of data
 Here, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
 How does the network as a whole coordinate?
 Do agents come to share a similar $\Theta$, suggesting that community-wide conventions have formed?
-
 We used a round-robin scheme to schedule four agents into three blocks of interaction, with agents taking turns in the speaker and listener roles. 
 From each individual agent's perspective, this experiment is identical to the earlier simulation (i.e. a series of 3 partners).
-Now that all agents are updating contingent on the other's behavior, however, additional dependencies are introduced.
+Because all agents are not learning from the others, however, the network as a whole faces a coordination problem.
 For example, in the first block, agent 1 and 2 may coordinate on using $u_1$ while agent 3 and 4 coordinate no using $u_2$. 
 Once they swap partners, they must re-negotiate this potential miscoordination. 
+We find that the network as a whole gradually aligns (Fig. \ref{fig:simulations}C).
 
 ```{r task_display, fig.env = "figure*", fig.pos = "t!", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
 ```
-# Experiment: Conventions on a network
+
+# Behavioral experiment: Convention formation on a network
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
@@ -348,7 +349,11 @@ Because some pairs within the network took longer than others to complete the tr
 
 ## Results
 
-### Utterance length
+### Listener accuracy
+
+TODO.
+
+### Speaker utterance length
 
 ```{r reduction, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 relevantMessages %>%
@@ -369,7 +374,9 @@ The key empirical predictions distinguishing our model from alternatives concern
 We operationalized the degree of conventionalization as the mean number of words used per description, a standard measure of coding efficiency in reference games . 
 We tested these predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level. We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. 
 
-### Convergence 
+### Network convergence 
+
+TODO.
 
 ```{r convergence, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 partnerLookup <- messages %>%
@@ -422,11 +429,15 @@ matches.summary %>%
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
     ggthemes::theme_few() +
     #facet_wrap(~ partnernum) +
-    ylab("alignment (% word matches)") +
-    xlab("") +
+    ylab("alignment") +
+    xlab("parnter #") +
     ylim(0, 1) +
     scale_color_colorblind() +
-    theme(aspect.ratio = 1.5)
+    scale_x_continuous(breaks = c(1,2,3)) +
+    annotate(geom="text", x=1, hjust = 0, y=.9, label="within dyads", color="orange") +
+    annotate(geom="text", x=1, hjust = 0, y=.2, label="across dyads", color="black") +
+    guides(color = FALSE) +
+    theme(aspect.ratio = 4/5)
 ```
 # Discussion
 
