@@ -138,7 +138,43 @@ This transfer is sometimes referred to as a "sharing of statistical strength" ac
 
 ## Model simulations
 
-```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=6, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
+```{r cache=T}
+unfinished <- read_csv('../../simulations/hierarchical/compiled_network_output.csv') %>%
+  group_by(chainNum) %>%
+  tally() %>%
+  filter(n < 24) %>%
+  pull(chainNum)
+
+modelNetworks <- read_csv('../../simulations/hierarchical/compiled_network_output.csv') %>%
+  filter(!(chainNum %in% unfinished)) %>%
+  mutate(row_number = row_number() - 1,
+       chainNum = floor(row_number / 24),
+       repNum = row_number %% 4,
+       correct = objectPicked == 'object1') 
+
+modelconvergence.toPlot <- modelNetworks %>%
+  filter(!(chainNum %in% unfinished)) %>%
+  group_by(chainNum, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(time == first(time), 'first', 'second')) %>%
+  select(ordinalRep, speakerID,  partnerID, utt, chainNum) %>%
+  group_by(chainNum, ordinalRep, partnerID) %>%
+  tidybayes::gather_pairs(speakerID, utt, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  mutate(partnerType = case_when(partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
+                                                            (speaker1 == 4 && speaker2 == 3),
+                                                          'within', 'between'),
+                                 partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
+                                                            (speaker1 == 4 && speaker2 == 2),
+                                                          'within', 'between'),
+                                 partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
+                                                            (speaker1 == 3 && speaker2 == 2),
+                                                          'within', 'between')),
+         match = utt1 == utt2) %>%
+  filter(utt1 %in% c('word1', 'word2') && utt2 %in% c('word1', 'word2')) %>%
+  group_by( partnerID, partnerType) %>%
+  tidyboot_mean(match) 
+```
+
+```{r model_results, cache = T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=3, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:simulations} Listener model expectations across a series of different partners."}
 library(grid)
 library(gridExtra)
 
@@ -149,9 +185,9 @@ model.plt1 <- read_csv('../../simulations/hierarchical/listenerOutput.csv') %>%
     geom_hline(yintercept = .5) +
     theme_few() +
     xlab('time') +
-    ylab("P(target)") +
-    scale_x_continuous(breaks = c(1,4,7,10)) +
-    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    ylab("accuracy") +
+    scale_x_continuous(breaks = c(1,3, 5,7,9,11,13,15)) +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE) +
     ggtitle("Listener behavior") +
     theme(aspect.ratio = 2/3)
@@ -169,31 +205,35 @@ model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %
     ylim(1, 2) +
     geom_hline(yintercept = 1) +
     xlab('time') +
-    ylab("Expected # words") +
-    scale_x_continuous(breaks = c(1,3, 5,7,9)) +
-    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
-    scale_fill_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    ylab("# words") +
+    scale_x_continuous(breaks = c(1,3, 5,7,9,11,13,15)) +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
+    scale_fill_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE, fill = FALSE) +
     ggtitle("Speaker behavior") +
     theme(aspect.ratio = 2/3)
 
-model.plt1 <- read_csv('../../simulations/hierarchical/networkOutput1.csv') %>%
-  ggplot(aes(x = time, y = prediction, color = factor(partnerID), group = factor(partnerID))) +
+model.plt3 <- modelconvergence.toPlot %>%
+  ungroup() %>%
+  mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
+  ggplot(aes(x = partnerID, y = empirical_stat, color = comparison, group = comparison)) +
     geom_point() +
     geom_line() +
-    geom_hline(yintercept = .5) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    ggtitle('Network') +
     theme_few() +
-    xlab('time') +
-    ylab("P(target)") +
-    scale_x_continuous(breaks = c(1,4,7,10)) +
-    scale_color_manual(values = rev(RColorBrewer::brewer.pal(10,'Blues'))) +
+    ylab("alignment") +
+    xlab("partner #") +
+    ylim(0, 1) +
+    scale_x_continuous(breaks = c(1,2,3)) +
+    scale_color_manual(values = c('#000000', RColorBrewer::brewer.pal(5,'Blues')[5])) +
+    annotate(geom="text", x=1, hjust = 0, y=.9, label="within dyads", color="#08519C") +
+    annotate(geom="text", x=1, hjust = 0, y=.4, label="across dyads", color="black") +
     guides(color = FALSE) +
-    ggtitle("Listener behavior") +
     theme(aspect.ratio = 2/3)
 
-
 #ggsave('grid_search.pdf', height = 10, width = 10, unit = 'in')
-grid.arrange(model.plt1, model.plt2, ncol = 2)
+gridExtra::grid.arrange(model.plt1, model.plt2, model.plt3, ncol = 3)
 ```
 
 We investigate the qualitative predictions of this model under three increasingly complex reference games scenarios. 
@@ -331,6 +371,63 @@ We tested these predictions using mixed-effects regressions of partner number an
 
 ### Convergence 
 
+```{r convergence, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
+partnerLookup <- messages %>%
+  group_by(networkid) %>%
+  do(., mutate(., speakerID = group_indices(., participantid))) %>%
+  group_by(networkid, roomid, partnernum, speakerID) %>%
+  tally() %>%
+  group_by(networkid, roomid) %>%
+  mutate(partnerID = ifelse(speakerID == first(speakerID), last(speakerID), first(speakerID))) %>%
+  ungroup() %>%
+  mutate(speaker1 = as.factor(speakerID)) %>%
+  select(-n, -roomid) 
+
+stopwords_regex = paste(c('ive', tm::stopwords('SMART')), collapse = '\\b|\\b')
+stopwords_regex = paste0('\\b', stopwords_regex, '\\b')
+
+matches <- messages %>% 
+  filter(role == "speaker") %>%
+  filter(networkid %in% completeNetworks) %>%
+  group_by(participantid, partnernum) %>%
+  mutate(ordinalrep = ifelse(repid == min(repid), 'first', 'second'),
+         content = tolower(content),
+         content = stringr::str_replace_all(content, stopwords_regex, ""),
+         content = str_squish(gsub("[[:punct:]]", "", content))) %>%
+  group_by(networkid) %>%
+  do(., mutate(., speakerID = as.integer(group_indices(., participantid)))) %>%
+  group_by(ordinalrep, networkid, partnernum, stimsetid, repid, target, participantid, speakerID, trialnum) %>%
+  summarize(content = paste0(content, collapse = ' ')) %>%
+  group_by(networkid, repid, target, partnernum, speakerID) %>%
+  tidybayes::gather_pairs(speakerID, content, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  left_join(partnerLookup) %>%
+  rowwise() %>%
+  mutate(partnerType = ifelse(speaker2 == partnerID, 'within', 'across'),
+         matchRate = length(intersect(strsplit(utt1, " ")[[1]], strsplit(utt2, " ")[[1]])),
+         utt1Length = length(strsplit(utt1, " ")[[1]]),
+         utt2Length = length(strsplit(utt2, " ")[[1]])) %>%
+  arrange(networkid, partnernum)
+
+matches.summary <- matches %>% 
+  group_by(partnernum, partnerType) %>%
+  tidyboot_mean(matchRate> 0)
+
+matches.summary %>%
+  ungroup() %>%
+  mutate(partnernum = paste0('partner ', partnernum + 1)) %>%
+  #mutate(ordinalrep = ifelse(ordinalrep == 'first', 'first half', 'second half')) %>%
+  mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
+  ggplot(aes(x = partnernum, y = empirical_stat, color = comparison, group = comparison)) +
+    geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    ggthemes::theme_few() +
+    #facet_wrap(~ partnernum) +
+    ylab("alignment (% word matches)") +
+    xlab("") +
+    ylim(0, 1) +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1.5)
+```
 # Discussion
 
 1. Other advantages of hierarchical model. e.g. it's more robust to deviations than complete-pooling; if we have a lot of interactions with idiosyncratic speakers (e.g. children), we don't replace our conventional community-level expectations. But agent-based models with a memory window or single representation predict this. Also there are other kinds of partner-specific information that may need to be tracked (e.g. visual access/knowledge, e.g. if you know someone is an expert in an area). 
