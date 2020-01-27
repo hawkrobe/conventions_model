@@ -105,6 +105,12 @@
 % Have to do it like this or it won't be in effect in the document
 \AtBeginDocument{\setlength\baselineskip{12pt}}
 
+\RequirePackage{todonotes}
+\RequirePackage{color}
+\newcommand{\rdh}[1]{\textcolor{orange}{[rdh: #1]}}
+\newcommand{\ndg}[1]{\textcolor{green}{[ndg: #1]}}
+\newcommand{\tg}[1]{\textcolor{red}{[tg: #1]}}
+\newcommand{\aeg}[1]{\textcolor{blue}{[aeg: #1]}}
 
 % Use Times fonts by default
 %%\RequirePackage{pslatex}
