@@ -84,7 +84,7 @@ On each trial, participants were paired with a random neighbor but were not info
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings. 
 Knowledge about a partner's identity is both available and relevant for conversation [@eckert_three_2012].
 Extensive evidence from psycholinguistics has demonstrated the *partner-specificity* of our language use [@clark_using_1996;@brennan_partner-specific_2009]. 
-Because meaning is grounded in the evolving `common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessary transfered to other partners [@wilkes-gibbs_coordinating_1992; @metzing_when_2003]. 
+Because meaning is grounded in the evolving 'common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessary transfered to other partners [@wilkes-gibbs_coordinating_1992; @metzing_when_2003]. 
 Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner. 
 We call this a *no-pooling* model. 
 The problem with no-pooling, of course, is that agents are forced to start from scratch with each partner.
@@ -421,8 +421,6 @@ matches.summary <- matches %>%
 
 matches.summary %>%
   ungroup() %>%
-  mutate(partnernum = paste0('partner ', partnernum + 1)) %>%
-  #mutate(ordinalrep = ifelse(ordinalrep == 'first', 'first half', 'second half')) %>%
   mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
   ggplot(aes(x = partnernum, y = empirical_stat, color = comparison, group = comparison)) +
     geom_line() +
@@ -430,7 +428,7 @@ matches.summary %>%
     ggthemes::theme_few() +
     #facet_wrap(~ partnernum) +
     ylab("alignment") +
-    xlab("parnter #") +
+    xlab("partner #") +
     ylim(0, 1) +
     scale_color_colorblind() +
     scale_x_continuous(breaks = c(1,2,3)) +
