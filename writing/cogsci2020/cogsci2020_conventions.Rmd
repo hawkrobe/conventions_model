@@ -12,11 +12,12 @@ author-information: >
 
 abstract: >
    Linguistic conventions allow us to communicate efficiently even with novel members of our community.
-   At the same time, much of our intended meaning is partner-specific: we flexibly .  
+   At the same time, much of our intended meaning is partner-specific.  
    Exactly how do agents make the inferential leap to community-wide expectations from their experiences with specific partners?
-   We propose a hierarchical Bayesian model that explains how partner-specific pacts may gradually spread through a network. 
-   Results were used to evaluate a hierarchical Bayesian cognitive model formalizing a theory of the generalization mechanisms underlying convention formation. 
-   We collected experimental data showing how people conventionalize referring expressions in a series of interactive reference games with different partners in a small community. 
+   We propose a hierarchical Bayesian model that explains how partner-specific pacts may spread through a network and present simulations of how speakers and listeners generalize meanings across partners. 
+   To evalute these predictions, we collected experimental data showing how people conventionalize referring expressions in a series of interactive reference games with different partners in a small community. 
+   These results suggest that local partner-specific learning is not only compatible with global convention formation but may facilitate it when coupled with a powerful hierachical inductive mechanism. 
+
     
 keywords: >
    convention; generalization; 
@@ -66,6 +67,11 @@ relevantMessages <- messages %>%
   mutate(ordinalrep = ifelse(repnum == min(repnum), 'first', 'second')) %>%
   group_by(participantid, networkid, roomid, target, partnernum, repnum, ordinalrep) %>%
   summarize(m = sum(uttLength)) 
+
+relevantClicks <- clicks %>%
+  filter(networkid %in% completeNetworks) %>%
+  mutate(repnum = floor(trialnum / 4)) %>%
+  mutate(correct = object_id == 'target') 
 ```
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
@@ -296,6 +302,11 @@ Because of the hierarchical structure of its lexical expectations, it was ambigu
 After adapting to multiple partners, however, we find that it has stronger initial expectations by its fourth partner. 
 Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
 
+```{r task_display, fig.env = "figure*", fig.pos = "t!", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
+knitr::include_graphics("figs/design.pdf")
+```
+
+
 ### Simulation 2: Speaker utterance length across partners
 
 Next, we show that our model accounts for the \emph{partner-specificity} of the speaker's referring expressions [@wilkes-gibbs_coordinating_1992]. 
@@ -318,16 +329,13 @@ For example, in the first block, agent 1 and 2 may coordinate on using $u_1$ whi
 Once they swap partners, they must re-negotiate this potential miscoordination. 
 We find that the network as a whole gradually aligns (Fig. \ref{fig:simulations}C).
 
-```{r task_display, fig.env = "figure*", fig.pos = "t!", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
-knitr::include_graphics("figs/design.pdf")
-```
-
 # Behavioral experiment: \ Convention formation on a network
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
 Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner [@BrennanClark96_ConceptualPactsConversation].
-While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and have beeen reported to sharply jump back to their initial length when a new partner is introduced [@wilkes-gibbs_coordinating_1992], we were interested in the effect at subsequent partner boundaries. 
+
+While it has been frequently observed that messages reduce in length across repetitions as common ground is built a single partner [@krauss_changes_1964], and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the key empirical predictions distinguishing our model from alternatives concern behavior across partner boundaries.
 Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992. 
 No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
 Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
@@ -336,64 +344,62 @@ Contrary to either of these extremes, our hierarchical Bayesian model predicts t
 
 ### Participants 
 
-We recruited  participants from Amazon Mechanical Turk to play an interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
-Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors.' 
-
-\aeg{how many ppts?]
+We recruited 92 participants from Amazon Mechanical Turk to play an interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
 
 ### Stimuli and procedure
 
-Participants were paired with each of their three neighbors for a series of dyadic interactions. 
-In each interaction, they played a real-time, natural-language reference game where they repeatedly referred to a set of four abstract tangram shapes taken from Clark and Wilkes-Gibbs [-@clark_referring_1986, see Fig. \ref{fig:task1_display}C].
-These stimuli have been used extensively in the literature on coordination and common ground.
-They were designed such that participants will not already have strong pre-existing lexical conventions for how to refer to them (unlike photographs of common objects), but are structured enough to support many possible descriptions (unlike images of white noise).
+Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors' (Fig. \ref{fig:task1_display}A) and paired with each of their three neighbors in a series of real-time, natural-language reference games.
+Pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
+Each network was randomly assigned one of three distinct sets of four abstract tangram stimuli taken from Clark and Wilkes-Gibbs [-@clark_referring_1986, see Fig. \ref{fig:task1_display}C].
+These stimuli were chosen because participants do not already have strong pre-existing lexical conventions for how to refer to them (unlike photographs of common objects), but they are structured enough to support many possible descriptions (unlike images of white noise).
 
-On each trial in a reference game, one of these four shapes was highlighted as the \emph{target object} for the "speaker" who was instructed to use a chatbox to communicate the identity of this object to their partner, the "listener".
-The listener could reply through the chatbox but must ultimately make a selection from the array. 
-The trial sequence for a given partner was constructed so that each of four targets appeared six times each, spread evenly across the session, for a total of 24 trials.
+On each trial, one of these four shapes was highlighted as the \emph{target object} for the "speaker" who was instructed to use a chatbox to communicate the identity of this object to their partner, the "listener".
+The listener could reply freely through the chatbox but was asked to ultimately make a selection from the array. 
+Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
 
-After completing 24 trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
-Each participant in a network was assigned a distinct avatar so that participants could tell they were speaking to distinct partners.
+The trial sequence for a given partner was constructed so that each of the four targets appeared once per block, for four continuous blocks.
+After completing sixteen trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
 This process repeated until each participant had partnered with all three neighbors.
-Players were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
+Participants in a network were assigned distinct avatars to emphasize that participants were speaking to the same partner for an extended period.
 Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
+```{r reduction, cache=T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:results}(A)Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence."}
+clicks.mean <- relevantClicks %>%  
+  group_by(repnum, partnernum) %>%
+  tidyboot::tidyboot_mean(correct)
 
-
-## Results
-
-### Listener accuracy
-
-TODO.
-
-### Speaker utterance length
-
-```{r reduction, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
-relevantMessages %>%
-  mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
-  group_by(partnerlabel, repnum) %>% 
-  tidyboot::tidyboot_mean(column = m) %>%
-  ggplot(aes(x = repnum, y = empirical_stat)) +
+results.plt1 <- clicks.mean %>%
+  mutate(t = repnum + 4 * partnernum) %>%
+  ggplot(aes(x = t, y = empirical_stat, fill = factor(partnernum), color = factor(partnernum), group = partnernum)) +
     geom_line() +
-    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2) +
-    facet_wrap(~ partnerlabel) +
+    geom_point() +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
+    scale_fill_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.2, color =NA) +
+    scale_x_continuous(breaks = c(1,3, 5,7,9,11)) +
     theme_few() +
+    theme(aspect.ratio = 1) +
+    guides(color = FALSE, fill = FALSE) +
+    labs(x = 'time', y = 'accuracy', tag = 'A')
+
+messages.mean <- relevantMessages %>%
+  group_by(partnernum, repnum) %>%
+  tidyboot::tidyboot_mean(column = m)
+
+results.plt2 <- messages.mean %>%
+  mutate(t = repnum + 4 * partnernum) %>%
+  ggplot(aes(x = t, y = empirical_stat, fill = factor(partnernum), color = factor(partnernum), group = partnernum)) +
+    geom_point() +
+    geom_line() +
+    scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
+    scale_fill_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
+    scale_x_continuous(breaks = c(1,3, 5,7,9,11)) +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2, color =NA) +
+    theme_few() +
+    theme(aspect.ratio = 1) +
+    guides(color = FALSE, fill = FALSE) +
     ylim(0,NA) +
-    ylab("mean # words") +
-    xlab("repetition with partner")
-```
+    labs(x = "time", y = "mean # words", tag = 'B')
 
-The key empirical predictions distinguishing our model from alternatives concern behavior across partner boundaries.
-We operationalized the degree of conventionalization as the mean number of words used per description, a standard measure of coding efficiency in reference games. 
-We tested predictions using mixed-effects regressions of partner number and repetition number on the number of words in a speaker's description, with random-effect structure including item-effects at the object and speaker level.
-\aeg{by-item, by-subject slopes and intercepts for partner \# and repetition \#?}
-We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001, consistent with our proposal. 
-\aeg{why t-test and not intercepts?}
-
-### Network convergence 
-
-TODO.
-
-```{r convergence, cache=T, fig.env = "figure", fig.pos = "t!", fig.width=3.5, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "Reduction in number of words within and across partner boundaries."}
 partnerLookup <- messages %>%
   group_by(networkid) %>%
   do(., mutate(., speakerID = group_indices(., participantid))) %>%
@@ -434,24 +440,46 @@ matches.summary <- matches %>%
   group_by(partnernum, partnerType) %>%
   tidyboot_mean(matchRate> 0)
 
-matches.summary %>%
+results.plt3 <- matches.summary %>%
   ungroup() %>%
   mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
   ggplot(aes(x = partnernum, y = empirical_stat, color = comparison, group = comparison)) +
     geom_line() +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    labs(x = "partner #", y = "alignment", tag = 'C') +
     ggthemes::theme_few() +
-    #facet_wrap(~ partnernum) +
-    ylab("alignment") +
-    xlab("partner #") +
     ylim(0, 1) +
     scale_color_colorblind() +
     scale_x_continuous(breaks = c(1,2,3)) +
-    annotate(geom="text", x=1, hjust = 0, y=.9, label="within dyads", color="orange") +
-    annotate(geom="text", x=1, hjust = 0, y=.2, label="across dyads", color="black") +
+    annotate(geom="text", x=0.5, hjust = 0, y=.9, label="within dyads", color="orange") +
+    annotate(geom="text", x=0.5, hjust = 0, y=.2, label="across dyads", color="black") +
     guides(color = FALSE) +
-    theme(aspect.ratio = 4/5)
+    theme(aspect.ratio = 1) 
+
+gridExtra::grid.arrange(results.plt1, results.plt2, results.plt3, ncol = 3)
 ```
+
+## Results
+
+We evaluate our model's predictions on the same three metrics we reported in the simulations: accuracy, utterance length, and network convergence.
+
+### Listener accuracy
+
+TODO. (see Fig. \ref{fig:results}A)
+
+### Speaker utterance length
+
+The mean number of words used per description is a standard measure of coding efficiency in reference games. 
+We tested predictions using a mixed-effects regression of partner number and repetition block number on the length of the speaker's description.
+We included a random-effect structure including item-effects at the object and speaker level.
+\aeg{by-item, by-subject slopes and intercepts for partner \# and repetition \#?}
+We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001 (Fig. \ref{fig:results}B).
+\aeg{why t-test and not intercepts?}
+
+### Network convergence 
+
+TODO. (Fig. \ref{fig:results}C).
+
 # Discussion
 
 In other words, we suggest that conventional meanings result from agents solving a meta-learning problem, adapting to each partner along the way.
@@ -460,16 +488,12 @@ In other words, we suggest that conventional meanings result from agents solving
 
 2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt; @horton_revisiting_2016], and \aeg{I'm not wild about "looking up" meaning in a "parameterized lexicon", preferring "a literal listener, L0, who identifies an intended meaning from their content-addressible memory which may include information about individual speakers or subgroups of speakers as well as phonological, contextual, and interpretative information" but for current purposes, fine!}
 
+3. Suggest ideas about different communities and code-switching as targets of future work. e.g. The current work captures and quantifies  incremental convergence within communities of 4 unfamiliar English speakers towards a set of shared language conventions.  We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. For example, we use largely overlapping but partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we comprehend certain conventions that we do not use ourselves. To model the full scale of an individual's network of communities, social factors and cues are required. A strength of the hierachical Bayesian framework is that knowledge about these communities can be learned and represented in the generative model of a speaker [@Gershman]. The current work suggests that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level while maintaining flexibility within interactions.
 
-3. Suggest ideas about different communities and code-switching as targets of future work. 
-\aeg{changed "over entire communities" to "an entire community of speakers" since I think the latter better conveys your intended meaning to be a community who share their conventions; that is,  we ultimately keep some partial-pooling since we adapt to communities of "english speakers" but also "psychologists" "HS friends" "a single child." the experiment isn't designed to create socially relevant sub-communities but the word "community" is often used to convey this type of subgroup ('my community'; 'community-center'; 'community of like-minded pps').   Do we mention ways to retain partial pooling?}
+<!-- # Acknowledgements -->
 
-3. The current work captures and quantifies  incremental convergence within communities of 4 unfamiliar English speakers towards a set of shared language conventions.  We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. For example, we use largely overlapping but partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we comprehend certain conventions that we do not use ourselves. To model the full scale of an individual's network of communities, social factors and cues are required. A strength of the hierachical Bayesian framework is that knowledge about these communities can be learned and represented in the generative model of a speaker [@Gershman]. The current work suggests that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level while maintaining flexibility within interactions.
-
-# Acknowledgements
-
-Place acknowledgments (including funding information) in a section at
-the end of the paper.
+<!-- Place acknowledgments (including funding information) in a section at -->
+<!-- the end of the paper. -->
 
 # References 
 
