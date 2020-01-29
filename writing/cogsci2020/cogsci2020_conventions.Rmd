@@ -7,7 +7,6 @@ csl: apa6.csl
 document-params: "10pt, letterpaper"
 
 author-information: > 
-    \vspace{-3em}
     \author{{\large \bf Morton Ann Gernsbacher (MAG@Macc.Wisc.Edu)} \\ Department of Psychology, 1202 W. Johnson Street \\ Madison, WI 53706 USA
     \AND {\large \bf Sharon J.~Derry (SDJ@Macc.Wisc.Edu)} \\ Department of Educational Psychology, 1025 W. Johnson Street \\ Madison, WI 53706 USA}
 
@@ -22,7 +21,7 @@ abstract: >
 keywords: >
    convention; generalization; 
     
-output: cogsci2016::cogsci_paper
+output: cogsci2016::cogsci_paper 
 #final-submission: \cogscifinalcopy
 ---
 
@@ -76,7 +75,7 @@ But exactly how do we make the inferential leap to community-wide expectations f
 Grounding collective convention formation in individual cognition requires an explicit *theory of generalization* capturing how people transfer what they have learned from one partner to the next.
 
 One influential theory is that speakers simply ignore the identity of different partners and update a single monolithic representation after every interaction [@steels_self-organizing_1995; @barr_establishing_2004; @young_evolution_2015; @baronchelli_emergence_2018]. 
-We call this a *complete-pooling* theory [@gelman2006data] because data from each partner is collapsed into an undifferentiated pool of evidence. 
+We call this a *complete-pooling* theory because data from each partner is collapsed into an undifferentiated pool of evidence [@gelman2006data]. 
 Complete-pooling models have been remarkably successful at predicting collective behavior on networks, but have typically been evaluated only in settings where anonymity is enforced. 
 For example, @centola_spontaneous_2015 asked how large networks of participants coordinated on conventional names for novel faces.
 On each trial, participants were paired with a random neighbor but were not informed of that neighbor's identity, or even the total number of different possible neighbors. 
@@ -114,27 +113,34 @@ Specifically, we show how the dyadic convention formation model of @hawkins_conv
 This model begins with the idea that knowledge about meanings can be represented probabilistically: agents have uncertainty about what lexical meaning their current partner is using [@bergen_pragmatic_2016]. 
 In our hierarchical model, this lexical uncertainty is represented by a multi-level prior. 
 
-At the highest level of the hierarchy is a *community-level* variable $\Theta$ parameterizing the agent's *partner-specific* expectations $P(\phi_{i} | \Theta)$, where $\phi_i$ represents the latent system of meanings used by partner $i$ (see Fig. \ref{fig:task1model}). 
-Given observations $D_i$ from repeated communicative interactions with a specific partner $i$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
-$$\begin{array}{rcl}
-P(\phi_i, \Theta | D_i)  & \propto &  P(D_i | \phi_i, \Theta) P(\phi_i, \Theta) \\
-                           & =   & P(D_i | \phi_i) P(\phi_i | \Theta) P(\Theta)
-\end{array}$$
+At the highest level of the hierarchy is a *community-level* variable $\Theta$ parameterizing the agent's *partner-specific* expectations $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the latent system of meanings used by partner $k$ (see Fig. \ref{fig:task1model}). 
+Given observations $D_k$ from repeated communicative interactions with a specific partner $i$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
+\begin{equation}
+\begin{array}{rcl}
+P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) \\
+                           & =   & P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)
+\end{array}
+\end{equation}
 
-This inference decomposes the problem of partner-specific learning into two terms, a prior term $P(\phi_i | \Theta)P(\Theta)$ and a likelihood term $P(D_i | \phi_i)$.
+This inference decomposes the problem of partner-specific learning into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
 The prior captures the idea that different partners will share some aspects of meaning in common.
-In the absence of strong information about language use departing from this common structure, the agent ought to be regularized toward generalizable knowledge of their community's conventions.
-The likelihood represents predictions about how a partner using a particular system of meaning will use language, which we specify in more detail below. 
+In the absence of strong information about partner-specific language use departing from this common structure, the agent ought to be regularized toward generalizable knowledge of their community's conventions [@davidson_nice_1986].
+The likelihood represents predictions about how a partner using a particular system of meaning will use language.
 
-Critically, in addition to allowing agents to update partner-specific expectations and adapt to their partner as an interaction continues, agents may also update their community-level expectations by marginalizing over data accumulated from different partners:
-$$
-P(\Theta | D) = P(\Theta)\int_{\phi_i} P(D_i | \phi_i) P(\phi_i | \Theta) d\phi_i
-$$
-where $D = \bigcup_{i=1}^k D_i$. 
-This inductive pathway allows new data from individual partners to systematically inform beliefs about community-wide conventions without swamping partner-specific beliefs.
-Given weak expectations about $\Theta$, a partner's behavior may at first be more parsimoniously explained as a partner-specific meaning.
-After multiple partners are inferred to have a similar system of meaning, however, it becomes more likely that a novel partner will share it as well: beliefs about $\Theta$ will shift to represent this commonality.
-This transfer is sometimes referred to as a "sharing of statistical strength" across partners.
+This joint posterior over meanings has two consequences for convention formation.
+First, it allows agents to maintain partner-specific expectations $\phi_k$ by marginalizing over community-level uncertainty:
+\begin{equation}
+P(\phi_k | D_k) = \int_{\Theta}P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)  d\Theta
+\end{equation}
+Second, the hierarchical structure provides an inductive pathway for data to inform beliefs about community-wide conventions.
+Agents update their beliefs about $\Theta$ by marginalizing over data accumulated from different partners:
+\begin{equation}
+P(\Theta | D) = P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
+\end{equation}
+where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and $N$ is the number of partners previous encountered. 
+Given weak community-level expectations about $\Theta$, a particular partner's behavior may at first be more parsimoniously explained with a partner-specific model.
+After multiple partners are inferred to have a similar system of meaning, however, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner will share it as well.
+This transfer is sometimes referred to as a "sharing of strength" or "partial pooling" [@gelman2006data] because abstractions are smoothly integrated with domain-specific detail depending on the data available.
 
 ## Model simulations
 
@@ -189,7 +195,7 @@ model.plt1 <- read_csv('../../simulations/hierarchical/listenerOutput.csv') %>%
     scale_x_continuous(breaks = c(1,3, 5,7,9,11,13,15)) +
     scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE) +
-    ggtitle("Listener behavior") +
+    labs(tag = "A", title = "Listener") +
     theme(aspect.ratio = 4/5)
 
 model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %>%
@@ -210,7 +216,7 @@ model.plt2 = read_csv('../../simulations/hierarchical/speakerOutput_reps.csv') %
     scale_color_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     scale_fill_manual(values = rev(RColorBrewer::brewer.pal(8,'Blues'))) +
     guides(color = FALSE, fill = FALSE) +
-    ggtitle("Speaker behavior") +
+    labs(tag = "B", title = "Speaker") +
     theme(aspect.ratio = 4/5)
 
 model.plt3 <- modelconvergence.toPlot %>%
@@ -220,7 +226,7 @@ model.plt3 <- modelconvergence.toPlot %>%
     geom_point() +
     geom_line() +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
-    ggtitle('Network') +
+    labs(tag = "C", title = "Network") +
     theme_few() +
     ylab("alignment") +
     xlab("partner #") +
@@ -238,52 +244,54 @@ gridExtra::grid.arrange(model.plt1, model.plt2, model.plt3, ncol = 3)
 
 We investigate the qualitative predictions of this model under three increasingly complex scenarios. 
 In all of these scenarios, speaker and listener agents play a reference game with a set of two objects $\{o_1, o_2\}$.
-One of these objects is designated for the speaker as the *target*. 
+On each trial, one of these objects is designated for the speaker as the *target*. 
 They must select from a set of utterance $\{u_0, \dots, u_j\}$ to convey the identity of the target to the listener.
-Upon hearing this utterance, the listener must select which of the objects they believe to be the target and then receives feedback about the true target.
-Thus, the available data $D_i$ from an interaction with partner $i$ consists of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$.
+Upon hearing this utterance, the listener selects which of the objects they believe to be the target and then receives feedback about the true target.
+The resulting data $D_k$ from an interaction with partner $k$ thus consists of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$.
 
 Given this reference game setting, we can now explicitly specify the likelihood and prior terms. 
-We consider a likelihood $P(D_i | \phi_i)$ given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS;@FrankeJager16_ProbabilisticPragmatics].
+We consider a likelihood given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS;@FrankeJager16_ProbabilisticPragmatics].
 A pragmatic speaker $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
-The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, who identifies an intended meaning from their content-addressible memory for lexical items $\mathcal{L}_{\phi}$. 
+The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, who identifies an intended meaning from their content-addressible memory for lexical items $\mathcal{L}_{\phi_k}$. 
 This model can be formally specified as follows:
 $$
 \begin{array}{rcl}
-L_0(o_i | u_j, \phi) &\propto  & \exp\{\mathcal{L}_{\phi}(u_j,o_i)\} \\
-S_1(u_j | o_i, \phi) &\propto &  \exp\{w_I \cdot \log L_0(o_i | u_j, \phi) - w_C \cdot \textrm{cost}(u_j)\}   \\
-L_1(o_i | u_j, \phi) &\propto  & S_1(w | o_i, \phi) P(o_i) 
+L_0(o | u, \phi_k) &\propto  & \exp\{\mathcal{L}_{\phi_k}(u,o)\} \\
+S_1(u | o, \phi_k) &\propto &  \exp\{w_I \cdot \log L_0(o | u, \phi_k) - w_C \cdot \textrm{cost}(u)\}   \\
+L_1(o | u, \phi_k) &\propto  & S_1(u | o, \phi_k) P(o) 
 \end{array}
 $$
-where $w_I$ and $w_C$ are free parameters controlling the relative weights on the informativity and cost term, respectively.
+where $w_I$ and $w_C$ are free parameters controlling the relative weights on the informativity and cost term, respectively. 
+We define $P(D_k | \phi_k)$ as the probability of the data under a pragmatic listener $L_1$.
+We also use this RSA model to simulate the behavior of uncertain speakers $S$ and listeners $L$. 
+Utterances and object selections are sampled from the posterior predictive, marginalizing over lexical uncertainty.
 
-Finally, to derive the model's behavior, we must also specify the form of the lexical prior and a method to perform inference.
-We assume $\Theta$ is an $N \times M$ matrix with an entry for each utterance-object pair, and use independent Gaussian distributions for each $\Theta_{ij} \in \Theta$ as a hyper-prior.
+Finally, we must specify the form of the lexical prior and a method to perform inference in this model.
+We assume $\Theta$ is a matrix with an entry for each utterance-object pair $(u_i, o_j)$, and use independent Gaussian distributions for each $\Theta_{ij} \in \Theta$ as a hyper-prior.
 We then centered our partner-specific prior $\phi_{ij} \in \phi$ at the shared value for a particular partner:
 $$\begin{array}{rcl}
 P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
-P(\phi_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
+P(\phi_{ij} | \Theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
 \end{array}$$
-Note that the variances chosen in these priors represent assumptions about how far partner-specific priors are allowed to drift from the community-wide value.
+Note that the variances chosen in these priors represent assumptions about how far partner-specific priors can drift from the community-wide value.
 
 For all simulations, we used variational inference [VI; @RanganathGerrishBlei13_BlackBoxVariationalInference] to perform inference. 
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
 Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable in the lexicon.
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective [see @murphy2012machine for more details].
 Variational inference allows us to amortize inference as additional data is observed. 
-We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from this posterior, then continue running gradient descent on the same parameters after adding the new observation in the data.
+We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the posterior predictive, then continue running gradient descent on the same parameters after adding the new observation in the data.
 
 ### Simulation 1: Listener accuracy across partners
 
 The key predictions of our model concern the pattern of generalization across partners.
 In our first simulation, we consider the partner-specificity of a listener's expectations about which object is being referred to.
-To observe the model's behavior in the simplest case, we assume the speaker can choose from two utterances $\{u_1, u_2\}$ and feed the model the same utterance-object pair ($\{o_1, u_1\}$) on every trial.
-\aeg{did I miss why there is a choice between two utterances?}
+To observe the model's behavior in the simplest case, we assume the speaker has a vocabulary of two utterances $\{u_1, u_2\}$ and feed the model the same utterance-object pair ($\{o_1, u_1\}$) on every trial.
 Instead of presenting this stream of data from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
 
 Our simulation results are shown in Fig. \ref{fig:simulations}A.
-We find that the listener begins at chance due to its uninformative prior, but after several trials with the same partner, it updates its beliefs to be highly accurate at guessing the target.
-When a new partner is introduced, we find that it reverts nearly to its original state.
+The listener begins at chance due to its uninformative prior, but after observing several trial of evidence from the same partner, it learns to choose the true target with high accuracy.
+When a new partner is introduced, it reverts nearly to its original state.
 Because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
 After adapting to multiple partners, however, we find that it has stronger initial expectations by its fourth partner. 
 Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
@@ -314,7 +322,7 @@ We find that the network as a whole gradually aligns (Fig. \ref{fig:simulations}
 knitr::include_graphics("figs/design.pdf")
 ```
 
-# Behavioral experiment: Convention formation on a network
+# Behavioral experiment: \ Convention formation on a network
 
 To evaluate these qualitative predictions, we designed a communication experiment on a small network.
 Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
