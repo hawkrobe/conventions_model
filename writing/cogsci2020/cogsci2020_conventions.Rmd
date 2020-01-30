@@ -284,7 +284,7 @@ P(\phi_{ij} | \Theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
 \end{array}$$
 The variances chosen in these priors represent assumptions about how far partner-specific priors can drift from the community-wide value.
 
-For all simulations, we used the variational inference implementation in WebPPL [@GoodmanStuhlmuller14_DIPPL]. 
+For all simulations, we used the implementation of variational inference in WebPPL [@GoodmanStuhlmuller14_DIPPL]. 
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
 Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable. 
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective [see @murphy2012machine for more details].
@@ -294,77 +294,54 @@ We run 50,000 steps of gradient descent on the first observation to obtain a pos
 ### Simulation 1: Listener accuracy across partners
 
 The key predictions of our model concern the pattern of generalization across partners.
-In our first simulation, we consider the partner-specificity of a listener's expectations about which object is being referred to.
-To observe the model's behavior in the simplest case, we assume the speaker has a vocabulary of two utterances $\{u_1, u_2\}$ and feed the model the same utterance-object pair ($\{o_1, u_1\}$) on every trial.
-Instead of presenting this stream of data from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
+In our first simulation, we consider the partner-specificity of a *listener*'s expectations about which object is being referred to.
+To observe the model's behavior in the simplest case, we assume the speaker has a vocabulary of two single-word utterances $\{u_1, u_2\}$ with equal cost, and feed the listener the same utterance and feedback about the target object ($\{o_1, u_1\}$) on every trial.
+Instead of presenting these observations from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
 
-Our simulation results are shown in Fig. \ref{fig:simulations}A.
-The listener begins at chance due to its uninformative prior, but after observing several trial of evidence from the same partner, it learns to choose the true target with high accuracy.
-When a new partner is introduced, it reverts nearly to its original state.
-Given weak community-level expectations about $\Theta$, a particular partner's behavior may at first be more parsimoniously explained with a partner-specific model.
-Because of the hierarchical structure of its lexical expectations, it was ambiguous whether the evidence from the first partner was idiosyncratic or due to shared structure.
-After adapting to multiple partners, however, we find that it has stronger initial expectations by its fourth partner. 
-Thus, expectations about what an individual partner means have gradually been incorporated into community-level expectations.
+Our results are shown in Fig. \ref{fig:simulations}A.
+The listener begins at chance due to its uninformative prior, but after observing several trial of evidence from the same partner, it rapidly infers the meaning of $u_1$ and learns to choose the true target with high accuracy.
+When a second partner is introduced, however, it reverts nearly to its original state.
+This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
+In the absence of data from other partners, this data is more parsimoniously explained with a partner-specific model.
+After observing multiple partners behave similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
+It has stronger initial expectations about its fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
 
-```{r task_display, fig.env = "figure*", fig.pos = "t!", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
+```{r task_display, fig.env = "figure*", fig.pos = "h", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
 ```
 
 ### Simulation 2: Speaker utterance length across partners
 
-Next, we show that our model accounts for the \emph{partner-specificity} of the speaker's referring expressions [@wilkes-gibbs_coordinating_1992]. 
-We supplement the utterance space with multi-word utterances built from a set of four primitives: $\{u_1, u_2, u_3, u_4\}$.
-Under our model, speakers revert back to a longer description with a novel partner because evidence from a single listener is relatively uninformative about the community-level prior.
-After interacting with enough partners in a tight-knit community, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community.
-In other words, the partner-specific expectations agents form within an interaction to solve novel communication problems gradually generalize to community-wide expectations as they gain additional evidence of the latent population-level distribution from which different partners are sampled.
-These expectations manifest in an increasing willingness to use shorter labels with novel partners (Fig. \ref{fig:simulations}B).
+Next, we examined our model's predictions about how a *speaker*'s referring expressions will change with successive listeners.
+In particular, we are interested in its willingness to reduce to shorter utterances. 
+To examine reduction, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into two-word conjunctions, e.g. $\{u_1+u_2, u_3+u_4\}$.
+The meanings of these two-word utterances were determined compositionally from the values of the primitive utterances^[We used the standard product T-norm semantics for conjunction in fuzzy logic, where values lie in the $[0,1]$ interval. Because we used a Gaussian prior with support over the real numbers, we first used a logistic function to map primitive values to the unit interval, and a logit function to map the product back to the original domain.].
+Additionally, we placed a weakly biased initial prior over $\Theta$: two of the utterances ($u_1$ and $u_2$) were assumed to apply more strongly to $o_1$ and the other two ($u_3$ and $u_4$) more strongly to $o_2$.
+This weak prior led the speaker to prefer conjunctions at the outset and thus allowed us to examine the speaker's shifting preference for conjunctions.
+
+To focus on the speaker's behavior, we paired it with a fixed listener who always correctly selected the target, and ran 48 independent simulations. 
+First, we find that across successful interaction with the first partner becoming more efficient as they gain confidence that the shorter utterances will be meaningful to their partner [e.g. the speaker begins to prefer either $u_1$ or $u_2$ to refer to $o_1$ instead of the conjunction; see @hawkins_convention-formation_2017 for further interpretation of this effect].
+Second, we find that speakers revert back to a longer description at the first partner swap, just as our listener model did: evidence from a single partner is relatively uninformative about the community-level distribution.
+After interacting with several partners, however, speakers become increasingly confident that one or the other of the short labels is shared across the entire community, and are less likely to begin an interaction with a long utterance (Fig. \ref{fig:simulations}B).
 
 ### Simulation 3: Network convergence
 
-The first two simulations presented a single agent with a fixed sequence of data to understand its gradient of generalization within and across partners. 
-Here, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
-How does the network as a whole coordinate?
-Do agents come to share a similar $\Theta$, suggesting that community-wide conventions have formed?
-We used a round-robin scheme to schedule four agents into three blocks of interaction, with agents taking turns in the speaker and listener roles. 
-From each individual agent's perspective, this experiment is identical to the earlier simulation (i.e. a series of 3 partners).
-Because all agents are not learning from the others, however, the network as a whole faces a coordination problem.
-For example, in the first block, agent 1 and 2 may coordinate on using $u_1$ while agent 3 and 4 coordinate no using $u_2$. 
-Once they swap partners, they must re-negotiate this potential miscoordination. 
-We find that the network as a whole gradually aligns (Fig. \ref{fig:simulations}C).
+The first two simulations presented a single adaptive agent with a fixed partner to understand its gradient of generalization. 
+In our final simulation, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
+From each individual agent's perspective, this simulations is identical to the earlier ones (i.e. a sequence of 3 different partners).
+Because all agents are simultaneously making inferences about the others, however, the network as a whole faces a coordination problem.
+For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
+Once they swap partners, they must negotiate this potential mismatch in usage. 
+How does the network as a whole manage to coordinate?
+
+We used a round-robin scheme to schedule four agents into three blocks of interaction, with each agent taking turns in the speaker and listener roles, and again simulated 48 independent networks.
+We measured alignment by computing whether different pairs of agents produced the same one-word utterances as speakers.
+In particular, we were interested in comparing the alignment between currently interacting agents (i.e. *within* a dyad) to the alignment between agents in the network who are not interacting (i.e. *across* dyads).
+We found that on the first block in the sequence of partners, alignment across dyads was roughly at chance (reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$).
+In the absence of hierarchical generalization, we would expect subsequent blocks to show similar chance levels, as partner-specific conventions would continually need to be re-negotiated from scratch.
+Instead, we find that alignment measured across dyads gradually increases, suggesting that partial pooling across partners leads to emergent consensus (Fig. \ref{fig:simulations}C).
 
 # Behavioral experiment: \ Convention formation on a network
-
-To evaluate these qualitative predictions, we designed a communication experiment on a small network.
-Rather than anonymizing partners, we divided the experiment into blocks of contiguous interaction with stable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
-Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner [@BrennanClark96_ConceptualPactsConversation].
-
-While it has been frequently observed that messages reduce in length across repetitions with a single partner [@krauss_changes_1964], and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the key empirical predictions distinguishing our model from alternatives concern behavior across subsequent partner boundaries.
-Complete-pooling accounts predict no change in the number of words when a new partner is introduced and are thus inconsistent even with the results of @wilkes-gibbs_coordinating_1992. 
-No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
-Contrary to either of these extremes, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
-
-## Methods
-
-### Participants 
-
-We recruited 92 participants from Amazon Mechanical Turk to play an interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
-
-### Stimuli and procedure
-
-Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors' (Fig. \ref{fig:task1_display}A) and paired with each of their three neighbors in a series of real-time, natural-language reference games.
-Pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
-Each network was randomly assigned one of three distinct sets of four abstract tangram stimuli taken from Clark and Wilkes-Gibbs [-@clark_referring_1986, see Fig. \ref{fig:task1_display}C].
-These stimuli were chosen because participants do not already have strong pre-existing lexical conventions for how to refer to them (unlike photographs of common objects), but they are structured enough to support many possible descriptions (unlike images of white noise).
-
-On each trial, one of these four shapes was highlighted as the \emph{target object} for the "speaker" who was instructed to use a chatbox to communicate the identity of this object to their partner, the "listener".
-The listener could reply freely through the chatbox but was asked to ultimately make a selection from the array. 
-Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
-
-The trial sequence for a given partner was constructed so that each of the four targets appeared once per block, for four continuous blocks.
-After completing sixteen trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
-This process repeated until each participant had partnered with all three neighbors.
-Participants in a network were assigned distinct avatars to emphasize that participants were speaking to the same partner for an extended period.
-Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
 ```{r reduction, cache=T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:results}(A)Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence."}
 clicks.mean <- relevantClicks %>%  
   group_by(repnum, partnernum) %>%
@@ -461,14 +438,48 @@ results.plt3 <- matches.summary %>%
 
 gridExtra::grid.arrange(results.plt1, results.plt2, results.plt3, ncol = 3)
 ```
+To evaluate the qualitative predictions observed in our simulations, we designed a communication experiment on a small network.
+Instead of anonymizing partners, as in many previous empirical studies of convention formation, we divided the experiment into blocks of contiguous interaction with stable, identifiable partners [see @fay_interactive_2010; @garrod_conversation_1994 for earlier examples of this network design].
+Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner [@BrennanClark96_ConceptualPactsConversation].
+
+While it has been frequently observed that messages reduce in length across repetitions with a single partner [@krauss_changes_1964], and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the novel empirical predictions distinguishing our model concern behavior across subsequent partner boundaries.
+Complete-pooling accounts predict no change in number of words when a new partner is introduced.
+No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
+Contrary to either of these extremes, as we showed in our simulations above, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
+
+## Methods
+
+
+### Participants 
+
+We recruited 92 participants from Amazon Mechanical Turk to play a series of interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
+
+### Stimuli and procedure
+
+Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors' (Fig. \ref{fig:task1_display}A) 
+Each network was then randomly assigned one of three distinct "contexts" containing four abstract tangram stimuli taken from Clark and Wilkes-Gibbs [-@clark_referring_1986].
+This set was fixed for each network: all four tangrams assigned to a network were shown to every participant on every trial.
+These stimuli were chosen because participants do not already have strong pre-existing conventions for how to conceptualize or refer to them (unlike photographs of common objects), but they are structured enough to support multiple possible descriptions (unlike images of white noise).
+
+Partner pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
+After completing sixteen trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
+This process repeated until each participant had partnered with all three neighbors.
+Participants in a network were assigned distinct avatars to emphasize that participants were speaking to the same partner for an extended period.
+Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
+
+On each trial, one of the four tangrams in the context was highlighted as the \emph{target object} for the "speaker." 
+They were instructed to use a chatbox to communicate the identity of this object to their partner, the "listener" (see Fig. \ref{fig:task1_display}C).
+The listener could reply freely through the chatbox but was asked to ultimately make a selection from the array. 
+Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
+The trial sequence for a given partner was constructed so that each of the four targets appeared once per block, for four continuous blocks, and the order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. 'the one on the left').
 
 ## Results
 
-We evaluate our model's predictions on the same three metrics we reported in the simulations: accuracy, utterance length, and network convergence.
+We evaluate generalization behavior on the same three metrics we reported in the simulations: accuracy, utterance length, and network convergence.
 
 ### Listener accuracy
 
-TODO. (see Fig. \ref{fig:results}A)
+First, we asked whether participants (see Fig. \ref{fig:results}A)
 
 ### Speaker utterance length
 
