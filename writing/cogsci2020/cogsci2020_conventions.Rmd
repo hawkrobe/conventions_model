@@ -68,13 +68,15 @@ relevantMessages <- messages %>%
   mutate(repnum = repnum + 1) %>%
   group_by(participantid, partnernum) %>%
   mutate(ordinalrep = ifelse(repnum == min(repnum), 'first', 'second')) %>%
-  group_by(participantid, networkid, roomid, target, partnernum, repnum, ordinalrep) %>%
-  summarize(m = sum(uttLength)) 
+  group_by(participantid, trialnum, networkid, roomid, target, partnernum, repnum, ordinalrep) %>%
+  summarize(m = sum(uttLength)) %>%
+  ungroup()
 
 relevantClicks <- clicks %>%
   filter(networkid %in% completeNetworks) %>%
   mutate(repnum = floor(trialnum / 4)) %>%
-  mutate(correct = object_id == 'target') 
+  mutate(correct = object_id == 'target') %>%
+  left_join(relevantMessages %>% select(target, trialnum, networkid, roomid, ordinalrep) %>% distinct(), by = c( 'roomid', 'trialnum', 'networkid'))
 ```
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
@@ -91,7 +93,7 @@ On each trial, participants were paired with a random neighbor but were not info
 
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings. 
 Knowledge about a partner's identity is both available and relevant for conversation [@eckert_three_2012].
-Extensive evidence from psycholinguistics has demonstrated the *partner-specificity* of our language use [@clark_using_1996;@brennan_partner-specific_2009]. 
+Extensive evidence from psycholinguistics has demonstrated the *partner-specificity* of our language use [@clark_using_1996]. 
 Because meaning is grounded in the evolving 'common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessarily transfered to other partners [@wilkes-gibbs_coordinating_1992; @metzing_when_2003]. 
 Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner. 
 We call this a *no-pooling* model. 
@@ -131,7 +133,6 @@ P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) 
                            & =   & P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)
 \end{array}
 \end{equation}
-
 This joint inference decomposes the problem of partner-specific learning into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
 The prior captures the idea that different partners share some aspects of meaning in common.
 In the absence of strong information about partner-specific language use departing from this common structure, the agent ought to be regularized toward generalizable knowledge of their community's conventions [@davidson_nice_1986].
@@ -148,6 +149,7 @@ Agents update their beliefs about $\Theta$ by marginalizing over data accumulate
 P(\Theta | D) = P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
 \end{equation}
 where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and $N$ is the number of partners previous encountered. 
+
 After multiple partners are inferred to have a similar system of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner will share it as well.
 This transfer is sometimes referred to as a "sharing of strength" or "partial pooling" [@gelman2006data] because pooled data is smoothly integrated with domain-specific detail depending on the data available.
 
@@ -288,7 +290,6 @@ For all simulations, we used the implementation of variational inference in WebP
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
 Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable. 
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective [see @murphy2012machine for more details].
-Variational inference allows us to amortize inference as additional data is observed. 
 We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the posterior predictive, then continue running gradient descent on the same parameters after adding the new observation in the data.
 
 ### Simulation 1: Listener accuracy across partners
@@ -304,7 +305,7 @@ When a second partner is introduced, however, it reverts nearly to its original 
 This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
 In the absence of data from other partners, this data is more parsimoniously explained with a partner-specific model.
 After observing multiple partners behave similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
-It has stronger initial expectations about its fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
+It has much stronger initial expectations about meaning by its fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
 
 ```{r task_display, fig.env = "figure*", fig.pos = "h", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
@@ -313,8 +314,12 @@ knitr::include_graphics("figs/design.pdf")
 ### Simulation 2: Speaker utterance length across partners
 
 Next, we examined our model's predictions about how a *speaker*'s referring expressions will change with successive listeners.
-In particular, we are interested in its willingness to reduce to shorter utterances. 
-To examine reduction, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into two-word conjunctions, e.g. $\{u_1+u_2, u_3+u_4\}$.
+While it has been frequently observed that messages reduce in length across repetitions with a single partner [@krauss_changes_1964], and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the key prediction distinguishing our model concerns behavior across subsequent partner boundaries.
+Complete-pooling accounts predict no change in number of words when a new partner is introduced.
+No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
+Here we show that a partial pooling account predicts a more complex pattern of generalization.
+
+To allow for reduction, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into two-word conjunctions, e.g. $\{u_1+u_2, u_3+u_4\}$.
 The meanings of these two-word utterances were determined compositionally from the values of the primitive utterances^[We used the standard product T-norm semantics for conjunction in fuzzy logic, where values lie in the $[0,1]$ interval. Because we used a Gaussian prior with support over the real numbers, we first used a logistic function to map primitive values to the unit interval, and a logit function to map the product back to the original domain.].
 Additionally, we placed a weakly biased initial prior over $\Theta$: two of the utterances ($u_1$ and $u_2$) were assumed to apply more strongly to $o_1$ and the other two ($u_3$ and $u_4$) more strongly to $o_2$.
 This weak prior led the speaker to prefer conjunctions at the outset and thus allowed us to examine the speaker's shifting preference for conjunctions.
@@ -438,14 +443,11 @@ results.plt3 <- matches.summary %>%
 
 gridExtra::grid.arrange(results.plt1, results.plt2, results.plt3, ncol = 3)
 ```
-To evaluate the qualitative predictions observed in our simulations, we designed a communication experiment on a small network.
-Instead of anonymizing partners, as in many previous empirical studies of convention formation, we divided the experiment into blocks of contiguous interaction with stable, identifiable partners [see @fay_interactive_2010; @garrod_conversation_1994 for earlier examples of this network design].
-Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner [@BrennanClark96_ConceptualPactsConversation].
 
-While it has been frequently observed that messages reduce in length across repetitions with a single partner [@krauss_changes_1964], and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the novel empirical predictions distinguishing our model concern behavior across subsequent partner boundaries.
-Complete-pooling accounts predict no change in number of words when a new partner is introduced.
-No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
-Contrary to either of these extremes, as we showed in our simulations above, our hierarchical Bayesian model predicts that description length will increase at partner boundaries but that the initial length will decrease incrementally over successive interactions: after each partner, agents should be more willing to transfer expectations from one partner to another in their community. 
+To evaluate the qualitative predictions observed in our simulations, we designed a group communication experiment.
+Instead of anonymizing partners, as in many previous empirical studies of convention formation, we divided the experiment into blocks of extended dyadic interactions with stable, identifiable partners [see @fay_interactive_2010; @garrod_conversation_1994 for earlier examples of this network design].
+Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to reoccuring target objects with their partner [@BrennanClark96_ConceptualPactsConversation].
+As we showed in our simulations above, our hierarchical Bayesian model predicts that these pacts will revert at partner boundaries, but that agents should be increasingly willing to transfer expectations from one partner to another in their community. 
 
 ## Methods
 
@@ -456,10 +458,9 @@ We recruited 92 participants from Amazon Mechanical Turk to play a series of int
 
 ### Stimuli and procedure
 
-Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of `neighbors' (Fig. \ref{fig:task1_display}A) 
+Participants were randomly assigned to one of `r numNetworks` fully-connected four-person communities of 'neighbors' (Fig. \ref{fig:task1_display}A) 
 Each network was then randomly assigned one of three distinct "contexts" containing four abstract tangram stimuli taken from Clark and Wilkes-Gibbs [-@clark_referring_1986].
 This set was fixed for each network: all four tangrams assigned to a network were shown to every participant on every trial.
-These stimuli were chosen because participants do not already have strong pre-existing conventions for how to conceptualize or refer to them (unlike photographs of common objects), but they are structured enough to support multiple possible descriptions (unlike images of white noise).
 
 Partner pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
 After completing sixteen trials with one partner, participants were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
@@ -479,7 +480,64 @@ We evaluate generalization behavior on the same three metrics we reported in the
 
 ### Listener accuracy
 
-First, we asked whether participants (see Fig. \ref{fig:results}A)
+```{r}
+# testing raw 
+mainEffect.acc <- relevantClicks %>%  
+  lme4::glmer(correct ~ repnum + (1 + repnum | participantid) + (1 + repnum |target),
+              family = 'binomial',
+              control = lme4::glmerControl("bobyqa"),
+              data = .) %>%
+  broom::tidy() %>%
+  filter(group == 'fixed')
+ 
+mainEffect.acc.repnum <- mainEffect.acc %>% filter(term == 'repnum') 
+ 
+boundary.acc <- relevantClicks %>% 
+  unite("key", partnernum, repnum) %>%
+  select(networkid, target, correct, key) %>%
+  group_by(networkid, target, key) %>%
+  mutate(gameid = row_number()) %>%
+  spread(key, correct) %>% 
+  select(networkid, target, gameid, `0_3`, `1_0`, `1_3`, `2_0`) %>%
+  gather(jump, response, `0_3`:`2_0`) %>%
+  mutate(jump = case_when(jump == '0_3' ~ 'first_end',
+                          jump == '1_0'  ~ 'first_start',
+                          jump == '1_3' ~ 'second_end',
+                          jump == '2_0' ~ 'second_start')) %>%
+  separate(jump, into = c('jumpID', 'timepoint')) %>%
+  ungroup() %>%
+  lme4::glmer(response ~ timepoint + jumpID + (1 | target) + (1 + timepoint | networkid) , 
+        family = 'binomial',
+        contrasts = list(jumpID = contr.sum),
+        data = .) %>%
+  broom::tidy()
+
+boundary.acc.timepoint <- boundary.acc %>% filter(term == "timepointstart")
+
+increase.acc <- relevantClicks %>%  
+  filter(repnum == 0) %>%
+  lme4::glmer(correct ~ partnernum + (1  | participantid) + (1 |target),
+              family = 'binomial',
+              control = lme4::glmerControl("bobyqa"),
+              data = .) %>%
+  broom::tidy() %>%
+  filter(group == 'fixed')
+
+increase.acc.partnernum <- increase.acc %>% filter(term == 'partnernum')
+```
+
+First, we examined changes in listener accuracy over the sequence of partners, where accuracy is defined as the proportion of trials where the target was correctly selected (see Fig. \ref{fig:results}A).
+In particular, our partial pooling model predicts (1) gains in accuracy within each partner and (2) drops in accuracy at partner boundaries, but (3) overall improvement in initial interactions with successive partners.
+To test the first prediction, we constructed a logistic mixed-effects regression predicting trial-level listener responses. 
+We included a fixed effect of repetition block within partner (1, 2, 3, 4), along with random intercepts and slopes for each participant and each tangram. 
+We found that accuracy improved over successive repetitions with every partner, $b =$ `r round(mainEffect.acc.repnum$estimate,2)`, $t =$ `r round(mainEffect.acc.repnum$statistic,2)`, $p<0.001$.
+
+To test changes at partner boundaries, we constructed a different regression model.
+We coded the blocks before and after each partner swap with categorical variables and compared the final repetition block with one partner against the first repetition block with the next.
+Because partner roles were randomized for each game, the same participant often did not serve as listener in both blocks, so in addition to tangram-level intercepts, we included random slopes and intercepts at the *network* level (instead of the participant level).
+We found that across the two partner swaps, accuracy dropped significantly, $b=$ `r round(boundary.acc.timepoint$estimate,2)`, $t=$, `r round(boundary.acc.timepoint$statistic,2)`, $p=$, `r round(boundary.acc.timepoint$p.value, 3)`, reflecting the partner-specificity of meaning.
+Finally, to test whether performance in the initial repetition block improves with subsequent partners, we examined the simple effect of partner number on first repetition block.
+As predicted, we found a significant improvement in performance, $b=$ `r round(increase.acc.partnernum$estimate, 2)`, $t=$, `r round(increase.acc.partnernum$statistic, 2)`, $p=$, `r round(increase.acc.partnernum$p.value, 3)`, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors.
 
 ### Speaker utterance length
 
@@ -515,7 +573,7 @@ In other words, we suggest that conventional meanings result from agents solving
 # References will be generated automatically by Pandoc and included here.
 # The following code is some latex to format the bibliography. Do not remove it.
 ```
-
+\normalsize
 \setlength{\parindent}{-0.1in} 
 \setlength{\leftskip}{0.125in}
 \noindent
