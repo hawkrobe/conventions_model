@@ -475,12 +475,6 @@ The order of the stimuli on the screen was randomized on every trial to prevent 
 The display also contained an avatar representing their current partner to emphasize that they were speaking to the same partner for an extended period.
 
 
-## Results
-
-We evaluate generalization behavior on the same three metrics we reported in the simulations: accuracy, utterance length, and network convergence.
-
-### Listener accuracy
-
 ```{r}
 # testing raw 
 mainEffect.acc <- relevantClicks %>%  
@@ -527,31 +521,110 @@ increase.acc <- relevantClicks %>%
 increase.acc.partnernum <- increase.acc %>% filter(term == 'partnernum')
 ```
 
-First, we examined changes in listener accuracy over the sequence of partners, where accuracy is defined as the proportion of trials where the target was correctly selected (see Fig. \ref{fig:results}A).
+## Results
+
+We evaluate participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
+
+### Listener accuracy
+
+We first examined changes in listener accuracy over different partners, where accuracy is defined as the proportion of trials where the target was correctly selected (see Fig. \ref{fig:results}A).
 In particular, our partial pooling model predicts (1) gains in accuracy within each partner and (2) drops in accuracy at partner boundaries, but (3) overall improvement in initial interactions with successive partners.
 To test the first prediction, we constructed a logistic mixed-effects regression predicting trial-level listener responses. 
 We included a fixed effect of repetition block within partner (1, 2, 3, 4), along with random intercepts and slopes for each participant and each tangram. 
 We found that accuracy improved over successive repetitions with every partner, $b =$ `r round(mainEffect.acc.repnum$estimate,2)`, $t =$ `r round(mainEffect.acc.repnum$statistic,2)`, $p<0.001$.
 
-To test changes at partner boundaries, we constructed a different regression model.
-We coded the blocks before and after each partner swap with categorical variables and compared the final repetition block with one partner against the first repetition block with the next.
+To test changes at partner boundaries, we constructed another regression model.
+We coded the blocks before and after each partner swap and compared the final repetition block with one partner against the first repetition block with the next.
 Because partner roles were randomized for each game, the same participant often did not serve as listener in both blocks, so in addition to tangram-level intercepts, we included random slopes and intercepts at the *network* level (instead of the participant level).
-We found that across the two partner swaps, accuracy dropped significantly, $b=$ `r round(boundary.acc.timepoint$estimate,2)`, $t=$, `r round(boundary.acc.timepoint$statistic,2)`, $p=$, `r round(boundary.acc.timepoint$p.value, 3)`, reflecting the partner-specificity of meaning.
+We found that across the two partner swaps, accuracy dropped significantly, $b=$ `r round(boundary.acc.timepoint$estimate,2)`, $t=$ `r round(boundary.acc.timepoint$statistic,2)`, $p=$ `r round(boundary.acc.timepoint$p.value, 3)`, reflecting the partner-specificity of meaning.
 Finally, to test whether performance in the initial repetition block improves with subsequent partners, we examined the simple effect of partner number on first repetition block.
-As predicted, we found a significant improvement in performance, $b=$ `r round(increase.acc.partnernum$estimate, 2)`, $t=$, `r round(increase.acc.partnernum$statistic, 2)`, $p=$, `r round(increase.acc.partnernum$p.value, 3)`, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors.
+As predicted, we found a significant improvement in performance, $b=$ `r round(increase.acc.partnernum$estimate, 2)`, $t=$ `r round(increase.acc.partnernum$statistic, 2)`, $p=$ `r round(increase.acc.partnernum$p.value, 3)`, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors.
+
+```{r}
+# testing raw 
+library(lmerTest)
+mainEffect.reduction <- relevantMessages %>%  
+  lmer(log(m) ~ repnum + (1 + repnum | participantid) + (1 + repnum |target),
+              control = lme4::lmerControl("bobyqa"),
+              data = .) %>%
+  broom.mixed::tidy() %>%
+  filter(effect == 'fixed')
+ 
+mainEffect.reduction.repnum <- mainEffect.reduction %>% filter(term == 'repnum') 
+ 
+boundary.reduction <- relevantMessages %>% 
+  unite("key", partnernum, repnum) %>%
+  select(networkid, target, m, key) %>%
+  group_by(networkid, target, key) %>%
+  mutate(gameid = row_number()) %>%
+  spread(key, m) %>% 
+  select(networkid, target, gameid, `0_4`, `1_1`, `1_4`, `2_1`) %>%
+  gather(jump, uttLength, `0_4`:`2_1`) %>%
+  mutate(jump = case_when(jump == '0_4' ~ 'first_end',
+                          jump == '1_1'  ~ 'first_start',
+                          jump == '1_4' ~ 'second_end',
+                          jump == '2_1' ~ 'second_start')) %>%
+  separate(jump, into = c('jumpID', 'timepoint')) %>%
+  ungroup() %>%
+  lmer(log(uttLength) ~ timepoint + jumpID + (1 | target) + (1 + timepoint | networkid) , 
+        contrasts = list(jumpID = contr.sum),
+        data = .) %>%
+  broom.mixed::tidy()
+
+boundary.reduction.timepoint <- boundary.reduction %>% filter(term == "timepointstart")
+
+increase.reduction <- relevantMessages %>%  
+  filter(repnum == 1) %>%
+  lmer(log(m) ~ partnernum + (1  | participantid) + (1 |target),
+    data = .) %>%
+  broom.mixed::tidy() 
+
+increase.reduction.partnernum <- increase.reduction %>% filter(term == 'partnernum')
+```
 
 ### Speaker utterance length
 
-The mean number of words used per description is a standard measure of coding efficiency in reference games. 
-We tested predictions using a mixed-effects regression of partner number and repetition block number on the length of the speaker's description.
-We included a random-effect structure including item-effects at the object and speaker level.
-\aeg{by-item, by-subject slopes and intercepts for partner \# and repetition \#?}
-We find a positive jump in description length across partner-boundaries overall, t(91) = 3.7, p < 0.001, indicating sensitivity to different partners, but a successive incremental decrease in the lengths of these initial descriptions, t(79.2) = -6.8, p < 0.001 (Fig. \ref{fig:results}B).
-\aeg{why t-test and not intercepts?}
+Next, as a measure of coding efficiency, we calculated the raw number of words produced by a speaker on each trial.
+We then tested analogs of the same three predictions we tested in the previous section: speakers should *reduce* utterance length with each partner and revert to longer utterances at partner boundaries, but become gradually more willing to use shorter referring expressions with successive partners.
+We tested these predictions using the same mixed-effects models, but using (log) utterance length as a continuous DV (see Fig. \ref{fig:results}B).
+First, we found that speaker used fewer words over the course of interaction with every partner, $b =$ `r round(mainEffect.reduction.repnum$estimate,2)`, $t =$ `r round(mainEffect.reduction.repnum$statistic,2)`, $p<0.001$.
+Second, we found that length increased across partner-boundaries, $b =$ `r round(boundary.reduction.timepoint$estimate,2)`, $t =$ `r round(boundary.reduction.timepoint$statistic,2)`, $p<0.001$, indicating speaker sensitivity to different partners.
+Finally, we found an incremental decrease in the lengths of *initial descriptions* as speakers interacted with more partners on their network,$b =$ `r round(increase.reduction.partnernum$estimate,2)`, $t =$ `r round(increase.reduction.partnernum$statistic,2)`, $p<0.001$.
 
 ### Network convergence 
 
-TODO. (Fig. \ref{fig:results}C).
+```{r}
+convergence.lmer <- matches %>% 
+  mutate(match = matchRate > 0) %>%
+  glmer(match ~ partnernum * partnerType  + (1   | target) + (1 + partnernum * partnerType | networkid), 
+        family = 'binomial',
+        control = lme4::glmerControl("bobyqa"),
+        data = .) %>%
+  tidy() %>%
+  filter(effect == 'fixed')
+
+convergence.lmer.interaction <- convergence.lmer %>% filter(term == 'partnernum:partnerTypewithin')
+
+# matches %>% 
+#   mutate(match = matchRate > 0) %>%
+#   glmer(match ~ repid + partnernum + partnerType + partnernum:partnerType + repid:partnerType + (1 + partnernum  | target) + (1 + partnernum * partnerType | networkid), 
+#         family = 'binomial',
+#         control = lme4::glmerControl("bobyqa"),
+#         data = .) %>%
+#   tidy()
+# repid +
+```
+
+While coarse signatures of accuracy and utterance length are consistent with the predictions of our partial pooling model, it is possible that the network as a whole still fails to coordinate.
+In this section, we examine the actual *content* of pacts and measure changes in alignment across network. 
+Specifically, we extend the 'exact matching' measure of alignment used in Simulation 3 to messier natural language production by examining the *intersection* of words produced by different speakers, excluding common stop words (e.g. 'the', 'both') to emphasize the core conceptual content of the pact.
+We then constructed a mixed-effects logistic regression predicting whether this intersection was non-empty for each pair of utterances produced by speakers.
+
+The main comparison of interest was between currently interacting participants (within dyad), and participants who are not interacting (across dyad).
+Because the latter group is not aware of one another, if they nonetheless happen to tacitly be aligned, this can be taken as evidence of network-wide coordination.
+Our prediction thus concerns the interaction between pair type and partner number: within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will gradually increase as participants interact with more partners. 
+We included these variables and their interaction as fixed effects, along with random intercepts for each tangram and maximal random effects for each network (i.e. intercept, both main effects, and the interaction).
+We found a significant interaction ($b =$ `r round(convergence.lmer.interaction$estimate,2)`, $t =$ `r round(convergence.lmer.interaction$statistic,2)`, $p<0.001$; see Fig. \ref{fig:results}C).
 
 # Discussion
 
