@@ -41,6 +41,7 @@ knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F,
 library(grid)
 library(tidyverse)
 library(tidyboot)
+library(broom.mixed)
 library(ggthemes)
 library(xtable)
 
@@ -263,7 +264,7 @@ The resulting data $D_k$ from an interaction with partner $k$ thus consists of u
 Given this reference game setting, we can now explicitly specify the likelihood and prior terms. 
 We consider a likelihood given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS;@FrankeJager16_ProbabilisticPragmatics].
 A pragmatic speaker $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
-The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, who identifies an intended meaning from their content-addressible memory for lexical items $\mathcal{L}_{\phi_k}$. 
+The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, who identifies an intended meaning using their knowledge of lexical items $\mathcal{L}_{\phi_k}$. 
 This model can be formally specified as follows:
 $$
 \begin{array}{rcl}
@@ -482,7 +483,7 @@ mainEffect.acc <- relevantClicks %>%
               family = 'binomial',
               control = lme4::glmerControl("bobyqa"),
               data = .) %>%
-  broom::tidy() %>%
+  tidy() %>%
   filter(group == 'fixed')
  
 mainEffect.acc.repnum <- mainEffect.acc %>% filter(term == 'repnum') 
@@ -505,7 +506,7 @@ boundary.acc <- relevantClicks %>%
         family = 'binomial',
         contrasts = list(jumpID = contr.sum),
         data = .) %>%
-  broom::tidy()
+  tidy()
 
 boundary.acc.timepoint <- boundary.acc %>% filter(term == "timepointstart")
 
@@ -515,7 +516,7 @@ increase.acc <- relevantClicks %>%
               family = 'binomial',
               control = lme4::glmerControl("bobyqa"),
               data = .) %>%
-  broom::tidy() %>%
+  tidy() %>%
   filter(group == 'fixed')
 
 increase.acc.partnernum <- increase.acc %>% filter(term == 'partnernum')
@@ -547,7 +548,7 @@ mainEffect.reduction <- relevantMessages %>%
   lmer(log(m) ~ repnum + (1 + repnum | participantid) + (1 + repnum |target),
               control = lme4::lmerControl("bobyqa"),
               data = .) %>%
-  broom.mixed::tidy() %>%
+  tidy() %>%
   filter(effect == 'fixed')
  
 mainEffect.reduction.repnum <- mainEffect.reduction %>% filter(term == 'repnum') 
@@ -569,7 +570,7 @@ boundary.reduction <- relevantMessages %>%
   lmer(log(uttLength) ~ timepoint + jumpID + (1 | target) + (1 + timepoint | networkid) , 
         contrasts = list(jumpID = contr.sum),
         data = .) %>%
-  broom.mixed::tidy()
+  tidy()
 
 boundary.reduction.timepoint <- boundary.reduction %>% filter(term == "timepointstart")
 
@@ -577,7 +578,7 @@ increase.reduction <- relevantMessages %>%
   filter(repnum == 1) %>%
   lmer(log(m) ~ partnernum + (1  | participantid) + (1 |target),
     data = .) %>%
-  broom.mixed::tidy() 
+  tidy() 
 
 increase.reduction.partnernum <- increase.reduction %>% filter(term == 'partnernum')
 ```
@@ -624,17 +625,28 @@ The main comparison of interest was between currently interacting participants (
 Because the latter group is not aware of one another, if they nonetheless happen to tacitly be aligned, this can be taken as evidence of network-wide coordination.
 Our prediction thus concerns the interaction between pair type and partner number: within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will gradually increase as participants interact with more partners. 
 We included these variables and their interaction as fixed effects, along with random intercepts for each tangram and maximal random effects for each network (i.e. intercept, both main effects, and the interaction).
-We found a significant interaction ($b =$ `r round(convergence.lmer.interaction$estimate,2)`, $t =$ `r round(convergence.lmer.interaction$statistic,2)`, $p<0.001$; see Fig. \ref{fig:results}C).
+We found a significant interaction ($b =$ `r round(convergence.lmer.interaction$estimate,2)`, $t =$ `r round(convergence.lmer.interaction$statistic,2)`, $p<0.001$; see Fig. \ref{fig:results}C), indicating that although different pairs in a network may initially use different labels, some of these labels begin to spread through the network over subsequent interactions. 
 
 # Discussion
 
-In other words, we suggest that conventional meanings result from agents solving a meta-learning problem, adapting to each partner along the way.
+How do community-level conventions emerge from local interactions? 
+In this paper, we suggested a partial pooling account of convention formation, formalized as a hierachical Bayesian model, where conventions represent the shared structure that agents can "abstract away" from partner-specific interactions.
+Unlike complete pooling accounts, this model allows for partner-specific common ground to override existing community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
+Unlike no pooling accounts, it allows networks to gradually converge on more efficient and accurate initial expectations about new partners.
+We conducted a series of simulations demonstrating key model predictions about generalization behavior, and evaluated these predictions in a natural-language communication experiment where participants interacted with different neighbors on their network.
 
-1. Other advantages of hierarchical model. e.g. blessing of abstraction so that community-level abstractions may emerge even with relatively sparse input from each partner. it's more robust to deviations than complete-pooling; if we have a lot of interactions with idiosyncratic speakers (e.g. children), we don't replace our conventional community-level expectations. But agent-based models with a memory window or single representation predict this. Also there are other kinds of partner-specific information that may need to be tracked (e.g. visual access/knowledge, e.g. if you know someone is an expert in an area). 
+Hierarchical Bayesian models have several other properties of theoretical interest for convention formation that may be useful to evaluate in future work.
+First, they offer a "blessing of abstraction" [@GoodmanUllmanTenenbaum11_TheoryOfCausality], where community-level conventions may be learned even with relatively sparse input from each partner, as long as there is not substantial variance in the population. 
+Second, they are more robust to deviations than complete-pooling models relying on a fixed set of memory slots or a single mental dictionary. 
+This robustness is due to their ability to 'explain away' outliers with partner-specific models without their community-level expectations being affected. 
+They can therefore explain how speakers are able to emerge with conventional knowledge intact from an extended series of communicative interactions where they have adapted to children or non-native speakers. 
+Finally, the deep connection between hierarchical Bayesian models and accounts of *meta-learning*, or learning to learn [e.g. @grant2018recasting], provides a useful set of tools to analyze conventions as the result of agents solving a meta-learning problem, adapting to each partner along the way.
 
-2. Possible connection to memory mechanisms: partners as contexts that get reinstated [@Brown-schmidt; @horton_revisiting_2016], and \aeg{I'm not wild about "looking up" meaning in a "parameterized lexicon", preferring "a literal listener, L0, who identifies an intended meaning from their content-addressible memory which may include information about individual speakers or subgroups of speakers as well as phonological, contextual, and interpretative information" but for current purposes, fine!}
-
-3. Suggest ideas about different communities and code-switching as targets of future work. e.g. The current work captures and quantifies  incremental convergence within communities of 4 unfamiliar English speakers towards a set of shared language conventions.  We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. For example, we use largely overlapping but partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we comprehend certain conventions that we do not use ourselves. To model the full scale of an individual's network of communities, social factors and cues are required. A strength of the hierachical Bayesian framework is that knowledge about these communities can be learned and represented in the generative model of a speaker [@Gershman]. The current work suggests that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level while maintaining flexibility within interactions.
+The current work captures and quantifies incremental convergence within communities of four unfamiliar English speakers towards a set of shared language conventions.  
+We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. 
+For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we are able to comprehend certain conventions that we do not use ourselves. 
+For future work using hierachical Bayesian models to address the full scale of an individual's  network of community, additional social knowledge about these communities must be learned and represented in the generative model [e.g. @gershman_learning_2017]. 
+Our results are a promising first step, providing evidence that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level.
 
 <!-- # Acknowledgements -->
 
