@@ -342,12 +342,13 @@ How does the network as a whole manage to coordinate?
 
 We used a round-robin scheme to schedule four agents into three blocks of interaction, with each agent taking turns in the speaker and listener roles, and again simulated 48 independent networks.
 We measured alignment by computing whether different pairs of agents produced the same one-word utterances as speakers.
-In particular, we were interested in comparing the alignment between currently interacting agents (i.e. *within* a dyad) to the alignment between agents in the network who are not interacting (i.e. *across* dyads).
-We found that on the first block in the sequence of partners, alignment across dyads was roughly at chance (reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$).
+We compared the alignment between currently interacting agents (i.e. *within* a dyad) to the alignment between agents in the network who were not interacting (i.e. *across* dyads).
+During interaction with the first partner, alignment across dyads was roughly at chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
 In the absence of hierarchical generalization, we would expect subsequent blocks to show similar chance levels, as partner-specific conventions would continually need to be re-negotiated from scratch.
-Instead, we find that alignment measured across dyads gradually increases, suggesting that partial pooling across partners leads to emergent consensus (Fig. \ref{fig:simulations}C).
+Instead, we find that alignment across dyads gradually increases, suggesting that partial pooling across partners leads to emergent consensus (Fig. \ref{fig:simulations}C).
 
-# Behavioral experiment: \ Convention formation on a network
+# Behavioral experiment
+
 ```{r reduction, cache=T, fig.env = "figure*", fig.pos = "t!", fig.width=7, fig.height=4, fig.align = "center", set.cap.width=T, num.cols.cap=1, fig.cap = "\\label{fig:results}(A)Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence."}
 clicks.mean <- relevantClicks %>%  
   group_by(repnum, partnernum) %>%
@@ -450,11 +451,9 @@ Instead of anonymizing partners, as in many previous empirical studies of conven
 Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to novel objects with their partner [@BrennanClark96_ConceptualPactsConversation].
 As the simulations demonstrated, our model predicts that these pacts will reset at partner boundaries, but that agents should be increasingly willing to transfer expectations from one partner to another in their community. 
 
-## Methods
-
 ### Participants 
 
-We recruited 92 participants from Amazon Mechanical Turk to play a series of interactive, natural-language reference game implemented with the Dallinger platform\footnote{http://docs.dallinger.io/}.
+We recruited 92 participants from Amazon Mechanical Turk to play a series of interactive, natural-language reference games.
 
 ### Stimuli and procedure
 
@@ -483,9 +482,8 @@ mainEffect.acc <- relevantClicks %>%
               family = 'binomial',
               control = lme4::glmerControl("bobyqa"),
               data = .) %>%
-  tidy() %>%
-  filter(group == 'fixed')
- 
+  tidy() 
+
 mainEffect.acc.repnum <- mainEffect.acc %>% filter(term == 'repnum') 
  
 boundary.acc <- relevantClicks %>% 
@@ -516,15 +514,14 @@ increase.acc <- relevantClicks %>%
               family = 'binomial',
               control = lme4::glmerControl("bobyqa"),
               data = .) %>%
-  tidy() %>%
-  filter(group == 'fixed')
+  tidy()
 
 increase.acc.partnernum <- increase.acc %>% filter(term == 'partnernum')
 ```
 
 ## Results
 
-We evaluate participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
+We evaluated participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
 
 ### Listener accuracy
 
