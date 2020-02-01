@@ -16,11 +16,12 @@ abstract: >
    At the same time, much of our language use is partner-specific: we know that words may be understood differently by different people based on local common ground.
    This poses a challenge for accounts of convention formation. 
    Exactly how do agents make the inferential leap to community-wide expectations while maintaining partner-specific knowledge?
-   We propose a hierarchical Bayesian model of convention explaining how speakers and listeners abstract away meanings that seem to be shared across partners. 
+   We propose a hierarchical Bayesian model of convention to explain how speakers and listeners abstract away meanings that seem to be shared across partners. 
+   \aeg{changed convention explaining just above to convention to explain, to avoid garden path}
    To evalute our model's predictions, we then conducted an experiment where participants played an extended natural-language communication game with different partners in a small community. 
    We examine several measures of generalization across partners, and find a combination of local adaptation and global convergence.
    These results suggest that local partner-specific learning is not only compatible with global convention formation but may facilitate it when coupled with a powerful hierachical inductive mechanism. 
-
+\aeg{great!}
     
 keywords: >
    convention; generalization; 
@@ -127,6 +128,7 @@ In our hierarchical model, this lexical uncertainty is represented by a multi-le
 
 At the highest level of the hierarchy is *community-level* uncertainty $P(\Theta)$, where $\Theta$ represents an abstract "overhypothesis" about the overall distribution of possible partners. 
 $\Theta$ then parameterizes the agent's *partner-specific* uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meanings used by partner $k$ (see Fig. \ref{fig:task1model}). 
+\aeg{Is the uncertainty about the system of {\bf meanings} or about "meaning representations" or form-meaning correspondences (aka constructions)}?
 Given observations $D_k$ from repeated communicative interactions with $k$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
 \begin{equation}
 \begin{array}{rcl}
@@ -134,10 +136,12 @@ P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) 
                            & =   & P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)
 \end{array}
 \end{equation}
+\aeg{The figure is explained below, but maybe make the individual-images be made slightly smaller so that it's clear they belong to the second row?  Also, the 2nd row label on the left also seems to imply any novel partner, but then it's odd to assign a random partner two distinct colors. Isn't it "lexical prior for individuals?"?
 This joint inference decomposes the problem of partner-specific learning into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
 The prior captures the idea that different partners share some aspects of meaning in common.
 In the absence of strong information about partner-specific language use departing from this common structure, the agent ought to be regularized toward generalizable knowledge of their community's conventions [@davidson_nice_1986].
 The likelihood represents predictions about how a partner using a particular system of meaning will use language.
+\aeg{just to think about: I agree but doesn't this tuck part of the solution into the prior? Does this then raise the question as to whether the bias to generalize is learned and how.  It certainly could be learned in a more bottom-up way, as a preference for simplicity or just by witnessing multiple partners using shared conventions.}
 
 This joint posterior over meanings has two consequences for convention formation.
 First, it allows agents to maintain partner-specific expectations $\phi_k$ by marginalizing over community-level uncertainty:
@@ -301,12 +305,12 @@ To observe the model's behavior in the simplest case, we assume the speaker has 
 Instead of presenting these observations from a single partner, or randomly choosing a different partner on every trial, we swap in a new partner every block of 4 trials.
 
 Our results are shown in Fig. \ref{fig:simulations}A.
-The listener begins at chance due to its uninformative prior, but after observing several trial of evidence from the same partner, it rapidly infers the meaning of $u_1$ and learns to choose the true target with high accuracy.
+The listener begins at chance due to its uninformative prior, but after observing several trials of evidence from the same partner, it rapidly infers the meaning of $u_1$ and learns to choose the true target with high accuracy.
 When a second partner is introduced, however, it reverts nearly to its original state.
 This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
 In the absence of data from other partners, this data is more parsimoniously explained with a partner-specific model.
 After observing multiple partners behave similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
-It has much stronger initial expectations about meaning by its fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
+This is evident in the much stronger initial expectations about meaning by its fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
 
 ```{r task_display, fig.env = "figure*", fig.pos = "h", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "\\label{fig:task1_display} Experimental design. (A) Participants were placed in fully-connected networks of 4 and (B) played repeated reference games with each partner."}
 knitr::include_graphics("figs/design.pdf")
@@ -324,21 +328,25 @@ To allow for reduction, we allowed a set of four primitive utterances, $\{u_1, u
 The meanings of these two-word utterances were determined compositionally from the values of the primitive utterances^[We used the standard product T-norm semantics for conjunction in fuzzy logic, where values lie in the $[0,1]$ interval. Because we used a Gaussian prior with support over the real numbers, we first used a logistic function to map primitive values to the unit interval, and a logit function to map the product back to the original domain.].
 Additionally, we placed a weakly biased initial prior over $\Theta$: two of the utterances ($u_1$ and $u_2$) were assumed to apply more strongly to $o_1$ and the other two ($u_3$ and $u_4$) more strongly to $o_2$.
 This weak prior led the speaker to prefer conjunctions at the outset and thus allowed us to examine the speaker's shifting preference for conjunctions.
+\aeg{Just a thought: this sounds kind of klugy to me.  Is there a way to better motivate it? Maybe, since there were 4  us and 2 objects, priors were initialized pseudo-randomly so that 2 us's were biased toward o1 and 2 toward o2? Or maybe its motivated by the idea that the default assumption is that all given options are relevant to the task in some way? } 
 
 To focus on the speaker's behavior, we paired it with a fixed listener who always correctly selected the target, and ran 48 independent simulations. 
-First, we find that across successful interaction with the first partner becoming more efficient as they gain confidence that the shorter utterances will be meaningful to their partner [e.g. the speaker begins to prefer either $u_1$ or $u_2$ to refer to $o_1$ instead of the conjunction; see @hawkins_convention-formation_2017 for further interpretation of this effect].
+First, we find that successful interactions with the first partner become more efficient over trials as the model learns that the shorter utterances will be meaningful to their partner [e.g. the speaker begins to prefer either $u_1$ or $u_2$ to refer to $o_1$ instead of the conjunction; see @hawkins_convention-formation_2017 for further interpretation of this effect].
+\aeg{I feel like this doesn't capture *why* this happens: if the model is successful, why doesn't it stick with what works? Is there a prior to be efficient? or does the second conjunct introduce possible noise or interference?}
 Second, we find that speakers revert back to a longer description at the first partner swap, just as our listener model did: evidence from a single partner is relatively uninformative about the community-level distribution.
+\aeg{the speaker-agents rather than speakers? also, how does a model become more confident? Just ignore if these are standard modeling-community conventions. : )}
 After interacting with several partners, however, speakers become increasingly confident that one or the other of the short labels is shared across the entire community, and are less likely to begin an interaction with a long utterance (Fig. \ref{fig:simulations}B).
 
 ### Simulation 3: Network convergence
 
 The first two simulations presented a single adaptive agent with a fixed partner to understand its gradient of generalization. 
 In our final simulation, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
-From each individual agent's perspective, this simulations is identical to the earlier ones (i.e. a sequence of 3 different partners).
+From each individual agent's perspective, this simulation is identical to the earlier ones (i.e. a sequence of 3 different partners).
 Because all agents are simultaneously making inferences about the others, however, the network as a whole faces a coordination problem.
 For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
 Once they swap partners, they must negotiate this potential mismatch in usage. 
 How does the network as a whole manage to coordinate?
+\aeg{nicely described!}
 
 We used a round-robin scheme to schedule four agents into three blocks of interaction, with each agent taking turns in the speaker and listener roles, and again simulated 48 independent networks.
 We measured alignment by computing whether different pairs of agents produced the same one-word utterances as speakers.
@@ -614,12 +622,12 @@ convergence.lmer.interaction <- convergence.lmer %>% filter(term == 'partnernum:
 ```
 
 While coarse signatures of accuracy and utterance length are consistent with the predictions of our partial pooling model, it is possible that the network as a whole still fails to coordinate.
-In this section, we examine the actual *content* of pacts and measure changes in alignment across network. 
+In this section, we examine the actual *content* of pacts and measure changes in alignment across the network. 
 Specifically, we extend the 'exact matching' measure of alignment used in Simulation 3 to messier natural language production by examining the *intersection* of words produced by different speakers, excluding common stop words (e.g. 'the', 'both') to emphasize the core conceptual content of the pact.
 We then constructed a mixed-effects logistic regression predicting whether this intersection was non-empty for each pair of utterances produced by speakers.
 
 The main comparison of interest was between currently interacting participants (within dyad), and participants who are not interacting (across dyad).
-Because the latter group is not aware of one another, if they nonetheless happen to tacitly be aligned, this can be taken as evidence of network-wide coordination.
+Because the latter group is not aware of one another, if they nonetheless happen to tacitly be aligned, it provides evidence of network-wide coordination.
 Our prediction thus concerns the interaction between pair type and partner number: within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will gradually increase as participants interact with more partners. 
 We included these variables and their interaction as fixed effects, along with random intercepts for each tangram and maximal random effects for each network (i.e. intercept, both main effects, and the interaction).
 We found a significant interaction ($b =$ `r round(convergence.lmer.interaction$estimate,2)`, $t =$ `r round(convergence.lmer.interaction$statistic,2)`, $p<0.001$; see Fig. \ref{fig:results}C), indicating that although different pairs in a network may initially use different labels, some of these labels begin to spread through the network over subsequent interactions. 
@@ -629,20 +637,23 @@ We found a significant interaction ($b =$ `r round(convergence.lmer.interaction$
 How do community-level conventions emerge from local interactions? 
 In this paper, we suggested a partial pooling account of convention formation, formalized as a hierachical Bayesian model, where conventions represent the shared structure that agents can "abstract away" from partner-specific interactions.
 Unlike complete pooling accounts, this model allows for partner-specific common ground to override existing community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
-Unlike no pooling accounts, it allows networks to gradually converge on more efficient and accurate initial expectations about new partners.
+Unlike no-pooling accounts, it allows networks to gradually converge on more efficient and accurate initial expectations about new partners.
 We conducted a series of simulations demonstrating key model predictions about generalization behavior, and evaluated these predictions in a natural-language communication experiment where participants interacted with different neighbors on their network.
 
 Hierarchical Bayesian models have several other properties of theoretical interest for convention formation that may be useful to evaluate in future work.
 First, they offer a "blessing of abstraction" [@GoodmanUllmanTenenbaum11_TheoryOfCausality], where community-level conventions may be learned even with relatively sparse input from each partner, as long as there is not substantial variance in the population. 
-Second, they are more robust to deviations than complete-pooling models relying on a fixed set of memory slots or a single mental dictionary. 
+Second, they are more robust to deviations than complete-pooling models relying on a fixed set of memory slots or a single mental lexicon. 
+\aeg{dictionary's the wrong metaphor since lexical items aren't represented in a strictly ordered list, but in a network}
 This robustness is due to their ability to 'explain away' outliers with partner-specific models without their community-level expectations being affected. 
 They can therefore explain how speakers are able to emerge with conventional knowledge intact from an extended series of communicative interactions where they have adapted to children or non-native speakers. 
 Finally, the deep connection between hierarchical Bayesian models and accounts of *meta-learning*, or learning to learn [e.g. @grant2018recasting], provides a useful set of tools to analyze conventions as the result of agents solving a meta-learning problem, adapting to each partner along the way.
+\aeg{just for future thinking:  the same partial pooling could be very useful for capturing the conventions themselves across speakers: there are some language-wide conventions (e.g., SVO order, AN order, but they are generally overridden by some individual constructions: topicalization, cluster of "a-adjectives"}
 
 The current work captures and quantifies incremental convergence within communities of four unfamiliar English speakers towards a set of shared language conventions.  
 We recognize that real-world communities are more complex than this, however, as each speaker takes part in a number of subcommunities which vary in size and overlap. 
 For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children, and we are able to comprehend certain conventions that we do not use ourselves. 
-For future work using hierachical Bayesian models to address the full scale of an individual's  network of community, additional social knowledge about these communities must be learned and represented in the generative model [e.g. @gershman_learning_2017]. 
+For future work using hierachical Bayesian models to address the full scale of an individual's  network of communities, additional social knowledge about these communities must be learned and represented in the generative model [e.g. @gershman_learning_2017]. 
+\aeg{nice!}
 Our results are a promising first step, providing evidence that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level.
 
 <!-- # Acknowledgements -->
