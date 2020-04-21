@@ -1,7 +1,7 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
-var data = refModule.readCSV(argv.gameNum + '.csv');
+var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
 console.log(data);
 var numUtterances = 16;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
@@ -147,9 +147,9 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   }
 };
 
-var f = csv.open('networkOutput' + argv.gameNum + '.csv');
+var f = csv.open('./output/output' + argv.gameNum + '.csv');
 csv.writeLine('gameNum,alpha,time,speakerID,listenerID,speakerPredictionLikelihood,listenerPredictionLikelihood,topSpeakerChoice,topListenerChoice,trueUtterance,trueResponse,modelCorrect,participantCorrect',f);
 
-iterate(f, data, []);
+iterate(f, data, {1: [], 2: []});
 
 csv.close(f);
