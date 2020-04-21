@@ -1,0 +1,155 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
+
+var data = refModule.readCSV(argv.gameNum + '.csv');
+console.log(data);
+var numUtterances = 16;
+var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
+var objects = ['square_red_light', 'square_red_dark', 'square_blue_light', 'square_blue_dark',
+               'circle_striped_high', 'circle_striped_low', 'circle_spotted_high', 'circle_spotted_low'];
+var features = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 'light', 'dark', 'high', 'low'];
+var objectLookup = {
+  'redSquare1' : 'square_red_light', 'redSquare2' : 'square_red_dark',
+  'blueSquare1' : 'square_blue_light', 'blueSquare2' : 'square_blue_dark',
+  'stripedCircle1' : 'circle_striped_low', 'stripedCircle2' :'circle_striped_high',
+  'spottedCircle1' : 'circle_spotted_low', 'spottedCircle2' : 'circle_spotted_high'
+};
+var numFeatures = features.length;
+var lexDims = [numUtterances, numFeatures];
+
+var params = {
+  alpha : 10,
+  costWeight: 0,
+  utterances: utterances,
+  objects: objects,
+  features: features
+};
+
+console.log(params);
+var tensorSoftplus = function(x) {
+  return T.log(T.add(T.exp(x), 1));
+};
+
+var partnerGuide = function(paramName) {
+  return function() {
+    return DiagCovGaussian({
+      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(v) {return zeros(lexDims);}}),
+      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
+    });
+  };
+};
+
+var sampleLexicon = function(agentID) {
+  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 1)}),
+		{guide: partnerGuide(agentID)});
+};
+
+var S = function(object, agentID, context) {
+  return Infer({method: "enumerate"}, function() {
+    var utt = uniformDraw(params.utterances);
+    var utility = expectation(Infer({method:"forward", samples: 2500, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID);
+      var config = {lexicon: lexicon, context: context};
+      // console.log(object)
+      // console.log(utt)
+      //console.log(refModule.getListenerScore(object, utt, extend(params, config)))
+      return (params.alpha * refModule.getListenerScore(object, utt, extend(params, config)));
+    }));
+    display(utt);
+    display(utility);
+    factor(utility);
+    return utt;
+  });
+};
+
+var L = function(utt, agentID, context) {
+  return Infer({method: "enumerate"}, function() {
+    var object = uniformDraw(context);
+    var utility = expectation(Infer({method:"forward", samples: 2500, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID);
+      var config = {lexicon: lexicon, context: context};
+//      console.log('L0 score', refModule.getL0Score(object, utt, extend(params, config)));
+//      console.log(object);
+      return Math.exp(refModule.getListenerScore(object, utt, extend(params, config)));
+    }));
+    display(object);
+    display(utility);
+    factor(Math.log(utility));
+    return object;
+  });
+};
+
+var update = function(agentID, dataSoFar) {
+  Optimize({
+    steps: 2500, verbose: false, optMethod: {adam: {stepSize: 0.01}},
+    model: function() {
+      var lexicon = sampleLexicon(agentID);
+      mapData({data: dataSoFar, batchSize: _.min([10, dataSoFar.length])}, function(trial) {
+        var config = {lexicon: lexicon, context: trial.context};
+        var score = (
+          trial.role == 'speaker' ?
+            refModule.getListenerScore(trial.clickedName, trial.wordID, extend(params, config)) :
+            refModule.getSpeakerScore(trial.wordID, trial.intendedName, extend(params, config))
+        );
+        factor(score);
+      });
+    }
+  });
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(outputFile, remainingTrials, dataSoFar) {
+  var currTrialRaw = first(remainingTrials);
+  var currTrial = extend(currTrialRaw, {
+    context : map(function(v) {return objectLookup[v];},
+                  [currTrialRaw.object1name, currTrialRaw.object2name,
+                   currTrialRaw.object3name, currTrialRaw.object4name]),
+    intendedName : objectLookup[currTrialRaw['intendedName']],
+    clickedName : objectLookup[currTrialRaw['clickedName']]
+  });
+  // console.log(currTrialRaw);
+  console.log('currTrial:', currTrial)
+  // run VI on current data
+  if(!_.isEmpty(dataSoFar[currTrial.speakerID])) {
+    update(currTrial.speakerID, dataSoFar);
+    update(currTrial.listenerID, dataSoFar);
+  } 
+  
+  // get marginal prediction of next data point over lexicon posterior
+
+  var listenerOutput = L(currTrial.wordID, currTrial.listenerID, currTrial.context);
+  var listenerPrediction = listenerOutput.score(currTrial.clickedName);
+  var topListenerChoice = MAP(listenerOutput)['val'];
+
+  var speakerOutput = S(currTrial.intendedName, currTrial.speakerID, currTrial.context);
+  var speakerPrediction = speakerOutput.score(currTrial.wordID);
+  var topSpeakerChoice = MAP(speakerOutput)['val'];
+  
+  console.log('speaker likelihood is: ' + speakerPrediction);
+  console.log('listener likelihood is: ' + listenerPrediction);  
+
+  console.log('top speaker choice is ' + topSpeakerChoice + ' while real is ' + currTrial.wordID);
+  console.log('top listener choice is ' + topListenerChoice + ' while real is ' + currTrial.clickedName);  
+  csv.writeLine([argv.gameNum, params.alpha, currTrial.trialNum,
+                 currTrial.speakerID, currTrial.listenerID,
+                 speakerPrediction, listenerPrediction,
+                 topSpeakerChoice, topListenerChoice,
+                 currTrial.wordID, currTrial.clickedName,
+                 topListenerChoice == currTrial.intendedName,
+                 currTrial.clickedName == currTrial.intendedName
+                ].join(','), outputFile);
+
+  var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
+    return dataSoFar[id].concat(extend(currTrial, {role : id == currTrial.speakerID ? 'speaker' : 'listener'}));
+  }, [currTrial.speakerID, currTrial.listenerID]));
+  if(!_.isEmpty(rest(remainingTrials))) {
+    iterate(outputFile, rest(remainingTrials), newDataSoFar);
+  }
+};
+
+var f = csv.open('networkOutput' + argv.gameNum + '.csv');
+csv.writeLine('gameNum,alpha,time,speakerID,listenerID,speakerPredictionLikelihood,listenerPredictionLikelihood,topSpeakerChoice,topListenerChoice,trueUtterance,trueResponse,modelCorrect,participantCorrect',f);
+
+iterate(f, data, []);
+
+csv.close(f);
