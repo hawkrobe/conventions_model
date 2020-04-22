@@ -74,11 +74,49 @@
 %
 %Agent-based models use heuristics 
 %
-%\section{Convention formation as hierarchical inference}
+\section{Convention formation as hierarchical inference}
+
 %
 %We present our model. It is learning and inference all the way down but gives rise to emergent behavior in groups.
 %
-%\section{Experiment 1: pragmatic inferences shape conventions}
+\subsection{Hierarchical inference: generalizing to new partners}
+
+In this section, we provide an explicit computational account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
+Specifically, we show how the dyadic convention formation model of @hawkins_convention-formation_2017 can be extended with a principled mechanism for generalization across multiple partners.
+This model begins with the idea that knowledge about linguistic meaning can be represented probabilistically: agents have uncertainty about the form-meaning mappings their current partner is using [@bergen_pragmatic_2016]. 
+In our hierarchical model, this uncertainty is represented by a multi-level prior. 
+
+At the highest level of the hierarchy is *community-level* uncertainty $P(\Theta)$, where $\Theta$ represents an abstract "overhypothesis" about the overall distribution of possible partners. 
+$\Theta$ then parameterizes the agent's *partner-specific* uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meaning used by partner $k$ (see Fig. \ref{fig:task1model}). 
+Given observations $D_k$ from interactions with partner $k$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
+\begin{equation}
+\begin{array}{rcl}
+P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) \\
+                           & =   & P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)
+\end{array}
+\end{equation}
+This joint inference decomposes the learning problem into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
+The prior captures the idea that different partners may share aspects of meaning in common.
+In the absence of strong evidence that partner-specific language use departs from this common structure, the agent ought to regularize toward background knowledge of the population's conventions.
+The likelihood represents predictions about how a partner using a particular system of meaning will use language.
+
+This joint posterior over meanings has two consequences for convention formation.
+First, it allows agents to maintain partner-specific expectations $\phi_k$ by marginalizing over community-level uncertainty:
+\begin{equation}
+P(\phi_k | D_k) = \int_{\Theta}P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)  d\Theta
+\end{equation}
+Second, the hierarchical structure provides an inductive pathway for data to inform beliefs about community-wide conventions.
+Agents update their beliefs about $\Theta$ by marginalizing over data accumulated from different partners:
+\begin{equation}
+P(\Theta | D) = P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
+\end{equation}
+where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and $N$ is the number of partners previous encountered. 
+
+After multiple partners are inferred to have a similar system of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner will share it as well.
+This transfer is sometimes referred to as "sharing of strength" or "partial pooling" [@gelman2006data] because pooled data is smoothly integrated with domain-specific knowledge.
+
+
+\section{Experiment 1: pragmatic inferences shape conventions}
 %
 %We run some simulations and fit our model to an artificial language communication game. 
 %
@@ -103,70 +141,184 @@ In other words, the partner-specific expectations agents form within an interact
 These expectations should manifest in an increasing willingness to use short labels with novel partners, leading to the emergent consequence of lending additional evidence for that structure. 
 We test this novel prediction in a networked communication game and compare our model to two non-hierarchical variants: a `complete-pooling' model that collapses across partners and a `no-pooling' model that treats partners as entirely separate.
 
-\begin{figure}[t!]
-\centering
-    \includegraphics[scale=.32]{task1_network.pdf}
-  \caption{Network}% tying individual cognition to population-level patterns}
-  \label{fig:task1_network}
-\end{figure}
+\subsection{Model predictions}
 
-\subsection{Participants}
+We investigate the generalization behavior of our model under three increasingly complex scenarios. 
+In all of these scenarios, speaker and listener agents play a reference game with a set of two objects $\{o_1, o_2\}$.
+On each trial, one of these objects is designated for the speaker as the *target*. 
+They must select from a set of utterances $\{u_0, \dots, u_j\}$ to convey the identity of the target to the listener.
+Upon hearing this utterance, the listener selects which of the objects they believe to be the target and then receives feedback about the true target.
+The resulting data $D_k$ from an interaction with partner $k$ thus consists of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$, as well as information about the context of objects.
 
-We recruited 600 participants from Amazon Mechanical Turk to play an interactive, natural-language reference game using the Dallinger platform\footnote{http://docs.dallinger.io/}.
-Participants were randomly assigned to one of 100 six-member networks and embedded as a fully-connected graph, such that everyone was neighbors with everyone else in their assigned community (Fig. \ref{fig:task1_network}). 
-We prescreened participants who report a native language different from English. 
+Given this reference game setting, we can explicitly specify the likelihood and prior terms. 
+We consider a likelihood given by the Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity [@GoodmanFrank16_RSATiCS].
+A pragmatic speaker $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their model of the speaker to infer the intended target.
+The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, who identifies an intended meaning using their lexical knowledge $\mathcal{L}_{\phi_k}$. 
+This model can be formally specified as follows:
+$$
+\begin{array}{rcl}
+L_0(o | u, \phi_k) &\propto  & \exp\{\mathcal{L}_{\phi_k}(u,o)\} \\
+S_1(u | o, \phi_k) &\propto &  \exp\{w_I \cdot \log L_0(o | u, \phi_k) - w_C \cdot \textrm{cost}(u)\}   \\
+L_1(o | u, \phi_k) &\propto  & S_1(u | o, \phi_k) P(o) 
+\end{array}
+$$
+where $w_I$ and $w_C$ are free parameters controlling the relative weights on the informativity and parsimony, respectively^[Throughout our simulations, we set $w_I = 11,~w_C = 7$. A grid search over parameter space revealed different regimes of behavior, but we leave broader exploration of this space to future work.].
+We define $P(D_k | \phi_k)$ as the probability of the data under a pragmatic listener $L_1$.
+We also use this RSA model to simulate the behavior of uncertain speakers $S$ and listeners $L$. 
+Utterances and object selections are sampled from the posterior predictive, marginalizing over lexical uncertainty.
 
-\subsection{Stimulus \& design}
+Finally, we must specify the form of the lexical prior and a method to perform inference in this model.
+We assume $\Theta$ is a matrix with an entry for each utterance-object pair $(u_i, o_j)$, and use independent Gaussian distributions for each $\Theta_{ij} \in \Theta$ as a hyper-prior.
+We then centered our partner-specific prior $\phi_{ij} \in \phi$ at the shared value for a particular partner:
+$$\begin{array}{rcl}
+P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
+P(\phi_{ij} | \Theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
+\end{array}$$
+These priors represent assumptions about how far partner-specific learning can drift from the community-wide value.
 
-%At a high level, my experiment design will follow the basic setup from \cite{fay_interactive_2010}. 
-Participants were paired with each of their five neighbors in a round-robin schedule.
-In each interaction, they played a game where they repeatedly referred to six abstract tangram shapes taken from \citeA[Fig. \ref{fig:task1_display}]{clark_referring_1986}.
-These stimuli have been used extensively in the literature on coordination and common ground \shortcite<e.g.>{duff_development_2006,hawkins_convention-formation_2017}.
-They were designed such that participants will not already have strong pre-existing lexical conventions for how to refer to them (unlike photographs of common objects), but are structured enough to support many possible descriptions (unlike images of white noise).
+For all simulations, we used the implementation of variational inference in WebPPL [@GoodmanStuhlmuller14_DIPPL]. 
+Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
+Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable. 
+We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective.
+We run 50,000 steps of gradient descent on the first observation to obtain a posterior, compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the posterior predictive, then resume gradient descent on the resulting outcome.
 
-On each trial of a reference game, one of these six shapes was highlighted as the \emph{target object} for the ``speaker'' who was instructed to use a chatbox to communicate the identity of this object to their partner, the ``listener''.
-The listener may reply through the chatbox but must ultimately make a selection from the array. 
-The trial sequence for a given partner was constructed so that each of four targets appear six times each, spread evenly across the session, for a total of 24 trials.
+\paragraph{Simulation 1: Listener accuracy across partners}
 
-After completing 24 trials with one partner, they were introduced to their next partner and asked to play the repeated reference game again with the same four objects.
-Each participant in a network was assigned a distinct avatar so that participants were clear they were speaking to distinct partners.
-This process repeated until each participant had partnered with all five neighbors.
-Players were given full feedback on each about their partner's choice and received bonus payment for each correct response. 
-Because some pairs within the network took longer than others to complete the trial sequence, we sent participants to a temporary waiting room if their next partner was not yet ready. 
+The key predictions of our model concern the pattern of generalization across partners.
+In our first simulation, we consider the partner-specificity of a *listener*'s expectations about which object is being referred to.
+To observe the model's behavior in the simplest case, we assume the speaker has a vocabulary of two single-word utterances $\{u_1, u_2\}$ with equal cost and use the same utterance and target object ($\{o_1, u_1\}$) on every trial.
+We introduce a new partner every 4 trials.
 
-\begin{figure}
-\centering
-    \includegraphics[scale=.27]{task1_display.pdf}
-  \caption{Task}% tying individual cognition to population-level patterns}
-  \label{fig:task1_display}
-\end{figure}
+The probability assigned to the target on each trial is shown in Fig. \ref{fig:model_results}A.
+The listener model begins at chance due to its uninformative prior, but after observing several trials of evidence from the same partner, it rapidly infers the meaning of $u_1$ and learns to choose the true target with high accuracy.
+When a second partner is introduced, however, it reverts nearly to its original state.
+This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
+In the absence of data from other partners, this data is more parsimoniously explained with a partner-specific model.
+After observing multiple partners behave similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
+This is evident in much stronger initial expectations by the fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner.)
+
+\paragraph{Simulation 2: Speaker utterance length across partners}
+
+Next, we examined our model's predictions about how a *speaker*'s referring expressions will change with successive listeners.
+While it has been frequently observed that messages reduce in length across repetitions with a single partner and sharply revert back to longer utterances when a new partner is introduced [@wilkes-gibbs_coordinating_1992], the key prediction distinguishing our model concerns behavior across subsequent partner boundaries.
+Complete-pooling accounts predict no change in number of words when a new partner is introduced.
+No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor. 
+Here we show that a partial pooling account predicts a more complex pattern of generalization.
+
+We allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into conjunctions, e.g. $\{u_1+u_2, u_3+u_4\}$, which are assumed to have a higher utterance cost.
+The meanings of these conjunctions were determined compositionally from the values of the primitive utterances^[We used a standard product T-norm for conjunction. Because our values come from a Gaussian prior and the T-norm is defined over $[0,1]$, we used logistic and logit function to map values to the unit interval and back.].
+Speakers do not typically begin at chance over their *entire* vocabulary, so we used a weakly biased prior for $\Theta$: two of the primitive utterances initially applied more strongly to $o_1$ and the other two more strongly to $o_2$.
+This weak bias leads to a preference for conjunctions at the outset and thus allows us examine reduction.
+
+We paired the speaker model with a fixed listener who always selected the target, and ran 48 independent simulations.
+First, we found that descriptions become more efficient over interaction with a single partner: the model becomes more confident that shorter utterances will be meaningful, so the marginal informativity provided by the conjunction is not worth the additional cost [see @hawkins_convention-formation_2017].
+Critically, we find that the speaker model reverts back to a longer description at the first partner swap: evidence from one partner is relatively uninformative about the community.
+After interacting with several partners, however, it becomes more likely that one of the short labels is shared across the entire community, and the model is correspondingly more likely to begin a new interaction with it (Fig. \ref{fig:model_results}B).
+
+\paragraph{Simulation 3: Network convergence}
+
+The first two simulations presented a single adaptive agent with a fixed partner to understand its gradient of generalization. 
+In our final simulation, we test the consequences of the proposed hierarchical inference scheme for a network of interacting agents.
+From each individual agent's perspective, this simulation is identical to the earlier ones (i.e. a sequence of 3 different partners).
+Because all agents are simultaneously making inferences about the others, however, the network as a whole faces a coordination problem.
+For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
+Once they swap partners, they must negotiate this potential mismatch in usage. 
+How does the network as a whole manage to coordinate?
+
+We used a round-robin scheme to schedule four agents into three blocks of interaction, with each agent taking turns in the speaker and listener roles, and simulated 48 networks.
+We measured alignment by computing whether different agents produced the same one-word utterances. 
+We compared the alignment between currently interacting agents (i.e. *within* a dyad) to those who were not interacting (i.e. *across* dyads).
+Alignment across dyads was initially at chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
+In the absence of hierarchical generalization, we would expect subsequent blocks to remain at chance, as pacts would need to be re-negotiated from scratch.
+Instead, we find that alignment across dyads gradually increases, suggesting that partial pooling leads to emergent consensus (Fig. \ref{fig:model_results}C).
+
+\subsection{Behavioral methods}
+
+To evaluate the qualitative predictions observed in our simulations, we designed a natural-language communication experiment following roughly the same network design.
+Instead of anonymizing partners, as in many previous empirical studies of convention formation, we divided the experiment into blocks of extended dyadic interactions with stable, identifiable partners [see @fay_interactive_2010; @garrod_conversation_1994 for similar designs].
+Each block was a full repeated reference game, where participants had to coordinate on an *ad hoc* convention, or *pact*, for how to refer to novel objects with their partner [@BrennanClark96_ConceptualPactsConversation].
+Our model predicts that these pacts will reset at partner boundaries, but that agents should be increasingly willing to transfer expectations from one partner to another.
+
+\paragraph{Participants}
+
+We recruited 92 participants from Amazon Mechanical Turk to play a series of interactive, natural-language reference games.
+
+\paragraph{Stimuli and procedure}
+
+Each participant was randomly assigned to one of `r numNetworks` fully-connected networks with three other participants as their 'neighbors' (Fig. \ref{fig:task1_display}A). 
+Each network was then randomly assigned one of three distinct "contexts" containing abstract tangram stimuli taken from Clark and Wilkes-Gibbs [-@clark_referring_1986].
+The experiment was structured into a series of three repeated reference games with different partners, using these same four stimuli as referents.
+Partner pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
+The trial sequence for each reference game was composed of four repetition blocks, where each target appeared once per block.
+After completing sixteen trials with one partner, participants were introduced to their next partner and asked to play the game again. 
+This process repeated until each participant had partnered with all three neighbors.
+Because some pairs within the network took longer than others, we sent participants to a temporary waiting room if their next partner was not ready. 
+
+Each trial proceeded as follows.
+First, one of the four tangrams in the context was highlighted as the \emph{target object} for the "speaker." 
+They were instructed to use a chatbox to communicate the identity of this object to their partner, the "listener" (see Fig. \ref{fig:task1_display}C).
+The listener could reply freely through the chatbox but was asked to ultimately make a selection from the array. 
+Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
+The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. 'the one on the left').
+The display also contained an avatar representing their current partner to emphasize that they were speaking to the same partner for an extended period.
+
+\subsection{Results}
+
+We evaluated participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
+
+\paragraph{Listener accuracy}
+
+We first examined changes in the proportion of correct listener selections.
+In particular, our partial pooling model predicts (1) gains in accuracy within each partner and (2) drops in accuracy at partner boundaries, but (3) overall improvement in initial interactions with successive partners.
+To test the first prediction, we constructed a logistic mixed-effects regression predicting trial-level listener responses. 
+We included a fixed effect of repetition block within partner (1, 2, 3, 4), along with random intercepts and slopes for each participant and each tangram. 
+We found that accuracy improved over successive repetitions with every partner, $b =$ `r round(mainEffect.acc.repnum$estimate,2)`, $z =$ `r round(mainEffect.acc.repnum$statistic,2)`, $p<0.001$.
+
+To test changes at partner boundaries, we constructed another regression model.
+We coded the repetition blocks immediately before and after each partner swap, and included this as a categorical fixed effect.
+Because partner roles were randomized for each game, the same participant often did not serve as listener in both blocks, so in addition to tangram-level intercepts, we included random slopes and intercepts at the *network* level (instead of the participant level).
+We found that across the two partner swaps, accuracy dropped significantly, $b=$ `r round(boundary.acc.timepoint$estimate,2)`, $z=$ `r round(boundary.acc.timepoint$statistic,2)`, $p<0.05$, reflecting partner-specificity of meaning.
+Finally, to test whether performance in the initial repetition block improves with subsequent partners, we examined the simple effect of partner number, restricting analysis to the first repetition block.
+As predicted, we found a significant improvement in performance, $b=$ `r round(increase.acc.partnernum$estimate, 2)`, $z=$ `r round(increase.acc.partnernum$statistic, 2)`, $p<0.01$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig. \ref{fig:results}A).
 
 
-\subsection{Confirmatory behavioral predictions}
-%A partial pooling account makes three behavioral predictions that allow us to distinguish it from no pooling and complete pooling accounts. 
-The most diagnostic dependent variable to distinguish the hierarchical model from alternatives concerns the mean number of words used per description.
-This is a common operationalization of conventionalization in terms of coding efficiency.
-In particular, we are interested in how this measure changes within partners and across partner boundaries.
-The first panel of Fig. \ref{fig:task1predictions} shows the mean number of words used across six repetitions with one partner in a pilot experiment with $N=100$ isolated pairs.
-All of the model variants we consider are consistent with this pattern: messages reduce in length across repetitions with a partner as they coordinate on shorthand. 
+\paragraph{Speaker utterance length}
 
-However, our account diverges in its predictions at the partner boundary, as visualized in the remaining panels of Fig. \ref{fig:task1predictions}. 
-Pilot data was used to calibrate expected effect sizes. 
-While `complete-pooling' predicts that participants will completely transfer conventions from the previous partner  \cite<inconsistent with existing evidence from psycholinguistics, e.g.>{wilkes-gibbs_coordinating_1992}, the other accounts predict that speakers will revert nearly to their initial description length.
-Furthermore, while \emph{no-pooling} predicts the same complete reversion with every subsequent partner, our hierarchical \emph{partial pooling} account predicts that the magnitude of the reversion will decrease over successive interactions: after several partners, it predicts transfer as strongly as complete pooling. 
+Next, as a measure of coding efficiency, we calculated the raw number of words produced by a speaker on each trial.
+We then tested analogs of the same three predictions we tested in the previous section using the same mixed-effects models, but using (log) utterance length as a continuous DV instead of accuracy (see Fig. \ref{fig:results}B).
+We found that speakers reduced utterance length with every partner, $b =$ `r round(mainEffect.reduction.repnum$estimate,2)`, $t(`r round(mainEffect.reduction.repnum$df, 1)`)=$ `r round(mainEffect.reduction.repnum$statistic,2)`, $p<0.001$, increased length across partner-boundaries, $b =$ `r round(boundary.reduction.timepoint$estimate,2)`, $t(`r round(boundary.reduction.timepoint$df, 2)`)=$ `r round(boundary.reduction.timepoint$statistic,2)`, $p<0.001$, and decreased the length of their *initial descriptions* as they interacted with more partners on their network,$b =`r round(increase.reduction.partnernum$estimate,2)`$, $t(`r round(increase.reduction.partnernum$df, 1)`)=`r round(increase.reduction.partnernum$statistic,2)`$, $p<0.001$ (see Fig. \ref{fig:results}B).
 
-\begin{figure}
-\centering
-    \includegraphics[scale=.5]{task1_predictions.pdf}
-  \caption{Predictions}% tying individual cognition to population-level patterns}
-  \label{fig:task1predictions}
-\end{figure}
+\paragraph{Network convergence }
 
-We will test these predictions using a mixed-effects regression of partner number on ``reversion size'' (the difference in number of words between the final descriptions on one repetition and the initial ones on the next), with maximum random-effect structure including item-effects at the object and speaker level.  
-Only the partial pooling model predicts a significant decrease in reversion over successive partners. 
-Preliminary support for this signature was reported by \shortciteA{fay_interactive_2010} in a Pictionary task where participants used sketches to communicate verbal concepts instead of using words to refer to visual targets, and the measure of interest was the  complexity of the drawings \cite<see also>{garrod_conversation_1994}.
+In this section, we examine the actual *content* of pacts and test whether these coarse signatures of generalization actually lead to increased alignment across the network, as predicted. 
+Specifically, we extend the 'exact matching' measure of alignment used in Simulation 3 to natural language production by examining whether the *intersection* of words produced by different speakers was non-empty^[We excluded a list of common stop words (e.g. 'the', 'both') to focus on the core conceptual content of pacts; using the size of the intersection instead of the binary variable yielded similar results.].
+As in our simulation, the main comparison of interest was between currently interacting participants and participants who are not interacting: we predicted that within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will increase. 
+We thus constructed a mixed-effects logistic regression including fixed effects of pair type (within vs. across), partner number, and their interaction.
+We included random intercepts at the tangram level and maximal random effects at the network level (i.e. intercept, both main effects, and the interaction).
+As predicted, we found a significant interaction ($b =$ `r round(convergence.lmer.interaction$estimate,2)`, $z=$ `r round(convergence.lmer.interaction$statistic,2)`, $p<0.001$; see Fig. \ref{fig:results}C).
+Although different pairs in a network may initially use different labels, these labels begin to align over subsequent interactions. 
 
-\subsection{Simulations}
+\section{General discussion}
+
+\subsection{Communities}
+
+How do community-level conventions emerge from local interactions? 
+In this paper, we proposed a partial-pooling account, formalized as a hierarchical Bayesian model, where conventions represent the shared structure that agents "abstract away" from partner-specific interactions.
+Unlike complete-pooling accounts, this model allows for partner-specific common ground to override community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
+Unlike no-pooling accounts, it allows networks to converge on more efficient and accurate expectations about novel partners.
+We conducted a series of simulations demonstrating the model's generalization behavior, and evaluated these predictions with a natural-language communication experiment on a small network.
+
+Hierarchical Bayesian models have several other properties of theoretical interest for convention formation.
+First, they offer a "blessing of abstraction" [Goodman et al., -@GoodmanUllmanTenenbaum11_TheoryOfCausality], where community-level conventions may be learned even with relatively sparse input from each partner, as long as there is not substantial variance in the population. 
+Second, they are more robust to partner-specific deviations from conventions (e.g. interactions with children or non-native speakers) than complete-pooling models relying on a fixed set of memory slots or a single mental 'inventory.' 
+This robustness is due to their ability to 'explain away' outliers without community-level expectations being affected. 
+Finally, the deep connection between hierarchical Bayesian models and accounts of *meta-learning*, or learning to learn [Grant et al., -@grant_recasting_2018], provides a useful set of tools to analyze conventions as the result of agents solving a meta-learning problem, adapting to each partner along the way.
+
+Real-world communities are much more complex than the simple networks we considered: each speaker takes part in a number of overlapping subcommunities. 
+For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children.
+For future work using hierarchical Bayesian models to address the full scale of an individual's  network of communities, additional social knowledge about these communities must be learned and represented in the generative model [e.g. Gershman et al, -@gershman_learning_2017]. 
+Our results are a promising first step, providing evidence that hierarchical generalization may be a foundational cognitive building block for establishing conventionality at the group level.
+
 
 \section{\bf Acknowledgments}
 \small
