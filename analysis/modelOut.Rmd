@@ -12,25 +12,7 @@ library(tidyverse)
 library(ggthemes)
 ```
 
-```{r}
-data.frame(prediction = c(0.48319292387482204, 0.5427530392854598, 0.6142042978402963,
-                          0.5216966792994756, 0.5845228687964401, 0.6583643792065222, 
-                          0.5948892425562737, 0.6583853974068616, 0.7282353919606799,
-                          0.6971169524835485 ),
-           t = seq(1,10),
-           partner = factor(c(1,1,1,2,2,2,3,3,3,4))) %>%
-  ggplot(aes(x = t, y = prediction, color = partner)) +
-    geom_point() +
-    geom_line() +
-    geom_hline(yintercept = .5) +
-    theme_few() +
-    xlab('time') +
-    ylab("P(target)") +
-    scale_x_continuous(breaks = c(1,4,7,10)) +
-    theme(aspect.ratio = 1)
-
-ggsave('../../dissertation/dissertation/figures/modeling/partnerspecificity.pdf', height = 8, width = 8, units = 'cm', useDingbats = F)
-```
+Make plot from table in Clark paper
 
 ```{r}
 data.frame(prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.2, 7.8, 6.7),
@@ -47,4 +29,79 @@ data.frame(prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.
     theme(aspect.ratio = 1)
 
 ggsave('../../dissertation/dissertation/figures/modeling/clark92.pdf', height = 8, width = 8, units = 'cm', useDingbats = F)
+```
+
+## Simulating models & looking at post-test
+
+```{r}
+trajectory <- read_csv('../simulations/cogsci2018/output/trajectorygame1.csv')
+ggplot(trajectory, aes(x = time, y = object, fill = val)) +
+  geom_tile()
+```
+
+```{r}
+postTest <- read_csv('../simulations/cogsci2018/output/postTestgame1.csv')
+ggplot(postTest, aes(x = word, y = object, fill = val > 2)) +
+  geom_tile() +
+  facet_wrap(~ agentID)
+```
+
+## Fitting human data
+
+```{r}
+modelInput <- dir(path = "../simulations/cogsci2018/input/",
+    pattern = "game*",
+    full.names = T) %>%
+  map(read_csv) %>%
+  reduce(rbind) %>%
+  rename(time = trialNum, gameNum = id)
+
+modelOutput <- dir(path = "../simulations/cogsci2018/output/pragmatics/",
+    pattern = "*.csv",
+    full.names = T) %>%
+  map(read_csv) %>%
+  reduce(rbind) %>%
+  left_join(modelInput, by = c('gameNum', 'time', 'speakerID', 'listenerID')) %>%
+  mutate(sameUtteranceAsParticipant = topSpeakerChoice==trueUtterance,
+         sameSelectionAsParticipant = topListenerChoice == trueResponse)
+```
+
+Model accuracy appears to track participant accuracy at each point in time... 
+
+```{r}
+modelOutput %>%
+  gather(src,value,modelCorrect, participantCorrect) %>%
+  group_by(time, condition, src) %>%
+  summarize(m = mean(value)) %>%
+  ggplot(aes(x = time, y = m, color = src)) +
+    geom_point() +
+    geom_smooth() +
+    facet_grid(condition ~ .) +
+    theme_few()
+```
+
+Predicting utterance is harder than predicting selection. And we make better predictions over time (maybe not surprising, since human behavior stabilizes later on)
+
+```{r}
+modelOutput %>%
+  gather(src,value,sameUtteranceAsParticipant,sameSelectionAsParticipant) %>%
+  group_by(time, condition, src) %>%
+  summarize(m = mean(value)) %>%
+  ggplot(aes(x = time, y = m, color = src)) +
+    geom_point(alpha = 0.25) +
+    geom_smooth() +
+    facet_grid(condition ~ .) +
+    theme_few()
+```
+
+```{r}
+modelOutput %>%
+  gather(src,value,speakerPredictionLikelihood,listenerPredictionLikelihood) %>%
+  group_by(time, condition, src) %>%
+  summarize(m = mean(value)) %>%
+  ggplot(aes(x = time, y = m)) +
+    geom_point(alpha = 0.25) +
+    geom_smooth() +
+    facet_grid(src ~ condition, scale = 'free_y') +
+    theme_few()
 ```
