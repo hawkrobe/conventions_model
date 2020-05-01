@@ -31,11 +31,12 @@ var tensorSoftplus = function(x) {
 };
 
 var partnerGuide = function(paramName) {
+//  console.log('initializing with', paramName)
   return function() {
     return DiagCovGaussian({
-      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(v) {return zeros(lexDims);}}),
-      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims, 
-                                   init: function(v) {return zeros(lexDims);}}))
+      mu: param({name: 'mu' + paramName, dims: lexDims}),
+      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims
+                                   }))
     });
   };
 };
@@ -81,8 +82,9 @@ var L = function(utt, agentID, context) {
 };
 
 var update = function(agentID, dataSoFar) {
+  console.log('updating')
   Optimize({
-    steps: 2500, verbose: false, optMethod: {adam: {stepSize: 0.001}},
+    steps: 10000, verbose: false, optMethod: {adam: {stepSize: 0.001}},
     model: function() {
       var lexicon = sampleLexicon(agentID);
       mapData({data: dataSoFar, batchSize: _.min([10, dataSoFar.length])}, function(trial) {
@@ -127,29 +129,30 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
                    currTrialRaw.object3name, currTrialRaw.object4name]),
     intendedName : objectLookup[currTrialRaw['intendedName']]
   });
-
+  console.log('trial data', currTrial)
   // run VI on current data
-  if(!_.isEmpty(dataSoFar[currTrial.speakerID])) {
-    console.log('updating')
-    update(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
-    update(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
-  } 
+  // if(!_.isEmpty(dataSoFar[currTrial.speakerID])) {
+  //   console.log('updating')
+  update(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
+  update(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
+  //} 
   
   // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, currTrial.speakerID, currTrial.context);
+  console.log('speaker output', JSON.stringify(speakerOutput))
+  console.log('other agent speakerOutput', JSON.stringify(S(currTrial.intendedName, currTrial.listenerID, currTrial.context)));
   var topSpeakerChoice = MAP(speakerOutput)['val'];
 
   var listenerOutput = L(topSpeakerChoice, currTrial.listenerID, currTrial.context);
+  console.log('listener output', JSON.stringify(listenerOutput))
   var topListenerChoice = MAP(listenerOutput)['val'];
 
   display('top speaker choice is ' + topSpeakerChoice);
   display('top listener choice is ' + topListenerChoice);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
   // if(_.toInteger(currTrial.trialNum) > 1) {
-  //   display('mu1:word1:obj1: ' + param({name: 'mu1', dims : lexDims}));
-  //   display('mu1:word2:obj1: ' + param({name: 'mu1', dims : lexDims}));
-  //   display('mu2:word1:obj1: ' + param({name: 'mu2', dims : lexDims}));
-  //   display('mu2:word2:obj1: ' + param({name: 'mu2', dims : lexDims}));
+  display('mu1:word1:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 1));
+  display('mu2:word1:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 1));
   // }
   csv.writeLine([argv.gameNum, params.alpha, currTrial.trialNum, currTrial.condition,currTrial.contextType,
                  currTrial.speakerID, currTrial.listenerID,
