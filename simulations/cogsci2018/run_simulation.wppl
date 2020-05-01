@@ -2,7 +2,6 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
-console.log(data);
 var numUtterances = 16;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['square_red_light', 'square_red_dark', 'square_blue_light', 'square_blue_dark',
@@ -35,7 +34,8 @@ var partnerGuide = function(paramName) {
   return function() {
     return DiagCovGaussian({
       mu: param({name: 'mu' + paramName, dims: lexDims, init: function(v) {return zeros(lexDims);}}),
-      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
+      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims, 
+                                   init: function(v) {return zeros(lexDims);}}))
     });
   };
 };
@@ -66,7 +66,7 @@ var S = function(object, agentID, context) {
 var L = function(utt, agentID, context) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(context);
-    var utility = expectation(Infer({method:"forward", samples: 2500, guide:true}, function(){
+    var utility = expectation(Infer({method:"forward", samples: 5000, guide:true}, function(){
       var lexicon = sampleLexicon(agentID);
       var config = {lexicon: lexicon, context: context};
       return (params.usingPragmatics ? 
@@ -130,6 +130,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 
   // run VI on current data
   if(!_.isEmpty(dataSoFar[currTrial.speakerID])) {
+    console.log('updating')
     update(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
     update(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
   } 
@@ -171,7 +172,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 };
 
 var pragStr = params.usingPragmatics ? 'prag' : 'no_prag';
-var f = csv.open('./output/trajectory' + argv.gameNum + '_' + pragStr + '.csv');
+var f = csv.open('./output/trajectory_' + pragStr + argv.gameNum + '.csv');
 csv.writeLine('gameNum,alpha,time,condition,contextType,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
@@ -179,7 +180,7 @@ iterate(f, data, {1: [], 2: []});
 csv.close(f);
 
 console.log('running posttest')
-var posttestF = csv.open('./output/postTest' + argv.gameNum + '_' + pragStr + '.csv');
+var posttestF = csv.open('./output/postTest_' + pragStr + argv.gameNum + '.csv');
 csv.writeLine('gameNum,alpha,agentID,object,word,val',
               posttestF);
 postTest(posttestF);
