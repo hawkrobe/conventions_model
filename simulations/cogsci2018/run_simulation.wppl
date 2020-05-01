@@ -170,7 +170,8 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   } 
 };
 
-var f = csv.open('./output/trajectory' + argv.gameNum + '.csv');
+var pragStr = params.usingPragmatics ? 'prag' : 'no_prag';
+var f = csv.open('./output/trajectory' + argv.gameNum + '_' + pragStr + '.csv');
 csv.writeLine('gameNum,alpha,time,condition,contextType,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
@@ -178,7 +179,7 @@ iterate(f, data, {1: [], 2: []});
 csv.close(f);
 
 console.log('running posttest')
-var posttestF = csv.open('./output/postTest' + argv.gameNum + '.csv');
+var posttestF = csv.open('./output/postTest' + argv.gameNum + '_' + pragStr + '.csv');
 csv.writeLine('gameNum,alpha,agentID,object,word,val',
               posttestF);
 postTest(posttestF);
