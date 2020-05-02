@@ -52,7 +52,7 @@ var S = function(object, agentID, context) {
   console.log(object)
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-    var utility = expectation(Infer({method:"forward", samples: 5000, guide:true}, function(){
+    var utility = expectation(Infer({method:"forward", samples: 2500, guide:true}, function(){
       var lexicon = sampleLexicon(agentID);
       var config = {lexicon: lexicon, context: context};
       return (params.usingPragmatics ? 
@@ -69,7 +69,7 @@ var S = function(object, agentID, context) {
 var L = function(utt, agentID, context) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(context);
-    var utility = expectation(Infer({method:"forward", samples: 5000, guide:true}, function(){
+    var utility = expectation(Infer({method:"forward", samples: 2500, guide:true}, function(){
       var lexicon = sampleLexicon(agentID);
       var config = {lexicon: lexicon, context: context};
       return (params.usingPragmatics ? 
@@ -86,7 +86,7 @@ var L = function(utt, agentID, context) {
 var update = function(agentID, dataSoFar) {
   console.log('updating')
   Optimize({
-    steps: 10000, verbose: false, optMethod: {adam: {stepSize: 0.001}},
+    steps: 5000, verbose: false, optMethod: {adam: {stepSize: 0.001}},
     model: function() {
       var lexicon = sampleLexicon(agentID);
       mapData({data: dataSoFar, batchSize: _.min([10, dataSoFar.length])}, function(trial) {
