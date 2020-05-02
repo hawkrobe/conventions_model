@@ -6,12 +6,14 @@ var numUtterances = 16;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['square_red_light', 'square_red_dark', 'square_blue_light', 'square_blue_dark',
                'circle_striped_high', 'circle_striped_low', 'circle_spotted_high', 'circle_spotted_low'];
-var features = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 'light', 'dark', 'high', 'low'];
+var features = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 
+                'lightred', 'lightblue', 'darkred', 'darkblue',
+                'highstriped', 'highspotted', 'lowstriped', 'lowspotted'];
 var objectLookup = {
-  'redSquare1' : 'square_red_light', 'redSquare2' : 'square_red_dark',
-  'blueSquare1' : 'square_blue_light', 'blueSquare2' : 'square_blue_dark',
-  'stripedCircle1' : 'circle_striped_low', 'stripedCircle2' :'circle_striped_high',
-  'spottedCircle1' : 'circle_spotted_low', 'spottedCircle2' : 'circle_spotted_high'
+  'redSquare1' : 'square_red_lightred', 'redSquare2' : 'square_red_darkred',
+  'blueSquare1' : 'square_blue_lightblue', 'blueSquare2' : 'square_blue_darkblue',
+  'stripedCircle1' : 'circle_striped_lowstriped', 'stripedCircle2' :'circle_striped_highstriped',
+  'spottedCircle1' : 'circle_spotted_lowspotted', 'spottedCircle2' : 'circle_spotted_highspotted'
 };
 var numFeatures = features.length;
 var lexDims = [numUtterances, numFeatures];
