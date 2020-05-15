@@ -4,10 +4,10 @@
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
 var numUtterances = 4;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
-var objects = ['circle_striped_highstriped', //'circle_striped_lowstriped', 'circle_spotted_highspotted', 'circle_spotted_lowspotted',
+var objects = ['circle_striped_highstriped', 'circle_striped_lowstriped', 'circle_spotted_highspotted', 'circle_spotted_lowspotted',
                'square_red_lightred', 'square_red_darkred', 'square_blue_lightblue', 'square_blue_darkblue'];
-var features = ['circle', 'square', 'red', 'blue', 'striped', //'spotted', 
-                'highstriped', 'lowstriped', //'lowspotted', 'highspotted', 
+var features = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 
+                'highstriped', 'lowstriped', 'lowspotted', 'highspotted', 
                 'lightred', 'lightblue', 'darkred', 'darkblue'];
 var objectLookup = {
   'redSquare1' : 'square_red_lightred', 'redSquare2' : 'square_red_darkred',
@@ -20,7 +20,7 @@ var lexDims = [numUtterances, numFeatures];
 
 var params = {
   alpha : 1,
-  listenerAlpha: 5,
+  listenerAlpha: 1,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
   costWeight: 0,
   utterances: utterances,
@@ -49,7 +49,7 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(agentID) {
-  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 5)}),
+  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 1)}),
 		{guide: partnerGuide(agentID)});
 };
 
@@ -93,18 +93,33 @@ var S = function(object, agentID, context) {
     // var utility_diff = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
     //   var lexicon = sampleLexicon(agentID);
     //   var config = {lexicon: lexicon, context: context};
-    //   return (Math.exp(refModule.getLexiconElement(utt, distractors[2], extend(params, config))) -
-    //           Math.exp(refModule.getLexiconElement(utt, distractors[1], extend(params, config))));
+    //   return (Math.exp(refModule.getL0Score(distractors[1], utt, extend(params, config))) -
+    //           Math.exp(refModule.getL0Score(object, utt, extend(params, config))));
     // }));
+    var utility_diff_lex = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID);
+      var config = {lexicon: lexicon, context: context};
+      return (refModule.getLexiconElement(utt, distractors[1], extend(params, config)) -
+              refModule.getLexiconElement(utt, object, extend(params, config)));
+    }));
+    var utility_diff_lex2 = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
+      var lexicon = sampleLexicon(agentID);
+      var config = {lexicon: lexicon, context: context};
+      return (refModule.getLexiconElement(utt, distractors[2], extend(params, config)) -
+              refModule.getLexiconElement(utt, object, extend(params, config)));
+    }));
 
 //    var utility = L(utt, agentID, context).score(object);
     display(utt);
     display('P(object)' + utility);
     //display('P(object) in webppl' + utilitywebppl);
-    //display('P' + distractors[0] + utility2);
+    display('P' + distractors[0] + utility2);
      display('P' + distractors[1] + utility3);
     // display('P' + distractors[2] + utility4);
-    // display('P_diff: ' + utility_diff);            
+     display(distractors[1] + '-' + object)
+     display('P_diff: ' + utility_diff_lex);            
+     display(distractors[2] + '-' + object)
+     display('P_diff: ' + utility_diff_lex2);            
     factor(params.alpha * utility);
     return utt;
   });
