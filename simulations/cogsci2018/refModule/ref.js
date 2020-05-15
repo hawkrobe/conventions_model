@@ -61,9 +61,12 @@ var getLexiconElement = function(utt, target, params) {
   if(components.length == 1) {
     var utt_i = _.indexOf(params.utterances, utt);
     var feature_i = _.indexOf(params.features, target);
-    // console.log(utt_i)
+    // console.log('utt', utt);
+    // console.log('utt i', utt_i)
+    // console.log('feature', target)
     // console.log('feature i', feature_i)
-    var lexiconElement = T.get(params.lexicon, utt_i * params.features.length + feature_i);
+    // console.log('element', T.get(params.lexicon, utt_i * (params.features.length) + feature_i))
+    var lexiconElement = T.get(params.lexicon, utt_i * (params.features.length) + feature_i);
     return lexiconElement;
   } else {
     return logit(
@@ -78,11 +81,15 @@ var getLexiconElement = function(utt, target, params) {
 // P(t | utt) \propto e^L(t, utt)
 // => log(p) = L(t, utt) - log(\sum_{i} e^L(t_i, utt))
 var getL0Score = function(target, utt, params) {
-  var truth = getLexiconElement(utt, target, params);
-//  console.log('truth', truth);
-  var sum = getLexiconElement(utt, params.context[0], params);
+  var listenerUtility = function(obj) {
+    return ad.scalar.mul(params.listenerAlpha, getLexiconElement(utt, obj, params));
+  };
+
+  var truth = listenerUtility(target);
+  var sum = listenerUtility(params.context[0]);
   for(var i=1; i<params.context.length; i++){
-    sum = numeric.logaddexp(sum, getLexiconElement(utt, params.context[i], params));
+//    console.log('sum term', i, ':', sum);
+    sum = numeric.logaddexp(sum, listenerUtility(params.context[i]));
   }
   return normalize(truth, sum);
 };
@@ -107,10 +114,14 @@ var getSpeakerScore = function(utt, targetObj, params) {
 // if P(o | u, c, l) = P(u | o, c, l) P(u | c, l) / sum_o P(u | o, c, l)
 // then log(o | u, c, l) = log P(u | o, c, l) - log(sum_{o in context} P(u | o, c, l))
 var getListenerScore = function(trueObj, utt, params) {
-  var truth = getSpeakerScore(utt, trueObj, params);
-  var sum = getSpeakerScore(utt, params.context[0], params);
+  var listenerUtility = function(obj) {
+    return ad.scalar.mul(params.listenerAlpha, getSpeakerScore(utt, obj, params));
+  };
+  
+  var truth = listenerUtility(trueObj);
+  var sum = listenerUtility(params.context[0]);
   for(var i=1; i< params.context.length; i++){
-    sum = numeric.logaddexp(sum, getSpeakerScore(utt, params.context[i], params));
+    sum = numeric.logaddexp(sum, listenerUtility(params.context[i]));
   }
   return normalize(truth, sum);
 };
