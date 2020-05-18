@@ -50,51 +50,17 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(agentID) {
-  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 5)}),
+  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 1)}),
 		{guide: partnerGuide(agentID)});
 };
 
 var S = function(object, agentID, context) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-
-    var distractors = remove(object, context);
-    // var utility = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
-    //   var lexicon = sampleLexicon(agentID);
-    //   var config = {lexicon: lexicon, context: context};
-    //   return refModule.getL0Score(object, utt, extend(params, config));
-    // }));
-
-    //     var utility2 = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
-    //   var lexicon = sampleLexicon(agentID);
-    //   var config = {lexicon: lexicon, context: context};
-    //   return (params.usingPragmatics ?
-    //           refModule.getL0Score(distractors[0], utt, extend(params, config)):
-    //           refModule.getLexiconElement(utt, distractors[0], extend(params, config)));
-    // }));
-    // var utility3 = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
-    //   var lexicon = sampleLexicon(agentID);
-    //   var config = {lexicon: lexicon, context: context};
-    //   return (params.usingPragmatics ?
-    //           refModule.getL0Score(distractors[1], utt, extend(params, config)) :
-    //           refModule.getLexiconElement(utt, distractors[1], extend(params, config)));
-    // }));
-    // var utility4 = expectation(Infer({method:"forward", samples: 100000, guide:true}, function(){
-    //   var lexicon = sampleLexicon(agentID);
-    //   var config = {lexicon: lexicon, context: context};
-    //   return (params.usingPragmatics ?
-    //           refModule.getL0Score(distractors[2], utt, extend(params, config)):
-    //           refModule.getLexiconElement(utt, distractors[2], extend(params, config)));
-    // }));
     var listenerOut = L(utt, agentID, context);
     var utility = listenerOut.score(object);
     display(utt)
-//    display(JSON.stringify(L(utt, agentID, context)))
     display(utility);
-    // display('P' + distractors[0] + utility2);
-    // display('P' + distractors[1] + utility3);
-    // display('P' + distractors[2] + utility4);
-    //display('P_diff: ' + utility_diff);            
     factor(params.alpha * utility);
     return utt;
   });
