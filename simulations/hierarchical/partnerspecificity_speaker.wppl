@@ -9,10 +9,10 @@ var primitiveUtterances = map(function(i) {return 'word' + i;}, _.range(1, numUt
 var states = map(function(i) {return 'object' + i;}, _.range(1, numStates+1));
 
 // 7 -> 2 works, but has a weird blip at the beginning where it starts low-ish then rises then falls...
-// TODO: run grid with diff alpha & costWeight (and maybe also hyper-prior sigma?)
 var params = {
   alpha : argv.alpha,
   costWeight: argv.costWeight,
+  model: argv.model,
   context: ['object1', 'object2'],
   primitiveUtterances: primitiveUtterances,
   states : states,
@@ -37,11 +37,19 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(i) {
-  var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
-                                         sigma: T.mul(ones(lexDims), argv.priorSigma)}),
-			{guide: partnerGuide('hyper')});
-  return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
-		{guide: partnerGuide(i)});
+  var prior = DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
+                               sigma: T.mul(ones(lexDims), 1)});
+  if(params.model != 'no_pooling') {
+    var hyperLex = sample(prior, {guide: partnerGuide('hyper')});
+    if(params.model == 'hierarchical') {
+      return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
+		    {guide: partnerGuide(i)});
+    } else if(params.model == 'complete_pooling') {
+      return hyperLex;
+    }
+  } else {
+    return sample(prior, {guide: partnerGuide(i)});
+  }
 };
 
 var S = function(state, partnerID) {
@@ -93,8 +101,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   console.log(JSON.stringify(speakerOutput));
   var nextUtt = sample(speakerOutput);
   console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
-  csv.writeLine([params.alpha, params.costWeight, argv.priorSigma,
-                 currTrial.t, currTrial.partnerID, speakerOutput.score('word1_word2')].join(','), outputFile);
+  csv.writeLine([params.alpha, params.costWeight, currTrial.t, currTrial.partnerID, speakerOutput.score('word1_word2')].join(','), outputFile);
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), dataSoFar.concat({
       partnerID: currTrial.partnerID,
@@ -122,6 +129,6 @@ var trials = [{t: 1, partnerID: 1, target: 'object1'},
              ];
 
 var f = csv.open('speakerOutput' + argv.chainNum + '.csv');
-csv.writeLine('alpha,costWeight,priorSigma,time,partnerID,prediction',f);
+csv.writeLine('alpha,costWeight,time,partnerID,prediction',f);
 iterate(f, trials, []);
 csv.close(f);

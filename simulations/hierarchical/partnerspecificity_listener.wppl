@@ -10,6 +10,7 @@ var lexDims = [numUtterances, numStates];
 var params = {
   alpha : argv.alpha,
   costWeight: argv.costWeight,
+  model: argv.model,
   context: ['object1', 'object2'],
   primitiveUtterances: utterances,
   states : states,
@@ -18,13 +19,6 @@ var params = {
 
 var tensorSoftplus = function(x) {
   return T.log(T.add(T.exp(x), 1));
-};
-
-var hyperGuide = function() {
-  return DiagCovGaussian({
-    mu: param({name: 'hypermu', dims: lexDims}),
-    sigma: tensorSoftplus(param({name: 'hypersigma', dims: lexDims}))
-  });
 };
 
 var partnerGuide = function(paramName) {
@@ -37,19 +31,24 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(i) {
-  var hyperLex = sample(DiagCovGaussian({mu: zeros(lexDims),
-					 sigma: T.mul(ones(lexDims), argv.priorSigma)}),
-			{guide: partnerGuide('hyper')});
-  return sample(DiagCovGaussian({mu: hyperLex,
-				 sigma: T.mul(ones(lexDims), 1)}),
-		          {guide: partnerGuide(i)});
+  var prior = DiagCovGaussian({mu: zeros(lexDims),
+                               sigma: T.mul(ones(lexDims), 1)});
+  if(params.model != 'no_pooling') {
+    var hyperLex = sample(prior, {guide: partnerGuide('hyper')});
+    if(params.model == 'hierarchical') {
+      return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
+		    {guide: partnerGuide(i)});
+    } else if(params.model == 'complete_pooling') {
+      return hyperLex;
+    }
+  } else {
+    return sample(prior, {guide: partnerGuide(i)});
+  }
 };
 
 var observeRound = function(llex, datum) {
   // For listener, we observe the object they clicked given the utterance they heard
   var listenerScore = refModule.getListenerScore(datum.clickedName, datum.wordID,extend(params, {lexicon: llex}));
-  // display(listenerScore);
-  // display(llex);
   factor(listenerScore);
 };
 
@@ -93,7 +92,7 @@ var iterate = function(outputFile, data) {
       var L = L2(nextDataPoint.wordID, ['object1', 'object2'],nextDataPoint.partnerID);
       return Math.exp(L.score(nextDataPoint.clickedName));
     }, method: 'forward', samples: 100000, guide: true}));
-    csv.writeLine([t, nextDataPoint.partnerID, prediction].join(','), outputFile);
+    csv.writeLine([argv.model, t, nextDataPoint.partnerID, argv.alpha, argv.costWeight, prediction].join(','), outputFile);
   }, _.range(data.length ));
 };
 
@@ -112,6 +111,6 @@ var data = [{partnerID: 1, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 4, clickedName: 'object1', wordID: 'word1'}];
 
 var f = csv.open('listenerOutput.csv');
-csv.writeLine('time,partnerID,prediction',f);
+csv.writeLine('model,time,partnerID,alpha,cost,prediction',f);
 iterate(f, data);
 csv.close(f);
