@@ -101,7 +101,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   console.log(JSON.stringify(speakerOutput));
   var nextUtt = sample(speakerOutput);
   console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
-  csv.writeLine([params.alpha, params.costWeight, currTrial.t, currTrial.partnerID, speakerOutput.score('word1_word2')].join(','), outputFile);
+  csv.writeLine([argv.model, argv.chainNum, params.alpha, params.costWeight, currTrial.t, currTrial.partnerID, speakerOutput.score('word1_word2')].join(','), outputFile);
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), dataSoFar.concat({
       partnerID: currTrial.partnerID,
@@ -128,7 +128,7 @@ var trials = [{t: 1, partnerID: 1, target: 'object1'},
               {t: 14, partnerID: 4, target: 'object1'},                                                        
              ];
 
-var f = csv.open('speakerOutput' + argv.chainNum + '.csv');
-csv.writeLine('alpha,costWeight,time,partnerID,prediction',f);
+var f = csv.open('./output/speakerOutput' + argv.model + argv.chainNum + '.csv');
+csv.writeLine('model,chainNum,alpha,costWeight,time,partnerID,prediction',f);
 iterate(f, trials, []);
 csv.close(f);

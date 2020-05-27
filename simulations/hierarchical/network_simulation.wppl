@@ -11,6 +11,7 @@ var states = map(function(i) {return 'object' + i;}, _.range(1, numStates+1));
 var params = {
   alpha : argv.alpha,
   costWeight: argv.costWeight,
+  model: argv.model,
   context: ['object1', 'object2'],
   primitiveUtterances: primitiveUtterances,
   states : states,
@@ -34,11 +35,19 @@ var partnerGuide = function(paramName) {
 };
 
 var sampleLexicon = function(agentID, partnerID) {
-  var hyperLex = sample(DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
-                                         sigma: T.mul(ones(lexDims), 1)}),
-			{guide: partnerGuide('hyper-' + agentID)});
-  return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
-		{guide: partnerGuide(agentID + '-' + partnerID)});
+  var prior = DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
+                               sigma: T.mul(ones(lexDims), 1)});
+  if(params.model != 'no_pooling') {
+    var hyperLex = sample(prior, {guide: partnerGuide('hyper-' + agentID)});
+    if(params.model == 'hierarchical') {
+      return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
+		    {guide: partnerGuide(agentID + '-' + partnerID)});
+    } else if(params.model == 'complete_pooling') {
+      return hyperLex;
+    }
+  } else {
+    return sample(prior, {guide: partnerGuide(agentID + '-' + partnerID)});
+  }
 };
 
 var S = function(state, agentID, partnerID) {
@@ -87,7 +96,7 @@ var update = function(role, agentID, dataSoFar) {
         var score = (
           role == 'speaker' ?
             refModule.getListenerScore(trial.target, trial.wordID, extend(params, {lexicon: lex})) :
-            refModule.getSpeakerScore(trial.wordID, trial.target, extend(params, {lexicon: lex}))
+            refModule.getSpeakerScore(trial.wordID, trial.clickedName, extend(params, {lexicon: lex}))
         );
         factor(score);
       });
@@ -114,7 +123,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   
   console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
   console.log('chosen object for partner ' + currTrial.partnerID + ' is: ' + nextChoice);  
-  csv.writeLine([argv.chainNum, params.alpha, params.costWeight, currTrial.t,
+  csv.writeLine([argv.model, argv.chainNum, params.alpha, params.costWeight, currTrial.t,
                  currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
                  nextUtt, speakerOutput.score('word1_word2'),
                  speakerOutput.score('word1'), hypotheticalPartnerOutput.score('word1'),
@@ -168,7 +177,7 @@ var trials = [
   {t: 12, speakerID: 3, listenerID: 2, partnerID: 3, target: 'object1'}
 ];
 
-var f = csv.open('networkOutput' + argv.chainNum + '.csv');
-csv.writeLine('chainNum,alpha,costWeight,time,speakerID,listenerID,partnerID,utt,longUttScore,word1Score,objectPicked,object1Score',f);
+var f = csv.open('./output/networkOutput' + argv.model + argv.chainNum + '.csv');
+csv.writeLine('model,chainNum,alpha,costWeight,time,speakerID,listenerID,partnerID,utt,longUttScore,word1Score,objectPicked,object1Score',f);
 iterate(f, trials, {1: [], 2: [], 3: [], 4: []});
 csv.close(f);

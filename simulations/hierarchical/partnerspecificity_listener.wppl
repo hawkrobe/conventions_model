@@ -92,7 +92,7 @@ var iterate = function(outputFile, data) {
       var L = L2(nextDataPoint.wordID, ['object1', 'object2'],nextDataPoint.partnerID);
       return Math.exp(L.score(nextDataPoint.clickedName));
     }, method: 'forward', samples: 100000, guide: true}));
-    csv.writeLine([argv.model, t, nextDataPoint.partnerID, argv.alpha, argv.costWeight, prediction].join(','), outputFile);
+    csv.writeLine([argv.model, t, nextDataPoint.partnerID, argv.alpha,argv.costWeight, argv.chainNum, prediction].join(','), outputFile);
   }, _.range(data.length ));
 };
 
@@ -110,7 +110,7 @@ var data = [{partnerID: 1, clickedName: 'object1', wordID: 'word1'},
 	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},            
 	    {partnerID: 4, clickedName: 'object1', wordID: 'word1'}];
 
-var f = csv.open('listenerOutput.csv');
-csv.writeLine('model,time,partnerID,alpha,cost,prediction',f);
+var f = csv.open('./output/listenerOutput' + argv.model + argv.chainNum + '.csv');
+csv.writeLine('model,time,partnerID,alpha,cost,chainNum,prediction',f);
 iterate(f, data);
 csv.close(f);
