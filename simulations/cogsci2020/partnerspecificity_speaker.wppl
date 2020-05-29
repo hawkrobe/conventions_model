@@ -25,33 +25,6 @@ var tensorSoftplus = function(x) {
   return T.log(T.add(T.exp(x), 1));
 };
 
-var partnerGuide = function(paramName) {
-  return function() {
-    return DiagCovGaussian({
-      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(dims) {
-        return T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25);
-      }}),
-      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
-    });
-  };
-};
-
-var sampleLexicon = function(i) {
-  var prior = DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
-                               sigma: T.mul(ones(lexDims), 1)});
-  if(params.model != 'no_pooling') {
-    var hyperLex = sample(prior, {guide: partnerGuide('hyper')});
-    if(params.model == 'hierarchical') {
-      return sample(DiagCovGaussian({mu: hyperLex, sigma: T.mul(ones(lexDims), 1)}),
-		    {guide: partnerGuide(i)});
-    } else if(params.model == 'complete_pooling') {
-      return hyperLex;
-    }
-  } else {
-    return sample(prior, {guide: partnerGuide(i)});
-  }
-};
-
 var S = function(state, partnerID) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
