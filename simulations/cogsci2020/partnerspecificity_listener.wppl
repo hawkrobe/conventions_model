@@ -1,10 +1,10 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
 
-var numUtterances = 2
+var numUtterances = 4
 var numStates = 2
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
-var states = map(function(i) {return 'object' + i;}, _.range(1, numUtterances+1));
+var states = map(function(i) {return 'object' + i;}, _.range(1, numStates+1));
 var lexDims = [numUtterances, numStates];
 
 var params = {
@@ -24,14 +24,16 @@ var tensorSoftplus = function(x) {
 var partnerGuide = function(paramName) {
   return function() {
     return DiagCovGaussian({
-      mu: param({name: 'mu' + paramName, dims: lexDims}),
+      mu: param({name: 'mu' + paramName, dims: lexDims, init: function(dims) {
+        return T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25);
+      }}),
       sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
     });
   };
 };
 
 var sampleLexicon = function(i) {
-  var prior = DiagCovGaussian({mu: zeros(lexDims),
+  var prior = DiagCovGaussian({mu: T.mul(Tensor(lexDims, [1, -1, 1, -1, -1, 1, -1, 1]), .25),
                                sigma: T.mul(ones(lexDims), 1)});
   if(params.model != 'no_pooling') {
     var hyperLex = sample(prior, {guide: partnerGuide('hyper')});
@@ -47,19 +49,20 @@ var sampleLexicon = function(i) {
 };
 
 var observeRound = function(llex, datum) {
-  // For listener, we observe the object they clicked given the utterance they heard
-  var listenerScore = refModule.getListenerScore(datum.clickedName, datum.wordID,extend(params, {lexicon: llex}));
-  factor(listenerScore);
+  // For listener, we observe the true intended object
+
 };
 
 // literal listener (using real-valued lexicon)
-var L2 = function(utt, context, partner) {
-  var lexicon = sampleLexicon(partner);
-  
+var getPrediction = function(utt, context, partner) {
   return Infer({method:"enumerate"}, function(){
     var state = uniformDraw(context);
-    var score = refModule.getSpeakerScore(utt, state, extend(params, {lexicon: lexicon}));
-    factor(score);
+    var utility = expectation(Infer({method: 'forward', samples: 100000, guide: true}, function() {	  
+      var lexicon = sampleLexicon(partner);
+      return Math.exp(refModule.getSpeakerScore(utt, state, extend(params, {lexicon: lexicon})));
+    }))
+
+    factor(Math.log(utility));
     return state;
   });
 };
@@ -70,7 +73,6 @@ var iterate = function(outputFile, data) {
     // grab data up to this point
     var dataSoFar = data.slice(0,t);
     // run VI on current data
-
     Optimize({
       steps: 50000, verbose: true, optMethod: {adam: {stepSize: 0.001}},
       model: function() {
@@ -81,34 +83,31 @@ var iterate = function(outputFile, data) {
 	mapData({data: dataSoFar}, function(trialDatum) {
 	  var i = trialDatum.partnerID;
 	  var lexicon = lexica[i];
-	  observeRound(lexicon, trialDatum);
+          factor(refModule.getSpeakerScore(trialDatum.wordID, trialDatum.intendedName, extend(params, {lexicon: lexicon})))
 	});
       }
     });
 
     // get marginal prediction of next data point
     var nextDataPoint = data[t];
-    var prediction = expectation(Infer({model: function() {
-      var L = L2(nextDataPoint.wordID, ['object1', 'object2'],nextDataPoint.partnerID);
-      return Math.exp(L.score(nextDataPoint.clickedName));
-    }, method: 'forward', samples: 100000, guide: true}));
-    csv.writeLine([argv.model, t, nextDataPoint.partnerID, argv.alpha,argv.costWeight, argv.chainNum, prediction].join(','), outputFile);
+    var prediction = getPrediction(nextDataPoint.wordID, ['object1', 'object2'], nextDataPoint.partnerID).score('object1');
+    csv.writeLine([argv.model, t, nextDataPoint.partnerID, argv.alpha,argv.costWeight, argv.chainNum, Math.exp(prediction)].join(','), outputFile);
   }, _.range(data.length ));
 };
 
-var data = [{partnerID: 1, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 1, clickedName: 'object1', wordID: 'word1'},            
-	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 2, clickedName: 'object1', wordID: 'word1'},            
-	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},
-	    {partnerID: 3, clickedName: 'object1', wordID: 'word1'},            
-	    {partnerID: 4, clickedName: 'object1', wordID: 'word1'}];
+var data = [{partnerID: 1, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 1, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 1, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 1, intendedName: 'object1', wordID: 'word1'},            
+	    {partnerID: 2, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 2, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 2, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 2, intendedName: 'object1', wordID: 'word1'},            
+	    {partnerID: 3, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 3, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 3, intendedName: 'object1', wordID: 'word1'},
+	    {partnerID: 3, intendedName: 'object1', wordID: 'word1'},            
+	    {partnerID: 4, intendedName: 'object1', wordID: 'word1'}];
 
 var f = csv.open('./output/listenerOutput' + argv.model + argv.chainNum + '.csv');
 csv.writeLine('model,time,partnerID,alpha,cost,chainNum,prediction',f);
