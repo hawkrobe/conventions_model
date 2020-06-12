@@ -12,33 +12,31 @@
 %Why and how do different levels of abstraction become conventionalized in the first place? %And why do we have words for some abstractions but not for others?
 Why do certain conventions form and not others?
 What determines the \emph{content} of conventions? 
-A degree of arbitrariness is central to conventionality: there exist multiple solutions that would work equally well. 
-Yet functional accounts, especially those of linguistic conventions, have also frequently observed that conventions are well-calibrated to the environment \cite{}.
-This optimal expressivity hypothesis accounts well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{RegierKempKay15_WordMeaningsEfficientCommunication,GibsonEtAl17_ColorNamingUse}, as well as the compositional systems that emerge under iterated learning with communication in the lab \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication}. 
+A degree of arbitrariness is central to conventionality -- there must exist multiple solutions that would work equally well -- but this does not necessarily imply that all possible conventions are equally likely.
+Functional accounts of language evolution have frequently observed that conventions are well-calibrated to the statistics of the communicative environment \cite{Gibson}.
+This ``optimal expressivity'' hypothesis has accounted well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{RegierKempKay15_WordMeaningsEfficientCommunication,GibsonEtAl17_ColorNamingUse}, as well as the compositional systems that emerge under iterated learning with communication in the lab \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication}. 
 For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{RegierCarstensenKemp16_WordsForSnow}. 
 
-% hypothesized that this context shaped the conventionalization process through the mechanism of pragmatic reasoning.
+Context-sensitivity is an important phenomenon for theories of convention formation to explain.
+We hypothesize that context shapes the long-term conventionalization process through the mechanisms of pragmatic reasoning over the shorter timescales of dyadic interactions.
 %While our hypothesis about ad hoc conventionalization specifically concerned the shorter timescales of dyadic interaction, similar pressures may operate over the multi-generational timescales of cultural evolution. %,  operate on the shorter timescales of dyadic interaction. 
-Better understanding the effect of context on local conventions rapidly formed by adaptive agents over extended interactions may therefore be valuable for understanding how \emph{languages} are globally shaped by communicative constraints.
-
-Recent computational approaches to language evolution have argued that the lexical conventions of languages balance simplicity, or learnability, with the communicative needs of their users over longer timescales. 
-A key prediction is that the lexicon of a \emph{group} of language users should be sensitive to the pragmatic demands of their environment. 
-
+%Better understanding the effect of context on local conventions rapidly formed by adaptive agents over extended interactions may therefore be valuable for understanding how \emph{languages} are globally shaped by communicative constraints.
+%Recent computational approaches to language evolution have argued that the lexical conventions of languages balance simplicity, or learnability, with the communicative needs of their users over longer timescales. 
+%A key prediction is that the lexicon of a \emph{group} of language users should be sensitive to the pragmatic demands of their environment. 
 %% Limitations of past studies
-Still, there are several limitations to the current evidence for this hypothesis. 
+The current evidence for this hypothesis has several limitations. 
 First, much of the relevant evidence is observational, aggregated at the level of overall language statistics, not by directly manipulating the contextual conditions of individual language users. 
-Second, previous experimental studies have largely focused on the functional outcomes of an iterated learning process, %thus providing a functional argument for when different systems are appropriate. 
-but have not grounded the results of this process in a cognitive, mechanistic account of lexical adaptation and convention-formation among individual agents. 
-Finally, the phenomenon of reference taxonomies poses a further theoretical challenge: why do languages have hierarchies of terms instead of flatly partitioning the space into category labels as previous work has assumed?
-
-%% Make the case for zooming into dyadic convention formation
-%In a matter of minutes, communication partners coordinate on efficient but informative local conventions, or conceptual pacts, for the task at hand \cite{ClarkWilkesGibbs86_ReferringCollaborative,HawkinsFrankGoodman17_ConventionFormation}. %, BrennanClark96_ConceptualPactsConversation
+Second, previous experimental studies have largely focused on the functional outcomes of iterated learning processes, but have not grounded these outcomes in a cognitive and mechanistic account of the processes unfolding in the minds of individual agents. 
 
 %% Hypothesis
-Under the logic of a local efficiency/informativity tradeoff, we make two predictions about the emergence of abstractions in dyads. 
-First, we expect that communicative pressures for informativity should lead to the lexicalization of specific names when fine distinctions must be drawn. 
-Second, abstractions should become lexicalized precisely when the relevant distinctions are at coarser levels of the conceptual hierarchy. 
-For example, we are often called upon to make fine distinctions between people in our social circles, hence lexicalizing efficient names for each individual; when referring to green beans or paper towels, however, we can get away without such specific terms -- we are rarely called upon to disambiguate between entities. %\citeA{Wittgenstein09_PhilosophicalInvestigations}
+%Under the logic of a local efficiency/informativity tradeoff, we make two predictions about the emergence of abstractions in dyads. 
+In this section, we first fill this empirical gap by reporting a new dataset of human interactions.
+We manipulated the communcative context in a repeated reference game where pairs of participants interactively coordinated on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
+% which allows us to examine the conventions that form in different communicative contexts.
+We then report model simulations of artificial agents in the same environment to elucidate the mechanisms that support context-sensitivity.
+Even though a complete communication system containing a distinct label for each object is feasible and sufficient for all contexts, we find that abstractions begin to emerge when fine-grained distinctions are not functionally necessary for communicative success. 
+%We close with a discussion of learning mechanisms that may give rise to these dynamics.
+%For example, we are often called upon to make fine distinctions between people in our social circles, hence lexicalizing efficient names for each individual; when referring to green beans or paper towels, however, we can get away without such specific terms -- we are rarely called upon to disambiguate between entities. %\citeA{Wittgenstein09_PhilosophicalInvestigations}
 %\todo[inline]{KS: second unrelated comment at this point. The thing I find interesting from the simplicity/expressivity trade-off perspective is that hierachical terms seem like they are a bad idea - what's the advantage of having multiple terms, and how does it overcome the cost of the increase in the size of the lexicon? Is it worth flagging that up? And does our data speak to it?} 
 
 \begin{figure*}[t]
@@ -49,10 +47,8 @@ For example, we are often called upon to make fine distinctions between people i
 \end{center}
 \end{figure*}
 
-Here, we develop an experimental paradigm and analytic approach to examine the causal factors driving the emergence of lexical conventions in real-time. 
-We manipulated context in a repeated reference game where pairs of participants interactively coordinated on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
+%We manipulated context in a repeated reference game where pairs of participants interactively coordinated on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
 %We manipulated the pragmatic demands of context and found that abstractions only emerged when  that for the optimal expressivity hypothesis in the lexica different pairs converged on, we conducted a Bayesian Data Analysis of a rational communication model to infer the underlying lexica participants were using throughout the game. 
-Even though a complete communication system containing a distinct word for each object is feasible and sufficient for all contexts, we find that abstractions begin to emerge when fine-grained distinctions are not necessary. %We close with a discussion of learning mechanisms that may give rise to these dynamics.
 
 %\ndg{this paragraph is too vague yet technical. either be more specific about design and results. or describe at the level of take-aways.}
 % rational communication model allowing us to analyze not just what system they converged on but how it got there. % present a learning mechanism at the level of individual agents 
@@ -242,35 +238,6 @@ These preliminary results, then, may reflect a combination of narrowing and broa
 %The mixed pairs can get by with their lexicon of specific terms, and even the coarse pairs are stuck with the residue of their early specific terms. 
 
 %\todo[inline]{TODO: use simple model to look at the expected extension size of each word, and how it changes between quartiles.... walk through examples of early rounds in different contexts; show timecourse of abstractions, e.g.\ are initially specific terms extended or are initially abstract terms narrowed?  Do you tend to move from big to small or small to big quarter-to-quarter?}
-
-\section{Discussion}
-
-How and why do abstractions emerge in local interactions? We hypothesized that although communicative contexts requiring fine distinctions would favor one-to-one object-word mappings, pressures for efficiency would allow abstractions to emerge in coarser contexts. By manipulating context statistics in a real-time experiment, we found evidence for these pragmatic influences on interactive convention formation.
-
-Our results may help to illuminate the relationship between our concepts and words, which are often treated interchangeably. While our mental taxonomies are adaptive to the natural perceptual structure of the world \cite{MervisRosch81_CategorizationReview} %(Rosch et al, 1976; Mervis \& Rosch ,1981; Murphy \& Smith, 1982), 
-it is far from inevitable that all levels of these conceptual hierarchies become conventionalized as lexical items. There are many perfectly natural concepts that are not represented by distinct words in the English language: for instance, we do not have words for each tree in our yards, or for ad-hoc concepts %like \emph{things to sell at a garage sale} 
-\cite{Barsalou83_AdHocCategories}. Indeed, English speakers are often fascinated by foreign words like the Danish ``hygge'' (a specific notion of coziness) or Scottish ``tartle'' (hesitating when introducing someone because you've forgotten their name) that are difficult to express in English.
-Our results highlight communicative needs to distinguish, in context, as a force behind the choice to lexicalize some fine-grained concepts. 
-A related direction for future work is to explore the relationship between communicative need and \emph{basic-level} structure.
-
-While we showed how abstract words emerge from efficiency even in a task requiring only reference to individual objects, there are other clear functional advantages to having abstract terms in the lexicon. For one, they allow speakers to efficiently refer to large, potentially infinite, sets of things, and make generalizations about categories, e.g.\ ``Dogs bark'' \cite{TesslerGoodman16_Generics}. Future work should explore this as an additional pressure toward abstract, nested nouns.
-Similarly, the option to refer to more specific concepts with compound terms (e.g.~``spotted dog''), which was not available in our experiment, may impact final conventions.
-We expect that labels will become lexicalized when the cost incurred by frequently using a compositional construction exceeds the cost of adding an additional word to the lexicon. 
-Future work should also explore these hypotheses about how lexicalization of nominal terms trades off with compositionality. 
-
-
-%\todo[inline]{question for NDG: Should we comment on some methodlogical things people put in the `strategy' box? e.g.\ some people seem to be taking notes or using sound-symbolic associations like "nogo" to mean "red" (not a problem; should just help memory or help make initial meanings not entirely arbitrary but shouldn't change contextual demands\dots)}
-
-%\todo[inline]{question for MF: put some broader comment connecting to/contrasting with other cognitive theories of what's going on here? e.g.\ (1) not a simple associative learning account, where people just store memory traces of word-object co-occurances (can't account for context effects of generation), although note that probably a simpler model just counting co-occurences could account for the post-test responses just as well (it just wouldn't have as flexible an underlying representation). (2) elaborates on Xu \& Tenenbaum (2007) word learning story by introducing contextual pressures?}
-%\ndg{could do if there is a short clear point to make...}
-%\mf{phew, not sure there is enough space and hesitant that this might wake sleeping dogs, no matter how careful we are}
-
-
-Finally, although we implemented a purely statistical Bayesian data analysis model to infer lexica, it is also possible to consider a cognitive model of participants' own lexical inferences. Indeed, our findings are consistent with a recent cognitive model of convention formation which explained the rapid coordination on efficient but informative lexical terms as a process of mutual lexical learning \cite{HawkinsFrankGoodman17_ConventionFormation}. %Instead of simply using RSA as a linking function to analyze the snapshot meanings without assuming anything about how \emph{agents} might be learning or developing their lexica in response their partner -- . 
-In this model, each agent assumes their partner is rationally producing cooperative utterances under some latent lexicon; given initial uncertainty over the contents of that lexicon, agents can invert their model of their partner to infer their lexicon from observable behavior. 
-The different dynamics we observed across conditions, then, may be the consequence of different lexical inferences in different local contexts. Further, while we used RSA as a linking function in our statistical model, a cognitive model would allow us to test to what extent pragmatic reasoning is necessary to explain behavior.% may result from the different inferences made by pragmatic agents about the lexicon.  % \cite{BergenLevyGoodman16_LexicalUncertainty}. %Each individual is trying to infer the lexicon being used by their partner by observing their behavior in context. 
-
-Our shared lexical conventions are richly structured systems with meanings at multiple levels of abstraction. There is now abundant evidence that languages adapt to the needs of their users, and the context-sensitive emergence of abstractions demonstrated in this paper suggests that the driver of this adaptation may lie in the remarkably rapid adaptability of agents themselves. We are constantly supplementing our existing language with local conventions as we need them. Our separate minds may organize the world into meaningful conceptual hierarchies but our shared language only evolves to reflect this structure when it is communicatively relevant. 
 
 
 
