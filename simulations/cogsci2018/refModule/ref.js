@@ -57,15 +57,9 @@ var logit = function(p) {
 
 var getLexiconElement = function(utt, target, params) {
   var components = target.split('_');
-//  console.log(components);
   if(components.length == 1) {
     var utt_i = _.indexOf(params.utterances, utt);
     var feature_i = _.indexOf(params.features, target);
-    // console.log('utt', utt);
-    // console.log('utt i', utt_i)
-    // console.log('feature', target)
-    // console.log('feature i', feature_i)
-    // console.log('element', T.get(params.lexicon, utt_i * (params.features.length) + feature_i))
     var lexiconElement = T.get(params.lexicon, utt_i * (params.features.length) + feature_i);
     return lexiconElement;
   } else {
@@ -82,7 +76,7 @@ var getLexiconElement = function(utt, target, params) {
 // => log(p) = L(t, utt) - log(\sum_{i} e^L(t_i, utt))
 var getL0Score = function(target, utt, params) {
   var listenerUtility = function(obj) {
-    return ad.scalar.mul(params.listenerAlpha, getLexiconElement(utt, obj, params));
+    return getLexiconElement(utt, obj, params);
   };
 
   var truth = listenerUtility(target);
@@ -115,7 +109,7 @@ var getSpeakerScore = function(utt, targetObj, params) {
 // then log(o | u, c, l) = log P(u | o, c, l) - log(sum_{o in context} P(u | o, c, l))
 var getListenerScore = function(trueObj, utt, params) {
   var listenerUtility = function(obj) {
-    return ad.scalar.mul(params.listenerAlpha, getSpeakerScore(utt, obj, params));
+      return ad.scalar.mul(getSpeakerScore(utt, obj, params), params.listenerAlpha);
   };
   
   var truth = listenerUtility(trueObj);
