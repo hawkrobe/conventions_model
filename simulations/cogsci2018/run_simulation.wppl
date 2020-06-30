@@ -22,7 +22,7 @@ var lexDims = [1];
 
 var params = {
   alpha : 1,
-  listenerAlpha: 5,
+  listenerAlpha: 3,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
@@ -41,18 +41,22 @@ var tensorSoftplus = function(x) {
   return T.log(T.add(T.exp(x), 1));
 };
 
-var sampleLexicon = function() {
+var sampleLexicon = function(agentID) {
   var out = _.zipObject(utterances, map(function(utt) {
-    var meaning = sample(Categorical({vs: meanings}))
-    return meaning
-  }, utterances))
+    return sample(Categorical({vs:meanings}), {guide: function() {
+      return Categorical({
+        vs: meanings,
+        ps: numeric.squishToProbSimplex(param({name: 'categorical_' + agentID + '_' + utt, dims: [numMeanings-1]}))
+      });
+    }});
+  }, utterances));
   return out
 };
 
-var S = function(object, context, posterior) {
+var S = function(object, context, agentID) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-    var utility = L(utt, context, posterior).score(object)
+    var utility = L(utt, context, agentID).score(object);
     display(utt);
     display(utility);
     factor(params.alpha * utility);
@@ -60,34 +64,39 @@ var S = function(object, context, posterior) {
   });
 };
 
-var L = function(utt, context, posterior) {
+var L = function(utt, context, agentID) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(context);
-    var utility = expectation(posterior, function(lexicon) {
-      var config = {lexicon: lexicon, context: context};
+    var utility = expectation(Infer({method: 'forward', guide: true, samples: 5000, model: function() {
+      var config = {lexicon: sampleLexicon(agentID), context: context};
       return (params.usingPragmatics ? 
               refModule.getSpeakerScore(utt, object, extend(params, config)) :
 	      Math.exp(refModule.getLexiconElement(utt, object, extend(params, config))))
-    });
+    }}));
     factor(params.listenerAlpha * utility);
     return object;
   });
 };
 
-var postTest = function(trial, outputFile, posterior1, posterior2) {
+var postTest = function(trial, outputFile) {
     map(function(word) {
-      var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}))
-      var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}))
+      var speaker1TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
+        return sampleLexicon(1)[word]
+      }));
+      var speaker2TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
+        return sampleLexicon(2)[word]
+      }));
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
     }, utterances);
 };
 
-var updatePosterior = function(dataSoFar) {
-   var data = dataSoFar.slice(-16)
-   return Infer({method: 'SMC', particles: 2000, rejuvSteps: 1, model : function() {
-      var lexicon = sampleLexicon();
-      mapData({data: data}, function(trial) { 
+var updatePosterior = function(agentID, dataSoFar) {
+  Optimize({
+    steps: 10000, verbose: true,optMethod: {adam: {stepSize: 0.005}},
+    model: function() {
+      var lexicon = sampleLexicon(agentID);
+      mapData({data: dataSoFar, batchSize : _.min([20, dataSoFar.length])}, function(trial) { 
         var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
         var config = {lexicon: lexicon, context: trial.context};
         var objectToUse = params.coord == 'same' ? trial.intendedName : (trial.role == 'speaker' ? trial.clickedName : trial.intendedName);
@@ -99,7 +108,6 @@ var updatePosterior = function(dataSoFar) {
           factor(discount * refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
         }
       });
-      return lexicon;
   }});
 };
 
@@ -115,14 +123,14 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 
   console.log('speaker:', currTrial.speakerID)
   // run VI on current data
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID]);
+  updatePosterior(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
+  updatePosterior(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
   
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, currTrial.context, speakerPosterior);
+  var speakerOutput = S(currTrial.intendedName, currTrial.context, currTrial.speakerID);
   var topSpeakerChoice = MAP(speakerOutput)['val']; // sample(speakerOutput)//
 
-  var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
+  var listenerOutput = L(topSpeakerChoice, currTrial.context, currTrial.listenerID);
   var topListenerChoice = MAP(listenerOutput)['val']; // sample(listenerOutput)  // 
 
   display('context is ' + currTrial.context);
@@ -146,7 +154,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     }));
   }, [currTrial.speakerID, currTrial.listenerID]));
 
-  postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
+  postTest(currTrial, posttestF);
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), newDataSoFar);
   } 
