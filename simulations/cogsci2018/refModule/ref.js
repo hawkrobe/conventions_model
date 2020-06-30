@@ -56,19 +56,12 @@ var logit = function(p) {
 }
 
 var getLexiconElement = function(utt, target, params) {
-  var components = target.split('_');
-  if(components.length == 1) {
-    var utt_i = _.indexOf(params.utterances, utt);
-    var feature_i = _.indexOf(params.features, target);
-    var lexiconElement = T.get(params.lexicon, utt_i * (params.features.length) + feature_i);
-    return lexiconElement;
-  } else {
-    return logit(
-      ad.scalar.mul(ad.scalar.sigmoid(getLexiconElement(utt, components[0], params)),
-                    ad.scalar.mul(ad.scalar.sigmoid(getLexiconElement(utt, components[1], params)),
-                                  ad.scalar.sigmoid(getLexiconElement(utt, components[2], params))))
-    );
-  }
+  var uttLex = params.lexicon[utt]
+  // console.log('element for ', utt, ' and ', target)
+  // console.log('chosen meaning' + uttLex.chosenMeaning);
+  // console.log(_.includes(target.split('_'), uttLex.chosenMeaning))
+  // console.log(T.get(uttLex.lexicon, 0), ' vs. ', T.get(uttLex.lexicon, 1))
+  return (_.includes(target.split('_'), uttLex) ? 10 : -10)
 };
 
 // We directly implement RSA without webppl to avoid overhead
