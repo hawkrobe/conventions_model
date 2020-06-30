@@ -2,13 +2,13 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
-var numUtterances = 16;
+var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['circle_striped_highstriped', 'circle_striped_lowstriped',
                'circle_spotted_highspotted', 'circle_spotted_lowspotted',
                'square_red_lightred', 'square_red_darkred',
                'square_blue_lightblue', 'square_blue_darkblue'];
-var features = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 
+var meanings = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 
                 'highstriped', 'lowstriped', 'lowspotted', 'highspotted', 
                 'lightred', 'lightblue', 'darkred', 'darkblue'];
 var objectLookup = {
@@ -17,21 +17,19 @@ var objectLookup = {
   'stripedCircle1' : 'circle_striped_lowstriped', 'stripedCircle2' :'circle_striped_highstriped',
   'spottedCircle1' : 'circle_spotted_lowspotted', 'spottedCircle2' : 'circle_spotted_highspotted'
 };
-var numFeatures = features.length;
-var lexDims = [numUtterances, numFeatures];
+var numMeanings = meanings.length;
+var lexDims = [1];
 
 var params = {
-  alpha : 5,
-  listenerAlpha: 5,
+  alpha : 1,
+  listenerAlpha: 3,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
   costWeight: 0,
   utterances: utterances,
-  objects: objects,
-  features: features
+  objects: objects
 };
-
 
 var pragStr = (params.usingPragmatics ? 'prag' : 'no_prag') + '_discount' + params.discountFactor + '_' + params.coord;
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
@@ -43,78 +41,63 @@ var tensorSoftplus = function(x) {
   return T.log(T.add(T.exp(x), 1));
 };
 
-var partnerGuide = function(paramName) {
-  return function() {
-    return Delta({
- v: param({name: 'mu_x' + paramName, dims:lexDims})
-    //      mu: param({name: 'mu' + paramName, dims: lexDims}),
-//      sigma: tensorSoftplus(param({name: 'sigma' + paramName, dims: lexDims}))
-    });
-  };
-};
-
 var sampleLexicon = function(agentID) {
-  return sample(DiagCovGaussian({mu: zeros(lexDims), sigma: T.mul(ones(lexDims), 5)}),
-		{guide: partnerGuide(agentID)});
+  var out = _.zipObject(utterances, map(function(utt) {
+    return sample(Categorical({vs:meanings}), {guide: function() {
+      return Categorical({
+        vs: meanings,
+        ps: numeric.squishToProbSimplex(param({name: 'categorical_' + agentID + '_' + utt, dims: [numMeanings-1]}))
+      });
+    }});
+  }, utterances));
+  return out
 };
 
-var S = function(object, agentID, context) {
+var S = function(object, context, agentID) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-    var utility = expectation(Infer({method:"forward", samples: 1, guide:true}, function(){
-      var lexicon = sampleLexicon(agentID);
-      var config = {lexicon: lexicon, context: context};
-      return refModule.getListenerScore(object, utt, extend(params, config))
-    }));
+    var utility = L(utt, context, agentID).score(object);
+    display(utt);
+    display(utility);
     factor(params.alpha * utility);
     return utt;
   });
 };
 
-var L = function(utt, agentID, context) {
+var L = function(utt, context, agentID) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(context);
-    var utility = expectation(Infer({method:"forward", samples: 1, guide:true}, function(){
-      var lexicon = sampleLexicon(agentID);
-      var config = {lexicon: lexicon, context: context};
+    var utility = expectation(Infer({method: 'forward', guide: true, samples: 5000, model: function() {
+      var config = {lexicon: sampleLexicon(agentID), context: context};
       return (params.usingPragmatics ? 
               refModule.getSpeakerScore(utt, object, extend(params, config)) :
-	      Math.exp(refModule.getLexiconElement(utt, object, extend(params, config))));
-    }));
-    // display(object);
-    // display(utility);
+	      Math.exp(refModule.getLexiconElement(utt, object, extend(params, config))))
+    }}));
     factor(params.listenerAlpha * utility);
     return object;
   });
 };
 
-var postTest = function(trialNum, outputFile) {
-  map(function(object) {
+var postTest = function(trial, outputFile) {
     map(function(word) {
-      var speaker1AvgVal = expectation(Infer({method:"forward", samples: 100, guide:true}, function(){
-        var lexicon = sampleLexicon(1);
-        return refModule.getLexiconElement(word, object, extend(params, {lexicon: lexicon}));
+      var speaker1TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
+        return sampleLexicon(1)[word]
       }));
-      var speaker2AvgVal = expectation(Infer({method:"forward", samples: 100, guide:true}, function(){
-        var lexicon = sampleLexicon(2);
-        return refModule.getLexiconElement(word, object, extend(params, {lexicon: lexicon}));
+      var speaker2TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
+        return sampleLexicon(2)[word]
       }));
-      // display(word + ':' + object)
-      // display(speaker1AvgVal)
-      // display(speaker2AvgVal)      
-      csv.writeLine([argv.gameNum, params.alpha, trialNum, 1, object, word, speaker1AvgVal].join(','), outputFile);
-      csv.writeLine([argv.gameNum, params.alpha, trialNum, 2, object, word, speaker2AvgVal].join(','), outputFile);
+      csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
+      csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
     }, utterances);
-  }, objects);
 };
 
-var update = function(agentID, dataSoFar) {
+var updatePosterior = function(agentID, dataSoFar) {
   Optimize({
-    steps: 25, optMethod: {adam: {stepSize: 0.01}},
+    steps: 10000, verbose: true,optMethod: {adam: {stepSize: 0.005}},
     model: function() {
       var lexicon = sampleLexicon(agentID);
-      mapData({data: dataSoFar, batchSize: _.min([20, dataSoFar.length])}, function(trial) { 
-        var discount = Math.pow(params.discountFactor, dataSoFar.length - trial.trialNum);
+      mapData({data: dataSoFar, batchSize : _.min([20, dataSoFar.length])}, function(trial) { 
+        var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
         var config = {lexicon: lexicon, context: trial.context};
         var objectToUse = params.coord == 'same' ? trial.intendedName : (trial.role == 'speaker' ? trial.clickedName : trial.intendedName);
         if(!params.usingPragmatics){
@@ -125,8 +108,7 @@ var update = function(agentID, dataSoFar) {
           factor(discount * refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
         }
       });
-    }
-  });
+  }});
 };
 
 // for each point in data, we want the model's predictions 
@@ -139,30 +121,25 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     intendedName : objectLookup[currTrialRaw['intendedName']]
   });
 
-//  console.log('trial data', currTrial);
   console.log('speaker:', currTrial.speakerID)
   // run VI on current data
-    update(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
-    update(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
+  updatePosterior(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
+  updatePosterior(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
   
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, currTrial.speakerID, currTrial.context);
-
-//  console.log('speaker output', JSON.stringify(speakerOutput))
+  var speakerOutput = S(currTrial.intendedName, currTrial.context, currTrial.speakerID);
   var topSpeakerChoice = MAP(speakerOutput)['val']; // sample(speakerOutput)//
 
-  var listenerOutput = L(topSpeakerChoice, currTrial.listenerID, currTrial.context);
-//  console.log('listener output', JSON.stringify(listenerOutput))
-  var topListenerChoice = MAP(listenerOutput)['val']; // sample(listenerOutput) 
+  var listenerOutput = L(topSpeakerChoice, currTrial.context, currTrial.listenerID);
+  var topListenerChoice = MAP(listenerOutput)['val']; // sample(listenerOutput)  // 
 
+  display('context is ' + currTrial.context);
   display('top speaker choice is ' + topSpeakerChoice);
   display('top listener choice is ' + topListenerChoice);
+  display('intended: ' + currTrial.intendedName);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  // if(_.toInteger(currTrial.trialNum) > 1) {
-  // display('mu1:word1:obj1: ' + T.get(param({name: 'mu1', dims : lexDims}), 1));
-  // display('mu2:word1:obj1: ' + T.get(param({name: 'mu2', dims : lexDims}), 1));
-  // }
-  csv.writeLine([argv.gameNum, params.alpha, params.discountFactor, currTrial.trialNum, currTrial.condition,currTrial.contextType,
+  csv.writeLine([argv.gameNum, params.alpha, params.discountFactor,
+                 currTrial.trialNum, currTrial.condition, currTrial.contextType,
                  currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
@@ -177,7 +154,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     }));
   }, [currTrial.speakerID, currTrial.listenerID]));
 
-  postTest(currTrial.trialNum, posttestF);
+  postTest(currTrial, posttestF);
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), newDataSoFar);
   } 
