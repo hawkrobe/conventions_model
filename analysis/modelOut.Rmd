@@ -34,16 +34,115 @@ ggsave('../../dissertation/dissertation/figures/modeling/clark92.pdf', height = 
 ## Simulating models & looking at post-test
 
 ```{r}
-trajectory <- read_csv('../simulations/cogsci2018/output/trajectorygame1.csv')
-ggplot(trajectory, aes(x = time, y = object, fill = val)) +
-  geom_tile()
+trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "trajectory.*", full.names = T) %>%
+  map(~ read_csv(.x) %>% select(gameNum, time, condition, correct,topSpeakerChoice) %>% mutate(filename=.x)) %>%
+  reduce(rbind) %>%
+  mutate(quarter = floor((time - 1) / 24)) %>%
+  mutate(repNum = floor((time - 1) / 8)) %>%
+  separate(filename, c('garbage1', 'garbage2', 'discount', 'coord'), sep="_") %>%
+  mutate(discount = gsub("discount", "", discount),
+         coord = ifelse(coord == 'same', 'same', 'diff')) %>%
+  select(-starts_with("garbage")) %>%
+  mutate(condition = case_when(condition == 'subOnly' ~ 'fine', 
+                               condition == 'mixedLower' ~ 'mixed', 
+                               TRUE ~ 'coarse')) 
+
+  
+trajectories %>% 
+#  filter(coord == 'diff') %>%
+  group_by(condition, discount, time) %>%
+  tidyboot::tidyboot_mean(correct, nboot=100) %>%
+  ggplot(aes(x = time, y = empirical_stat, color = condition)) +
+    geom_point(alpha=0.5) +
+    ylim(0, 1) +
+    geom_smooth() +
+    facet_wrap(~ paste0('discount:', discount)) +
+    labs(y = 'proportion correct', x = 'trial number') +
+    theme_few() 
+
+```
+
+
+```{r}
+trajectories %>%
+  filter(coord == 'diff') %>%
+  group_by(gameNum, condition, discount, repNum) %>%
+  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition, repNum, discount) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
+    geom_line() +
+    facet_wrap(~ discount) +
+    ylim(3.5, 8.5) +
+    geom_hline(yintercept = c(4, 8)) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    theme_few() +
+    labs(y = "number unique words used")
 ```
 
 ```{r}
-postTest <- read_csv('../simulations/cogsci2018/output/postTestgame1.csv')
-ggplot(postTest, aes(x = word, y = object, fill = val > 2)) +
-  geom_tile() +
-  facet_wrap(~ agentID)
+trajectories %>% 
+  filter(discount == 0.8) %>%
+  group_by(condition, coord, time) %>%
+  tidyboot::tidyboot_mean(correct, nboot=100) %>%
+  ggplot(aes(x = time, y = empirical_stat, color = condition)) +
+    geom_point(alpha=0.5) +
+    ylim(0, 1) +
+    geom_smooth() +
+    facet_wrap(~ coord) +
+    labs(y = 'proportion correct', x = 'trial number') +
+    theme_few() 
+
+```
+
+```{r}
+trajectories %>%
+  filter(discount == 0.8) %>%
+  group_by(gameNum, condition, coord, repNum) %>%
+  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition, repNum, coord) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
+    geom_line() +
+    facet_wrap(~ coord) +
+    ylim(3.5, 8.5) +
+    geom_hline(yintercept = c(4, 8)) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    theme_few() +
+    labs(y = "number unique words used")
+
+```
+
+
+
+
+```{r}
+softmax <- function(outVec){
+  s.vec <- exp(outVec)/sum(exp(outVec))
+  return(s.vec)
+}
+
+postTest <- read_csv('../simulations/cogsci2018/testing_game101.csv') %>%
+  left_join(trajectories %>% group_by(gameNum) %>% filter(row_number() == 1))
+
+postTest %>%
+  filter(trialNum == 96) %>%
+  mutate(aboveThreshold = val > -1) %>%
+  group_by(gameNum, condition, agentID, word, aboveThreshold) %>%
+  tally() %>%
+  filter(aboveThreshold) %>%
+  group_by(condition, n) %>%
+  tally()
+  
+postTest %>%
+  filter(trialNum == 96) %>%
+  group_by(word) %>%
+  mutate(val = softmax(val)) %>%
+  ggplot(aes(x = word, y = object, fill = val)) +
+    geom_tile() +
+    facet_wrap(condition ~ gameNum)
+
+ggsave("big_tile.pdf", width = 10, height = 10, units = 'in')
 ```
 
 ## Fitting human data
@@ -56,7 +155,7 @@ modelInput <- dir(path = "../simulations/cogsci2018/input/",
   reduce(rbind) %>%
   rename(time = trialNum, gameNum = id)
 
-modelOutput <- dir(path = "../simulations/cogsci2018/output/pragmatics/",
+modelOutput <- dir(path = "../simulations/cogsci2018/output/",
     pattern = "*.csv",
     full.names = T) %>%
   map(read_csv) %>%
