@@ -1,0 +1,9 @@
+iterationName	gameid	time	mago	kohu	lige	kunu	muwa	hawu	hewo	polo	wiga	niki	neno	lapa	kame	huna	wogu	gawe	target	finalRole	eventType
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482477065	false	false	false	false	false	false	false	true	false	false	false	false	false	false	false	false	blueSquare1	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482479673	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	blueSquare2	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482488594	false	true	false	false	false	false	false	false	false	false	false	false	false	true	false	false	redSquare1	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482506278	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	redSquare2	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482509048	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	false	spottedCircle1	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482511398	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	spottedCircle2	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482513503	false	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	stripedCircle1	listener	postTest_object
+experiment1	3850-bfcd68c1-0806-476a-b0e6-e0586c1a12b8	1516482516356	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	stripedCircle2	listener	postTest_object

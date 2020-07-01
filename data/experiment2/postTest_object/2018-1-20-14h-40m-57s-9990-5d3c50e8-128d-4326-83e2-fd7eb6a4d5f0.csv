@@ -1,0 +1,9 @@
+iterationName	gameid	time	heka	gemo	wilu	meho	woli	puwa	kipa	nige	nume	guwi	gaga	hole	kego	wuna	weko	wala	target	finalRole	eventType
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488057587	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	blueSquare1	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488060524	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	blueSquare2	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488064973	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	redSquare1	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488069449	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	redSquare2	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488072734	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	spottedCircle1	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488075288	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488079434	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	stripedCircle1	speaker	postTest_object
+experiment1	9990-5d3c50e8-128d-4326-83e2-fd7eb6a4d5f0	1516488083769	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	stripedCircle2	speaker	postTest_object

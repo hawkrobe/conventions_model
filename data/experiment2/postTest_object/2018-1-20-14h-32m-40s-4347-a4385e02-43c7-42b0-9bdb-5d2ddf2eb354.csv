@@ -1,0 +1,17 @@
+iterationName	gameid	time	wowi	hiwo	pepe	huno	meho	niwa	gahu	wuni	piki	honu	nawu	liha	newe	miko	kane	mapi	target	finalRole	eventType
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487560888	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487562924	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487567194	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	redSquare1	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487569470	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487572126	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487573197	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	redSquare2	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487576013	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle1	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487579317	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487582144	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	stripedCircle1	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487585064	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	redSquare1	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487585168	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	stripedCircle2	listener	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487587884	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	redSquare2	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487591048	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle1	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487594907	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487600622	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	stripedCircle1	speaker	postTest_object
+experiment1	4347-a4385e02-43c7-42b0-9bdb-5d2ddf2eb354	1516487603210	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	stripedCircle2	speaker	postTest_object

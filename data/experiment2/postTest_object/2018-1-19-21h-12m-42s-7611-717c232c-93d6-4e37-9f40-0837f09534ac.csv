@@ -1,0 +1,17 @@
+iterationName	gameid	time	gogo	hohi	nihe	wine	lume	pupa	hewa	kipu	nuli	mani	newo	humo	hina	lele	gegi	papi	target	finalRole	eventType
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425162773	false	false	false	false	false	false	true	false	false	true	false	false	false	false	false	false	blueSquare1	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425165603	false	false	false	false	true	false	false	false	false	true	false	false	false	false	false	false	blueSquare2	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425170627	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	redSquare1	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425172672	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	redSquare2	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425175625	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	spottedCircle1	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425178502	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	spottedCircle2	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425181623	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	stripedCircle1	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425185701	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	stripedCircle2	speaker	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425233212	false	false	false	false	true	false	false	false	false	true	false	false	false	false	false	false	blueSquare1	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425236378	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425245069	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	redSquare1	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425247324	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	redSquare2	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425251509	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	spottedCircle1	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425256781	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425265645	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	false	stripedCircle1	listener	postTest_object
+experiment1	7611-717c232c-93d6-4e37-9f40-0837f09534ac	1516425269333	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	false	stripedCircle2	listener	postTest_object

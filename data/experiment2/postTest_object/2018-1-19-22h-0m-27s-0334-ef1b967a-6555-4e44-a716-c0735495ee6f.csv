@@ -1,0 +1,17 @@
+iterationName	gameid	time	lila	luno	mane	pumo	lame	wowi	goho	gepe	loli	kopo	niwu	peni	gaga	wagu	pigi	wugo	target	finalRole	eventType
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428027666	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428030513	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428034295	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	redSquare1	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428034352	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428036354	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	redSquare2	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428037087	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428041042	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	spottedCircle1	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428043033	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	redSquare1	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428044353	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	spottedCircle2	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428046136	false	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	redSquare2	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428047537	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle1	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428050282	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle2	listener	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428054128	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	spottedCircle1	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428056464	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	spottedCircle2	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428060778	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle1	speaker	postTest_object
+experiment1	0334-ef1b967a-6555-4e44-a716-c0735495ee6f	1516428068048	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle2	speaker	postTest_object

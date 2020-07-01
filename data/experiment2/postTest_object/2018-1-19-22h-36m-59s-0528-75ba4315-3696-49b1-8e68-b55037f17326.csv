@@ -1,0 +1,17 @@
+iterationName	gameid	time	mewo	hege	hama	puli	make	kimu	peho	hogo	lahe	wanu	kagu	mile	niwi	nuna	welo	leme	target	finalRole	eventType
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430219637	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430221639	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430230019	false	false	false	false	false	false	false	false	true	true	false	false	false	false	false	false	redSquare1	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430232419	false	false	false	false	false	false	false	false	true	true	false	false	false	false	false	false	redSquare2	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430240855	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	spottedCircle1	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430242929	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430246611	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle1	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430251157	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle2	speaker	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430252293	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare1	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430256206	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	blueSquare2	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430262667	false	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	redSquare1	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430268606	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	false	redSquare2	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430276974	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	spottedCircle1	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430279541	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	spottedCircle2	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430281830	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle1	listener	postTest_object
+experiment1	0528-75ba4315-3696-49b1-8e68-b55037f17326	1516430288480	false	false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	stripedCircle2	listener	postTest_object
