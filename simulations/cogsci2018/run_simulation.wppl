@@ -8,8 +8,9 @@ var objects = ['circle_striped_highstriped', 'circle_striped_lowstriped',
                'circle_spotted_highspotted', 'circle_spotted_lowspotted',
                'square_red_lightred', 'square_red_darkred',
                'square_blue_lightblue', 'square_blue_darkblue'];
-var meanings = ['circle', 'square', 'red', 'blue', 'striped', 'spotted', 
-                'highstriped', 'lowstriped', 'lowspotted', 'highspotted', 
+var meanings = ['circle', 'striped', 'spotted', 
+                'highstriped', 'lowstriped', 'lowspotted', 'highspotted',
+                'square', 'red', 'blue',
                 'lightred', 'lightblue', 'darkred', 'darkblue'];
 var objectLookup = {
   'redSquare1' : 'square_red_lightred', 'redSquare2' : 'square_red_darkred',
@@ -22,7 +23,7 @@ var lexDims = [1];
 
 var params = {
   alpha : 1,
-  listenerAlpha: 3,
+  listenerAlpha: 1,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
@@ -41,22 +42,20 @@ var tensorSoftplus = function(x) {
   return T.log(T.add(T.exp(x), 1));
 };
 
-var sampleLexicon = function(agentID) {
+var sampleLexicon = function() {
   var out = _.zipObject(utterances, map(function(utt) {
-    return sample(Categorical({vs:meanings}), {guide: function() {
-      return Categorical({
-        vs: meanings,
-        ps: numeric.squishToProbSimplex(param({name: 'categorical_' + agentID + '_' + utt, dims: [numMeanings-1]}))
-      });
-    }});
-  }, utterances));
+    var meaning = sample(Categorical({
+      vs: meanings
+    }))
+    return meaning
+  }, utterances))
   return out
 };
 
-var S = function(object, context, agentID) {
+var S = function(object, context, posterior) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-    var utility = L(utt, context, agentID).score(object);
+    var utility = L(utt, context, posterior).score(object);
     display(utt);
     display(utility);
     factor(params.alpha * utility);
@@ -64,50 +63,62 @@ var S = function(object, context, agentID) {
   });
 };
 
-var L = function(utt, context, agentID) {
+var L = function(utt, context, posterior) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(context);
-    var utility = expectation(Infer({method: 'forward', guide: true, samples: 5000, model: function() {
-      var config = {lexicon: sampleLexicon(agentID), context: context};
+    var utility = expectation(posterior, function(lexicon) {
+      var config = {lexicon: lexicon, context: context};
+      var truthTerm = refModule.getLexiconElement(utt, object, extend(params,config));
+      // console.log(lexicon)
+      // console.log(truthTerm)
       return (params.usingPragmatics ? 
-              refModule.getSpeakerScore(utt, object, extend(params, config)) :
-	      Math.exp(refModule.getLexiconElement(utt, object, extend(params, config))))
-    }}));
+              truthTerm + refModule.getSpeakerScore(utt, object, extend(params, config)) :
+	      truthTerm);
+    });
     factor(params.listenerAlpha * utility);
     return object;
   });
 };
 
-var postTest = function(trial, outputFile) {
+var postTest = function(trial, outputFile, posterior1, posterior2) {
     map(function(word) {
-      var speaker1TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
-        return sampleLexicon(1)[word]
-      }));
-      var speaker2TopGuess = JSON.stringify(Infer({method: 'forward', samples: 1000, guide: true}, function() {
-        return sampleLexicon(2)[word]
-      }));
+      var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}))
+      var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}))
+      console.log(word)
+      console.log(speaker1TopGuess)
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
     }, utterances);
 };
 
-var updatePosterior = function(agentID, dataSoFar) {
-  Optimize({
-    steps: 10000, verbose: true,optMethod: {adam: {stepSize: 0.005}},
-    model: function() {
-      var lexicon = sampleLexicon(agentID);
-      mapData({data: dataSoFar, batchSize : _.min([20, dataSoFar.length])}, function(trial) { 
-        var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
-        var config = {lexicon: lexicon, context: trial.context};
-        var objectToUse = params.coord == 'same' ? trial.intendedName : (trial.role == 'speaker' ? trial.clickedName : trial.intendedName);
-        if(!params.usingPragmatics){
-          factor(refModule.getLexiconElement(trial.wordID, objectToUse, extend(params,config)));
-        } else if(trial.role == 'speaker') {
-          factor(discount * refModule.getListenerScore(objectToUse, trial.wordID, extend(params, config)));
-        } else {
-          factor(discount * refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
-        }
-      });
+var updatePosterior = function(dataSoFar) {
+  var data = dataSoFar.slice(-16)
+  return Infer({method: 'MCMC', samples:5000,burn:5000,lag:5, model : function() {
+    var lexicon = sampleLexicon();
+
+    // impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
+    condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
+    mapData({data: data}, function(trial) { 
+      var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
+      var config = {lexicon: lexicon, context: trial.context};
+      var objectToUse = params.coord == 'same' ? trial.intendedName : (trial.role == 'speaker' ? trial.clickedName : trial.intendedName);
+      var truthTerm = refModule.getLexiconElement(trial.wordID, objectToUse, extend(params,config));
+      // console.log(lexicon)
+      // console.log(objectToUse)
+      // console.log(trial.wordID)
+      // console.log(truthTerm)
+      if(params.usingPragmatics){
+        var pragmaticTerm = (trial.role == 'speaker' ?
+                             refModule.getListenerScore(objectToUse, trial.wordID, extend(params, config)) :
+                             refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
+        // console.log('prag', pragmaticTerm)
+        // console.log('truth', truthTerm)
+        factor(discount * (truthTerm + pragmaticTerm));
+      } else {
+        factor(discount * truthTerm);
+      }
+    });
+    return lexicon;
   }});
 };
 
@@ -115,24 +126,26 @@ var updatePosterior = function(agentID, dataSoFar) {
 var iterate = function(outputFile, remainingTrials, dataSoFar) {
   var currTrialRaw = first(remainingTrials);
   var currTrial = extend(currTrialRaw, {
-    context : map(function(v) {return objectLookup[v];},
+        context : map(function(v) {return objectLookup[v];},
          [currTrialRaw.object1name, currTrialRaw.object2name,
           currTrialRaw.object3name, currTrialRaw.object4name]),
     intendedName : objectLookup[currTrialRaw['intendedName']]
   });
 
-  console.log('speaker:', currTrial.speakerID)
+  console.log(currTrial);
   // run VI on current data
-  updatePosterior(currTrial.speakerID, dataSoFar[currTrial.speakerID]);
-  updatePosterior(currTrial.listenerID, dataSoFar[currTrial.listenerID]);
-  
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
+//  console.log(JSON.stringify(speakerPosterior))
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID]);
+//  console.log(JSON.stringify(listenerPosterior))  
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, currTrial.context, currTrial.speakerID);
-  var topSpeakerChoice = MAP(speakerOutput)['val']; // sample(speakerOutput)//
+  var speakerOutput = S(currTrial.intendedName, currTrial.context, speakerPosterior);
+  var topSpeakerChoice =  MAP(speakerOutput)['val']; //sample(speakerOutput)// 
 
-  var listenerOutput = L(topSpeakerChoice, currTrial.context, currTrial.listenerID);
-  var topListenerChoice = MAP(listenerOutput)['val']; // sample(listenerOutput)  // 
+  var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
+  var topListenerChoice =  MAP(listenerOutput)['val'];//sample(listenerOutput)  // 
 
+  postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
   display('context is ' + currTrial.context);
   display('top speaker choice is ' + topSpeakerChoice);
   display('top listener choice is ' + topListenerChoice);
@@ -154,7 +167,6 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     }));
   }, [currTrial.speakerID, currTrial.listenerID]));
 
-  postTest(currTrial, posttestF);
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), newDataSoFar);
   } 
@@ -168,5 +180,5 @@ iterate(f, data, {1: [], 2: []});
 csv.close(f);
 
 console.log('running posttest')
-postTest('post', posttestF);
+//postTest('post', posttestF);
 csv.close(posttestF);
