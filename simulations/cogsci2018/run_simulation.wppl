@@ -22,8 +22,8 @@ var numMeanings = meanings.length;
 var lexDims = [1];
 
 var params = {
-  alpha : 1,
-  listenerAlpha: 1,
+  alpha : 3,
+  listenerAlpha: 3,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
@@ -140,10 +140,10 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 //  console.log(JSON.stringify(listenerPosterior))  
   // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, currTrial.context, speakerPosterior);
-  var topSpeakerChoice =  MAP(speakerOutput)['val']; //sample(speakerOutput)// 
+  var topSpeakerChoice =  sample(speakerOutput)// MAP(speakerOutput)['val']; //
 
   var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
-  var topListenerChoice =  MAP(listenerOutput)['val'];//sample(listenerOutput)  // 
+  var topListenerChoice =  sample(listenerOutput)  // MAP(listenerOutput)['val'];//
 
   postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
   display('context is ' + currTrial.context);
