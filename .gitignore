@@ -1,7 +1,14 @@
 *~
+/snapshots
+node_modules
+*-1.pdf
+__pycache__/
+*.nb.html
 .ipynb_checkpoints
-/__pychache__/*
 .DS_Store
 *.log
 *.bbl
 *.aux
+.Rhistory
+.RData
+.Rproj.user
