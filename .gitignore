@@ -1,4 +1,5 @@
 *~
+networkOutput*.csv
 .ipynb_checkpoints
 /__pychache__/*
 .DS_Store
