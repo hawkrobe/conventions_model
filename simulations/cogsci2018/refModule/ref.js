@@ -61,7 +61,7 @@ var getLexiconElement = function(utt, target, params) {
   // console.log('chosen meaning' + uttLex.chosenMeaning);
   // console.log(_.includes(target.split('_'), uttLex.chosenMeaning))
   // console.log(T.get(uttLex.lexicon, 0), ' vs. ', T.get(uttLex.lexicon, 1))
-  return (_.includes(target.split('_'), uttLex) ? 0 : -10)
+  return (_.includes(target.split('_'), uttLex) ? 0 : -1)
 };
 
 // We directly implement RSA without webppl to avoid overhead
