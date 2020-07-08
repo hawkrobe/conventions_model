@@ -2,7 +2,7 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
-var numUtterances = 8;
+var numUtterances = 10;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['circle_striped_highstriped', 'circle_striped_lowstriped',
                'circle_spotted_highspotted', 'circle_spotted_lowspotted',
@@ -22,7 +22,7 @@ var numMeanings = meanings.length;
 var lexDims = [1];
 
 var params = {
-  alpha : 3,
+  alpha : 10,
   listenerAlpha: 3,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
@@ -43,13 +43,9 @@ var tensorSoftplus = function(x) {
 };
 
 var sampleLexicon = function() {
-  var out = _.zipObject(utterances, map(function(utt) {
-    var meaning = sample(Categorical({
-      vs: meanings
-    }))
-    return meaning
-  }, utterances))
-  return out
+  return _.zipObject(utterances, map(function(utt) {
+    return sample(Categorical({vs: meanings}));
+  }, utterances));
 };
 
 var S = function(object, context, posterior) {
@@ -69,8 +65,6 @@ var L = function(utt, context, posterior) {
     var utility = expectation(posterior, function(lexicon) {
       var config = {lexicon: lexicon, context: context};
       var truthTerm = refModule.getLexiconElement(utt, object, extend(params,config));
-      // console.log(lexicon)
-      // console.log(truthTerm)
       return (params.usingPragmatics ? 
               truthTerm + refModule.getSpeakerScore(utt, object, extend(params, config)) :
 	      truthTerm);
@@ -92,8 +86,8 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
 };
 
 var updatePosterior = function(dataSoFar) {
-  var data = dataSoFar.slice(-16)
-  return Infer({method: 'MCMC', samples:5000,burn:5000,lag:5, model : function() {
+  var data = dataSoFar//.slice(-16)
+  return Infer({method: 'MCMC', samples:2000,burn:10000,verbose:true,lag:5, model : function() {
     var lexicon = sampleLexicon();
 
     // impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
@@ -101,18 +95,13 @@ var updatePosterior = function(dataSoFar) {
     mapData({data: data}, function(trial) { 
       var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
       var config = {lexicon: lexicon, context: trial.context};
-      var objectToUse = params.coord == 'same' ? trial.intendedName : (trial.role == 'speaker' ? trial.clickedName : trial.intendedName);
+      var objectToUse = (params.coord == 'same' ? trial.intendedName :
+                         (trial.role == 'speaker' ? trial.clickedName : trial.intendedName));
       var truthTerm = refModule.getLexiconElement(trial.wordID, objectToUse, extend(params,config));
-      // console.log(lexicon)
-      // console.log(objectToUse)
-      // console.log(trial.wordID)
-      // console.log(truthTerm)
       if(params.usingPragmatics){
         var pragmaticTerm = (trial.role == 'speaker' ?
-                             refModule.getListenerScore(objectToUse, trial.wordID, extend(params, config)) :
+                             refModule.getL0Score(objectToUse, trial.wordID, extend(params, config)) :
                              refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
-        // console.log('prag', pragmaticTerm)
-        // console.log('truth', truthTerm)
         factor(discount * (truthTerm + pragmaticTerm));
       } else {
         factor(discount * truthTerm);
