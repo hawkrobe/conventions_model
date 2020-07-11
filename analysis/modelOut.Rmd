@@ -34,7 +34,7 @@ ggsave('../../dissertation/dissertation/figures/modeling/clark92.pdf', height = 
 ## Simulating models & looking at post-test
 
 ```{r}
-trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "trajectory.*", full.names = T) %>%
+trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "game.*_.*csv", full.names = T) %>% # 
   map(~ read_csv(.x) %>% select(gameNum, time, condition, correct,topSpeakerChoice) %>% mutate(filename=.x)) %>%
   reduce(rbind) %>%
   mutate(quarter = floor((time - 1) / 24)) %>%
@@ -43,41 +43,53 @@ trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "traje
   mutate(discount = gsub("discount", "", discount),
          coord = ifelse(coord == 'same', 'same', 'diff')) %>%
   select(-starts_with("garbage")) %>%
-  mutate(condition = case_when(condition == 'subOnly' ~ 'fine', 
-                               condition == 'mixedLower' ~ 'mixed', 
-                               TRUE ~ 'coarse')) 
+  mutate(condition = case_when(condition == 'subOnly' ~ 'fine',
+                               condition == 'mixedLower' ~ 'mixed',
+                               TRUE ~ 'coarse'))
 
   
-trajectories %>% 
-#  filter(coord == 'diff') %>%
+trajectories %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  filter(!is.na(discount)) %>%
   group_by(condition, discount, time) %>%
   tidyboot::tidyboot_mean(correct, nboot=100) %>%
   ggplot(aes(x = time, y = empirical_stat, color = condition)) +
     geom_point(alpha=0.5) +
     ylim(0, 1) +
-    geom_smooth() +
-    facet_wrap(~ paste0('discount:', discount)) +
+    geom_hline(yintercept = 0.25) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    geom_smooth(se=F) +
+    facet_grid(paste0('discount:', discount) ~ .) +
     labs(y = 'proportion correct', x = 'trial number') +
-    theme_few() 
+    theme_few() +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1/2)
 
 ```
 
 
 ```{r}
+trajectories %>% filter(time < 8) %>% group_by(condition, time) %>% tidyboot::tidyboot_mean(correct, nboot=100)
+```
+
+```{r}
 trajectories %>%
   filter(coord == 'diff') %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
   group_by(gameNum, condition, discount, repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
   group_by(condition, repNum, discount) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
-    facet_wrap(~ discount) +
     ylim(3.5, 8.5) +
     geom_hline(yintercept = c(4, 8)) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    facet_grid(paste0('discount:', discount) ~ .) +
     theme_few() +
-    labs(y = "number unique words used")
+    scale_color_colorblind() +
+    labs(y = "number unique words used") +
+    theme(aspect.ratio = 2/3)
 ```
 
 ```{r}
