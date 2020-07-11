@@ -1,4 +1,5 @@
 *~
+networkOutput*.csv
 /snapshots
 node_modules
 *-1.pdf
