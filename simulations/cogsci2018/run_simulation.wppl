@@ -1,8 +1,14 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
+var intersect = function(a_of_a) {
+  return reduce(function(i, acc) {
+    return _.intersection(i, acc);
+  }, a_of_a[0], a_of_a);
+};
+
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
-var numUtterances = 10;
+var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['circle_striped_highstriped', 'circle_striped_lowstriped',
                'circle_spotted_highspotted', 'circle_spotted_lowspotted',
@@ -23,7 +29,7 @@ var lexDims = [1];
 
 var params = {
   alpha : 10,
-  listenerAlpha: 3,
+  listenerAlpha: 5,
   coord: argv.coord,
   discountFactor: argv.discountFactor,
   usingPragmatics: argv.usingPragmatics == undefined ? true : argv.usingPragmatics == 'true',
@@ -78,8 +84,8 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
     map(function(word) {
       var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}))
       var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}))
-      console.log(word)
-      console.log(speaker1TopGuess)
+//      console.log(word)
+//      console.log(speaker1TopGuess)
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
       csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
     }, utterances);
@@ -87,11 +93,22 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
 
 var updatePosterior = function(dataSoFar) {
   var data = dataSoFar//.slice(-16)
-  return Infer({method: 'MCMC', samples:2000,burn:10000,verbose:true,lag:5, model : function() {
+  return Infer({method: 'MCMC', samples:2000,burn:10000,lag:5, model : function() { // 
     var lexicon = sampleLexicon();
 
     // impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
     condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
+
+    // stricter mutual exclusivity
+    //console.log(lexicon);
+    // var flattened = _.flatten(map(function(key) {
+    //   return filter(function(object) {
+    //     return _.includes(object.split('_'), lexicon[key])
+    //   }, objects);
+    // }, _.keys(lexicon)));
+    // console.log(flattened);
+    // console.log(_.uniq(flattened).length == flattened.length);
+    //condition(_.uniq(flattened).length == flattened.length);
     mapData({data: data}, function(trial) { 
       var discount = Math.pow(params.discountFactor,  dataSoFar.length - trial.trialNum);
       var config = {lexicon: lexicon, context: trial.context};
@@ -121,7 +138,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     intendedName : objectLookup[currTrialRaw['intendedName']]
   });
 
-  console.log(currTrial);
+//  console.log(currTrial);
   // run VI on current data
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
 //  console.log(JSON.stringify(speakerPosterior))
@@ -132,6 +149,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   var topSpeakerChoice =  sample(speakerOutput)// MAP(speakerOutput)['val']; //
 
   var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
+  display(JSON.stringify(listenerOutput))
   var topListenerChoice =  sample(listenerOutput)  // MAP(listenerOutput)['val'];//
 
   postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
@@ -161,7 +179,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   } 
 };
 
-var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
+var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '_' + argv.iterNum + '.csv');
 csv.writeLine('gameNum,alpha,discountFactor,time,condition,contextType,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
