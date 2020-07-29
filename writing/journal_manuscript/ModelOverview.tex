@@ -13,7 +13,7 @@ Our model is based on three basic principles:
 \begin{enumerate}
 \item \emph{lexical uncertainty}, the idea that beliefs about the underlying conventions used by other agents are represented and updated probabilistically \cite{bergen_pragmatic_2016}
 \item \emph{pragmatic reasoning}, the idea that agents expect other agents to use language in a cooperative manner, and do so themselves  \cite{GoodmanFrank16_RSATiCS}
-\item \emph{inductive generalization}, the idea that agents expect some abstract structure to be shared by their entire community, even by individuals they have never met \cite{}
+\item \emph{inductive learning}, the idea that agents expect some abstract structure to be shared by their entire community, even by individuals they have never met \cite{}
 \end{enumerate}
 
 We formalize these principles in a hierarchical Bayesian model.
@@ -69,3 +69,5 @@ $$
 % MF: adjusted this for better vertical spacing wrt adjacent paragraphs
 where $o_i$ is a chosen object and $w$ an uttered word.
 
+\todo[inline]{Describe some more specific mechanisms that are shared across the simulations.
+(1) memory discounting, (2) lexicon prior (simplicity + space of hypotheses for each word?), (3) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects),}
