@@ -4,17 +4,22 @@
 %\end{savequote}
 
 %% Set up problem
-%Natural languages provide speakers with remarkable flexibility in the labels they may use to refer to things \cite{Brown58_HowShallAThingBeCalled,Cruse77_PragmaticsLexicalSpecificity}.
-%On top of an abundance of expressions made available by syntactic combination and semantic compositionality \cite{Partee95_LexicalSemanticsCompositionality}, we have a number of overlapping and nested terms in our lexicon. 
-%\emph{Fido}, \emph{Dalmatian}, \emph{dog}, and \emph{animal} can all reasonably be used to talk about the same entity at different levels of abstraction. 
-%How these overlapping meanings are learned, and why speakers choose different levels of specificity in different contexts, is increasingly well-understood \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,GrafEtAl16_BasicLevel} 
-%but there remains a more fundamental question about the structure of our conventions. 
-%Why and how do different levels of abstraction become conventionalized in the first place? %And why do we have words for some abstractions but not for others?
+\begin{figure*}[t]
+\begin{center}
+{\includegraphics[scale=.55]{./figures/Sec2-design.png}}
+{\caption{{(A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
+\vspace{-2ex}
+\end{center}
+\end{figure*}
+
 In the previous section, we examined a mechanism for rapid, partner-specific learning that allows agents to form stable but arbitrary \emph{ad hoc} conventions. 
-While a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions are equally likely to form.
-Why do certain conventions form rather than others?
-What determines the structure and content of conventions? 
-Here, we show how our proposed theory accounts for important patterns of \emph{context-sensitivity}.
+While a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions for a meaning are equally likely in practice, or even that all meanings are equally likely to become conventionalized in the first place \cite{HawkinsGoldstone16_SocialConventions}.
+
+For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have labels exclusively referring to each individual tree in our yard.
+If we need to refer to a specific tree, we instead create a referring expression \emph{on the fly.}
+Meanwhile, we \emph{do} often have conventionalized labels (i.e. proper nouns) for individual people and places that we regularly encounter in our daily lives.
+Why do conventions form at some levels of abstraction rather than others?
+Here, we show how our proposed theory accounts for these key patterns of \emph{context-sensitivity} as arising naturally from communicative need in dyadic interaction.
 
 In particular, functional accounts of linguistic conventions have frequently observed that lexical systems are well-calibrated to the statistics of the environment \cite{gibson2019efficiency}.
 This ``optimal expressivity'' hypothesis has accounted well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{KempRegier12_KinshipCategories,regier201511,gibson2017color,kemp2018semantic}, as well as the compositional systems that emerge under iterated learning with communication in the lab \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication}. 
@@ -30,31 +35,15 @@ Our inferential account hypothesizes that local context shapes the conventionali
 %Under the logic of a local efficiency/informativity tradeoff, we make two predictions about the emergence of abstractions in dyads. 
 
 
-\begin{figure*}[t]
-\begin{center}
-{\includegraphics[scale=.55]{./figures/Sec2-design.png}}
-{\caption{{(A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
-\vspace{-2ex}
-\end{center}
-\end{figure*}
-
-
-First, we fill a gap in the empirical literature by collecting a new dataset of human interactions.
-In this experiment, we manipulated the context in a repeated reference game where participants must interactively coordinate on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
+First, we fill a gap in the empirical literature by collecting a new dataset of human interactions under different environmental statistics.
+This experiment manipulates the context of distractors in a repeated reference game where participants must interactively coordinate on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
 % which allows us to examine the conventions that form in different communicative contexts.
-We then compare different model predictions by reporting simulations of artificial agents interacting in the same contexts.
-In both cases, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success. 
-%For example, we are often called upon to make fine distinctions between people in our social circles, hence lexicalizing efficient names for each individual; when referring to green beans or paper towels, however, we can get away without such specific terms -- we are rarely called upon to disambiguate between entities. %\citeA{Wittgenstein09_PhilosophicalInvestigations}
-
-%In this paper, however, . If there are multiple rabbits around, the travelers may need a specific conventionalized term for each; otherwise, they can achieve the same communicative success with fewer words by learning generalizations. When the pragmatics of the context allow for ambiguity in the intended level of reference, adaptive speakers can get away with extending the term more broadly. 
-
-
+Second, we compare different model predictions by reporting simulations of artificial agents interacting in the same contexts.
+In both the empirical data and simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success. 
+Furthermore, we find that pragmatic reasoning is necessary for these effects to arise. 
 %% Example that sets up our specific hypothesis?
 
 %Suppose, mixing thought experiments from \citeA{Wittgenstein09_PhilosophicalInvestigations} and \citeA{Quine13_WordAndObject}, that two travelers meet in a forest, with no language in common. One is cooking dinner, and the other agrees to help in exchange for food and shelter. What kind of micro-language do they coordinate on to solve this joint task, and how is it shaped by context? 
-%To test intuitions about how pragmatics and context might affect the communication system they develop, we consider two cases. If there are multiple rabbits around, the travelers may need a specific conventionalized term for each; otherwise, they can achieve the same communicative success with fewer words by learning generalizations. 
-
-
 			
 \subsection{Experimental methods}
 
@@ -71,7 +60,6 @@ Critically, we manipulated the statistics of the context in a between-subjects d
 In the pure \emph{fine} and \emph{coarse} conditions, all targets appeared in fine or coarse contexts, respectively.
 In the \emph{mixed} condition, the two context types were equally likely. 
 Sequences of trials were constructed by randomly shuffling targets and trial types within blocks and ensuring no target appeared more than once in a row. 
-
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
 This bidirectional measure allows us to check the internal validity of the lexica reported.
 
@@ -94,6 +82,8 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 \vspace{-3ex}
 \end{center}
 \end{figure}
+
+
 \begin{figure*}[t]
 \begin{center}
 \includegraphics[scale=0.75]{Sec2-results.pdf}
@@ -129,19 +119,28 @@ These data also reveal an interesting asymmetry in lexicon content across condit
 
 \subsection{Simulation results}
 
-Our empirical results suggest that different conventions may form under different communicative contexts.
-However, understanding the \emph{dynamics} of how such context-sensitive conventions emerge requires a more detailed model comparison.
-Next, we show how our inferential account explains these dynamics as the consequence of Gricean expectations of cooperativity, as implemented in the Rational Speech Acts framework \cite{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}.
-As previously observed by \cite{FrankGoodmanTenenbaum09_Wurwur} in the context of early cross-situation word learning, this mechanism naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} during partner-specific learning.
+Our empirical results suggest that different communicative contexts systematically lead to different communicative conventions.
+Critically, the sequence of targets was held constant across the \emph{course}, \emph{fine}, and \emph{mixed} conditions; only the distractors were manipulated.
+In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
 
-In order to conduct formal simulations to compare with our artificial language experiment, we must extend the model to appropriately represent the stimulus hierarchy. 
-That is, we must allow some objects to be more similar than others by representing each object not as a distinct, unitary entity but in terms of component \emph{features}, 
-We do so by assigning each object a 14-dimensional binary vector corresponding to the possible features in the stimulus hierarchy.
-The super-ordinate level of shape contributes two features (circle and square) while the basic-level contributes four features (striped, spotted, blue, red) and the sub-ordinate contributes eight features (a distinctive feature for each of the 8 individual objects). 
-We thus parameterize the underlying lexical representation $\theta$ as a real-valued matrix where each entry $\theta_{wf}$ represents the extent to which word $w$ applies to \emph{feature} $f$.
-By analogy to the compositional meaning assigned to multi-word utterances in Simulation \#1, we then define the lexical meaning $\mathcal{L}_\theta(w,o)$ of the word $w$ for object $o = \{f_1, f_2, f_3\}$ by composing the values of the object's features: 
-$$\mathcal{L}_\theta(w,o) = logit(\sigma(\theta_{wf_1}) \cdot \sigma(\theta_{wf_2}) \cdot \sigma(\theta_{wf_3}))$$
-where $\sigma$ is the logistic function mapping the real-valued $\theta$ parameters to the $[0,1]$ interval where the $t$-norm is defined.
+This task poses several distinct challenges for models of coordination and convention formation.
+First, the context constantly changes, with a subset of only four of the eight total objects shown on each trial.
+Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
+These 
+
+Here we must consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
+That is, in addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square) and 1 exhaustive meaning (shape).
+
+ 
+ \todo[inline]{New additions: (1) memory discounting, (2) mutual exclusivity, (3) discrete space of taxonomic meanings vs. independent real-valued lexicon, (4) addition of pure truth term}
+\todo[inline]{the non-pragmatic version seems to converge to a degenerate 2-word (cricle/squre) state (initial usage is ambiguous b/w levels, so someone will eventually extend to different object, then only way to accomodate that data is to rule out more specific meanings). if we allowed a degenerate meaning where all words have same meaning, it would converge to that; can't tell that it's confusing and is guaranteed to be literally true!}
+\todo[inline]{May need to implement baseline model from other papers (e.g. Steels-style, or Spike implementation?) rather than using this version, since it has somewhat different behavior, I think.}
+
+\todo[inline]{Make a note that in the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.}
+
+\todo[inline]{First, show theoretical guarantees of lexical systems that arise when models condition on the same data with and without pragmatics?}
+\todo[inline]{Second, show that we can also capture learning curves if we introduce memory discounting, etc.?}
+
 
 \todo[inline]{Explain simulation details; for each dyad in our human-human dataset, we pair up two artificial agents. They update based on previous choices, etc...}
 We use these pragmatic speaker and listener likelihood functions to link latent lexica, represented as a matrix of real values $\ell_{w,o}^t \in \mathbb{R}$, to behavior.
@@ -169,12 +168,18 @@ The approximating family for each random variable is Gaussian.
 }
 \subsection{Discussion}
 
-Previous proposals have handled context in different ways.
-In some cases, there is no explicit representation of context at all, as when agents coordinate on naming one object at a time \cite{Baronchelli,oldnaminggame}. 
-In models using simple Roth-Erev reinforcement learning update rules, the referential context is sometimes accounted for with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents.
-If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite{steels2005coordinating}.
-This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of learning from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
-Under an inferential framework, however, this property falls out as a natural consequence of well-established Gricean principles of pragmatic reasoning.
+Previous proposals have handled context-sensitivity in different ways.
+In some common settings for convention formation, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{Baronchelli,oldnaminggame}. 
+In other common settings, context is central but held constant throughout interactions, as in Lewis signaling games, where agents use a fixed set of messages to communicate a fixed set of world states \cite{lewis,signalinggame}.
+One of the most sophisticated studies of context in prior work is the Discrimination Game of \citeA{steels2005coordinating}, which examined the joint formation of color categories and color naming conventions.
+As in our experiments, contexts were generated randomly on each trial from a large space and stimuli are embedded in a similarity space (with similarity based on Euclidean distance in continuous space rather than taxonomic relations).
+Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart.
+
+In models using Roth-Erev reinforcement learning update rules or simple neural networks, the referential context is sometimes accounted for with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional}.
+If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite<see also>{steels2005coordinating}.
+This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of allowing the agent to learn from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
+Under an inferential framework, however, this property emerges as a natural consequence of well-established Gricean principles of pragmatic reasoning.
+As previously observed by \cite{FrankGoodmanTenenbaum09_Wurwur} in the context of early cross-situation word learning, reasoning about speakers' intentions naturally instantiates a kind of inductive bias for \emph{mutual exclusivity}.
 
 
 %\subsection{Validating post-test responses}
