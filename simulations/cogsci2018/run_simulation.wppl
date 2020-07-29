@@ -28,7 +28,7 @@ var numMeanings = meanings.length;
 var lexDims = [1];
 
 var params = {
-  alpha : 10,
+  speakerAlpha : 10,
   listenerAlpha: 5,
   epsilon: 0.000001,
   coord: argv.coord,
@@ -40,7 +40,7 @@ var params = {
 
 var pragStr = ('discount:' + params.discountFactor + '_coord:' + params.coord);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,alpha,agentID,object,word,val', posttestF);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
 
 console.log(params);
 console.log(lexDims);
@@ -168,8 +168,10 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
   map(function(word) {
     var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}));
     var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}));
-    csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
-    csv.writeLine([argv.gameNum, params.alpha, trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
+    csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
+                   trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
+    csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
+                   trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
   }, utterances);
 };
 
@@ -200,7 +202,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   display('top listener choice is ' + topListenerChoice);
   display('intended: ' + currTrial.intendedName);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([argv.gameNum, params.alpha, params.discountFactor, params.coord, 
+  csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.condition, currTrial.contextType,
                  currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName,
@@ -222,7 +224,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 };
 
 var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,alpha,discountFactor,coord,time,condition,contextType,speakerID,listenerID,' +
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,condition,contextType,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 iterate(f, data, {1: [], 2: []});

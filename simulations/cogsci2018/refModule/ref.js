@@ -56,61 +56,62 @@ var logit = function(p) {
 }
 
 var getLexiconElement = function(utt, target, params) {
-  var uttLex = params.lexicon[utt]
-  // console.log('element for ', utt, ' and ', target)
-  // console.log('chosen meaning' + uttLex.chosenMeaning);
-  // console.log(_.includes(target.split('_'), uttLex.chosenMeaning))
-  // console.log(T.get(uttLex.lexicon, 0), ' vs. ', T.get(uttLex.lexicon, 1))
-  return (_.includes(target.split('_'), uttLex) ? 0 : -1)
+  var uttLex = params.lexicon[utt];
+  return (_.includes(target.split('_'), uttLex) ? 1 : 0);
 };
 
 // We directly implement RSA without webppl to avoid overhead
-// P(t | utt) \propto e^L(t, utt)
-// => log(p) = L(t, utt) - log(\sum_{i} e^L(t_i, utt))
+// P(obj | utt) \propto L(obj, utt)
+// => log(p) = log [ L(obj, utt) / \sum_{i} L(obj_i, utt) ]
 var getL0Score = function(target, utt, params) {
-  var listenerUtility = function(obj) {
-    return getLexiconElement(utt, obj, params);
-  };
-
-  var truth = listenerUtility(target);
-  var sum = listenerUtility(params.context[0]);
-  for(var i=1; i<params.context.length; i++){
-//    console.log('sum term', i, ':', sum);
-    sum = numeric.logaddexp(sum, listenerUtility(params.context[i]));
+  var targetMeaning = getLexiconElement(utt, target, params);
+  // if given object isn't in extension, some small probability of guessing it anyway
+  if(targetMeaning == 0) {
+    return Math.log(params.epsilon);
+  } else {
+    var otherMeanings = 0;
+    for(var i=0; i<params.context.length; i++){
+      otherMeanings += getLexiconElement(utt, params.context[i], params);
+    }
+    return Math.log(targetMeaning / otherMeanings);
   }
-  return normalize(truth, sum);
 };
 
-// return alpha * log P(u | o, c, l) - 
+// P(utt | obj) \propto e^{alpha * log P(obj | utt)}
+// => log P(utt | obj) = alpha * log P(obj | utt) - log(sum_i e^{alpha * log P(obj | utt)})
 var getSpeakerScore = function(utt, targetObj, params) {
-  var utility = function(possibleUtt) {
-    return ad.scalar.sub(
-      ad.scalar.mul(params.alpha, getL0Score(targetObj, possibleUtt, params)),
-      ad.scalar.mul(params.costWeight, possibleUtt.split('_').length)
-    );
-  };
-  var truth = utility(utt);
-
-  var sum = utility(params.utterances[0]);
-  for(var i=1; i< params.utterances.length; i++){
-    sum = numeric.logaddexp(sum, utility(params.utterances[i]));
+  var targetMeaning = getLexiconElement(utt, targetObj, params);
+  // if given utterance doesn't apply, some small probability of saying it anyway
+  if(targetMeaning == 0) {
+    return Math.log(params.epsilon);
+  } else {
+    var truth = params.speakerAlpha * getL0Score(targetObj, utt, params);
+    var sum = params.speakerAlpha * getL0Score(targetObj, params.utterances[0], params);
+    for(var i=1; i< params.utterances.length; i++){
+      sum = numeric.logaddexp(sum, params.speakerAlpha * getL0Score(targetObj, params.utterances[i], params));
+    }
+    return normalize(truth, sum);
   }
-  return normalize(truth, sum);
 };
 
 // if P(o | u, c, l) = P(u | o, c, l) P(u | c, l) / sum_o P(u | o, c, l)
 // then log(o | u, c, l) = log P(u | o, c, l) - log(sum_{o in context} P(u | o, c, l))
 var getListenerScore = function(trueObj, utt, params) {
-  var listenerUtility = function(obj) {
+  var targetMeaning = getLexiconElement(utt, trueObj, params);
+  if(targetMeaning == 0) {
+    return Math.log(params.epsilon);
+  } else {
+    var listenerUtility = function(obj) {
       return ad.scalar.mul(getSpeakerScore(utt, obj, params), params.listenerAlpha);
-  };
-  
-  var truth = listenerUtility(trueObj);
-  var sum = listenerUtility(params.context[0]);
-  for(var i=1; i< params.context.length; i++){
-    sum = numeric.logaddexp(sum, listenerUtility(params.context[i]));
+    };
+    
+    var truth = listenerUtility(trueObj);
+    var sum = listenerUtility(params.context[0]);
+    for(var i=1; i< params.context.length; i++){
+      sum = numeric.logaddexp(sum, listenerUtility(params.context[i]));
+    }
+    return normalize(truth, sum);
   }
-  return normalize(truth, sum);
 };
 
 var reformatData = function(rawData) {
