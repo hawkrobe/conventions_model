@@ -57,8 +57,7 @@ Participants were paired over the web and placed in a shared environment contain
 The objects that served as referents were designed to cluster in a fixed three-level hierarchy with shape at the top-most level, color/texture at the intermediate levels, and frequency/intensity at the finest levels (see Fig.\ \ref{fig:context_design}C). Each communicative context contained four objects. Distractors could differ from the target at various level of the hierarchy, creating different types of contexts defined by the finest distinction that had to be drawn. We focus on two: \emph{fine} trials, where the closest distractor belongs to the same fine-grained subordinate category (e.g.\ another striped circle; see Fig.\ \ref{fig:context_design}A), and \emph{coarse} trials, where the closest distractor belongs to a coarser level of the conceptual hierarchy (e.g.\ dotted circle instead of striped circle).\footnote{Even coarser trials with super-ordinate distractors (e.g.\ a circle target among three square distractors) were logically possible but would have introduced several experimental confounds; we opted to leave these trial types out of our design and conduct the minimal manipulation.} Fixed arrays of 16 utterances (enough to allow the potential for full expressibility) were randomly generated for each pair (and held constant across trials) by stringing together consonant-vowel pairs into pronounceable 2-syllable words (see Fig.\ \ref{fig:context_design}B).
 
 Critically, we manipulated the statistics of the context in a between-subjects design to test the context-sensitivity of conventions. 
-In the pure \emph{fine} and \emph{coarse} conditions, all targets appeared in fine or coarse contexts, respectively.
-In the \emph{mixed} condition, the two context types were equally likely. 
+In the \emph{fine} condition, all targets appeared in fine contexts; in the \emph{course} condition, all targets appeared in course contexts.
 Sequences of trials were constructed by randomly shuffling targets and trial types within blocks and ensuring no target appeared more than once in a row. 
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
 This bidirectional measure allows us to check the internal validity of the lexica reported.
@@ -70,7 +69,7 @@ This bidirectional measure allows us to check the internal validity of the lexic
 Although participants in all conditions began with no common basis for label meanings, performing near chance on the first trial (proportion correct $= 0.19$, 95\%~CI~$=~[0.13, 0.27]$), most pairs were nonetheless able to coordinate on a successful communication system over repeated interaction (see Fig.\ \ref{fig:context_accuracy}). 
 A mixed-effects logistic regression on listener responses with trial number as a fixed effect, and including by-pair random slopes and intercepts, showed a significant improvement in accuracy overall, $z = 14.4, p < 0.001$. 
 Accuracy also differed significantly \emph{across} conditions (Fig.\ \ref{fig:context_accuracy}): adding an additional main effect of condition to our logistic model provided a significantly better fit, $\chi^2(2) = 10.8, p = 0.004$. 
-Qualitatively, the \emph{coarse} condition was easiest for participants, the \emph{fine} condition was hardest, and the \emph{mixed} condition was roughly in between. % Looking more closely at games within the mixed condition, we found that performance on subordinate and intermediate trial types roughly mirrored the gap between the .
+Qualitatively, the \emph{coarse} condition was easiest for participants, and the \emph{fine} condition was hardest. 
 Finally, the (log) response time taken by the speaker to choose an utterance also decreased significantly over the course of the game, $t = -19.7, p < 0.001$, indicating that lexical mappings became increasingly established or accessible.
 
 \begin{figure}[t]
@@ -100,27 +99,34 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 
 \subsubsection{Partners converge on similar conventions}
 
-Another indicator of successful learning is convergence or alignment of lexica across partners in a dyad. Before using post-test responses to compute similarity \emph{across} partners, however, we examine the internal consistency \emph{within} an individual's post-test responses. For each participant, we counted the number of mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa'). In general, participants were quite consistent: out of 128 cells in the lexicon matrix (16 words $\times$ 8 objects), the median number of mismatches was 2 (98\% agreement), though the distribution has a long tail (mean $= 7.3$). We therefore conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses.
+Another indicator of successful learning is convergence or alignment of lexica between partners within a dyad. 
+Before using post-test responses to compute similarity between partners, however, we examine the internal consistency of an individual's post-test responses. 
+For each participant, we counted the number of mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa'). 
+In general, participants were quite consistent: out of 128 cells in the lexicon matrix (16 words $\times$ 8 objects), the median number of mismatches was 2 (98\% agreement), though the distribution has a long tail (mean $= 7.3$). 
+We therefore conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses.
 
-Using these estimates of each participant's lexicon, we compute the overlap between partners. For most pairs, partners aligned strongly by the end, with a median post-test overlap of 97.6\% (125 out of 128 entries). Because these matrices were extremely sparse, however, just a a few mismatches could have a large impact on performance. Overall accuracy in the game is strongly correlated with alignment: partners who reported more similar lexica at the end tended to perform better at the task ($r = 0.77$).  
+Using these estimates of each participant's lexicon, we compute the overlap between partners. 
+For most pairs, partners aligned strongly by the end, with a median post-test overlap of 97.6\% (125 out of 128 entries). 
+Because these matrices were extremely sparse, however, just a a few mismatches could have a large impact on performance. 
+Overall accuracy in the game is strongly correlated with alignment: partners who reported more similar lexica at the end tended to perform significantly better at the task ($r = 0.77$).  
 
-Despite these markers of success at the group level, individual performance was bimodal: a subpopulation of 29 games (11\% of coarse games, 18\% of mixed, and 39\% of fine) still showed relatively poor performance, sometimes at chance, by the end of the game. For the subsequent analyses focusing on the content of the lexicon, we exclude games with fourth-quartile accuracy below the pre-registered criterion of 75\% to ensure we are examining only successful lexica. %After removing these participants, internal consistency was roughly similar across conditions (means of 3.0 and 3.4 internal mismatches in the \emph{coarse} and \emph{fine} conditions, and 5.8 in \emph{mixed}) so we don't expect these to bias our data.
+Despite these markers of success at the group level, individual performance was bimodal: a subpopulation of 29 games (11\% of coarse games, 18\% of mixed, and 39\% of fine) still showed relatively poor performance, sometimes near chance, by the end of the game. 
+For the subsequent analyses focusing on the content of the lexicon, we exclude games with fourth-quartile accuracy below the pre-registered criterion of 75\% to ensure we are examining only successful lexica. 
 
 \subsubsection{Contextual pressures shape the lexicon}
 
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize more abstract terms. One coarse signature of this prediction lies in the \emph{efficiency} of the resulting lexicon: lexicalizing abstract terms should require participants to use fewer terms overall.
 
-To test this prediction, we counted the number of words in each participant's reported lexicon (i.e.\ the words for which they marked at least one object in the post-test). We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{mixed} and \emph{fine} conditions ($m = 7.4, t = 10.3, p <0.001$ and $m = 7.6, t = 9.5, p < 0.001$, respectively; see Fig.\ \ref{fig:lexiconContent}A). At the same time, the smaller lexicon provided equivalent coverage of objects: the median number of objects where participants agreed on the same word or words was 7, 6.5, and 7, respectively. 
-
+To test this prediction, we counted the number of words in each participant's reported lexicon (i.e.\ the words for which they marked at least one object in the post-test). We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{fine} condition ($m = 7.6, t = 9.5, p < 0.001$; see Fig.\ \ref{fig:lexiconContent}A). At the same time, the smaller lexicon provided equivalent coverage of objects: the median number of objects where participants agreed on the same word was 7 in both conditions. 
 
 If participants in the \emph{coarse} condition can get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
 
-These data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the other conditions often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B). In the \emph{coarse} condition, for instance, participants could in principle perform optimally with only four abstract terms and no specific terms. While this was the modal system that emerged (reported in the post-test by nearly 1/3 of participants), the average proportion of abstract (vs.\ specific) terms \emph{within} each participant's lexicon in the \emph{coarse} condition ($m = 0.56$) was significantly higher than in the other conditions ($p < 0.001$, exploratory).
+These data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B). Participants could in principle perform optimally with only four abstract terms and no specific terms. While this was the modal system that emerged (reported in the post-test by nearly 1/3 of participants), the average proportion of abstract (vs.\ specific) terms \emph{within} each participant's lexicon in the \emph{coarse} condition ($m = 0.56$) was significantly higher than in the other conditions ($p < 0.001$, exploratory).
 
 \subsection{Simulation results}
 
 Our empirical results suggest that different communicative contexts systematically lead to different communicative conventions.
-Critically, the sequence of targets was held constant across the \emph{course}, \emph{fine}, and \emph{mixed} conditions; only the distractors were manipulated.
+Critically, the sequence of targets was held constant across the \emph{course} and \emph{fine} conditions; only the distractors were manipulated.
 In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
 
 This task poses several distinct challenges for models of coordination and convention formation.
@@ -136,7 +142,6 @@ That is, in addition to 8 meanings at the sub-ordinate level (one for each indiv
 \todo[inline]{the non-pragmatic version seems to converge to a degenerate 2-word (cricle/squre) state (initial usage is ambiguous b/w levels, so someone will eventually extend to different object, then only way to accomodate that data is to rule out more specific meanings). if we allowed a degenerate meaning where all words have same meaning, it would converge to that; can't tell that it's confusing and is guaranteed to be literally true!}
 \todo[inline]{May need to implement baseline model from other papers (e.g. Steels-style, or Spike implementation?) rather than using this version, since it has somewhat different behavior, I think.}
 
-\todo[inline]{Make a note that in the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.}
 
 \todo[inline]{First, show theoretical guarantees of lexical systems that arise when models condition on the same data with and without pragmatics?}
 \todo[inline]{Second, show that we can also capture learning curves if we introduce memory discounting, etc.?}
@@ -148,6 +153,10 @@ Because each trial has only a single choice for each player, we pool statistics 
 As in our earlier simulations, we sample lexical entries from independent Gaussian priors: $$\ell_{o,w}^k\sim\mathcal{N}(0, 5)$$ 
 We approximate the posterior of this model separately for each pair using mean-field variational inference, implemented in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL,DAIPP}. 
 The approximating family for each random variable is Gaussian.
+
+\subsection{Model comparison}
+
+In the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
 
 %\begin{figure*}[t]
 %\begin{center}
