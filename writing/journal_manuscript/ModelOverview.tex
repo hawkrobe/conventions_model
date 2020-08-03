@@ -61,7 +61,7 @@ The chain of recursive social reasoning grounds out in a \emph{literal listener}
 This model can be formally specified as follows:
 $$
 \begin{array}{rcl}
-L_0(o_i | w, \mathcal{L}^t) &\propto  & \exp\{\mathcal{L}^t(w,o_i)\} \\
+L_0(o_i | w, \mathcal{L}^t) &\propto  & \mathcal{L}^t(w,o_i) \\
 S_1(w | o_i, \mathcal{L}^t) &\propto & \exp\{\ln L_0(o_i | w, \mathcal{L}^t)\} \\
 L_1(o_i | w, \mathcal{L}^t) &\propto  & S_1(w | o_i, \mathcal{L}^t) P(o_i) 
 \end{array}
@@ -69,5 +69,9 @@ $$
 % MF: adjusted this for better vertical spacing wrt adjacent paragraphs
 where $o_i$ is a chosen object and $w$ an uttered word.
 
+\subsection{Auxiliary assumptions}
+
 \todo[inline]{Describe some more specific mechanisms that are shared across the simulations.
-(1) memory discounting, (2) lexicon prior (simplicity + space of hypotheses for each word?), (3) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects),}
+(1) memory discounting based on Spike, (2) lexicon prior (simplicity + space of hypotheses for each word?), (3) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects), (4) how we handle coordination, i.e. what data is being conditioned on, (5) agent's decision rules, i.e. MAP vs. softmax sampling}
+
+According to Spike et al., 2018 forgetting is necessary for convergence. the problem is that random guesses at the beginning of the interaction will confuse agents much later: even at the end, they'll continue to think that 4 different words can possibly refer to the same object even if only a single one has ever successfully referred to it. 
