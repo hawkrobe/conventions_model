@@ -34,98 +34,55 @@ ggsave('../../dissertation/dissertation/figures/modeling/clark92.pdf', height = 
 ## Simulating models & looking at post-test
 
 ```{r}
-trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "game.*_.*csv", full.names = T) %>% # 
-  map(~ read_csv(.x) %>% select(gameNum, time, condition, correct,topSpeakerChoice) %>% mutate(filename=.x)) %>%
+trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "trajectory", full.names = T) %>% # 
+  map(~ read_csv(.x) %>% mutate(filename=.x)) %>%
   reduce(rbind) %>%
   mutate(quarter = floor((time - 1) / 24)) %>%
   mutate(repNum = floor((time - 1) / 8)) %>%
-  separate(filename, c('garbage1', 'garbage2', 'discount', 'coord'), sep="_") %>%
-  mutate(discount = gsub("discount", "", discount),
-         coord = ifelse(coord == 'same', 'same', 'diff')) %>%
-  select(-starts_with("garbage")) %>%
-  mutate(condition = case_when(condition == 'subOnly' ~ 'fine',
-                               condition == 'mixedLower' ~ 'mixed',
-                               TRUE ~ 'coarse'))
+  filter(condition != 'mixedLower') %>%
+  mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
 
   
 trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  filter(!is.na(discount)) %>%
-  group_by(condition, discount, time) %>%
+  group_by(condition, coord, discountFactor, time) %>%
   tidyboot::tidyboot_mean(correct, nboot=100) %>%
-  ggplot(aes(x = time, y = empirical_stat, color = condition)) +
-    geom_point(alpha=0.5) +
-    ylim(0, 1) +
-    geom_hline(yintercept = 0.25) +
-    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
-    geom_smooth(se=F) +
-    facet_grid(paste0('discount:', discount) ~ .) +
-    labs(y = 'proportion correct', x = 'trial number') +
+  filter(discountFactor == 0.8 , coord == 'diff') %>%
+  ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
+    geom_point(alpha=0.2) +
+    geom_hline(yintercept = 25, lty = 'dashed') +
+    geom_smooth(se=T) +
+    facet_grid(paste0('discount:', discountFactor) ~ coord) +
+    labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_colorblind() +
-    theme(aspect.ratio = 1/2)
+    ylim(0,100) +
+    theme(aspect.ratio = 1)
 
-```
-
-
-```{r}
-trajectories %>% filter(time < 8) %>% group_by(condition, time) %>% tidyboot::tidyboot_mean(correct, nboot=100)
+ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', useDingbats = FALSE)
 ```
 
 ```{r}
 trajectories %>%
-  filter(coord == 'diff') %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition, discount, repNum) %>%
+  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum, discount) %>%
+  group_by(condition, repNum, coord,discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  filter(discountFactor == 0.8 , coord == 'diff') %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
     ylim(3.5, 8.5) +
     geom_hline(yintercept = c(4, 8)) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    facet_grid(paste0('discount:', discount) ~ .) +
+    facet_grid(paste0('discount:', discountFactor) ~coord) +
     theme_few() +
     scale_color_colorblind() +
     labs(y = "number unique words used") +
-    theme(aspect.ratio = 2/3)
+    theme(aspect.ratio = 1)
+
+ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf')
 ```
-
-```{r}
-trajectories %>% 
-  filter(discount == 0.8) %>%
-  group_by(condition, coord, time) %>%
-  tidyboot::tidyboot_mean(correct, nboot=100) %>%
-  ggplot(aes(x = time, y = empirical_stat, color = condition)) +
-    geom_point(alpha=0.5) +
-    ylim(0, 1) +
-    geom_smooth() +
-    facet_wrap(~ coord) +
-    labs(y = 'proportion correct', x = 'trial number') +
-    theme_few() 
-
-```
-
-```{r}
-trajectories %>%
-  filter(discount == 0.8) %>%
-  group_by(gameNum, condition, coord, repNum) %>%
-  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum, coord) %>%
-  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
-    geom_line() +
-    facet_wrap(~ coord) +
-    ylim(3.5, 8.5) +
-    geom_hline(yintercept = c(4, 8)) +
-    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    theme_few() +
-    labs(y = "number unique words used")
-
-```
-
-
 
 
 ```{r}
@@ -134,8 +91,13 @@ softmax <- function(outVec){
   return(s.vec)
 }
 
-postTest <- read_csv('../simulations/cogsci2018/testing_game101.csv') %>%
-  left_join(trajectories %>% group_by(gameNum) %>% filter(row_number() == 1))
+trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "meaningTest", full.names = T) %>% # 
+  map(~ read_csv(.x) %>% mutate(filename=.x)) %>%
+  reduce(rbind) %>%
+  mutate(quarter = floor((time - 1) / 24)) %>%
+  mutate(repNum = floor((time - 1) / 8)) %>%
+  filter(condition != 'mixedLower') %>%
+  mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
 
 postTest %>%
   filter(trialNum == 96) %>%

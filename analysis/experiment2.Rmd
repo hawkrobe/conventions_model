@@ -102,7 +102,7 @@ for(i in gameIDs) {
     mutate(speakerID = ifelse(trialNum %% 2 == 0, 1, 2),
            listenerID = ifelse(trialNum %% 2 == 0, 2, 1)) %>%
     select(-gameid, -text, -acc, -quarter, -cumAcc, -overallAcc, -timeFromRoundStart)  
-  write_csv(toWrite, path = paste0('../models/bdaInput/', i, '.csv'))
+  write_csv(toWrite, path = paste0('../simulations/cogsci2018/input/', i, '.csv'))
 }
 ```
 
@@ -131,22 +131,21 @@ ggsave('~/Downloads/singleLine.pdf', height = 4, width = 6)
 
 ```{r}
 d %>%
-  mutate(condition = ifelse(condition == 'intermediateOnly', 'pure intermediate',
-                            'pure subordinate')) %>%
+  mutate(condition = ifelse(condition == 'intermediateOnly', 'coarse', 'fine')) %>%
   group_by(condition, trialNum) %>%
   summarize(trialLevelPctCorrect = mean(acc)) %>%
-  ggplot(aes(x = trialNum, y = trialLevelPctCorrect, color = condition)) +
-    geom_point(alpha = 0.2) +
+  ggplot(aes(x = trialNum, y = 100 * trialLevelPctCorrect, color = condition)) +
+    geom_point(alpha = 0.2, stroke = 0, size = 2) +
     theme_few() +
-    geom_hline(yintercept = 0.25) +
+    geom_hline(yintercept = 25, lty = 'dashed') +
     geom_smooth(method = 'loess') +
     scale_color_colorblind() +
-    theme(    
-      legend.position="top"
-    ) +
-    ylim(0,1)
+    theme(aspect.ratio = 1) +
+    labs(x = 'trial #', y = '% correct') +
+    ylim(0, 100)
 
-ggsave('../writing/journal_manuscript/figures/accuracyByCondition.pdf', width = 5, height = 4)
+ggsave('../writing/journal_manuscript/figures/Exp2_empirical_accuracy.pdf', width = 5, height = 4, 
+       useDingbats=FALSE)
 ```
 
 
@@ -180,7 +179,11 @@ d %>%
     geom_hline(yintercept = c(4, 8)) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
     theme_few() +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1) +
     labs(y = "number unique words used")
+
+ggsave('../writing/journal_manuscript/figures/Exp2_empirical_numwords.pdf', width = 5, height = 4, useDingbats = F)
 ```
 
 ## Reaction times
