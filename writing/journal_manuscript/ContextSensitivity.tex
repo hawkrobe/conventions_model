@@ -74,7 +74,7 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 
 \begin{figure}[t]
 \begin{center}
-{\includegraphics[scale=0.63]{./figures/accuracyByCondition_edited.pdf}}
+{\includegraphics[scale=0.65]{./figures/sec2_empirical_accuracy.pdf}}
 %{\includegraphics[scale=.64]{lexiconSize.pdf}}
 {\caption{{Players learn to coordinate on a successful communication system. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits.  %\todo[inline]{rdh questions: Use semantically meaningful condition codes, e.g.\ red/blue/purple? Is this too far aggregated from data (e.g.\ show error bars on each point? fit curves to individual-level binary responses instead of through group means?)}  
 \label{fig:context_accuracy}}}}
@@ -86,12 +86,7 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 \begin{figure*}[t]
 \begin{center}
 \includegraphics[scale=0.75]{Sec2-results.pdf}
-\caption{Pragmatic demands of context shape the formation of abstractions. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms.}
-%Each participant provided meanings for all sixteen words in their vocabulary box (including selecting no objects if it had no meaning). 
-%In the \emph{coarse} condition, participants reported fewer total words in their vocabulary and more of the words they did have were abstractions applying to more than one object. %Distribution of extension sizes in lexica reported across conditions, including those with no extensions  
-%\todo[inline]{KS: You'll have to explain how a word can have no extensions, but I'd be tempted to not show these in these graphs? Assuming these are uninteresting (?), showing proportion of  1 vs more-than-1 object words would make the result much clearer. Do you have this in to also show the lexicon size difference? Could show that more straightforwardly with a plot of number of words poer condition?} . 
-%Nearly every word reported in the \emph{fine} condition referred to a single object and the \emph{mixed} condition is more similar to the \emph{fine} condition than the \emph{coarse} condition.
-%(B) Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms.% \todo[inline]{TODO: A/B labels; use \# words instead of \%; change axis labels in B to `'' and ``\# words referring to multiple objects'';}  
+\caption{Pragmatic demands of context shape the formation of abstractions. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms. (C) Number of unique words used by speakers in each repetition block.}
 \label{fig:lexiconContent}
 \end{center}
 \end{figure*}
@@ -118,63 +113,57 @@ For the subsequent analyses focusing on the content of the lexicon, we exclude g
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize more abstract terms. One coarse signature of this prediction lies in the \emph{efficiency} of the resulting lexicon: lexicalizing abstract terms should require participants to use fewer terms overall.
 
 To test this prediction, we counted the number of words in each participant's reported lexicon (i.e.\ the words for which they marked at least one object in the post-test). We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{fine} condition ($m = 7.6, t = 9.5, p < 0.001$; see Fig.\ \ref{fig:lexiconContent}A). At the same time, the smaller lexicon provided equivalent coverage of objects: the median number of objects where participants agreed on the same word was 7 in both conditions. 
+\todo[inline]{TODO: describe Fig 4C, showing number of unique words at each point in the task}
 
 If participants in the \emph{coarse} condition can get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
 
 These data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B). Participants could in principle perform optimally with only four abstract terms and no specific terms. While this was the modal system that emerged (reported in the post-test by nearly 1/3 of participants), the average proportion of abstract (vs.\ specific) terms \emph{within} each participant's lexicon in the \emph{coarse} condition ($m = 0.56$) was significantly higher than in the other conditions ($p < 0.001$, exploratory).
 
-\subsection{Simulation results}
+\subsection{Model simulations}
 
 Our empirical results suggest that different communicative contexts systematically lead to different communicative conventions.
 Critically, the sequence of targets was held constant across the \emph{course} and \emph{fine} conditions; only the distractors were manipulated.
-In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
-
 This task poses several distinct challenges for models of coordination and convention formation.
 First, the context constantly changes, with a subset of only four of the eight total objects shown on each trial.
 Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
-These 
 
-Here we must consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
-That is, in addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square) and 1 exhaustive meaning (shape).
+In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
+Following \cite{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
+In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square) and 1 exhaustive meaning (shape).
+We evaluate the extent to which local context shapes our agents' conventions through a series of simulations.
+For each game in our human dataset, we pair up two artificial agents and present them the same stimulus sequence of targets and contexts.
+Our artificial agents swapped roles on each trial, as human participants did, and updated their beliefs after each trial using their own history: that is, while we matched the stimulus sequence, the models did not observe human data. 
 
- 
- \todo[inline]{Describe new additions: }
-\todo[inline]{the non-pragmatic version seems to converge to a degenerate 2-word (cricle/squre) state (initial usage is ambiguous b/w levels, so someone will eventually extend to different object, then only way to accomodate that data is to rule out more specific meanings). if we allowed a degenerate meaning where all words have same meaning, it would converge to that; can't tell that it's confusing and is guaranteed to be literally true!}
-\todo[inline]{May need to implement baseline model from other papers (e.g. Steels-style, or Spike implementation?) rather than using this version, since it has somewhat different behavior, I think.}
+\paragraph{Model results}
 
+In Fig. \ref{fig:sec2model}A, we find that the model converges to roughly the same proportions of unique words.
+In Fig. \ref{fig:sec2model}B, we observe that the learning curves are similar to the human data: coordination is easier in the coarse condition than the fine condition.
 
-\todo[inline]{First, show theoretical guarantees of lexical systems that arise when models condition on the same data with and without pragmatics?}
-\todo[inline]{Second, show that we can also capture learning curves if we introduce memory discounting, etc.?}
+\paragraph{Model comparison}
 
+We explore a few comparisons:
 
-\todo[inline]{Explain simulation details; for each dyad in our human-human dataset, we pair up two artificial agents. They update based on previous choices, etc...}
-We use these pragmatic speaker and listener likelihood functions to link latent lexica, represented as a matrix of real values $\ell_{w,o}^t \in \mathbb{R}$, to behavior.
-Because each trial has only a single choice for each player, we pool statistics within $k$ epochs of the data (we choose $k=6$ such that each target appears exactly twice in each epoch). 
-As in our earlier simulations, we sample lexical entries from independent Gaussian priors: $$\ell_{o,w}^k\sim\mathcal{N}(0, 5)$$ 
-We approximate the posterior of this model separately for each pair using mean-field variational inference, implemented in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL,DAIPP}. 
-The approximating family for each random variable is Gaussian.
+1. A simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt. 
+2. What happens when we manipulate forgetting parameter, or remove it?
+3. 
 
-\subsection{Model comparison}
+In a non-pragmatic version, using words proportional to their literal meaning and learning from data in the same way, converges to a degenerate 1-word (shape) state.
+The initial usage is ambiguous between levels, so someone will eventually extend to different object, then only way to accommodate that data is to rule out more specific meanings. 
+This agent has no way of knowing that this abstract words confusing, and will always use it because it's guaranteed to be literally true of everything.
 
-In the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
+\todo[inline]{May need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for comparison.}
 
-%\begin{figure*}[t]
-%\begin{center}
-%\includegraphics[scale=0.7]{./figures/sec2-modelFig.pdf}
-%\vspace{-1ex}
-%{\caption{{Model-based results. (A) A logistic classifier based on inferred lexical entries accurately predicts post-test responses. (B) Entropy of posterior word extensions show coalescence across epochs for each condition. (C) Mean change in entropy at the word level from trial to trial (error bars are $\pm 1$ SE)}  \label{fig:postTestPrediction}}}
-%\end{center}
-%\vspace{-3ex}
-%\end{figure*}
-\todo[inline,caption={}]{Tom: there are a few moving parts that I am currently exploring:
-\begin{enumerate}
-\item We need to say what happens after an unsuccessful communication attempt. Currently, speaker and listener are conditioning on different data (speaker conditions on what listener chose; listener conditions on what speaker said), which leads to persistent mis-coordination even later in the game. 
-\item We may just need a simple mechanism for forgetting. According to Spike et al., 2018 this is necessary for convergence. the problem is that random guesses at the beginning of the interaction will confuse agents much later: even at the end, they'll continue to think that 4 different words can possibly refer to the same object even if only a single one has ever successfully referred to it. We're amortizing inference anyway, so maybe we should try just updating on most recent 16 trials or something?
-\item another idea is to design some inductive bias for the likelihood that weights 'successes' as stronger evidence than 'failures'... but this seems unmotivated.
-\item another question is whether to sample vs. using a MAP decision rule when running agents forward
-%\item inductive biases for certain levels of hierarchy? (e.g. some levels weighted more strongly?)
-\end{enumerate}
-}
+Also, In the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[scale=0.6]{./figures/sec2-modelFig.pdf}
+\vspace{-1ex}
+{\caption{{Model simulations. (A) Speakers gradually use a larger lexicon size across conditions, and (B) coordinate more quickly in the coarse condition than the fine condition, as observed in the empirical data.}  \label{fig:sec2model}}}
+\end{center}
+\vspace{-3ex}
+\end{figure}
+
 \subsection{Discussion}
 
 Previous proposals have handled context-sensitivity in different ways.
