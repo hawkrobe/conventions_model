@@ -186,6 +186,24 @@ d %>%
 ggsave('../writing/journal_manuscript/figures/Exp2_empirical_numwords.pdf', width = 5, height = 4, useDingbats = F)
 ```
 
+```{r}
+d %>%
+  mutate(repNum = floor((trialNum - 1) / 8)) %>%
+  group_by(gameid, condition, repNum) %>%
+  mutate(numUniqueWordsUsed = length(unique(wordID))) %>%
+  group_by(condition) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100)
+
+d %>%
+  mutate(repNum = floor((trialNum - 1) / 8)) %>%
+  group_by(gameid, condition, repNum) %>%
+  summarize(numUniqueWordsUsed = length(unique(wordID))) %>%
+  lmer(numUniqueWordsUsed ~ scale(repNum, scale=F) * condition + (1 + repNum | gameid),
+       data = .,
+       contrasts = list(condition = contr.sum(2))) %>%
+  summary()
+```
+
 ## Reaction times
 
 ```{r}

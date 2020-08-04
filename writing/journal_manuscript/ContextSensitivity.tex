@@ -6,7 +6,7 @@
 %% Set up problem
 \begin{figure*}[t]
 \begin{center}
-{\includegraphics[scale=.55]{./figures/Sec2-design.png}}
+{\includegraphics[scale=.63]{./figures/Sec2-design.png}}
 {\caption{{(A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
 \vspace{-2ex}
 \end{center}
@@ -49,7 +49,7 @@ Furthermore, we find that pragmatic reasoning is necessary for these effects to 
 
 \subsubsection{Participants}
 
-We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game using the framework described in \citeA{Hawkins15_RealTimeWebExperiments}. Pairs were randomly assigned to one of three different conditions, yielding between $n=36$ and $n=53$ dyads per condition, after excluding participants who disconnected before completion.\footnote{All materials and data are available at \url{https://github.com/hawkrobe/conventionalizing_hierarchies}; planned sample sizes, exclusion criteria, and behavioral analysis plan were pre-registered at \url{https://osf.io/2hkjc/}.}
+We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game using the framework described in \citeA{Hawkins15_RealTimeWebExperiments}. Pairs were randomly assigned to one of two different conditions, yielding approximately $n=37$ dyads per condition, after excluding participants who disconnected before completion.\footnote{Planned sample sizes, exclusion criteria, and behavioral analysis plan were pre-registered at \url{https://osf.io/2hkjc/}. We also ran an additional 53 participants in a third condition which we do not analyze here.}
 
 \subsubsection{Procedure \& Stimuli}
 Participants were paired over the web and placed in a shared environment containing an array of objects (Fig.\ \ref{fig:context_design}A) and a `chatbox' to send messages from a randomly generated vocabulary (Fig.\ \ref{fig:context_design}B). On each of 96 trials, one player (the `speaker') was privately shown a highlighted target object and allowed to send a single word to communicate the identity of this object to their partner (the `listener'), who subsequently made a selection from the array. Players were given full feedback, swapped roles each trial, and both received bonus payment for each correct response.
@@ -62,6 +62,16 @@ Sequences of trials were constructed by randomly shuffling targets and trial typ
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
 This bidirectional measure allows us to check the internal validity of the lexica reported.
 
+\begin{figure}[t]
+\begin{center}
+{\includegraphics[scale=0.65]{./figures/sec2_empirical_accuracy.pdf}}
+{\caption{{Players learn to coordinate on a successful communication system, but converge faster in the coarse condition than the fine condition. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits. 
+\label{fig:context_accuracy}}}}
+\vspace{-3ex}
+\end{center}
+\end{figure}
+
+
 \subsection{Behavioral results}
 
 \subsubsection{Partners successfully learn to communicate}
@@ -72,15 +82,6 @@ Accuracy also differed significantly \emph{across} conditions (Fig.\ \ref{fig:co
 Qualitatively, the \emph{coarse} condition was easiest for participants, and the \emph{fine} condition was hardest. 
 Finally, the (log) response time taken by the speaker to choose an utterance also decreased significantly over the course of the game, $t = -19.7, p < 0.001$, indicating that lexical mappings became increasingly established or accessible.
 
-\begin{figure}[t]
-\begin{center}
-{\includegraphics[scale=0.65]{./figures/sec2_empirical_accuracy.pdf}}
-%{\includegraphics[scale=.64]{lexiconSize.pdf}}
-{\caption{{Players learn to coordinate on a successful communication system. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits.  %\todo[inline]{rdh questions: Use semantically meaningful condition codes, e.g.\ red/blue/purple? Is this too far aggregated from data (e.g.\ show error bars on each point? fit curves to individual-level binary responses instead of through group means?)}  
-\label{fig:context_accuracy}}}}
-\vspace{-3ex}
-\end{center}
-\end{figure}
 
 
 \begin{figure*}[t]
@@ -113,10 +114,16 @@ For the subsequent analyses focusing on the content of the lexicon, we exclude g
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize more abstract terms. One coarse signature of this prediction lies in the \emph{efficiency} of the resulting lexicon: lexicalizing abstract terms should require participants to use fewer terms overall.
 
 To test this prediction, we counted the number of words in each participant's reported lexicon (i.e.\ the words for which they marked at least one object in the post-test). We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{fine} condition ($m = 7.6, t = 9.5, p < 0.001$; see Fig.\ \ref{fig:lexiconContent}A). At the same time, the smaller lexicon provided equivalent coverage of objects: the median number of objects where participants agreed on the same word was 7 in both conditions. 
-\todo[inline]{TODO: describe Fig 4C, showing number of unique words at each point in the task}
 
-If participants in the \emph{coarse} condition can get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
+How did these lexica emerge over the course of interaction? 
+To measure the effective vocabulary size used at each point in time, we considered the total number of unique words produced within each repetition block.
+Because all eight objects appeared as the target once in each block, this measure takes a maximum value of 8, in the case where a different word was used for every object, and a minimum value of 1, in the case where the same word was used for every object.
+We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
+We found an overall main effect of condition, with participants in the fine condition using significantly fewer words across all repetition blocks ($m = 4.9$ in coarse, $m=6.8$ in fine, $t = 9.5, p < 0.001$).
+However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.06, t = 4.5, p < 0.001$, see Fig. \ref{fig:lexiconContent}C.
+This interaction is consistent with gradual differentiation based on communicative need in the fine condition.
 
+Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
 These data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B). Participants could in principle perform optimally with only four abstract terms and no specific terms. While this was the modal system that emerged (reported in the post-test by nearly 1/3 of participants), the average proportion of abstract (vs.\ specific) terms \emph{within} each participant's lexicon in the \emph{coarse} condition ($m = 0.56$) was significantly higher than in the other conditions ($p < 0.001$, exploratory).
 
 \subsection{Model simulations}
@@ -128,7 +135,7 @@ First, the context constantly changes, with a subset of only four of the eight t
 Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
 
 In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
-Following \cite{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
+Following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
 In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square) and 1 exhaustive meaning (shape).
 We evaluate the extent to which local context shapes our agents' conventions through a series of simulations.
 For each game in our human dataset, we pair up two artificial agents and present them the same stimulus sequence of targets and contexts.
