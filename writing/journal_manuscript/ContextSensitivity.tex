@@ -124,27 +124,37 @@ However, we also found a significant interaction: the effective vocabulary size 
 This interaction is consistent with gradual differentiation based on communicative need in the fine condition.
 
 Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
-These data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B). Participants could in principle perform optimally with only four abstract terms and no specific terms. While this was the modal system that emerged (reported in the post-test by nearly 1/3 of participants), the average proportion of abstract (vs.\ specific) terms \emph{within} each participant's lexicon in the \emph{coarse} condition ($m = 0.56$) was significantly higher than in the other conditions ($p < 0.001$, exploratory).
+The modal system in the fine condition was exactly eight specific terms with no abstract terms, and the modal system in the coarse condition was exactly four abstract terms (red, blue, striped, spotted) with no specific terms.
+However, these data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B); the average proportion of abstract (vs.\ specific) terms within each participant's lexicon in the \emph{coarse} condition was 56\%. 
 
 \subsection{Model simulations}
 
-Our empirical results suggest that different communicative contexts systematically lead to different communicative conventions.
+Our empirical results show that different communicative contexts systematically lead to different communicative conventions.
 Critically, the sequence of targets was held constant across the \emph{course} and \emph{fine} conditions; only the distractors were manipulated.
 This task poses several distinct challenges for models of coordination and convention formation.
 First, the context constantly changes, with a subset of only four of the eight total objects shown on each trial.
 Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
+In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings.
 
-In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings \cite{XuTenenbaum07_WordLearningBayesian}.
-Following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
-In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square) and 1 exhaustive meaning (shape).
 We evaluate the extent to which local context shapes our agents' conventions through a series of simulations.
-For each game in our human dataset, we pair up two artificial agents and present them the same stimulus sequence of targets and contexts.
-Our artificial agents swapped roles on each trial, as human participants did, and updated their beliefs after each trial using their own history: that is, while we matched the stimulus sequence, the models did not observe human data. 
+For each dyad in our human dataset, we pair up two artificial agents and present them the same stimulus sequence of targets and contexts that human participants saw.
+Our artificial agents swapped speaker and listener roles on each trial, as human participants did, and updated their beliefs after each trial using their own history: that is, while we matched the stimulus sequence, the models did not observe human data. 
 
-\paragraph{Model results}
+Following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
+In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square), 1 exhaustive meaning (shape), and 1 ``null'' meaning, which does not apply to any of the objects.
+We populate the utterance space with 8 single-word labels, which simplifies the speaker model: the utterance cost term is constant across all utterances, so it does not have an effect on speaker behavior.
+Finally, we note that the simplicity prior over the lexicon space penalizes meanings with larger extensions, so \emph{a priori}, agents have an inductive bias toward subordinate terms.
 
+\paragraph{Results}
+
+First, we compare the model's learning curves across context conditions (Fig. \ref{fig:sec2model}B). 
+For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
+In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across conditions, $b=0.62, z = 17.9, p<0.001$.
+However, we also find a significant interaction with condition: the rate of improvement is significantly higher in the coarse condition than the fine condition, $b=-0.4, z=9.3, p <0.001$. 
+These effects qualitatively track our findings in the human data: our artificial agents are able to successfully coordinate, but do so more easily in the coarse condition than the fine condition. 
+
+Second, we examine the conventions that emerge from our simulations. 
 In Fig. \ref{fig:sec2model}A, we find that the model converges to roughly the same proportions of unique words.
-In Fig. \ref{fig:sec2model}B, we observe that the learning curves are similar to the human data: coordination is easier in the coarse condition than the fine condition.
 
 \paragraph{Model comparison}
 
@@ -152,7 +162,6 @@ We explore a few comparisons:
 
 1. A simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt. 
 2. What happens when we manipulate forgetting parameter, or remove it?
-3. 
 
 In a non-pragmatic version, using words proportional to their literal meaning and learning from data in the same way, converges to a degenerate 1-word (shape) state.
 The initial usage is ambiguous between levels, so someone will eventually extend to different object, then only way to accommodate that data is to rule out more specific meanings. 
@@ -173,6 +182,10 @@ Also, In the limit it doesn't matter whether you have pragmatics in both learnin
 
 \subsection{Discussion}
 
+How does context shape conventions? 
+There is abundant evidence that languages adapt to the needs of their users, and the context-sensitive emergence of abstractions demonstrated in this section suggests that the driver of this adaptation may lie in the rapid adaptability of agents in individual dyadic interaction. 
+By manipulating context statistics in a real-time experiment, we evaluated the extent to which our model captured patterns of context-sensitivity in the behavioral data.
+
 Previous proposals have handled context-sensitivity in different ways.
 In some common settings for convention formation, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{Baronchelli,oldnaminggame}. 
 In other common settings, context is central but held constant throughout interactions, as in Lewis signaling games, where agents use a fixed set of messages to communicate a fixed set of world states \cite{lewis,signalinggame}.
@@ -184,8 +197,20 @@ In models using Roth-Erev reinforcement learning update rules or simple neural n
 If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite<see also>{steels2005coordinating}.
 This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of allowing the agent to learn from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
 Under an inferential framework, however, this property emerges as a natural consequence of well-established Gricean principles of pragmatic reasoning.
-As previously observed by \cite{FrankGoodmanTenenbaum09_Wurwur} in the context of early cross-situation word learning, reasoning about speakers' intentions naturally instantiates a kind of inductive bias for \emph{mutual exclusivity}.
+Reasoning about a partner's intentions, either while updating beliefs about their lexicon or while selecting an action, naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} \cite{gulordava2020one,ohmerreinforcement,FrankGoodmanTenenbaum09_Wurwur}.
 
+Our results may help to illuminate the relationship between our concepts and words, which are often treated interchangeably. While our mental taxonomies are adaptive to the natural perceptual structure of the world \cite{MervisRosch81_CategorizationReview} %(Rosch et al, 1976; Mervis \& Rosch ,1981; Murphy \& Smith, 1982), 
+it is far from inevitable that all levels of these conceptual hierarchies become conventionalized as lexical items. There are many perfectly natural concepts that are not represented by distinct words in the English language: for instance, we do not have words for each tree in our yards, or for ad-hoc concepts %like \emph{things to sell at a garage sale} 
+\cite{Barsalou83_AdHocCategories}. Indeed, English speakers are often fascinated by foreign words like the Danish ``hygge'' (a specific notion of coziness) or Scottish ``tartle'' (hesitating when introducing someone because you've forgotten their name) that are difficult to express in English.
+Our results highlight communicative needs to distinguish, in context, as a force behind the choice to lexicalize some fine-grained concepts. 
+A related direction for future work is to explore the relationship between communicative need and \emph{basic-level} structure.
+
+While we showed how abstract words emerge from efficiency even in a task requiring only reference to individual objects, there are other clear functional advantages to having abstract terms in the lexicon. For one, they allow speakers to efficiently refer to large, potentially infinite, sets of things, and make generalizations about categories, e.g.\ ``Dogs bark'' \cite{TesslerGoodman16_Generics}. Future work should explore this as an additional pressure toward abstract, nested nouns.
+Similarly, the option to refer to more specific concepts with compound terms (e.g.~``spotted dog''), which was not available in our experiment, may impact final conventions.
+We expect that labels will become lexicalized when the cost incurred by frequently using a compositional construction exceeds the cost of adding an additional word to the lexicon. 
+Future work should also explore these hypotheses about how lexicalization of nominal terms trades off with compositionality. 
+Our shared lexical conventions are richly structured systems with meanings at multiple levels of abstraction. 
+We are constantly supplementing our existing language with local conventions, as we need them.
 
 %\subsection{Validating post-test responses}
 %
