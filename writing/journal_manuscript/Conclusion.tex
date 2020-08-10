@@ -1,7 +1,4 @@
 %!TEX root = ../dissertation.tex
-\section{General Discussion}
-\label{conclusion}
-
 In this paper, we considered the computational challenge faced by agents trying to communicate in a variable and non-stationary landscape of meaning.
 We first proposed a hierarchical Bayesian approach to semantic adaption that formalized three broad mechanisms exposed by the prior literature.
 %Because theories of adaption have been under-constrained by fine-grained empirical data, we then collected and used recent NLP techniques to analyze a large corpus from a replication of the classic tangrams task.
@@ -31,34 +28,34 @@ i guess another way to ask this question is -- are lexical priors essentially re
 
 \paragraph{Similarities and differences across communication modalities}
 
-\begin{quote}
-The oral modality is not well suited to conveying messages mimetically (i.e., iconically), even though that function is also important to human languages. This function is, however, very well served by the manual modality. \cite[p.155]{goldin-meadow_role_1999}
-\end{quote}
+%\begin{quote}
+%The oral modality is not well suited to conveying messages mimetically (i.e., iconically), even though that function is also important to human languages. This function is, however, very well served by the manual modality. \cite[p.155]{}
+%\end{quote}
 
-While linguistic communication is powerful and prevalent, research on the dynamics of adaptation in other communication modalities, including graphical and gestural modalities, is important in several ways.
-First, it is a core claim of our hierarchical learning model that the mechanisms underlying adaptation and convention formation are domain-general.
-In other words, there's nothing special about spoken or written language; any ad hoc system that we use to communicate and coordinate with other minds should display similar learning dynamics because they are all trying to coordinate on meaning. 
+While we have focused primarily on verbal and textual communication channels, research on the dynamics of adaptation in other communication modalities, including graphical \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling} and gestural \cite{FayListerEllisonGoldinMeadow13_GestureBeatsVocalization,bohn2019young} modalities, is important for our account in several ways.
+First, it is a core claim of our hierarchical model that the basic cognitive mechanisms underlying adaptation and convention formation are domain-general.
+In other words, there is nothing inherently special in our account about spoken or written language as far as our ability to coordinate . 
+Any system that we use to communicate should display similar \emph{ad hoc} learning dynamics because in every case, agents are trying to infer the system of meaning being used by their partner.
+Directly comparing behavior in repeated reference games across different modalities is therefore necessary to determine which adaptation effects, if any, are robust and attributable to modality-general mechanisms.
 
-Second, because this hierarchical learning model claims a critical role for the global priors we build up across many interactions with many individuals, we predict that different communication modalities should nevertheless display certain systematic differences in their dynamics.
-For example, consider our reference game from Chapter 4 where the targets are complex, abstract geometric shapes like tangrams.
-In the verbal modality, these shapes are highly innominate -- we don't have much experience naming or describing them with words, thus our global prior is rather weak and we expect local adaptation to play a much bigger role.
-In the graphical modality, where you must communicate by drawing on a sketchpad, on the other hand, agents have a much stronger prior rooted in assumptions about shared perceptual systems and visual similarity (though see \citeNP{FanCommon2018}): explaining these similarity judgements poses its own challenges).
-Other stimuli have precisely the opposite property: to distinguish between natural images of dogs, for instance, we may have very strong priors in the linguistic modality (e.g. `husky', `poodle', `pug', etc) but drawing the necessary fine distinctions in the graphical modality may be initially very costly, encouraging the formation of local conventions. 
+Second, at the same time, our hierarchical learning model claims a critical role for the priors we build up across interactions with many individuals.
+We therefore predict that different communication modalities should display certain systematic differences due to the representational structure of the communication channel.
+For example, in the verbal modality, the tangram shapes from \cite{ClarkWilkesGibbs86_ReferringCollaborative} are highly innominate -- most people do not have much experience naming or describing them with words, so the global prior is weak and local adaptation plays a greater role.
+In the graphical modality, where communication takes place by drawing on a shared sketchpad, agents can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common} -- drawing a quick sketch of the tangram's outline may suffice for understanding.
+Other stimuli have precisely the opposite property: to distinguish between natural images of dogs, agents may have developed strong global conventions in the linguistic modality (e.g. `husky', `poodle', `pug', etc) but drawing the necessary fine distinctions in the graphical modality may be initially very costly for novices, requiring the formation of local conventions. 
+Gesture also has its own distinctive prior, which also allows communicators to use time and the space around them to convey mimetic or depictive meanings that may be difficult to encode verbally or graphically \cite{goldin-meadow_role_1999,clark2016depicting,mcneill1992hand}. 
 
-Practically speaking, then, considering repeated reference games across different modalities is necessary to (1) test which adaptation effects, if any, are robust \& attributable to general mechanisms and (2) explain variance across settings where global priors and local adaptation trade off in different ways.
-If we adhered solely to the verbal modality, we would be limited to a fairly narrow range of stimuli (e.g. abstract shapes/tangrams) where behavior in the lab isn't totally dominated by strong prior conventions people bring into the interaction. 
-The clearest analogs to repeated linguistic reference games in the style of \cite{KraussWeinheimer64_ReferencePhrases} are Pictionary games like this ones used in this chapter.
-where participants were given a whiteboard to draw on instead of an auditory channel to talk through \cite{TheisenEtAl10_SystematicityArbitrariness}.
-For example, \citeA{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems} used a set of 12 concept words with intuitively uncertain graphical priors as targets (``Robert de Niro'', ``poverty'').
+%If we adhered solely to the verbal modality, we would be limited to a fairly narrow range of stimuli (e.g. abstract shapes/tangrams) where behavior in the lab isn't totally dominated by strong prior conventions people bring into the interaction. 
+%For example, similar phenomena Pictionary games where participants use a whiteboard to draw messages instead of an auditory or text-based channel \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling}.
 
 Another modality-based manipulation is to attempt to destroy or scramble any meaningful priors that people might carry into the social interaction.
 For example, \citeA{Galantucci05_EmergenceOfCommunication} introduced a novel `seismograph' interface for communication -- a stylus that could be moved side-to-side or lifted up or down to make contact with the sketch pad while the vertical dimension drifted downward at a constant rate.
 The resulting messages consequently look nothing like the usual kinds of symbols people create: the relationship between motor actions and perceptual output is broken such that executing a familiar movement for a symbol or numeral instead produces an odd, wavy scribble.
 Despite the relative lack of priors on signal meanings in this medium, people were nevertheless able to converge on successful signaling systems in repeated reference games \cite{RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality}.
 Other novel modalities used in iterated reference games include a `whistle' language where movements along a vertical touch bar slider correspond to changes in pitch \cite{VerhoefRobertsDingemanse15_Iconicity} and a visual analog where movements along the slider were presented visually \cite{VerhoefEtAl16_TemporalLanguage}.
-A unified model of coordination in communication ought to be able to account for production and comprehension across these modalities simply by exchanging its encoder and decoder components.
+Our model ought to be able to account for production and comprehension across these modalities simply by exchanging its encoder and decoder components to use an appropriate prior.
 
-\paragraph{Exactly what is being adapted?}
+\paragraph{What is being adapted?}
 
 While we have focused on how participants coordinate on \emph{lexical} meaning, this is only one of many levels at which conventions may form. 
 In more complex circumstances, there is often initial uncertainty not just about which of a small set of targets a particular message refers to, but how to represent the relevant targets of reference in the first place. 
