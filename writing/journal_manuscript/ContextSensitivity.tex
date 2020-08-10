@@ -57,20 +57,19 @@ Participants were paired over the web and placed in a shared environment contain
 The objects that served as referents were designed to cluster in a fixed three-level hierarchy with shape at the top-most level, color/texture at the intermediate levels, and frequency/intensity at the finest levels (see Fig.\ \ref{fig:context_design}C). Each communicative context contained four objects. Distractors could differ from the target at various level of the hierarchy, creating different types of contexts defined by the finest distinction that had to be drawn. We focus on two: \emph{fine} trials, where the closest distractor belongs to the same fine-grained subordinate category (e.g.\ another striped circle; see Fig.\ \ref{fig:context_design}A), and \emph{coarse} trials, where the closest distractor belongs to a coarser level of the conceptual hierarchy (e.g.\ dotted circle instead of striped circle).\footnote{Even coarser trials with super-ordinate distractors (e.g.\ a circle target among three square distractors) were logically possible but would have introduced several experimental confounds; we opted to leave these trial types out of our design and conduct the minimal manipulation.} Fixed arrays of 16 utterances (enough to allow the potential for full expressibility) were randomly generated for each pair (and held constant across trials) by stringing together consonant-vowel pairs into pronounceable 2-syllable words (see Fig.\ \ref{fig:context_design}B).
 
 Critically, we manipulated the statistics of the context in a between-subjects design to test the context-sensitivity of conventions. 
-In the \emph{fine} condition, all targets appeared in fine contexts; in the \emph{course} condition, all targets appeared in course contexts.
+In the \emph{fine} condition, all targets appeared in fine contexts; in the \emph{course} condition, all targets appeared in course contexts; and in the \emph{mixed} condition, half of the targets appeared in each context.
 Sequences of trials were constructed by randomly shuffling targets and trial types within blocks and ensuring no target appeared more than once in a row. 
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
 This bidirectional measure allows us to check the internal validity of the lexica reported.
 
 \begin{figure}[t]
 \begin{center}
-{\includegraphics[scale=0.65]{./figures/sec2_empirical_accuracy.pdf}}
+{\includegraphics[scale=1]{./figures/sec2_empirical_accuracy.pdf}}
 {\caption{{Players learn to coordinate on a successful communication system, but converge faster in the coarse condition than the fine condition. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits. 
 \label{fig:context_accuracy}}}}
 \vspace{-3ex}
 \end{center}
 \end{figure}
-
 
 \subsection{Behavioral results}
 
@@ -79,7 +78,7 @@ This bidirectional measure allows us to check the internal validity of the lexic
 Although participants in all conditions began with no common basis for label meanings, performing near chance on the first trial (proportion correct $= 0.19$, 95\%~CI~$=~[0.13, 0.27]$), most pairs were nonetheless able to coordinate on a successful communication system over repeated interaction (see Fig.\ \ref{fig:context_accuracy}). 
 A mixed-effects logistic regression on listener responses with trial number as a fixed effect, and including by-pair random slopes and intercepts, showed a significant improvement in accuracy overall, $z = 14.4, p < 0.001$. 
 Accuracy also differed significantly \emph{across} conditions (Fig.\ \ref{fig:context_accuracy}): adding an additional main effect of condition to our logistic model provided a significantly better fit, $\chi^2(2) = 10.8, p = 0.004$. 
-Qualitatively, the \emph{coarse} condition was easiest for participants, and the \emph{fine} condition was hardest. 
+Qualitatively, the \emph{coarse} condition was easiest for participants, the \emph{fine} condition was hardest, and the \emph{mixed} condition was in between.
 Finally, the (log) response time taken by the speaker to choose an utterance also decreased significantly over the course of the game, $t = -19.7, p < 0.001$, indicating that lexical mappings became increasingly established or accessible.
 
 
@@ -87,7 +86,7 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 \begin{figure*}[t]
 \begin{center}
 \includegraphics[scale=0.75]{Sec2-results.pdf}
-\caption{Pragmatic demands of context shape the formation of abstractions. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms. (C) Number of unique words used by speakers in each repetition block.}
+\caption{Pragmatic demands of context shape the formation of abstractions. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Number of unique words used by speakers in each repetition block. (C)  Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms. }
 \label{fig:lexiconContent}
 \end{center}
 \end{figure*}
@@ -120,17 +119,20 @@ To measure the effective vocabulary size used at each point in time, we consider
 Because all eight objects appeared as the target once in each block, this measure takes a maximum value of 8, in the case where a different word was used for every object, and a minimum value of 1, in the case where the same word was used for every object.
 We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
 We found an overall main effect of condition, with participants in the fine condition using significantly fewer words across all repetition blocks ($m = 4.9$ in coarse, $m=6.8$ in fine, $t = 9.5, p < 0.001$).
-However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.06, t = 4.5, p < 0.001$, see Fig. \ref{fig:lexiconContent}C.
+However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.06, t = 4.5, p < 0.001$, see Fig. \ref{fig:lexiconContent}B.
 This interaction is consistent with gradual differentiation based on communicative need in the fine condition.
 
-Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
+Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? 
+We counted the numbers of `specific' terms (e.g.\ words that refer to only one object) and `abstract' terms (e.g.\ words that refer to two objects) in the post-test. 
+We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). 
+Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
 The modal system in the fine condition was exactly eight specific terms with no abstract terms, and the modal system in the coarse condition was exactly four abstract terms (red, blue, striped, spotted) with no specific terms.
-However, these data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}B); the average proportion of abstract (vs.\ specific) terms within each participant's lexicon in the \emph{coarse} condition was 56\%. 
+However, these data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}C); the average proportion of abstract (vs.\ specific) terms within each participant's lexicon in the \emph{coarse} condition was 56\%. 
 
 \subsection{Model simulations}
 
 Our empirical results show that different communicative contexts systematically lead to different communicative conventions.
-Critically, the sequence of targets was held constant across the \emph{course} and \emph{fine} conditions; only the distractors were manipulated.
+Critically, the sequence of targets was held constant across conditions; only the distractors were manipulated.
 This task poses several distinct challenges for models of coordination and convention formation.
 First, the context constantly changes, with a subset of only four of the eight total objects shown on each trial.
 Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
@@ -148,6 +150,7 @@ Finally, we note that the simplicity prior over the lexicon space penalizes mean
 \paragraph{Results}
 
 First, we compare the model's learning curves across context conditions (Fig. \ref{fig:sec2model}B). 
+We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
 For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
 In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across conditions, $b=0.62, z = 17.9, p<0.001$.
 However, we also find a significant interaction with condition: the rate of improvement is significantly higher in the coarse condition than the fine condition, $b=-0.4, z=9.3, p <0.001$. 
