@@ -48,26 +48,34 @@ where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and
 After multiple partners are inferred to have a similar system of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner will share it as well.
 This transfer is sometimes referred to as ``sharing of strength'' or ``partial pooling'' because pooled data is smoothly integrated with domain-specific knowledge.
 
-The principle of pragmatic reasoning enters our model at two distinct phases.
+The principle of \textit{pragmatic reasoning} plays two distinct roles in our model.
 First, when an agent is inferring their partner's latent representation of meaning from their observable behavior (Eq. \ref{eq:joint_inference}), we assume that the likelihood reflects Gricean principles.
 In other words, the agent assumes their partner is using language in a cooperative manner.
 Second, agents do not only make passive inferences from data, they actually \emph{use language} in interaction, given their current beliefs.
-We assume that this generative behavior is also guided by Gricean principles.
+We assume that production and comprehension is also guided by Gricean principles.
 
-\todo[inline]{Swap in description of RSA from cogsci paper...}
-In both cases, we formalize Gricean principles using the Rational Speech Act model, which has successfully accounted for a wide range of classic pragmatic as a consequence of basic mechanisms of social reasoning. 
-A pragmatic speaker, denoted by $S_1$, attempts to be informative in context while a pragmatic listener, denoted by $L_1$, inverts an internal model of the speaker to infer the intended target. 
-The chain of recursive social reasoning grounds out in a \emph{literal listener} $L_0$, which directly soft-maximizes its lexicon, $\mathcal{L}^t(w,o)$, to interpret a given utterance. 
+%In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
+Concretely, we build upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{GoodmanFrank16_RSATiCS}.
+A pragmatic speaker denoted by $S_1$ attempts to trade off informativity against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of the speaker to infer the intended target.
+This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, who identifies the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$. 
+For any utterance $u$ and world state $o$, the function $\mathcal{L}$ function returns the extent to which $u$ applies to $o$.
+While this function is traditionally a binary truth-conditional variable, $\mathcal{L}_{\phi_k}: (u,o) \rightarrow \{0,1\}$, recent work has also argued for a continuous semantics mapping to the full real interval $[0,1]$  \cite{degen2020redundancy}.
 This model can be formally specified as follows:
 $$
 \begin{array}{rcl}
-L_0(o_i | w, \mathcal{L}^t) &\propto  & \mathcal{L}^t(w,o_i) \\
-S_1(w | o_i, \mathcal{L}^t) &\propto & \exp\{\ln L_0(o_i | w, \mathcal{L}^t)\} \\
-L_1(o_i | w, \mathcal{L}^t) &\propto  & S_1(w | o_i, \mathcal{L}^t) P(o_i) 
+L_0(o | u, \phi_k) &\propto  & \mathcal{L}_{\phi_k}(u,o) \\
+S_1(u | o, \phi_k) &\propto &  \exp\{w_I \cdot \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}   \\
+L_1(o | u, \phi_k) &\propto  & S_1(u | o, \phi_k) P(o) 
 \end{array}
 $$
-% MF: adjusted this for better vertical spacing wrt adjacent paragraphs
-where $o_i$ is a chosen object and $w$ an uttered word.
+$c(u)$ is the cost of producing $u$ and $w_I$ and $w_C$ are free parameters controlling the relative weights on the informativity and parsimony, respectively.
+Note that under each value of $\phi_k$, the $S_1$ and $L_1$ functions assign a probability to each word or object that one's partner has chosen, thus yielding the likelihood of the full set of observations $P(D_k | \phi_k)$.
+In addition to using the RSA likelihood for updating an agent's beliefs about $\Theta$ and $\phi_k$, we can use the same functions to simulate the choices of speaker and listener agents on a particular trial.
+That is, we sample from the posterior predictive, marginalizing over the agent's current beliefs about $\phi_k$:
+\begin{align}
+L(o|u) &\propto   \exp\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)d\phi_k\label{eq:marginalized}\\
+S(u|o) &\propto  \exp\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k)  w_I \log L_1(o| u, \phi_k) - w_C c(u)d\phi_k\}\nonumber
+\end{align}
 
 \subsection{Auxiliary assumptions}
 
