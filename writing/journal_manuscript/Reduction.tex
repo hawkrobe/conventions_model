@@ -1,0 +1,46 @@
+
+\subsection{Emperical background}
+
+%If our lexical priors -- our global conventions -- serve as a source of stability in meaning over longer timescales, then what accounts for our extraordinary flexibility  over short timescales? How do we coordinate on efficient local conventions, or \emph{conceptual pacts}, for talking about things we've never talked about before? In this section, we review the dynamics of coordination within repeated reference games and explore the possibility, formalized in Chapter 2, that rapid adaptation can be understood in a Bayesian modeling framework as lexical inference given partner-specific data.%: $P(\mathcal{L}_i | D_i, \Theta)$. 
+
+The most well-known phenomenon in repeated reference games is a reduction in message length over multiple rounds \citeA{KraussWeinheimer64_ReferencePhrases, ClarkWilkesGibbs86_ReferringCollaborative}. 
+The first time participants referred to a figure, they tend to use a lengthy, detailed description (``the upside-down martini glass in a wire stand'') but with a small number of repetitions -- between 3 to 6 times, depending on the pair -- the description is reduced down to the limit of just one or two words (``martini''). 
+These final messages are as short or shorter than the messages participants choose for \emph{themselves} in the future  \citeA{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
+These observations set up the central empirical puzzle of convention formation: how does a short word or phrase that would have been completely ineffective for communicating under the initial lexical prior become perfectly understandable over mere minutes of interaction? What changes inside participants' minds in the interim? 
+
+One simple non-social explanation --- that reduction is merely an effect of familiarity or repetition on the part of the speaker --- can be easily dispelled. 
+When participants are asked to repeatedly refer to the same targets for a hypothetical partner, no reduction is found, and in some cases utterances actually get longer \cite{HupetChantraine92_CollaborationOrRepitition}. 
+Whatever is changing must be a result of the \emph{interaction} between partners.
+An alternative explanation suggested by our probabilistic model is that reduction is driven by \emph{ad hoc} word learning as communication partners coordinate on names. 
+If long initial messages can be explained as the result of initial uncertainty in the lexical prior, as discussed in the previous section, then a decrease in uncertainty may license shorter messages.
+
+There is some evidence supporting this alternative explanation in prior empirical work.
+For example, \citeA{BrennanClark96_ConceptualPactsConversation} counted \emph{hedges} across repetitions.
+Hedges are expressions like \emph{sort of} or \emph{like}, and morphemes like \emph{-ish}, that explicitly mark uncertainty or provisionality, such as \emph{a car, sort of silvery purple colored} \cite{BrennanClark96_ConceptualPactsConversation,Fraser10_Hedging,MedlockBriscoe07_HedgeClassification}.
+If participants reduce their lexical uncertainty over successive rounds, then we might expect a corresponding decrease in explicit markers of this uncertainty. 
+Indeed, \citeA{BrennanClark96_ConceptualPactsConversation} found a much greater occurrence of hedges on the first round than the final round (26\% and 2\%, respectively).
+Additionally, very few hedges were found on early trials in less ambiguous contexts (e.g. referring to a shoe in the context of dogs and fish), lending support for the specific use of hedges to mark uncertainty rather than a generic social use when first beginning to talk with a new partner.
+
+\subsection{Model simulations}
+
+In this section, we show that the mechanism of uncertainty reduction is sufficient to produce reduction in utterance length across repeated interaction.
+\todo[inline]{TODO: move details over from earlier paper}
+
+\subsection{Discussion}
+
+Our simulations in this section are also consistent with analysis of exactly \emph{what} gets reduced \cite{hawkins2020characterizing}.
+Is the speaker adopting a fragment shorthand by randomly and noisily dropping words, or are they simplifying or narrowing their descriptions to names by systematically omitting redundant details?
+Closed-class parts of speech like determiners and prepositions \emph{are} much more likely to be dropped than open-class parts of speech like adjectives and nouns, and entire modifying clauses are more likely to be dropped together than expected by random corruption.
+This accords with early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{KraussWeinheimer64_ReferencePhrases} the short names that participants converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
+These more fine-grained analyses suggest that reduction is grounded in the prior lexical content of the interaction and the speaker's increasing confidence in how the listener will interpret an initially ambiguous label. 
+
+\paragraph{Quality of feedback}
+
+If adaptation is learning, then the extent to which partners adapt should depend critically on the quality of the data $D_i$ on which they are conditioning: $P(\mathcal{L}_i | \Theta, D_i)$. In the absence of additional cues to the meanings that their partner is using to interpret their messages, a speaker or drawer can only continue to rely on their prior, or indeed elaborate upon it. A common feature of the reference games reviewed so far is the capacity for \emph{real-time feedback channel}: either player may say anything at any point in time, thus allowing for interruptions, back-channel responses (uh-huh, hmmm, huh?), clarification questions, and so on. To what extent is this design choice necessary for reduction? \citeA{KraussWeinheimer66_Tangrams} were the earliest to address this question by manipulating the kind of feedback received by the speaker.
+
+In one condition, participants were able to talk freely and bidirectionally as in \citeA{KraussWeinheimer64_ReferencePhrases}; in another condition, the channel was unidirectional: the speaker was unable to hear the listener's responses. This real-time feedback manipulation was crossed with a behavioral feedback manipulation where the experimenters intercepted the listener's responses: one group of speakers was told that their partner made the correct response 100\% of the trials (regardless of their real responses), while another was told on half of the trials that their partner made the incorrect response. 
+
+Intuitively, we might expect that if the speaker is unsure how their longer descriptions are being interpreted -- unsure whether or not they can get away with shorter, more ambiguous expressions -- they may not have enough evidence about meanings to justify shorter utterances. Indeed, \citeA{KraussWeinheimer66_Tangrams} found that even when told that their partner was getting 100\% correct, entirely blocking the verbal feedback channel significantly limited the reduction effect. Speakers converged to utterances that were about twice as long -- twice as inefficient -- in the limit. Telling speakers that their partner was performing poorly also inhibited reduction as a main effect, though to a lesser extent. In the extreme case of trying to communicate to a listener who can't respond and appears to not understand, speaker utterance length actually increased with repetition after an early dip. \citeA{HupetChantraine92_CollaborationOrRepitition} later found that in the \emph{complete} absence of feedback --- when the speaker is instructed to repeatedly refer to a set of objects for a listener who is not present and will do their half of the task offline --- there is also no reduction in message length. On the listener's part, too, the ability to actively \emph{give} feedback appears critical for learning. \citeA{SchoberClark89_Overhearers} showed that listeners who overheard the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances.
+
+More graded disruptions of feedback seem to force the speaker to use more words overall but not to significantly change the rate of reduction (though rigorous comparisons between rates have not been conducted). For example, \citeA{KraussBricker67_Delay} tested a transmission delay to temporally shift feedback and an access delay to block the onset of listener feedback until the speaker is finished. Later, \citeA{KraussEtAl77_AudioVisualBackChannel} replicated the adverse effect of delay but showed that undelayed visual access to one's partner cancelled out the effect and returned the number of words used to baseline. 
+
