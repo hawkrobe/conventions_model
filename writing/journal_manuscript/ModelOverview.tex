@@ -5,18 +5,15 @@
 \label{fig:model_schematic}
 \end{figure}
 
-%\subsection{Hierarchical inference: generalizing to new partners}
-
 In this section, we provide an explicit computational account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
-Our model is based on three basic principles: 
-
-\begin{enumerate}
-\item \emph{lexical uncertainty}, the idea that beliefs about the underlying conventions used by other agents are represented and updated probabilistically \cite{bergen_pragmatic_2016}
-\item \emph{pragmatic reasoning}, the idea that agents expect other agents to use language in a cooperative manner, and do so themselves  \cite{GoodmanFrank16_RSATiCS}
-\item \emph{inductive learning}, the idea that agents expect some abstract structure to be shared by their entire community, even by individuals they have never met \cite{}
-\end{enumerate}
-
-We formalize these principles in a hierarchical Bayesian model.
+%Our model is based on three basic principles: 
+%
+%\begin{enumerate}
+%\item \emph{lexical uncertainty}: beliefs about the underlying conventions used by other agents are represented and updated probabilistically \cite{bergen_pragmatic_2016}
+%\item \emph{pragmatic reasoning}: agents expect other agents to use language in a cooperative manner, and do so themselves  \cite{GoodmanFrank16_RSATiCS}
+%\item \emph{inductive learning}: agents expect their social world to be structured, such that common beliefs may be shared even by individuals they have never met \cite{}
+%\end{enumerate}
+We formalize the principles of uncertainty, adaptation, and generalization in a hierarchical Bayesian model.
 In a hierarchical model, the agent's uncertainty is represented by a multi-level prior. 
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis" about the overall distribution of possible partners. 
 $\Theta$ then parameterizes the agent's \emph{partner-specific} uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meaning used by partner $k$ (see Fig. \ref{fig:model_schematic}). 
@@ -73,13 +70,24 @@ Note that under each value of $\phi_k$, the $S_1$ and $L_1$ functions assign a p
 In addition to using the RSA likelihood for updating an agent's beliefs about $\Theta$ and $\phi_k$, we can use the same functions to simulate the choices of speaker and listener agents on a particular trial.
 That is, we sample from the posterior predictive, marginalizing over the agent's current beliefs about $\phi_k$:
 \begin{align}
-L(o|u) &\propto   \exp\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)d\phi_k\label{eq:marginalized}\\
-S(u|o) &\propto  \exp\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k)  w_I \log L_1(o| u, \phi_k) - w_C c(u)d\phi_k\}\nonumber
+L(o|u) &\propto   \exp\left\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)d\phi_k\right\}\label{eq:marginalized}\\
+S(u|o) &\propto  \exp\left\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k)  w_I \log L_1(o| u, \phi_k) - w_C c(u)d\phi_k\right\}\nonumber
 \end{align}
 
 \subsection{Auxiliary assumptions}
 
-\todo[inline]{Describe some more specific mechanisms that are shared across the simulations.
+\todo[inline]{TODO: Describe more specific details that are shared across the simulations.
 (1) memory discounting based on Spike, (2) lexicon prior (simplicity + space of hypotheses for each word?), (3) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects), (4) how we handle coordination, i.e. what data is being conditioned on, (5) agent's decision rules, i.e. MAP vs. softmax sampling}
 
 According to Spike et al., 2018 forgetting is necessary for convergence. the problem is that random guesses at the beginning of the interaction will confuse agents much later: even at the end, they'll continue to think that 4 different words can possibly refer to the same object even if only a single one has ever successfully referred to it. 
+
+\subsection{Relation to other models}
+
+One view this model is an argument from the continuity of probabilistic models of language acquisition in development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
+One important theoretical contribution is to generalize Bayesian models of word learning to an interactive referential setting among mature language users. 
+
+A second view is by analogy to the use of hierarchical inference to explain how the human mind solves other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality}, and speech perception \cite{kleinschmidt2015robust}.
+From this view, our contribution is to ground convention formation -- a fundamentally social phenomenon -- in the same generic cognitive mechanisms supporting generalization in non-social domains, where abstract, shared properties also need to be jointly inferred with idiosyncratic particulars of instances.
+The key difference is that the target of inference is the internal state of other agents; social cognition thus enters the model through the likelihood function, which represents the predictions an agent makes about how agents with different internal states are likely to behave in different contexts.
+
+
