@@ -12,6 +12,8 @@
 \end{center}
 \end{figure*}
 
+\subsection{Empirical Background}
+
 In the previous section, we examined a mechanism for rapid, partner-specific learning that allows agents to form stable but arbitrary \emph{ad hoc} conventions. 
 While a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions for a meaning are equally likely in practice, or even that all meanings are equally likely to become conventionalized in the first place \cite{HawkinsGoldstone16_SocialConventions}.
 
@@ -156,23 +158,22 @@ In a mixed-effects logic regression, we find that communicative accuracy steadil
 However, we also find a significant interaction with condition: the rate of improvement is significantly higher in the coarse condition than the fine condition, $b=-0.4, z=9.3, p <0.001$. 
 These effects qualitatively track our findings in the human data: our artificial agents are able to successfully coordinate, but do so more easily in the coarse condition than the fine condition. 
 
+\todo[inline]{TODO: put in this analysis.}
+
 Second, we examine the conventions that emerge from our simulations. 
 In Fig. \ref{fig:sec2model}A, we find that the model converges to roughly the same proportions of unique words.
 
 \paragraph{Model comparison}
 
-We explore a few comparisons:
-
-1. A simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt. 
-2. What happens when we manipulate forgetting parameter, or remove it?
+We compare our model to (1) a simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt, and (2) ask what happens when we manipulate forgetting parameter, or remove it?
 
 In a non-pragmatic version, using words proportional to their literal meaning and learning from data in the same way, converges to a degenerate 1-word (shape) state.
 The initial usage is ambiguous between levels, so someone will eventually extend to different object, then only way to accommodate that data is to rule out more specific meanings. 
 This agent has no way of knowing that this abstract words confusing, and will always use it because it's guaranteed to be literally true of everything.
-
-\todo[inline]{May need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for comparison.}
-
 Also, In the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
+
+\todo[inline]{TODO: decide which comparisons are most interesting. may need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for a more explicit comparison to models outside our class of Bayesian agents.}
+
 
 \begin{figure}[t]
 \begin{center}
@@ -214,43 +215,3 @@ We expect that labels will become lexicalized when the cost incurred by frequent
 Future work should also explore these hypotheses about how lexicalization of nominal terms trades off with compositionality. 
 Our shared lexical conventions are richly structured systems with meanings at multiple levels of abstraction. 
 We are constantly supplementing our existing language with local conventions, as we need them.
-
-%\subsection{Validating post-test responses}
-%
-%We begin by showing that the lexical entries we infer for each participant accurately predict their post-test responses. 
-%We constructed a logistic classifier from our posterior on each epoch: for each object-word pair $(o,w)$ in the post-test response matrix, we computed the marginal posterior probability $P(\ell_{o,w} > 0.5| \theta_{o,w})$, where $\theta_{o,w}$ are the corresponding variational parameters (i.e. the mean and variance of the approximating Gaussian). This gives the posterior probability that word $w$ applies to object $o$. We evaluated the performance of this classifier by constructing an ROC curve that shows the tradeoff between hits and false alarms as the discrimination criterion is varied. We found that the classifier based on the final epoch predicts post-test responses with excellent accuracy (AUC: $0.98$; see Fig.\ \ref{fig:postTestPrediction}A). This indicates that the post-test lexicon is indeed linked to behavior as predicted by RSA, validating both the post-test measure and the results of our Bayesian analysis.
-%
-%Furthermore, we found that the corresponding posterior predictives from earlier epochs predicted final post-test responses less well, even though they were learned from the same number and type of behavioral observations (Fig.\ \ref{fig:postTestPrediction}A). Still, even the classifier based on the earliest epoch performs above chance, indicating that some information about the final lexicon is available from the earliest trials. These patterns are suggestive of a path-dependent process where the lexicon gradually coalesces from initially arbitrary associations over the course of interaction. We next turn to the earliest stages of this process.% to examine this process in more detail.
-%
-%\subsection{Examining early time course}
-%
-%%\todo[inline]{note for MF: I got this feature-based model working and then Noah thought it might be better to just use the simple model for everything? I'm going to see how far I can run with the simple model, so this section is somewhat in flux\dots}
-%
-%%Classic theories in historical linguistics distinguish between semantic \emph{broadening}, when a word takes on a more inclusive meaning, and \emph{narrowing}, when meanings become more restrictive over time \cite{TraugottDasher02_RegularitySemanticChange}. 
-%One advantage of the statistical approach we develop here is the ability to make descriptive inferences about the meanings being used in settings where we \emph{don't} ask participants for explicit judgements---in particular, in early trials of our games. 
-%
-%Our primary measure of interest is the \emph{entropy} of the extension of words over the eight objects. The entropy of a particular word is near zero when its meaning is peaked on a single object, and is maximized when could apply equally to all objects (e.g. for a novel word that has not yet been used). 
-%%In principle, we would find uniform distributions for words that apply equally well to all eight objects, but in our case, uniform meanings are more likely to reflect the uncertainty in our model's posterior (e.g. for words that were never used in a game). 
-%We expect abstract terms to lie in between these extremes. 
-%We obtain the extension distribution for each word by running it through our $L_0$ model, essentially asking how likely it is to refer to each of the eight objects.\footnote{Using $L_0$, rather than $L_1$ or $\mathcal{L}$, gives us a notion of word extension that is close to the underlying lexicon while influenced by non-identifiability of parameters. For instance, $\mathcal{L}$ has an overall scaling per row that doesn't influence behavior.} 
-%We use the MAP estimate of the lexicon. % (in order to make entropy effects more evident). 
-%The resulting distribution of estimated word entropies, aggregated for each epoch and condition, is shown in Fig. \ref{fig:postTestPrediction}B. %There are two properties to note here. 
-%Abstract terms begin to form early (epoch 2) in the \emph{coarse} condition, and remain stable throughout the game. In contrast, specific terms are relatively slow-forming (epoch 4-5) in the other two conditions. The peak near an entropy of 3 reflects the inferred ambiguity of words that were not used or used randomly.
-%
-%Because these distributions are aggregated across words, however, they leave open the possibility that lexica are not stabilizing or coalescing but simply cycling through different words each epoch. We address these dynamics more thoroughly at the \emph{word} level by computing the difference in each word's entropy from epoch to epoch (Fig. \ref{fig:postTestPrediction}C). For all conditions, we found that the entropy of individual words changed less over later epochs (i.e. the difference scores approached zero), indicating that meanings gradually stabilized. There are also differences across conditions: words in the \emph{mixed} and \emph{fine} condition began with high entropy reduction (becoming more specific) which continued through the final epochs, while words in the \emph{coarse} condition actually seemed to increase in entropy across the game on average.
-%These preliminary results, then, may reflect a combination of narrowing and broadening depending on condition. Unknown words can initially refer to any of the objects and only acquire more informative meanings as agents learn through interaction. Yet in the coarse condition where agents are quick to adopt meanings, the rest of the game may be spent paring down the lexicon instead.
-
-%\ndg{i think we should try to squeeze in a figure for the entropy differences...}
-
-%For this analysis, we elaborated our model to use an underlying feature basis to derive the lexicon instead of independent entries for each object-word combination. 
-%\ndg{can't we first do this analysis using the simple lexicon model? }
-%That is, we re-encoded each of the eight objects as a point in a discrete seven-dimensional feature space roughly corresponding to the nodes of the hierarchy\footnote{(shape, red-ness, blue-ness, stripe-ness, spot-ness, pattern frequency, and color intensity)} and learned an embedding for each word in this space. The meaning function used by our literal listener, then, is simply $L^2$ similarity between the word and object vectors. This feature-based representation has two useful properties. First, it allows for more meaningful feature-based generalization: having observed a word associated with one red square, it is more likely to extend this term to the other red square than to a striped circle simply because of their relative distances in the space. Second, it provides a way to directly read out more abstracted terms from the inferred lexicon (e.g.\ by looking at whether the red-ness feature is high and the brightness term is at the mid-point). 
-
-%The mixed pairs can get by with their lexicon of specific terms, and even the coarse pairs are stuck with the residue of their early specific terms. 
-
-%\todo[inline]{TODO: use simple model to look at the expected extension size of each word, and how it changes between quartiles.... walk through examples of early rounds in different contexts; show timecourse of abstractions, e.g.\ are initially specific terms extended or are initially abstract terms narrowed?  Do you tend to move from big to small or small to big quarter-to-quarter?}
-
-
-
-% For an example of a full page figure, see Fig.~\ref{fig:myFullPageFigure}.
-
