@@ -18,23 +18,27 @@ In this paper, we propose a theory of convention formation that reconciles commu
 We begin by formalizing the computational problem facing agents who must communicate with one another in a variable and non-stationary world. 
 We argue that three core cognitive mechanisms are needed for an agent to solve this problem: 
 \begin{enumerate}
-\item \emph{\textbf{uncertainty} about what words mean to different partners}
-\item \emph{rapid \textbf{adaptation} to particular partners, in context}
-\item  \emph{inductive \textbf{generalization} to unseen partners}
+\item \textbf{uncertainty} about what words mean to different partners
+\item rapid \textbf{adaptation} to particular partners, in context
+\item  inductive \textbf{generalization} to unseen partners
 \end{enumerate}
 %\begin{enumerate}
 %\item \textbf{Lexical uncertainty:} When we first encounter a new communication partner in a new context, we call upon some representation about what we think different signals mean to them. This representation of meaning must be sensitive to the overall statistics of the population: more people are familiar with the use of \emph{dog} to refer to the beloved pet than \emph{sclerotic aorta} to refer to the potentially dangerous health condition. It must also be sensitive to the immediate context of the interaction: a cardiologist should have different expectations about a novel colleague than a novel patient.
 %\item \textbf{Rapid adaptation:} Within a few minutes of conversation, we can considerably strengthen our expectations about our partner's lexicon based on earlier utterances and feedback, and adjust our own usage accordingly. For example, even if we are not initially familiar with the term \emph{sclerotic aorta}, a few minutes spent discussing the condition in simpler terms should make us more confident using the term with that partner in the future. This social learning mechanism must allow for signal \emph{reduction} -- simpler, more efficient ways of referring to the same thing over time -- and \emph{path-dependence}: early reinforcement of certain meanings increases their later usage, however arbitrary or provisional they began. 
 %\item \textbf{Generalization:} When we encounter the same partner in a new context, we should expect some `stickiness' from previous learning. Language does not reset at context boundaries. In addition, the lexical model we've learned within a conversation should be largely \emph{partner-specific}. Just because we now expect Partner A to be familiar with a \emph{sclerotic aorta} shouldn't radically change our expectations about Partner B. Over enough interactions with different language users, however, our initial representations should be able to shift to take these data into account. To generalize appropriately, we must be able to correctly attribute whether a usage is idiosyncratic to a particular speaker, or a global convention we should expect to hold across the whole community.
 %\end{enumerate}
-We show that a hierarchical Bayesian model satisfies these desiderata and successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: (1) gradual reduction to simpler and more efficient referring expressions in dyadic interaction with a single partner, (2) context-sensitivity in the content of which conventions form, and (3) the gradient of partner-specificity and generalization in the emergence of conventions in small networks.
+We show that a hierarchical Bayesian model satisfies these desiderata and successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: (P1) gradual reduction to simpler and more efficient referring expressions in dyadic interaction with a single partner, (P2) context-sensitivity in the content of which conventions form, and (P3) the gradient of partner-specificity and generalization in the emergence of conventions in small networks.
 
 \subsection{Theoretical approaches to adaptation and convention}
 
-\todo[inline]{TODO: I decided to save the empirical background for each phenomenon for the specific sections... I want to keep this short but it definitely needs to be filled out more!}
+\todo[inline]{TODO: I decided to save the empirical background for each phenomenon for the specific section intros... I want to keep this bit short but wasn't sure how short before getting to our model? Maybe the intro is also the place to put some general background about repeated reference games as a task paradigm, even if I don't need to go into much detail about each of the three empirical phenomena yet?}
+
 \paragraph{Priming-based theories of dyadic alignment}
 
-Interactive alignment theories say that coordination with a single partner is `priming' with some connectionist voodoo that trickles up levels. It does not make predictions about partner-specificity, since in principle priming is a non-social accessibility-based mechanism.
+According to the \emph{interactive alignment} account \cite{pickering2004toward,pickering2006alignment, garrod2009joint}, coordination on higher-level mental representations proceeds primarily through automatic and egocentric priming of surface statistics at lower levels. 
+By appealing to classic spreading-activation connectionist models \cite<e.g.>{roelofs1992spreading}, \citeA{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate to strengthen higher semantic levels of representation \cite{pickering1998representation}.
+Thus, unconsciously coupling word choices \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} in dialogue could potentially contribute to the coordination of higher-level semantic representations.
+%It does not make predictions about partner-specificity, since in principle priming is a non-social accessibility-based mechanism.
 
 \paragraph{Agent-based theories of consensus}
 

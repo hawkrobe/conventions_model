@@ -1,9 +1,10 @@
 %!TEX root = ../dissertation.tex
 In this paper, we considered the computational challenge faced by agents trying to communicate in a variable and non-stationary landscape of meaning.
-We first proposed a hierarchical Bayesian approach to semantic adaption that formalized three broad mechanisms exposed by the prior literature.
-%Because theories of adaption have been under-constrained by fine-grained empirical data, we then collected and used recent NLP techniques to analyze a large corpus from a replication of the classic tangrams task.
-%Inspired by insights from these analyses, we designed a targeted artificial language experiment to test our hypothesis that context shapes conventions and a graphical communication experiment to test the object- and interaction-specificity of conventions.
-We conclude by discussing some broader questions raised by the theoretical perspective we have advanced.
+We advanced a Bayesian meta-learning approach  in which agents continually adapt their beliefs about the semantics used each partner, in turn.
+We formalized this approach by integrating three core cognitive mechanisms in a probabilistic framework: (1) initial uncertainty about what a partner thinks words mean, (2) partner-specific adaptation based on observations of language use in context, and (3) hierarchical structure for graded generalization to new partners.
+This unified model resolves several puzzles that have posed challenges from prior models, including (1) why referring expressions shorten over repeated interactions with the same partner, (2) why context shapes the level of abstraction of conventions with a partner, and (3) how partner-specific common ground may coexist with the emergence of conventions at the population level. 
+
+We conclude by discussing several broader questions raised by the theoretical perspective we have advanced, and corresponding pathways for future work.
 
 \paragraph{Language acquisition}
 
@@ -55,21 +56,50 @@ Despite the relative lack of priors on signal meanings in this medium, people we
 Other novel modalities used in iterated reference games include a `whistle' language where movements along a vertical touch bar slider correspond to changes in pitch \cite{VerhoefRobertsDingemanse15_Iconicity} and a visual analog where movements along the slider were presented visually \cite{VerhoefEtAl16_TemporalLanguage}.
 Our model ought to be able to account for production and comprehension across these modalities simply by exchanging its encoder and decoder components to use an appropriate prior.
 
+\paragraph{The role of feedback and backchannels}
+
+If adaptation is learning, then an important corollary of our model is that the extent to which partners adapt should depend critically on the quality of the data $D_i$ on which they are conditioning: $P(\mathcal{L}_i | \Theta, D_i)$. In the absence of additional cues to the meanings that their partner is using to interpret their messages, a speaker or drawer can only continue to rely on their prior, or indeed elaborate upon it. 
+Our simulations used the simplest source of feedback: the utterance and response in a reference game.
+A key direction for future work is to account for richer forms of feedback.
+
+For example, a key feature of dialogue, reflected in many empirical reference game designs, is the capacity for a \emph{real-time feedback channel}.
+Either individual may say anything at any point in time, thus allowing for interruptions, back-channel responses (uh-huh, hmmm, huh?), clarification questions, and so on. 
+Without elaborating the generative model of the listener to include these verbal behaviors, we cannot explain the inferences a speaker will make upon hearing them.
+Such an elaboration will thus be critical to explaining why listeners send fewer messages over time and what impact early listener responses on conventionalization. 
+
+Additionally, this elaboration would allow our model capture early, important empirical results from \citeA{KraussWeinheimer64_ReferencePhrases}, which manipulated the feedback channel.
+In one condition, participants were able to talk bidirectionally, and in another the channel was unidirectional: the speaker was unable to hear the listener's responses. 
+This real-time feedback manipulation was crossed with a behavioral feedback manipulation where the experimenters intercepted the listener's responses: one group of speakers was told that their partner made the correct response 100\% of the trials (regardless of their real responses), while another was told on half of the trials that their partner made the incorrect response. 
+
+Under our account, if the speaker is unsure how their longer descriptions are being interpreted -- unsure whether or not they can get away with shorter, more ambiguous expressions -- they may not have enough evidence about meanings to justify shorter utterances. 
+Indeed, \citeA{KraussWeinheimer66_Tangrams} found that even when told that their partner was getting 100\% correct, entirely blocking the verbal feedback channel significantly limited the reduction effect. 
+Speakers converged to utterances that were about twice as long -- twice as inefficient -- in the limit. 
+Telling speakers that their partner was performing poorly also inhibited reduction as a main effect, though to a lesser extent. 
+In the extreme case of trying to communicate to a listener who can't respond and appears to not understand, speaker utterance length actually increased with repetition after an early dip. 
+\citeA{HupetChantraine92_CollaborationOrRepitition} found that in the \emph{complete} absence of feedback --- when the speaker is instructed to repeatedly refer to a set of objects for a listener who is not present and will do their half of the task offline --- there is also no reduction in message length. 
+
+More graded disruptions of feedback seem to force the speaker to use more words overall but not to significantly change the rate of reduction. 
+For example, \citeA{KraussBricker67_Delay} tested a transmission delay to temporally shift feedback and an access delay to block the onset of listener feedback until the speaker is finished. 
+Later, \citeA{KraussEtAl77_AudioVisualBackChannel} replicated the adverse effect of delay but showed that undelayed visual access to one's partner cancelled out the effect and returned the number of words used to baseline. 
+On the listener's part, too, the ability to actively \emph{give} feedback appears critical for coordination. 
+\citeA{SchoberClark89_Overhearers} showed that even listeners who \emph{overheard} the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances.
+Our model provides an initial framework to begin understanding how these subtle manipulations of feedback channels license differing inferences about a partner's underlying system of meaning.
+
 \paragraph{What is being adapted?}
 
-While we have focused on how participants coordinate on \emph{lexical} meaning, this is only one of many levels at which conventions may form. 
+While our model has been formulated in terms of coordination on \emph{lexical} meaning, this is only one of many levels at which conventions may form. 
 In more complex circumstances, there is often initial uncertainty not just about which of a small set of targets a particular message refers to, but how to represent the relevant targets of reference in the first place. 
 Learning to communicate effectively may require discovering a lower-dimensional representation in which the targets of reference vary.
 For instance, when using sketches to communicate about the identity of complex pieces of music \cite{HealeySwobodaUmataKing07_GraphicalLanguageGames}, a particular set of strokes could correspond to any number of properties (pitch, tempo, melody, rhythm, intensity) at any temporal granularity. 
-This is made particularly clear in a classic maze game \cite{GarrodAnderson87_SayingWhatYouMean}: in order to give effective spatial directions, speakers had well-tuned lexical priors but had to coordinate on what space of \emph{referents} to use (e.g. paths, coordinates, lines, landmarks). 
+This is made particularly clear in a classic maze game \cite{GarrodAnderson87_SayingWhatYouMean}: in order to give effective spatial directions, speakers apparently had well-tuned lexical priors but had to coordinate on what space of \emph{referents} to use (e.g. paths, coordinates, lines, landmarks). 
 
-Prior theories have assumed representations of lexical meanings are relatively fixed and the only learning taking place is how one's partner construes a multi-stable percept. 
+Some theories have assumed representations of lexical meanings are relatively fixed and the only learning taking place is how one's partner construes a multi-stable percept. 
 For examine, this seems to be what \citeA{BrennanClark96_ConceptualPactsConversation} had in mind when they coined the term \emph{conceptual pact}, and \cite{stolk2016conceptual} have influentially argued that partners in communication construct shared conceptual spaces. 
 Given present data it is not clear how these two sources of uncertainty could be teased apart, though certain kinds of conventions (e.g. proper names or acronyms) seem to rely more on binding new linguistic tokens to meanings than on constructing new conceptualizations.
 Thus, we expect both levels of coordination are likely to play an important role. 
 Our probabilistic model could be extended to handle additional levels of coordination by placing uncertainty over a hyper-parameter corresponding to the intended feature dimension that must be jointly inferred with the correspondence along that dimension. 
 
-\todo[inline]{Cite Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model.}
+\todo[inline]{Cite Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model?}
 
 \paragraph{Additional layers of social structure}
 

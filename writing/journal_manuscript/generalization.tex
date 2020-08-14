@@ -1,5 +1,4 @@
 
-\subsection{Empirical background}
 How do \emph{ad hoc} conventions formed through interaction with a single partner become \emph{global} conventions shared throughout a community?
 Exactly how do we make the inferential leap to community-wide expectations from our experiences with specific partners? 
 Grounding collective convention formation in individual cognition requires an explicit \emph{theory of generalization} capturing how people transfer what they have learned from one partner to the next.
@@ -154,7 +153,7 @@ The display also contained an avatar representing their current partner to empha
 \subsection{Results}
 
 \begin{figure*}
-\includegraphics[scale=1]{./figures/sec3-empirical-results.pdf}
+\includegraphics[scale=1.1]{./figures/sec3-empirical-results.pdf}
 \caption{Results from networked communication experiment. (A) Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence.}
 \label{fig:results}
 \end{figure*}
@@ -222,6 +221,11 @@ Our account predicts that similar inductive learning mechanisms would operating 
 Critically, if then switched to a new partner after an equivalent number of trials, we should still see significant reversion along the partner-specificity axis.
 This would be a stronger test of evidence against pure practice effects. 
  
+While it is not easily classified into either the complete-pooling or no-pooling classes, the priming mechanisms proposed by \emph{interactive alignment} accounts also cannot straightforwardly account for patterns of partner-specificity.
+If a particular semantic representation has been activated due to precedent in the preceding dialogue, then the identity of the speaker should not in principle alter its continued influence \cite{brennan2009partner}.
+More sophisticated hierarchical memory retrieval accounts that represent different partners as different \emph{contexts} \cite<e.g>{polyn2009context} may be consistent with partner-specificity, but evoking such an account presupposes that social information like partner identity is already a salient and relevant feature of the agent's context representation and thus no longer relies purely on ``egocentric'' priming and activation mechanisms. 
+Indeed, a process-level account assuming socially-aware context reinstatement for episodic memories, and slower consolidation of shared features into population-level expectations, may be one possible candidate for realizing our computational-level model (see General Discussion for more on process-level evidence).
+
 While our behavioral data appears inconsistent with complete-pooling and no-pooling accounts, there remain deep theoretical connections between our hierarchical Bayesian formulation and alternative theories of generalization which may also be considered ``partial-pooling'' \cite{rogers2004semantic,marcus2018algebraic,doumas2008theory}.
 For example, recent neural network algorithms such as Model-Agnostic Meta-Learning \cite<MAML>{FinnAbeelLevine17_MAML}, which attempt to learn general parameter settings (e.g. conventions) that can rapidly adapt to different specific tasks (e.g. partners), have been shown to be equivalent to hierarchical Bayes under certain conditions \cite{grant_recasting_2018}.
 Such neural network instantiations may scale better in practice to natural language in more complex referential spaces, and may only require a handful of gradient steps to successfully adapt \cite{hawkins2019continual}.
