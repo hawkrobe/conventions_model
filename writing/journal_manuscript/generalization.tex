@@ -4,7 +4,7 @@ Exactly how do we make the inferential leap to community-wide expectations from 
 Grounding collective convention formation in individual cognition requires an explicit \emph{theory of generalization} capturing how people transfer what they have learned from one partner to the next.
 
 One influential theory is that speakers simply ignore the identity of different partners and update a single monolithic representation after every interaction \cite{steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
-We call this a *complete-pooling* theory because data from each partner is collapsed into an undifferentiated pool of evidence \cite{gelman2006data}. 
+We call this a \emph{complete-pooling} theory because data from each partner is collapsed into an undifferentiated pool of evidence \cite{gelman2006data}. 
 Complete-pooling models have been remarkably successful at predicting collective behavior on networks, but have typically been evaluated only in settings where anonymity is enforced. 
 For example, \citeA{centola_spontaneous_2015} asked how large networks of participants coordinated on conventional names for novel faces.
 On each trial, participants were paired with a random neighbor but were not informed of that neighbor's identity, or the total number of different possible neighbors. 
@@ -12,7 +12,7 @@ On each trial, participants were paired with a random neighbor but were not info
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings.
 Knowledge about a partner's identity is both available and relevant for conversation \cite{eckert_three_2012, davidson_nice_1986}.
 Extensive evidence from psycholinguistics has demonstrated the \emph{partner-specificity} of our language use \cite{clark_using_1996}. 
-Because meaning is grounded in the evolving 'common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessarily transferred to other partners \cite{wilkes-gibbs_coordinating_1992,metzing_when_2003}.
+Because meaning is grounded in the evolving 'common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessarily transferred to other partners \cite{wilkes-gibbs_coordinating_1992,metzing_when_2003,horton_revisiting_2016}.
 Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner.
 We call this a \emph{no-pooling} model.
 The problem with no-pooling is that agents are forced to start from scratch with each partner.
@@ -60,10 +60,10 @@ Specifically, we make a \emph{mean-field} approximation and assume that the full
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>{murphy2012machine}.
 On each trial, we run 50,000 gradient steps on previous observations to obtain a posterior (Eq.\ 1) and compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the variational guide (Eq. 4) \footnote{These details were chosen to ensure high-quality estimates of the model's behavior; see Discussion for other possible algorithms.}
 
-\paragraph{Simulation 1: Listener accuracy across partners}
+\paragraph{Simulation 3.1: Listener accuracy across partners}
 
 The key predictions of our partial-pooling model concern the pattern of generalization across partners.
-In our first simulation, we consider the partner-specificity of a *listener*'s expectations about which object is being referred to.
+In our first simulation, we consider the partner-specificity of a \emph{listener}'s expectations about which object is being referred to.
 To observe the model's behavior in the simplest possible case, we assume the speaker has a vocabulary of two single-word utterances $\{u_1, u_2\}$ with equal cost and produces the same utterance for the same target object ($\{o_1, u_1\}$) on every trial.
 We introduce a new partner every 4 trials.
 
@@ -75,7 +75,7 @@ In the absence of data from other partners, its observations are more parsimonio
 After observing multiple partners use $u_1$ similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
 This is evident in much stronger initial expectations when introduced to the fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner), unlike a no-pooling model (bottom row).
 
-\paragraph{Simulation 2: Speaker utterance length across partners}
+\paragraph{Simulation 3.2: Speaker utterance length across partners}
 
 Next, we examined our model's predictions about how a \emph{speaker}'s referring expressions will change with successive listeners.
 While it has been frequently observed that messages reduce in length across repetitions with a single partner \cite{krauss_changes_1964} and sharply revert back to longer utterances when a new partner is introduced \cite{wilkes-gibbs_coordinating_1992}, the key prediction distinguishing our model concerns behavior across subsequent partner boundaries.
@@ -94,7 +94,7 @@ First, as in our earlier simulations, we found that descriptions become more eff
 Second, we find that the speaker model reverts back to a longer description at the first partner swap: evidence from one partner is relatively uninformative about the community.
 Third, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig. \ref{fig:model_results}B, top row).
 
-\paragraph{Simulation 3: Network convergence}
+\paragraph{Simulation 3.3: Network convergence}
 
 The first two simulations presented a single adaptive agent with a fixed partner to understand its gradient of generalization. 
 In our final simulation, we test the consequences of the proposed hierarchical inference scheme for a network of \emph{interacting} agents.
@@ -152,11 +152,6 @@ The display also contained an avatar representing their current partner to empha
 
 \subsection{Results}
 
-\begin{figure*}
-\includegraphics[scale=1.1]{./figures/sec3-empirical-results.pdf}
-\caption{Results from networked communication experiment. (A) Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence.}
-\label{fig:results}
-\end{figure*}
 
 We evaluated participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
 
@@ -174,6 +169,12 @@ Because partner roles were randomized for each game, the same participant often 
 We found that across the two partner swaps, accuracy dropped significantly, $b = -1.56, z = -2, p < 0.05$, reflecting partner-specificity of meaning.
 Finally, to test whether performance improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number on the trials immediately after the partner swap ($t=\{1,5,9\}$).
 As predicted, we found a significant improvement in performance, $b = 0.57, z = 2.72, p < 0.01$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig. \ref{fig:results}A).
+
+\begin{figure*}
+\includegraphics[scale=1.1]{./figures/sec3-empirical-results.pdf}
+\caption{Results from networked communication experiment. (A) Increase in accuracy across partners, (B) reduction in number of words across partners, (C) network convergence.}
+\label{fig:results}
+\end{figure*}
 
 
 \paragraph{Speaker utterance length}
