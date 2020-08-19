@@ -49,7 +49,7 @@ Furthermore, we find that pragmatic reasoning is necessary for these effects to 
 
 \subsubsection{Participants}
 
-We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game using the framework described in \citeA{Hawkins15_RealTimeWebExperiments}. Pairs were randomly assigned to one of two different conditions, yielding approximately $n=37$ dyads per condition, after excluding participants who disconnected before completion.\footnote{Planned sample sizes, exclusion criteria, and behavioral analysis plan were pre-registered at \url{https://osf.io/2hkjc/}. We also ran an additional 53 participants in a third condition which we do not analyze here.}
+We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game using the framework described in \citeA{Hawkins15_RealTimeWebExperiments}. Pairs were randomly assigned to one of three different conditions, yielding approximately $n=37$ dyads per condition, after excluding participants who disconnected before completion.\footnote{Planned sample sizes, exclusion criteria, and behavioral analysis plan were pre-registered at \url{https://osf.io/2hkjc/}. We also ran an additional 53 participants in a third condition which we do not analyze here.}
 
 \subsubsection{Procedure \& Stimuli}
 Participants were paired over the web and placed in a shared environment containing an array of objects (Fig.\ \ref{fig:context_design}A) and a `chatbox' to send messages from a randomly generated vocabulary (Fig.\ \ref{fig:context_design}B). On each of 96 trials, one player (the `speaker') was privately shown a highlighted target object and allowed to send a single word to communicate the identity of this object to their partner (the `listener'), who subsequently made a selection from the array. Players were given full feedback, swapped roles each trial, and both received bonus payment for each correct response.
@@ -115,7 +115,7 @@ We predicted that in contexts regularly requiring speakers to make fine distinct
 To test this prediction, we counted the number of words in each participant's reported lexicon (i.e.\ the words for which they marked at least one object in the post-test). We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{fine} condition ($m = 7.6, t = 9.5, p < 0.001$; see Fig.\ \ref{fig:lexiconContent}A). At the same time, the smaller lexicon provided equivalent coverage of objects: the median number of objects where participants agreed on the same word was 7 in both conditions. 
 
 How did these lexica emerge over the course of interaction? 
-To measure the effective vocabulary size used at each point in time, we considered the total number of unique words produced within each repetition block.
+To measure the effective vocabulary size used throughout the interaction, we considered the total number of unique words produced within each repetition block.
 Because all eight objects appeared as the target once in each block, this measure takes a maximum value of 8, in the case where a different word was used for every object, and a minimum value of 1, in the case where the same word was used for every object.
 We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
 We found an overall main effect of condition, with participants in the fine condition using significantly fewer words across all repetition blocks ($m = 4.9$ in coarse, $m=6.8$ in fine, $t = 9.5, p < 0.001$).
@@ -127,7 +127,7 @@ We counted the numbers of `specific' terms (e.g.\ words that refer to only one o
 We found that the likelihood of lexicalizing abstractions differed systematically across conditions (see Fig.\ \ref{fig:lexiconContent}A). 
 Participants in the \emph{fine} condition reported lexica containing exclusively specific terms, while participants in the \emph{coarse} condition reported significantly more abstract terms ($m = 2.5, p < 0.001$). 
 The modal system in the fine condition was exactly eight specific terms with no abstract terms, and the modal system in the coarse condition was exactly four abstract terms (red, blue, striped, spotted) with no specific terms.
-However, these data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are entirely absent from the \emph{fine} condition, participants in the course condition often reported a mixture of terms (see Fig.\ \ref{fig:lexiconContent}C); the average proportion of abstract (vs.\ specific) terms within each participant's lexicon in the \emph{coarse} condition was 56\%. 
+However, these data also reveal an interesting asymmetry in lexicon content across conditions: while abstractions are nearly absent from the \emph{fine} condition, individual participants in the course condition often reported a mixture of terms at differently levels roughly following a Pareto frontier (see Fig.\ \ref{fig:lexiconContent}C).
 
 \subsection{Model simulations}
 
@@ -146,32 +146,7 @@ Following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of mea
 In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square), 1 exhaustive meaning (shape), and 1 ``null'' meaning, which does not apply to any of the objects.
 We populate the utterance space with 8 single-word labels, which simplifies the speaker model: the utterance cost term is constant across all utterances, so it does not have an effect on speaker behavior.
 Finally, we note that the simplicity prior over the lexicon space penalizes meanings with larger extensions, so \emph{a priori}, agents have an inductive bias toward subordinate terms.
-
-\paragraph{Results}
-
-First, we compare the model's learning curves across context conditions (Fig. \ref{fig:sec2model}B). 
-We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
-For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
-In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across conditions, $b=0.62, z = 17.9, p<0.001$.
-However, we also find a significant interaction with condition: the rate of improvement is significantly higher in the coarse condition than the fine condition, $b=-0.4, z=9.3, p <0.001$. 
-These effects qualitatively track our findings in the human data: our artificial agents are able to successfully coordinate, but do so more easily in the coarse condition than the fine condition. 
-
-\todo[inline]{TODO: put in this analysis.}
-
-Second, we examine the conventions that emerge from our simulations. 
-In Fig. \ref{fig:sec2model}A, we find that the model converges to roughly the same proportions of unique words.
-
-\paragraph{Model comparison}
-
-We compare our model to (1) a simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt, and (2) ask what happens when we manipulate forgetting parameter, or remove it?
-
-In a non-pragmatic version, using words proportional to their literal meaning and learning from data in the same way, converges to a degenerate 1-word (shape) state.
-The initial usage is ambiguous between levels, so someone will eventually extend to different object, then only way to accommodate that data is to rule out more specific meanings. 
-This agent has no way of knowing that this abstract words confusing, and will always use it because it's guaranteed to be literally true of everything.
-Also, In the limit it doesn't matter whether you have pragmatics in both learning rule or decision rule. In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
-
-\todo[inline]{TODO: decide which comparisons are most interesting. may need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for a more explicit comparison to models outside our class of Bayesian agents.}
-
+For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting parameter of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
 
 \begin{figure}[t]
 \begin{center}
@@ -182,6 +157,59 @@ Also, In the limit it doesn't matter whether you have pragmatics in both learnin
 \vspace{-3ex}
 \end{figure}
 
+
+\paragraph{Simulation 2.1: Context-sensitivity}
+
+First, we compare the model's learning curves across context conditions (Fig. \ref{fig:sec2model}B). 
+We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
+In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across conditions, $b=0.72, z = 16.9, p<0.001$.
+However, we also find a significant interaction with condition: the rate of improvement is significantly higher in the coarse condition than the fine condition, $b=-0.49, z=9.3, p <0.001$. 
+These effects track our qualitative findings in the human data: our artificial agents are able to successfully coordinate, but do so more easily in the coarse condition than the fine condition. 
+
+Second, we examine the effective vocabulary sizes that emerge from our simulations. 
+We use the same measure of unique words produced in each repetition block that we used in our analyses of human data above. 
+In an identical mixed-effects model, we again an overall main effect of condition, with participants in the fine condition using significantly fewer words across all repetition blocks ($m = 4.7$ in coarse, $m=6.5$ in fine, $t = 4.5, p < 0.001$).
+However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition compared to the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig. \ref{fig:sec2model}A.
+These effects suggest that the model converges to roughly the same lexicon sizes as humans do.
+
+Finally, we examine more closely the emergence of terms at different levels of abstraction.
+We have access not only to the outward behavior of our simulated agents, but also their internal \emph{beliefs} about their partner's lexicon.
+So we can not only query these beliefs at the very \emph{end} of the game, as we did in our empirical post-test, we can also directly examine the evolution of these beliefs from the very beginning of the interaction.
+At each time point in each game, we take the single meaning with highest probability for each word.
+
+In Fig. \ref{fig:evolution}, we show the proportion of words with meanings at each level of abstraction, collapsing across all games in each condition.
+Most critically for comparison with empirical data, we find that the \emph{final} proportion of basic-level vs. subordinate-level terms is significantly different across the coarse and fine conditions.
+Only 9\% of words had subordinate-level meanings (green) in the coarse condition, compared with 79\% in the fine condition, $\chi^2(1) = 436, p < 0.001$.
+At the same time, 45\% of words had basic-level meanings (blue) in the coarse condition, compared with only 8\% in the fine condition, $\chi^2(1) = 136, p < 0.001$.
+The remaining words in each condition were assigned the `null` meaning (red), consistent with an overall smaller effective vocabulary size in the coarse condition.
+These effects are consistent with human post-test responses.
+
+What dynamics give rise to these final proportions?
+Qualitatively, we observe that agents begin with assumptions of `null' meanings due to their simplicity prior but quickly begin assigning meanings based on their partner's usage.
+In both conditions, both basic-level meanings and simpler subordinate-meanings are consistent with the data, with a general preference for simpler meanings.
+After the first repetition block, however, agents in the coarse condition begin pruning out some of the subordinate-level terms and become increasingly confident of basic-level meanings and agents in the fine condition become even more confident of subordinate level meanings. 
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[scale=0.75]{evolution.pdf}
+\caption{Proportion of terms at different levels of abstraction in different conditions }
+\label{fig:evolution}
+\end{center}
+\end{figure}
+
+
+\paragraph{Model comparison}
+
+\rdh{TODO: we need to decide which comparisons are most interesting. may need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for a more explicit comparison to models outside our class of Bayesian agents...}
+
+We compare our model to (1) a simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt, and (2) ask what happens when we manipulate forgetting parameter, or remove it?
+
+In a non-pragmatic variant of our model, agents use words proportional to their literal meaning and assume their partner is doing the same. 
+In this case, their lexicon converges to a degenerate 1-word (shape) state.
+Because an initial usage is consistent with all levels of abstraction, one of the agents will eventually extend the same word to different object. 
+Then the only way to subsequently accommodate this extension in the interaction history is to rule out more specific meanings. 
+The non-pragmatic agent has no way of knowing that this degenerate solution is confusing to their partner, and will continue to prefer it because it's literally true of every object.
+
 \subsection{Discussion}
 
 How does context shape conventions? 
@@ -189,11 +217,12 @@ There is abundant evidence that languages adapt to the needs of their users, and
 By manipulating context statistics in a real-time experiment, we evaluated the extent to which our model captured patterns of context-sensitivity in the behavioral data.
 
 Previous proposals have handled context-sensitivity in different ways.
-In some common settings for convention formation, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{Baronchelli,oldnaminggame}. 
-In other common settings, context is central but held constant throughout interactions, as in Lewis signaling games, where agents use a fixed set of messages to communicate a fixed set of world states \cite{lewis,signalinggame}.
+In some common settings for convention formation, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{steels2012experiments,baronchelli2008depth}. 
+In other common settings, context is central but held constant throughout interactions, as in Lewis signaling games \cite{lewis_convention:_1969}, where agents use a fixed set of messages to communicate a fixed set of world states \cite{skyrms2010signals,BrunerEtAl14_LewisConventions}.
+
 One of the most sophisticated studies of context in prior work is the Discrimination Game of \citeA{steels2005coordinating}, which examined the joint formation of color categories and color naming conventions.
 As in our experiments, contexts were generated randomly on each trial from a large space and stimuli are embedded in a similarity space (with similarity based on Euclidean distance in continuous space rather than taxonomic relations).
-Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart.
+Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart  \cite<see also>[which found that imposing a realistic Just Noticeable Difference function as the minimum distance on communicative contexts leads to human-like color naming systems]{baronchelli2010modeling}.
 
 In models using Roth-Erev reinforcement learning update rules or simple neural networks, the referential context is sometimes accounted for with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional}.
 If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite<see also>{steels2005coordinating}.
