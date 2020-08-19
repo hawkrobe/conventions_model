@@ -7,7 +7,6 @@ While we are agnostic to the exact function parameterized by $\Theta$, there are
 First, this representation of meaning must be sensitive to the overall statistics of the population: there is more consensus about the meaning of \emph{dog} than the meaning of \emph{sclerotic aorta} in the general population. 
 Second, this representation should also, in principle, be sensitive to the identity of the partner: a cardiologist should have different expectations about a new colleague than a new patient.
 
-In this section, we 
 The most well-known phenomenon in repeated reference games is a reduction in message length over multiple rounds \citeA{KraussWeinheimer64_ReferencePhrases, ClarkWilkesGibbs86_ReferringCollaborative}. 
 The first time participants referred to a figure, they tend to use a lengthy, detailed description (``the upside-down martini glass in a wire stand'') but with a small number of repetitions -- between 3 to 6 times, depending on the pair -- the description is reduced down to the limit of just one or two words (``martini''). 
 These final messages are as short or shorter than the messages participants choose for \emph{themselves} in the future  \citeA{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
@@ -30,7 +29,7 @@ Additionally, very few hedges were found on early trials in less ambiguous conte
 
 \begin{figure*}
 \centering
-    \includegraphics[scale=.8]{sec1-modelResults.pdf}
+    \includegraphics[scale=.9]{sec1-modelResults.pdf}
   \caption{Schematic of model}
   \label{fig:sec1model}
 \end{figure*}
@@ -63,9 +62,9 @@ Fourth, \emph{failed references} can lead to conventions just as effectively as 
 
 Next, we show how our model explains reduction of utterance length over multiple interactions. 
 For utterances to be reduced, of course, they must vary in length, so we extend our grammar to include \emph{conjunctions}. 
-Conjunctions are one of the simplest ways to constructi longer utterances compositionally from lexical primitives, using the product rule:
+Conjunctions are one of the simplest ways to construct longer, non-atomic utterances compositionally from lexical primitives, using the product rule \cite<see also>[who instead consider negation]{SteinertThrelkeld16_CompositionalSignaling}:
 $$\mathcal{L}(u_i \textrm{ and } u_j, o) = \mathcal{L}(u_i, o) \times \mathcal{L}(u_j, o)$$
-\indent Analogous to the \emph{tangram} stimuli used in the reference game reviewed in Chapter 1, which have many ambiguous features and figurative perspectives that may be evoked in speaker descriptions, we consider a scenario the two objects $\{o_1, o_2\}$ differ along two different features. 
+We consider a scenario where two objects $\{o_1, o_2\}$ differ along two different features. 
 The speaker thus has four primitive words at their disposal -- two words for the first feature ($\{u_{11}, u_{12}\}$) and two for the second $\{u_{21}, u_{22}\}$. 
 While we established in the previous section that conventions can emerge over a reference game in the complete absence of initial preferences, players often bring such preferences to the table. 
 A player who hears `ice skater' on the first round of a tangrams task is more likely to select some objects more than others, even though they still have some uncertainty over its meaning in the context. 
@@ -85,8 +84,17 @@ Once the speaker chooses one of them, the symmetry collapses and that utterance 
 In this way, meaningful sub-phrases are omitted over time as the speaker becomes more confident about the true lexicon. 
 
 \paragraph{Model comparison}
-.
-\todo[inline]{We should compare this model to several simpler baselines, e.g., no pragmatics, point estimate instead of uncertainty. It may also be useful to explicitly show that the simple Roth-Erev RL updating from this literature doesn't reduce.}
+
+Here we compare this model to several simpler baselines to establish which components of the model are necessary and sufficient for the desired behavior.
+
+\rdh{e.g., no pragmatics, pragmatics only in learning rule or only in decision rule instead of both, simpler pragmatics (reasoning about $L_0$ instead of $L_1$), point estimate instead of uncertainty, effect of different parameter regimes.} 
+
+\rdh{It may also be useful to explicitly show that the simpler Roth-Erev RL updating from this literature doesn't reduce, or even better show that this kind of simpler update rule is equivalent to something within our framework as a point estimate representation with maximum likelihood or something...?}
+
+%In the limit, it doesn't matter whether you have pragmatics in both learning rule or decision rule. 
+%In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
+
+
 
 \subsection{Discussion}
 

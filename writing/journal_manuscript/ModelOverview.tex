@@ -48,25 +48,22 @@ After multiple partners are inferred to have a similar system of meaning, belief
 This transfer is sometimes referred to as ``sharing of strength'' or ``partial pooling'' because pooled data is smoothly integrated with domain-specific knowledge.
 
 The principle of \textit{pragmatic reasoning} plays two distinct roles in our model.
-First, when an agent is inferring their partner's latent representation of meaning from their observable behavior (Eq. \ref{eq:joint_inference}), we assume that the likelihood reflects Gricean principles.
+First, when an agent is inferring their partner's latent representation of meaning from their observable behavior (Eq.~\ref{eq:joint_inference}), we assume that the likelihood reflects Gricean principles.
 In other words, the agent assumes their partner is using language in a cooperative manner.
 Second, agents do not only make passive inferences from data, they actually \emph{use language} in interaction, given their current beliefs.
 We assume that production and comprehension is also guided by Gricean principles.
 
 %In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
-More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{frank_predicting_2012,GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}.
-A pragmatic speaker denoted by $S_1$ attempts to trade off informativity to an imagined listener against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of a speaker to infer the intended target.
+More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{frank_predicting_2012,GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to trade off informativity to an imagined listener against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of a speaker to infer the intended target.
 This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, who identifies the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$.
 For any utterance $u$ and world state $o$, the function $\mathcal{L}$ function returns the extent to which $u$ applies to $o$.\footnote{While this function is traditionally a binary truth-conditional variable, $\mathcal{L}_{\phi_k}: (u,o) \rightarrow \{0,1\}$, recent work has also argued for a continuous semantics mapping to the full real interval $[0,1]$  \cite{degen2020redundancy}}
 
 This model can be specified as follows:
-$$
-\begin{array}{rcl}
-L_0(o | u, \phi_k) &\propto  & \mathcal{L}_{\phi_k}(u,o)\label{eq:RSA}\\ \\
-S_1(u | o, \phi_k) &\propto &  \exp\{w_S \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}   \\
-L_1(o | u, \phi_k) &\propto  & \exp\{w_L \log S_1(u | o, \phi_k)\}
-\end{array}
-$$
+\begin{align}
+L_0(o | u, \phi_k) &\propto  \mathcal{L}_{\phi_k}(u,o)\hfill\label{eq:RSA}\\
+S_1(u | o, \phi_k) &\propto   \exp\{w_S \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}\nonumber   \\
+L_1(o | u, \phi_k) &\propto   \exp\{w_L \log S_1(u | o, \phi_k)\}\nonumber
+\end{align}
 where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener.
 
 Under any possible value of $\phi_k$, these functions can be used as a likelihood for observations of language use $P(D_k | \phi_k)$ to infer their partner's lexicon (Eq.~\ref{eq:joint_inference}).
@@ -85,10 +82,11 @@ Here, we highlight several auxiliary assumptions we make for the simulations thr
 
 First, what data $D_k$ should each agent use to update their beliefs at a particular point in an interaction?
 In our simulations, we allow the same agent to switch between the speaker and listener role, so a partner may produce utterances $u$ on some trials and object choices $o$ on other trials; consequently, we assume an agent always conditions on feedback from their \emph{partner's} choices.
-This establishes the basic problem of coordination. 
+This assumption of symmetry, where each partner equally adjusts to the other, creates a clear coordination problem. 
 In the case of an error, where the agent in the listener role hears the utterance $u$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the correct target and subsequently condition on the likelihood that the speaker chose this utterance to convey this target, $S_1(u | o^*)$. 
 Meanwhile, the agent in the speaker will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance $L_1(o' | u)$.
-In other words, each agent will subsequently condition on slightly different data, setting the stage for possible miscoordination. 
+In other words, each agent will subsequently condition on slightly different data.
+While we consider this assumption to be the most challenging coordination setting, it is also possible to assume that agents in one role (e.g. the listener role) are expected to adapt more strongly, leading to an asymmetric division of labor and reducing miscoordination \cite{MorenoBaggio14_AsymmetrySignaling}.
 
 Second, according to \citeA{spike_minimal_2017}, some \emph{forgetting} or \emph{discounting} mechanism appears necessary for convention formation. 
 Without forgetting, early errors may lead to persistent mis-coordination much later in an interaction, preventing agents from reaching consensus.
@@ -104,22 +102,18 @@ Further, we assume a simplicity prior over possible lexicons, $P(\phi) \propto \
 There are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. 
 We return to these possibilities in the General Discussion. 
 
-Many minor variations on the basic RSA model have been explored in previous work.
-We highlight two design choices in the specific formulation in Eq.~\ref{eq:RSA}. 
-First, both the pragmatic speaker and listener are ``action-oriented'' in the sense that they both use a soft-max function to select an action in the reference game, whereas in many instances of prior work, the listener is ``belief-oriented'' and assumed to simply update their beliefs about the world without taking action \cite{qing2015variations}.
-Second, we have parameterized the pragmatic speaker and listener functions with a particular lexicon $\phi_k$.
-
-\todo[inline]{TODO: Describe more specific details that are shared across the simulations.
-(3) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects), (4) , (5) agent's decision rules, i.e. MAP vs. softmax sampling}
-
+Fourth, many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting two design choices in the specific formulation we give in Eq.~\ref{eq:RSA}. 
+Both the pragmatic speaker and listener are ``action-oriented'' in the sense that they both use a soft-max function to select an action in the reference game, with separate optimality parameters, whereas in many instances of prior work, the listener is ``belief-oriented'' and assumed to simply update their beliefs about the world without taking action \cite{qing2015variations}.
+Additionally, we assume this softmax is the actual decision rule used by agents.
+It is possible to use a soft likelihood during updating, but in fact have agents choose utterances and objects by \emph{maximizing} utility. 
+See Appendix for further details about the definition and implementation of the RSA likelihood.
 
 \subsection{Relation to previous models}
 
 One view this model is an argument from the continuity of probabilistic models of language acquisition in development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
 One important theoretical contribution is to generalize Bayesian models of word learning to an interactive referential setting among mature language users. 
 
-
-A third view is by analogy to the use of hierarchical inference to explain how the human mind solves other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
+Another view is by analogy to the use of hierarchical inference to explain how the human mind solves other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
 From this view, our contribution is to ground conventions -- a fundamentally social phenomenon -- in the same domain-general machinery supporting generalization in non-social domains, where abstract, shared properties also need to be jointly inferred with idiosyncratic particulars of instances.
 The key difference is that the target of inference is the internal state of other agents; social cognition thus enters the model through the likelihood function, which represents the predictions an agent makes about how agents with different internal states are likely to behave in different contexts.
 
