@@ -45,45 +45,43 @@
  
  \definecolor{Green}{RGB}{10,200,100}
   \definecolor{Red}{RGB}{200,100,50}
-\newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
+\newcommand{\tlg}[1]{\textcolor{Green}{[tom: #1]}}  
 \newcommand{\rdh}[1]{\textcolor{Red}{[rdh: #1]}}  
 
 
 \makeatother
 
-\title{From partners to populations: \\ Social conventions emerge from Bayesian meta-learning}
+\title{From partners to populations: \\[.1em] Social conventions emerge from hierarchical Bayesian inference}
 \shorttitle{Conventions}
-\author{Authors}
-\affiliation{Universities}
+\author{Robert Hawkins, Kenny Smith, Michael Franke, Tom Griffiths, Noah Goodman}
+\affiliation{University}
 
 \abstract{Abstract}
 
 
 \keywords{keywords}
 
-\authornote{This report is based in part on work presented at the 38th Conference of the Cognitive Science Society. Correspondence should be addressed to Robert D. Hawkins, e-mail: rdhawkins@princeton.edu}
+\authornote{This report is based in part on work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Correspondence should be addressed to Robert D. Hawkins, e-mail: rdhawkins@princeton.edu}
 
 \begin{document}
 \maketitle
 
-\textit{The speaker wants to be understood [...] %, so he intends to speak in such a way that he will be interpreted in a certain way. 
-In order to judge how he will be interpreted, he uses his [...] starting theory of interpretation. % interpreter’s readiness to interpret along certain lines. %Central to this picture is what the speaker believes is 
+\begin{quote}
+%The speaker wants to be understood [...] %, so he intends to speak in such a way that he will be interpreted in a certain way. 
+\emph{In order to judge how he will be interpreted, [the speaker] uses his starting theory of interpretation. % interpreter’s readiness to interpret along certain lines. %Central to this picture is what the speaker believes is 
 %The speaker does not necessarily speak in such a way as to prompt the interpreter to apply this prior theory; he may deliberately dispose the interpreter to modify his prior theory. But the speaker’s view of the interpreter’s prior theory is not irrelevant to what he says, nor to what he means by his words; it is an important part of what he has to go on if he wants to be understood.
 As speaker and interpreter talk, their ``prior'' theories become more alike; so do their ``passing'' theories. 
 The asymptote of agreement and understanding is when passing theories coincide. 
-But the passing theory cannot in general correspond to an interpreter’s linguistic competence. 
+%But the passing theory cannot in general correspond to an interpreter’s linguistic competence. 
 Not only does it have its changing list of proper names and gerrymandered vocabulary, but it includes every successful use of any other word or phrase, no matter how far out of the ordinary. 
-Every deviation from ordinary usage, as long as it is agreed on for the moment (knowingly deviant, or not, on one, or both, sides), is in the passing theory as a feature of what the words mean on that occasion. 
-Such meanings, transient though they may be, are literal.}
-\cite{davidson_nice_1986}.
+Every deviation from ordinary usage, as long as it is agreed on for the moment [...] is in the passing theory as a feature of what the words mean on that occasion. 
+Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_nice_1986}.}
 
-\section{Introduction}
+\end{quote}
 
 \input{Introduction}
 
 \section{Model Overview}
-
-%[omitted.]
 
 \input{ModelOverview}
 
@@ -103,12 +101,14 @@ Such meanings, transient though they may be, are literal.}
 
 \input{Conclusion}
 
-
 \section{\bf Acknowledgments}
 \small
 
 \bibliography{ref}
 \bibliographystyle{apacite}
 
+\section*{Appendix A: RSA details}
+
+\rdh{Mention (1) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects), and (2) argue for where expectation should go and why... appeal to leon's paper, but also give proof that it leads to weird prior in some contexts?}
 
 \end{document}  
