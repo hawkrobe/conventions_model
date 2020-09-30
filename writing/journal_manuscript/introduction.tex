@@ -2,19 +2,25 @@
 % 4 paragraph intro
 
 To communicate successfully, speakers and listeners must share a common system of semantic meaning in the language they are using. 
-These meanings are \emph{conventional} in the sense that they are sustained by stable prior expectations each person has about others in their community, including complete strangers \cite{lewis_convention:_1969, hawkins2019emergence}.
+These meanings are \emph{social conventions} in the sense that they are sustained by stable prior expectations each person has about others in their community, including about complete strangers \cite{lewis_convention:_1969, hawkins2019emergence}.
 An English speaker may order an ``espresso'' at any café in the United States and expect to receive roughly the same drink.
 
 At the same time, meaning is remarkably flexible and \emph{partner-specific}.
-The same words may be interpreted differently by different listeners, and may take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}. 
+The same words may be interpreted differently by different listeners. 
 Interactions between friends and colleagues are filled with proper names, technical jargon, slang, shorthand, and inside jokes, many of which are unintelligible to outside observers.
+Words may even take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}.
 
 The tension between these two basic observations has posed a challenging puzzle for theories of convention.
-Computational accounts seeking to explain how conventions emerge do not typically allow for partner-specific meaning at all: agents are assumed to update a monolithic representation of language \cite{steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
-Conversely, accounts emphasizing coordination on partner-specific meaning via common ground typically do not provide a mechanism by which community-wide conventions may form.
-According to the philosopher Donald Davidson, for example, it is the ability to coordinate on \emph{partner-specific} meanings that is ultimately responsible for successful communication, since no two individuals will ever share exactly the same conventional meanings \cite{davidson1984communication,davidson_nice_1986}\footnote{This line of argument led Davidson to memorably claim that ``there is no such thing as a language.'' In his terminology, the system of meanings derived from conventional expectations is called the agent's \emph{prior} theory, while the ad hoc systems they form against the backdrop of interaction with a particular partner is called their \emph{passing} theory. We maintain this important distinction, but will instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, consistent with our claim that prior theories and passing theories belong to the same unified structure.}.
+Influential computational accounts explaining how conventions emerge in populations \cite<e.g.>{skyrms2010signals,steels2011modeling,barr_establishing_2004,young_evolution_2015} typically do not allow for partner-specific meaning at all.
+These accounts examine groups of interacting agents who update their representation of language after each interaction.
+While the specific update rule ranges from simple associative mechanisms \cite<e.g.>{steels_self-organizing_1995} or heuristics \cite<e.g>{Young96_EconomicsOfConvention} to sophisticated deep reinforcement learning algorithms \cite{tieleman2019shaping,graesser2019emergent,mordatch2017emergence}, all of these accounts assume that agents update a single, monolithic representation of language to be used with every partner, and that agents do not (knowingly) interact repeatedly with the same partner.
 
-In this paper, we propose a theory of convention formation that reconciles community-level consensus with partner-specific common ground through the process of meta-learning.
+Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} and partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} typically do not provide mechanisms by which community-wide conventions may arise over longer timescales.
+The philosopher Donald Davidson articulated one of the most radical of these accounts.
+According to \citeA{davidson1984communication,davidson_nice_1986}, it is exclusively the ability to coordinate on \emph{partner-specific} meanings that is ultimately responsible for successful communication.
+This line of argument led \citeA{davidson_nice_1986} to memorably conclude that ``there is no such thing as a language'' (p.~265).\footnote{ In Davidson's terminology, the system of meanings derived from conventional expectations is called the agent's \emph{prior} theory, while the ad hoc systems they form are called their \emph{passing} theories. We maintain this distinction, but instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, respectively.}.
+
+In this paper, we propose a theory of convention formation that reconciles community-level consensus with partner-specific common ground in a unified cognitive model.
 We begin by formalizing the computational problem facing agents who must communicate with one another in a variable and non-stationary world. 
 We argue that three core cognitive mechanisms are needed for an agent to solve this problem: 
 \begin{enumerate}
@@ -27,21 +33,12 @@ We argue that three core cognitive mechanisms are needed for an agent to solve t
 %\item \textbf{Rapid adaptation:} Within a few minutes of conversation, we can considerably strengthen our expectations about our partner's lexicon based on earlier utterances and feedback, and adjust our own usage accordingly. For example, even if we are not initially familiar with the term \emph{sclerotic aorta}, a few minutes spent discussing the condition in simpler terms should make us more confident using the term with that partner in the future. This social learning mechanism must allow for signal \emph{reduction} -- simpler, more efficient ways of referring to the same thing over time -- and \emph{path-dependence}: early reinforcement of certain meanings increases their later usage, however arbitrary or provisional they began. 
 %\item \textbf{Generalization:} When we encounter the same partner in a new context, we should expect some `stickiness' from previous learning. Language does not reset at context boundaries. In addition, the lexical model we've learned within a conversation should be largely \emph{partner-specific}. Just because we now expect Partner A to be familiar with a \emph{sclerotic aorta} shouldn't radically change our expectations about Partner B. Over enough interactions with different language users, however, our initial representations should be able to shift to take these data into account. To generalize appropriately, we must be able to correctly attribute whether a usage is idiosyncratic to a particular speaker, or a global convention we should expect to hold across the whole community.
 %\end{enumerate}
-We show that a hierarchical Bayesian model satisfies these desiderata and successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: (P1) gradual reduction to simpler and more efficient referring expressions in dyadic interaction with a single partner, (P2) context-sensitivity in the content of which conventions form, and (P3) the gradient of partner-specificity and generalization in the emergence of conventions in small networks.
+Finally, we show that a hierarchical Bayesian model satisfies these desiderata and successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: (P1) gradual reduction to simpler and more efficient referring expressions in dyadic interaction with a single partner, (P2) context-sensitivity in the content of which conventions form, and (P3) the gradient of partner-specificity and generalization in the emergence of conventions in small networks.
 
-\subsection{Theoretical approaches to adaptation and convention}
+\rdh{Signpost rest of intro here: In the remainder of this section, we introduce... }
 
-\rdh{I decided to save the empirical background for each phenomenon for the specific section intros... But maybe it's a good place to put general background about repeated reference games as a paradigm?}
+\subsection{Evidence from repeated reference games}
 
-\paragraph{Priming-based theories of dyadic alignment}
+These phenomena have largely been explored using the \emph{repeated reference game} paradigm...
 
-According to the \emph{interactive alignment} account \cite{pickering2004toward,pickering2006alignment, garrod2009joint}, coordination on higher-level mental representations proceeds primarily through automatic and egocentric priming of surface statistics at lower levels. 
-By appealing to classic spreading-activation connectionist models \cite<e.g.>{roelofs1992spreading}, \citeA{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate to strengthen higher semantic levels of representation \cite{pickering1998representation}.
-Thus, unconsciously coupling word choices \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} in dialogue could potentially contribute to the coordination of higher-level semantic representations.
-%It does not make predictions about partner-specificity, since in principle priming is a non-social accessibility-based mechanism.
-
-\paragraph{Agent-based theories of consensus}
-
-Agent-based models use simple update rules derived from reinforcement learning to update a monolithic model after each interaction \cite<see>{skyrms2010signals}.
-\citeA{spike_minimal_2017} distill three common features of these accounts: (1) creation and transmission of referential information, (2) a systemic bias against ambiguity, and (3) some form of information loss.
-Critically, for our purposes, these models do not explicitly represent uncertainty about the meanings used by partners and do not represent the identity of those partners.
+\rdh{Introduce paradigm here, and briefly mention these three key phenomena, enough for }
