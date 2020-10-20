@@ -13,35 +13,19 @@
 \end{figure*}
 
 In the previous section, we examined a mechanism for rapid, partner-specific learning that allows agents to form stable but arbitrary \emph{ad hoc} conventions. 
-While a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions for a meaning are equally likely in practice, or even that all meanings are equally likely to become conventionalized in the first place \cite{HawkinsGoldstone16_SocialConventions}.
-
-For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have labels exclusively referring to each individual tree in our yard.
-If we need to refer to a specific tree, we instead create a referring expression \emph{on the fly.}
+Here, we show how our model also accounts for key patterns of \emph{context-sensitivity} as arising naturally from communicative need in dyadic interaction.
+For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have labels exclusively referring to each individual tree in our yards.
+If we need to refer to a specific tree, we instead create a referring expression \emph{on the fly} (e.g. ``the one with the bright red leaves close to the street'').
 Meanwhile, we \emph{do} often have conventionalized labels (i.e. proper nouns) for individual people and places that we regularly encounter in our daily lives.
 Why do conventions form at some levels of abstraction rather than others?
-Here, we show how our proposed theory accounts for these key patterns of \emph{context-sensitivity} as arising naturally from communicative need in dyadic interaction.
 
-In particular, functional accounts of linguistic conventions have frequently observed that lexical systems are well-calibrated to the statistics of the environment \cite{gibson2019efficiency}.
-This ``optimal expressivity'' hypothesis has accounted well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{KempRegier12_KinshipCategories,regier201511,gibson2017color,kemp2018semantic}, as well as the compositional systems that emerge under iterated learning with communication in the lab \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication}. 
-For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{regier2016languages}. 
-
-Thus, while there is abundant evidence for context-sensitivity in the \emph{outcomes} that result from convention formation processes, it is currently unclear what cognitive mechanisms are necessary to give rise to such outcomes.
-That is, context-sensitivity has not yet been grounded in a cognitive and mechanistic account of the processes unfolding in the minds of individual agents as they interact.
-Our inferential account hypothesizes that local context shapes the conventionalization process through the mechanisms of pragmatic reasoning over the shorter timescales of dyadic interactions.
-%While our hypothesis about ad hoc conventionalization specifically concerned the shorter timescales of dyadic interaction, similar pressures may operate over the multi-generational timescales of cultural evolution. %,  operate on the shorter timescales of dyadic interaction. 
-%Better understanding the effect of context on local conventions rapidly formed by adaptive agents over extended interactions may therefore be valuable for understanding how \emph{languages} are globally shaped by communicative constraints.
-%Recent computational approaches to language evolution have argued that the lexical conventions of languages balance simplicity, or learnability, with the communicative needs of their users over longer timescales. 
-%% Hypothesis
-%Under the logic of a local efficiency/informativity tradeoff, we make two predictions about the emergence of abstractions in dyads. 
-
-
-First, we fill a gap in the empirical literature by collecting a new dataset of human interactions under different environmental statistics.
-This experiment manipulates the context of distractors in a repeated reference game where participants must interactively coordinate on an artificial language from scratch. %\cite<e.g.>{GalantucciGarrod11_ExperimentalSemiotics}.
-% which allows us to examine the conventions that form in different communicative contexts.
-Second, we compare different model predictions by reporting simulations of artificial agents interacting in the same contexts.
-In both the empirical data and simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success. 
-Furthermore, we find that pragmatic reasoning is necessary for these effects to arise. 
-%% Example that sets up our specific hypothesis?
+We hypothesize that local context shapes conventions through the mechanisms of pragmatic inference over the shorter timescales of dyadic interactions.
+When a particular partner uses a label to refer to an object in a context, we can infer that they do not believe it applies to the distractors as well; otherwise, they would have known it would be confusing and chosen a different label.
+First, we fill a gap in the empirical literature by collecting a new dataset of artificial-language repeated reference games manipulating context, allowing us to observe the emergence of \emph{ad hoc} conventions in the absence of global priors.
+%This experiment manipulates the context of distractors in a repeated reference game where participants must interactively coordinate on an artificial language from scratch. 
+Second, we show that context-sensitivity naturally emerges from our inferential account, via recursive pragmatic reasoning in the likelihood term agents use throughout coordination.
+In both the empirical data and our model simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success. 
+Furthermore, we find that pragmatic reasoning is needed for these effects to arise. 
 
 %Suppose, mixing thought experiments from \citeA{Wittgenstein09_PhilosophicalInvestigations} and \citeA{Quine13_WordAndObject}, that two travelers meet in a forest, with no language in common. One is cooking dinner, and the other agrees to help in exchange for food and shelter. What kind of micro-language do they coordinate on to solve this joint task, and how is it shaped by context? 
 			
@@ -192,7 +176,7 @@ After the first repetition block, however, agents in the coarse condition begin 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.75]{evolution.pdf}
-\caption{Proportion of terms at different levels of abstraction in different conditions }
+\caption{Proportion of terms at different levels of abstraction in our model's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of basic-level terms; in the fine condition, however, agents become more confident of subordinate terms.}
 \label{fig:evolution}
 \end{center}
 \end{figure}
