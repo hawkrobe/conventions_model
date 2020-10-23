@@ -1,24 +1,54 @@
 
-\begin{figure}[t!]
-\includegraphics[scale=0.4]{./figures/task1_model.pdf}
-\caption{Schematic of hierarchical Bayesian model.}
-\label{fig:model_schematic}
-\end{figure}
 
-In this section, we provide an explicit computational account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
-%Our model is based on three basic principles: 
-%
-%\begin{enumerate}
-%\item \emph{lexical uncertainty}: beliefs about the underlying conventions used by other agents are represented and updated probabilistically \cite{bergen_pragmatic_2016}
-%\item \emph{pragmatic reasoning}: agents expect other agents to use language in a cooperative manner, and do so themselves  \cite{GoodmanFrank16_RSATiCS}
-%\item \emph{inductive learning}: agents expect their social world to be structured, such that common beliefs may be shared even by individuals they have never met \cite{}
-%\end{enumerate}
-%We formalize the mechanisms of uncertainty, adaptation, and generalization in a hierarchical Bayesian model.
+
+In this section, we propose an explicit mathematical account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
+We begin by specifying the computational problem facing communicative agents.
+Classically, this problem has been formalized as a coding and compression problem \cite{Shannon48}. 
+An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
+More recently, this fundamental transmission problem has been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages \cite{FrankeJager16_ProbabilisticPragmatics,goodman_pragmatic_2016}.
+These formulations of the problem share the assumption that the speaker and listener share roughly the same literal ``protocol'' for encoding and decoding messages.
+We highlight two computational problems that complicate this assumption, which we take as motivation for an account where this assumption must be relaxed. 
+
+\paragraph{Two challenges for communication}
+
+The first computational challenge is \emph{variability} in linguistic meaning throughout a language community. 
+Different listeners may recover systematically different meanings from the same message, and different speakers may encode the same message in different ways.
+For example, doctors may fluently communicate with one another about medical conditions using terminology that is meaningless to a patient; the vocabulary itself may be unfamiliar, and even everyday words may be used in non-standard ways.
+That is, being fluent speakers of the same language does not ensure perfect overlap for the relevant meanings that need to be transmitted in every context.
+
+The second challenge is the \emph{non-stationarity} of the world. 
+Agents are continually presented with new thoughts, feelings, and entities, which they may not already have efficient conventions to talk about.
+For example, when new technology is developed, the community of developers and early adopters must find ways of referring to new concepts (e.g. \emph{e-mailing}, the \emph{Internet}). 
+Or, when researchers are designing a new experiment with multiple conditions, collaborators must find ways of referring to their own \emph{ad hoc} abstractions, often converging on idiosyncratic names.
+That is, any fixed protocol would be quickly outdated; we must have some ability to extend our systems of meaning.
+
+Our model is motivated by these fundamental challenges.
+Rather than assuming a monolithic, universally shared system of meaning, we argue that agents must handle the challenges of variability and non-stationary by attempting to continually, dynamically \emph{infer} the system of meaning used by their partner.
+When all agents are continually learning, we show that they are not only able to locally coordinate with specific partners but also able to abstract away shared structure representing communal linguistic conventions.
+We present our hierarchical Bayesian model of coordination in three steps, corresponding to three basic cognitive mechanisms: uncertainty, partner-specific learning, and inductive generalization.
+
+\paragraph{Mechanism \#1: Uncertainty} 
+
+When we first encounter a new communication partner in a new context, we call upon some representation about what we think different signals mean to them. 
+In our account, this representation is given by $P(\Theta)$, the global background prior.
+While we are agnostic to the exact function parameterized by $\Theta$, there are two properties that our account emphasizes.
+First, this representation of meaning must be sensitive to the overall statistics of the population: there is more consensus about the meaning of \emph{dog} than the meaning of \emph{sclerotic aorta} in the general population. 
+Second, this representation should also, in principle, be sensitive to the identity of the partner: a cardiologist should have different expectations about a new colleague than a new patient.
+
 We begin with the assumption of \emph{lexical uncertainty} \cite{smith_learning_2013,bergen_pragmatic_2016}. 
 Instead of assuming meanings are shared in common ground, we assume each agent has uncertainty over the exact meaning of words to their partner.
 Critically, in a hierarchical model, this uncertainty is represented by a multi-level prior. 
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis" about the overall distribution of possible partners. 
 $\Theta$ then parameterizes the agent's \emph{partner-specific} uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meaning used by partner $k$ (see Fig. \ref{fig:model_schematic}). 
+
+\paragraph{Mechanism \#2: Rapid learning}
+
+\begin{figure}[t!]
+\includegraphics[scale=0.4]{./figures/task1_model.pdf}
+\vspace{1em}
+\caption{Schematic of hierarchical Bayesian model.}
+\label{fig:model_schematic}
+\end{figure}
 
 Given observations $D_k$ from interactions with partner $k$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
 \begin{equation}
@@ -54,7 +84,7 @@ Second, agents do not only make passive inferences from data, they actually \emp
 We assume that production and comprehension is also guided by Gricean principles.
 
 %In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
-More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{frank_predicting_2012,GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to trade off informativity to an imagined listener against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of a speaker to infer the intended target.
+More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to trade off informativity to an imagined listener against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of a speaker to infer the intended target.
 This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, who identifies the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$.
 For any utterance $u$ and world state $o$, the function $\mathcal{L}$ function returns the extent to which $u$ applies to $o$.\footnote{While this function is traditionally a binary truth-conditional variable, $\mathcal{L}_{\phi_k}: (u,o) \rightarrow \{0,1\}$, recent work has also argued for a continuous semantics mapping to the full real interval $[0,1]$  \cite{degen2020redundancy}}
 
