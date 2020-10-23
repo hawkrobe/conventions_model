@@ -9,17 +9,17 @@ An English speaker may order an ``espresso'' at any café in the United States a
 At the same time, meaning can be remarkably flexible and \emph{partner-specific}.
 The same words may be interpreted differently by different listeners. 
 Interactions between friends and colleagues are filled with proper names, technical jargon, slang, shorthand, and inside jokes, many of which are unintelligible to outside observers.
-Words even take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}.
+Furthermore, words easily take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}.
 
 The tension between these two basic observations has posed a challenging and persistent puzzle for theories of convention.
 Influential computational accounts explaining how social conventions emerge in populations \cite<e.g.>{skyrms2010signals,steels2011modeling,barr_establishing_2004,young_evolution_2015} typically do not allow for partner-specific meaning at all.
 These accounts examine groups of interacting agents who update their representation of language after each interaction.
 While the specific update rules range from simple associative mechanisms \cite<e.g.>{steels_self-organizing_1995} or heuristics \cite<e.g>{Young96_EconomicsOfConvention} to sophisticated deep reinforcement learning algorithms \cite{tieleman2019shaping,graesser2019emergent,mordatch2017emergence}, all of these accounts assume that agents update a single, monolithic representation of language to be used with every partner, and that agents do not (knowingly) interact repeatedly with the same partner.
 
-Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} and partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} typically do not provide mechanisms by which community-wide conventions may arise over longer timescales.
+Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} and partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} typically do not specify mechanisms by which community-wide conventions may arise over longer timescales.
 The philosopher Donald Davidson articulated one of the most radical of these accounts.
-According to \citeA{davidson1984communication,davidson_nice_1986}, it is exclusively the ability to coordinate on \emph{partner-specific} meanings that is ultimately responsible for successful communication.
-This line of argument led \citeA{davidson_nice_1986} to memorably conclude that ``there is no such thing as a language'' (p.~265), and to abandon appeals to convention altogether\footnote{ In Davidson's terminology, the system of meanings given by from convention is called the agent's \emph{prior} theory, while the ad hoc systems they form with their partner on the fly are called their \emph{passing} theories. We maintain this distinction, but instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, respectively, to emphasize their commonality.}.
+According to \citeA{davidson1984communication,davidson_nice_1986,davidson1994social}, it is exclusively the ability to coordinate on \emph{partner-specific} meanings that is ultimately responsible for successful communication.
+This line of argument led \citeA{davidson_nice_1986} to memorably conclude that ``there is no such thing as a language'' (p.~265), and to abandon appeals to convention altogether \cite<see also>[for discussion]{heck_idiolect,lepore2007reality,hacking1986nice,dummett1994}.%\footnote{ In Davidson's terminology, the system of meanings given by from convention is called the agent's \emph{prior} theory, while the ad hoc systems they form with their partner on the fly are called their \emph{passing} theories. We maintain this distinction, but instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, respectively, to emphasize their commonality.}.
 
 In this paper, we propose a theory of coordination and convention that reconciles community-level consensus with partner-specific common ground in a unified cognitive model.
 We begin by formalizing the computational problem facing agents who must communicate with one another in a variable and non-stationary world. 
@@ -51,20 +51,21 @@ On each trial, the speaker is asked to produce a referring expression $u$ --- ty
 Critically, a \emph{repeated reference game} asks them to refer to the same targets multiple times as they build up a shared history of interaction, or \emph{common ground,} with their partner (see Table \ref{table:parameters} in Appendix for a review of the different axes along which the design may varied).
 
 Unlike general studies of referring expression generation, studies of coordination and convention use novel, ambiguous stimuli that participants do not already have strong conventions for.
-Unlike agent-based simulations of convention formation on large networks, which typically match agents with a new partner for each trial, repeated reference games ensure that participants maintain the same partner for the duration of the game.
-This design allows us to observe how the speaker's referring expressions for the same objects change as a function of interaction with a partner.
-We highlight three findings of particular significance.
+Unlike agent-based simulations of convention formation on large networks, which typically match agents with a new partner for each trial, repeated reference games ensure that participants maintain the same partner throughout an extended interaction.
+This design allows us to observe how the speaker's referring expressions for the same objects change as a function of interaction with that partner.
+We highlight three findings of particular theoretical significance in this literature.
 
 \paragraph{Increasing efficiency}
 
 The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964, ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
 The first time participants refer to a figure, they tend to use a lengthy, detailed description (``the upside-down martini glass in a wire stand'') but with a small number of repetitions -- between 3 to 6, depending on the pair of participants -- the description may be cut down to the limit of just one or two words (``martini''). 
 These final messages are as short or shorter than the messages participants choose to allow \emph{themselves} to choose the target in the future  \cite{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
-These observations set up our first puzzle of \emph{ad hoc} convention formation in dyads: how does a short word or phrase that would have been completely ineffective for communicating under the global conventions of a language become perfectly understandable over mere minutes of interaction? 
+These observations set up our first puzzle of \emph{ad hoc} convention formation in dyads: how does a short word or phrase that would have been ineffective for communicating under the global conventions of a language become perfectly understandable over mere minutes of interaction? 
 
 \begin{figure}[t!]
 \centering
 \includegraphics[scale=1]{./figures/clark92}
+\vspace{1em}
 \caption{Results reproduced from Table 3 in \protect\citeA{wilkes-gibbs_coordinating_1992} showing evidence of both increasing efficiency and partner specificity.}
 \label{fig:clark92}
 \end{figure}
@@ -92,7 +93,7 @@ When are agents justified in transferring an \emph{ad hoc} convention formed wit
 One important empirical clue was provided by \citeA{fay_interactive_2010}, who examined the emergence of conventions in a lab experiment where communities of eight people played a repeated (non-linguistic) Pictionary game with each partner in turn, for a series of seven repeated reference games in a row. 
 Strikingly, while participants reverted to their initial messages with the first few partners, consistent with partner-specificity, the initial messages they sent to subsequent partners gradually converged closer to the final \emph{ad hoc} messages they used with previous partners, indicating a slow gradient of generalization mixed with partner-specificity.
 While promising, this work was limited by an extremely small sample size ($N = 4$ groups) and technical challenges facing the measurement of conventions in the graphical modality \cite<but see>{hawkins2019disentangling}.
-In the final section of this paper, we revisit this effect to test novel predictions of our model. 
+In the final section of this paper, we revisit this effect in light of novel predictions generated by our model. 
 
 
 

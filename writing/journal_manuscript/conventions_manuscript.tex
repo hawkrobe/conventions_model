@@ -85,7 +85,7 @@ Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_n
 
 \input{ModelOverview}
 
-\section{Phenomenon \#1: \\ Reduction in ad hoc conventions}
+\section{Phenomenon \#1: \\ Increasing efficiency in ad hoc conventions}
 
 \input{Reduction}
 
@@ -106,6 +106,55 @@ Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_n
 
 \bibliography{ref}
 \bibliographystyle{apacite}
+
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\thetable}{A\arabic{table}}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+
+
+
+
+\begin{table*}[th!]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{}                                   & \textbf{Parameter}                                              & \multicolumn{1}{l}{\textbf{Example parameter settings}}                 \\ \midrule
+\multirow{11}{*}{\textbf{Partner design}}    & \multirow{3}{*}{What feedback is provided?}                & - no feedback at all                                                  \\
+                                            &                                                                 & - only correct/incorrect                                                   \\
+                                            &                                                                 & - real-time responses from partner                                         \\ \cmidrule(l){2-3} 
+                                            & \multirow{3}{*}{Are you playing with the same partner?}         & - same partner for whole game                                              \\
+                                            &                                                                 & - swap out partners every round                                            \\
+                                            &                                                                 & - swap after $k$ rounds                                                    \\ \cmidrule(l){2-3} 
+                                            & \multirow{3}{*}{What do you know about your partner?}         & - anonymous stranger                                              \\
+                                            &                                                                 & - stranger with perceptual information                                            \\
+                                            &                                                                 & - close friend                                                    \\ \cmidrule(l){2-3}                                             
+                                            & \multirow{2}{*}{How consistent are roles across repetitions?}   & - consistent director/matcher                                              \\
+                                            &                                                                 & - alternate roles each round                                               \\ \midrule
+\multirow{7}{*}{\textbf{Stimulus design}}   & \multirow{2}{*}{How familiar are targets?}                      & - very familiar: colors, household objects                                 \\
+                                            &                                                                 & - not at all familiar: tangrams, novel line drawings                       \\ \cmidrule(l){2-3} 
+                                            & \multirow{2}{*}{How complex are targets?}                       & - very complex: busy visual scenes, clips of music                         \\
+                                            &                                                                 & - not at all complex: geometric drawings                                   \\ \cmidrule(l){2-3} 
+                                            & \multirow{3}{*}{How consistent are targets across repetitions?} & - exact same image of object                                               \\
+                                            &                                                                 & - different pose/view of same object                                       \\
+                                            &                                                                 & - different objects from same neighborhood                                 \\ \midrule
+\multirow{5}{*}{\textbf{Context design}}    & \multirow{2}{*}{How similar are distractors to the target?}     & - very similar: same basic-level category                                  \\
+                                            &                                                                 & - not at all similar: other categories                                     \\ \cmidrule(l){2-3} 
+                                            & What is the size of context?                                    & - between 2 and 21                                                         \\ \cmidrule(l){2-3} 
+                                            & \multirow{2}{*}{How consistent is context across repetitions?}  & - exact same context each round                                            \\
+                                            &                                                                 & - randomized context (sometimes far, sometimes close)                      \\ \midrule
+\multirow{3}{*}{\textbf{Repetition design}} & How many repetitions per target?                                & - between 3 and 100                                                        \\ \cmidrule(l){2-3} 
+                                            & \multirow{2}{*}{What is spacing between repetitions?}           & - block structure                                                          \\
+                                            &                                                                 & - sequential structure with interspersed contexts                          \\ \midrule
+\textbf{Modality design}                    & What medium is used for communication?                          & \begin{tabular}[c]{@{}l@{}}- text\\ - audio\\ - gesture\\ - drawing\end{tabular} \\ \bottomrule
+\end{tabular}%
+}
+\caption{\normalfont{Proposed parameterization for repeated reference games, each of which theoretically impacts the formation of conventions.}}
+\label{table:parameters}
+\end{table*}
+
 
 \section*{Appendix A: RSA details}
 
