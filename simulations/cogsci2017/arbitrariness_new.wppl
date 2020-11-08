@@ -7,11 +7,11 @@ var meanings = ['null', 'shape', 'circle', 'square'];
 var numMeanings = meanings.length;
 
 var params = {
-  speakerAlpha : 10,
-  listenerAlpha: 5,
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  discountFactor: argv.discountFactor,  
   epsilon: 0.000001,
-  coord: argv.coord,
-  discountFactor: argv.discountFactor,
+  coord: 'diff',
   costWeight: 0,
   numTrials: 10,
   utterances: utterances.concat('null'),
