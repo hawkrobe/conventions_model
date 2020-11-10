@@ -13,12 +13,12 @@ var params = {
   epsilon: 0.000001,
   coord: 'diff',
   costWeight: 0,
-  numTrials: 10,
+  numTrials: 20,
   utterances: utterances.concat('null'),
   objects: objects
 };
 
-var pragStr = ('discount:' + params.discountFactor + '_coord:' + params.coord);
+var pragStr = ('discount:' + params.discountFactor);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
 csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
 
@@ -74,7 +74,7 @@ var L = function(utt, context, posterior) {
 };
 
 var updatePosterior = function(data) {
-  return Infer({method: 'MCMC', samples:2500,burn:10000,lag:2, model : function() { // 
+  return Infer({method: 'MCMC', samples:1000,burn:1000,lag:2, model : function() { // 
 
     // Implement simplicity prior (smaller lexicons preferred)
     var lexicon = sampleLexicon();
@@ -106,7 +106,7 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
 };
 
 // for each point in data, we want the model's predictions 
-var iterate = function(outputFile, dataSoFar) {
+var iterate = function(iterationNum, outputFile, dataSoFar) {
   var trialNum = dataSoFar[1].length;
   var currTrial = {
     intendedName: uniformDraw(objects),
@@ -133,7 +133,7 @@ var iterate = function(outputFile, dataSoFar) {
   display('top listener choice is ' + topListenerChoice);
   display('intended: ' + currTrial.intendedName);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
+  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
                  topListenerChoice == currTrial.intendedName
@@ -148,7 +148,7 @@ var iterate = function(outputFile, dataSoFar) {
   }, [currTrial.speakerID, currTrial.listenerID]));
 
   if(currTrial.trialNum < params.numTrials) {
-    iterate(outputFile, newDataSoFar);
+    iterate(iterationNum, outputFile, newDataSoFar);
   } 
 };
 
@@ -156,7 +156,9 @@ var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '.csv')
 csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
-iterate(f, {1: [], 2: []});
+map(function(i) {
+  iterate(i, f, {1: [], 2: []});
+}, _.range(1000));
 csv.close(f);
 
 console.log('running posttest')
