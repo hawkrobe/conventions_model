@@ -3,6 +3,8 @@
 \usepackage{graphicx}
 \usepackage[outdir=./]{epstopdf}
 %\DeclareGraphicsExtensions{.eps}
+\usepackage{caption}
+\captionsetup{font=footnotesize}
 
 \usepackage{mathtools}
 \usepackage{enumerate}
@@ -17,14 +19,14 @@
 \usepackage{booktabs}
 
 
+\synctex=1
+\usepackage{soul}
+
 \newcommand{\den}[2][]{
 \(
 \left\llbracket\;\text{#2}\;\right\rrbracket^{#1}
 \)
 }
-
-\synctex=1
-\usepackage{soul}
 
 \newcommand{\KL}[2]{\ensuremath{D_{KL}({#1}\, \| \, {#2})}}
 \newcommand{\E}[2]{\ensuremath{\mathbb{E}_{#1}\left [#2 \right]}}
@@ -73,15 +75,15 @@
 As speaker and interpreter talk, their ``prior'' theories become more alike; so do their ``passing'' theories. 
 %The asymptote of agreement and understanding is when passing theories coincide. 
 %But the passing theory cannot in general correspond to an interpreter’s linguistic competence. 
-Not only does it have its changing list of proper names and gerrymandered vocabulary, but it includes every successful use of any other word or phrase, no matter how far out of the ordinary. 
-Every deviation from ordinary usage, as long as it is agreed on for the moment [...] is in the passing theory as a feature of what the words mean on that occasion. 
+Not only does it have its changing list of proper names and gerrymandered vocabulary, but it includes every successful use of any other word or phrase, no matter how far out of the ordinary [...] 
+%Every deviation from ordinary usage, as long as it is agreed on for the moment [...] is in the passing theory as a feature of what the words mean on that occasion. 
 Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_nice_1986}.}
 
 \end{quote}
 
 \input{Introduction}
 
-\section{Model Overview}
+\section{Convention formation as\\ hierarchical Bayesian inference}
 
 \input{ModelOverview}
 
@@ -155,9 +157,30 @@ Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_n
 \label{table:parameters}
 \end{table*}
 
+\normalsize
 
 \section*{Appendix A: RSA details}
 
-\rdh{Mention (1) how we ensure normalization is well-defined w/ null utterance (i.e. handling case where a word doesn't apply to any of the objects), and (2) argue for where expectation should go and why... appeal to leon's paper, but also give proof that it leads to weird prior in some contexts?}
+Our setting poses several technical challenges for the Rational Speech Act (RSA) framework.
+In this Appendix, we describe these challenges in more detail and justify our choices.
+
+First, when we allow the full space of Boolean lexicons $\phi$, we must confront settings where an utterance $u$ does not apply to any of the objects under the given lexicon, i.e. where $\mathcal{L}_\phi(o, u) = -\infty$ for all $o\in \mathcal{C}$. 
+In this case, the normalizing constant is zero, and the literal listener distribution is not well-defined.
+A similar problem may arise when no utterance in the speaker's repertoire is true of the target, in which case the $S_1$ distribution is not well-defined.
+One possible solution is instead to use a `softer' Boolean semantics in the literal listener, where a Boolean value of false does not strictly rule out an object but instead assigns a very low numerical score, e.g. 
+$$\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 0 & \textrm{if $o \in $\den{u}$_\phi$} \\ -100 & \textrm{o.w.} \end{array}\right.$$
+This formulation assigns negligible listener probability to objects where $u$ is false whenever there is at least one $o\in\mathca{C}$ where $u$ is true, but allows the normalization constant to be non-zero even when $u$ is false for all objects in context.
+At the same time, this `soft' semantics leads to unexpected and unintuitive consequences at the level of the pragmatic speaker. 
+After renormalization in $L_0$, an utterance $u$ that fails to refer to any object in context is also by definition equally \emph{successful} for all objects, leading to a uniform probability distribution.
+Consequently, when $S_1$ reasons about this listener, an utterance that is literally false in the lexicon may be preferred over some true utterances.
+
+Rather than using `soft' semantics, we ensure that the normalization constant is well-defined  using another method.
+Following \citeA{bergen_pragmatic_2016}, we define (1) a `null' utterance, which is true of all objects, and (2) a `null' object, for which all utterances are true. 
+We add this fixed null utterance to every lexicon, and add this fixed null object to every context.
+Two consequences follow: (1) when a particular utterance does not apply to any object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen under the $L_0$ and (2) when no utterances apply to the target object, the speaker will fall back on the `null' utterance.
+Intuitively, the null utterance can be interpreted as choosing not to speak, and the null object can be interpreted as recognizing a failure to refer to anything.
+
+
+\rdh{(2) argue for where expectation should go and why... appeal to leon's paper, but also give proof that it leads to weird prior in some contexts?}
 
 \end{document}  
