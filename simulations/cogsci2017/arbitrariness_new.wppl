@@ -100,13 +100,12 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
 var iterate = function(iterationNum, outputFile, dataSoFar) {
   var trialNum = dataSoFar[1].length;
   var currTrial = {
-    intendedName: (trialNum % 2) == 0 ? objects[0] : objects[1],
+    intendedName: uniformDraw(objects),
     context : objects,
     trialNum: trialNum,
     speakerID: (trialNum % 2) == 0 ? 1 : 2,
     listenerID: (trialNum % 2) == 0 ? 2 : 1
   };
-  console.log(currTrial);
   // run VI on current data
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
   var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID]);
@@ -119,12 +118,12 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   var topListenerChoice =  sample(listenerOutput);
 
   postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
-  display('context is ' + currTrial.context);
-  display('speaker distribution')
-  display(speakerOutput);
-  display('listener distribution')
-  display(listenerOutput)
-  display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  // display('context is ' + currTrial.context);
+  // display('speaker distribution')
+  // display(speakerOutput);
+  // display('listener distribution')
+  // display(listenerOutput)
+  // display('correct? ' + (topListenerChoice == currTrial.intendedName));
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
