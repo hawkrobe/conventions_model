@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(tidyboot)
+```
+
+```{r}
+d <- read_csv('../simulations/cogsci2017/output/arbitrariness_trajectories.csv') 
+```
+
+```{r}
+d.boot <- d %>%
+  group_by(speakerAlpha, listenerAlpha, discountFactor, time) %>%
+  summarize(empirical_stat = mean(correct)) %>%
+  ungroup()
+
+d.boot %>%
+  mutate(discountFactor = factor(discountFactor)) %>%
+  ggplot(aes(x = time, y = empirical_stat, color = discountFactor, group = discountFactor)) +
+    geom_line() +
+    geom_hline(yintercept = c(.5, 1), linetype = 'dotted') +
+    facet_grid(listenerAlpha ~ speakerAlpha) +
+    theme_few() +
+    scale_color_manual(values = c('#9ecae1', '#3182bd', '#08519c')) +
+    theme(aspect.ratio = 1) +
+    labs(y = '% accuracy')
+    #geom_smooth(method = 'lm', formula = 'y ~ poly(x,2)', se = F)
+
+ggsave('../writing/journal_manuscript/figures/arbitrariness_grid.pdf', 
+       width = 8, height = 6, unit ='in')
+```
