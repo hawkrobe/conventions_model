@@ -1,58 +1,61 @@
 
-
-\paragraph{Two challenges for communicative agents}
-
-In this section, we propose an explicit mathematical account of the cognitive mechanisms supporting the balance between community-level stability and partner-specific flexibility.
-We begin by specifying the core computational problem facing communicative agents.
+In this section, we propose an explicit computational account of the cognitive capacities that support the balance between community-level stability and partner-specific flexibility.
+We begin by specifying the core computational problem people must solve to achieve successful communication.
 Classically, this problem has been formalized in terms of coding and compression \cite{Shannon48}. 
 An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
 More recently, this literal transmission problem has been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages \cite{FrankeJager16_ProbabilisticPragmatics,goodman_pragmatic_2016}.
 These formulations share a key assumption: that the speaker and listener share roughly the same literal ``protocol'' for encoding and decoding messages.
-We highlight two under-appreciated computational challenges that complicate this assumption. %, which we take as motivation for an account where this assumption must be relaxed. 
+Our account is motivated by two under-appreciated challenges of communication that complicate this assumption. 
 
-The first computational challenge for agents is \emph{variability} in linguistic meaning throughout a language community. 
+\subsection{Core challenges facing communicative agents}
+
+The first challenge we highlight is \emph{variability} in linguistic meaning throughout a language community. 
 Different listeners may recover systematically different meanings from the same message, and different speakers may encode the same message in different ways.
 For example, doctors may fluently communicate with one another about medical conditions using terminology that is meaningless to a patient; the vocabulary itself may be unfamiliar, and even everyday words may be used in non-standard ways.
 That is, being fluent speakers of the same language does not ensure perfect overlap for the relevant meanings that need to be transmitted in every context.
 
-The second challenge for agents is the \emph{non-stationarity} of the world. 
+The second challenge is the \emph{non-stationarity} of the world. 
 Agents are continually presented with new thoughts, feelings, and entities, which they may not already have efficient conventions to talk about.
-For example, when new technology is developed, the community of developers and early adopters must find ways of referring to new concepts (e.g. \emph{e-mailing}, the \emph{Internet}). 
-Or, when researchers are designing a new experiment with multiple conditions, collaborators must find ways of referring to their own \emph{ad hoc} abstractions, often converging on idiosyncratic names.
-That is, any fixed protocol would be quickly outdated; we must have some ability to extend our systems of meaning.
+For example, when new technology is developed, the community of developers and early adopters must find ways of referring to the new concepts they are working on (e.g. \emph{e-mailing}, \emph{the Internet}). 
+Or, when researchers design a new experiment with multiple conditions, they must find ways of talking about their own \emph{ad hoc} abstractions, often converging on idiosyncratic names that can be used seamlessly in meetings.
+That is, any fixed protocol would be quickly outdated; we must have some ability to extend our systems of meaning on the fly as needed.
 
-Our model aims to provide an explanation for how agents may solve these fundamental problems.
-Rather than assuming a monolithic, universally shared system of meaning, we argue that agents must handle the challenges of variability and non-stationary by attempting to continually, dynamically \emph{infer} the system of meaning used by their partner.
+%The model we present in this section aims to provide an explanation for how agents may  these fundamental problems.
+Rather than assuming a monolithic, universally shared system of meaning, we argue that agents solve the fundamental problems posed by variability and non-stationary by attempting to continually, dynamically \emph{infer} the system of meaning used by their partner in context.
 When all agents are continually learning, we show that they are not only able to locally coordinate with specific partners but also able to abstract away shared structure representing communal linguistic conventions.
-We introduce our model in three steps, corresponding to three basic cognitive mechanisms: uncertainty, partner-specific learning, and inductive generalization.
+We introduce our model in three steps, corresponding to three core capacities: uncertainty about meaning, online partner-specific learning, and inductive generalization.
 
-\paragraph{Uncertainty} 
+\paragraph{Uncertainty about meaning} 
 
-When an agent first encounters a new communication partner, they must call upon some representation about what they expect different signals will mean to them. 
-We formalize this representation by a parameterized (lexical) meaning function $\mathcal{L}_{\phi}$ where different values of $\phi$ yield different possible systems of meaning\footnote{$\mathcal{L}$ is traditionally a truth-conditional function evaluating whether a given utterance is true or false of any entity. However, our formulation is also consistent with continuous semantics \cite{degen2020redundancy} as learned by a (grounded) neural network \cite{potts2019case}.}.
-Instead of assuming this function is shared perfectly in common ground (i.e. a fixed $\phi$), we assume each agent maintains \emph{uncertainty} over the exact meaning of words as used by their partner.
+When an agent encounters a communication partner, they must call upon some representation about what they expect different signals will mean to that partner. 
+We will denote a (lexical) meaning function by $\mathcal{L}_{\phi}$, where different values of $\phi$ yield different possible systems of meaning in a parameterized functional family\footnote{$\mathcal{L}$ is traditionally a truth-conditional function evaluating whether a given utterance is true or false of any state of the world. However, our formulation is also consistent with continuous semantics \cite{degen2020redundancy} as learned by a (grounded) neural network \cite{potts2019case}.}.
+While we will remain agnostic to the exact form of this function, there are two key computational desiderata we emphasize.
+First, given the challenge of variability, these expectations ought to be sensitive to the overall statistics of the population. 
+An agent should know that there is tighter consensus about the meaning of \emph{dog} than the meaning of, say, specialized medical terms like \emph{sclerotic aorta}, and conversely, should expect more consensus around how to refer to familiar concepts than new or ambiguous concepts.
+Second, this representation should also, in principle, be sensitive to the identity of the partner: a cardiologist should have different expectations about a long-time colleague than a new patient.
+
+First, to represent variability, these desiderata motivate a \emph{probabilistic} formulation.
+Instead of holding a single function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. a fixed $\phi$ for the whole population), we assume each agent maintains \emph{uncertainty} over the exact meaning of words as used by different partners.
 In a Bayesian framework, this uncertainty is specified by a prior probability distribution over possible values of $\phi$.
 
-While we will remain agnostic to the exact form of this prior, there are two desiderata we emphasize.
-First, these distributions ought to be sensitive to the overall statistics of the population: an agent should know that there is tighter consensus about the meaning of \emph{dog} than the meaning of \emph{sclerotic aorta} in the general population. 
-Second, this representation should also, in principle, be sensitive to the identity of the partner: a cardiologist should have different expectations about a new colleague than a new patient.
-
-Critically, these desiderata suggest a hierarchical model, where uncertainty is represented by a multi-level prior. 
+Second, to represent partner-specificity, these desiderata motivate a \emph{hierarchical} model, where uncertainty is represented by a multi-level prior. 
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis" about the overall distribution of possible partners. 
 $\Theta$ then parameterizes the agent's \emph{partner-specific} uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meaning used by partner $k$ (see Fig. \ref{fig:model_schematic}). 
-The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{smith_learning_2013,bergen_pragmatic_2016}. 
-Here, we use it as the initialization for a learning process.
+The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}. 
+Here, we view it as knowledge about \emph{global} conventions that serves as the initialization for partner-specific learning.
 
-\paragraph{Rapid learning}
+\paragraph{Partner-specific learning}
 
 \begin{figure}[t!]
 \includegraphics[scale=0.4]{./figures/task1_model.pdf}
-\vspace{1em}
-\caption{Schematic of hierarchical Bayesian model.}
+\vspace{.5em}
+\caption{Schematic of our hierarchical Bayesian model. At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
 \label{fig:model_schematic}
 \end{figure}
 
-Given observations $D_k$ from interactions with partner $k$, the agent updates their beliefs about the latent system of meaning using Bayes rule:
+Although an agent may begin with significant uncertainty about the system of meaning their partner is using in the current context, an extended interaction provides useful information for reducing that uncertainty and therefore improving the success of communication.
+This formulation suggests that \emph{ad hoc} convention formation may be re-cast as an inference problem.
+Given observations $D_k$ from interactions with partner $k$, an agent can update their beliefs about their partner's latent system of meaning following Bayes rule:
 \begin{equation}
 \begin{array}{rcl}
 \label{eq:joint_inference}
@@ -61,102 +64,108 @@ P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) 
 \end{array}
 \end{equation}
 This joint inference decomposes the learning problem into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
-The prior captures the idea that different partners may share aspects of meaning in common.
-In the absence of strong evidence that partner-specific language use departs from this common structure, the agent ought to regularize toward background knowledge of the population's conventions.
-The likelihood represents predictions about how a partner using a particular system of meaning will use language in context.
+The prior term captures the idea that, in the absence of strong evidence of partner-specific language use, the agent ought to regularize toward their background knowledge of conventions: the aspects of meaning that all partners are expected to share in common.
+The likelihood term represents predictions about how a partner would use language in context under different underlying systems of meaning (see below for more details).
 
 \paragraph{Inductive generalization}
 
-This joint posterior over meanings has two consequences for convention formation.
-First, it allows agents to maintain partner-specific expectations $\phi_k$ by marginalizing over community-level uncertainty:
+Finally, the posterior in Eq.~\ref{eq:joint_inference} has two consequences for coordination and convention formation.
+First, it allows agents to maintain partner-specific expectations about $\phi_k$ by marginalizing over community-level uncertainty:
 \begin{equation}
-P(\phi_k | D_k) = \int_{\Theta}P(D_k | \phi_k) P(\phi_k | \Theta) P(\Theta)  d\Theta
+P(\phi_k | D_k) =  \int_{\Theta}P(\phi_k, \Theta | D_k)  d\Theta
 \end{equation}
-Second, the hierarchical structure provides an inductive pathway for data to inform beliefs about community-wide conventions.
+This posterior can be viewed as an ``idiolect'' that has been fine-tuned to account for the common ground from previous interactions.
+We will show that when agents learn about their partner in this way, and adjust their own production or comprehension accordingly, they are able to coordinate on stable \emph{ad hoc} conventions.
+
+Second, the hierarchical structure provides an inductive pathway for partner-specific data to inform beliefs about community-wide conventions.
 Agents update their beliefs about $\Theta$ by marginalizing over data accumulated from different partners:
 \begin{equation}
-P(\Theta | D) = P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
+\begin{split}
+    P(\Theta | D)  = & \int_{\phi} P(\phi_k, \Theta | D_k) d\phi \\
+%                     \propto & P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
+\end{split}
 \end{equation}
 where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and $N$ is the number of partners previous encountered. 
-After multiple partners are inferred to have a similar system of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner will share it as well.
+Intuitively, when multiple partners are inferred to use similar systems of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner in one's community will share it as well.
+In other words, this updated $\Theta$ should be used to guide the prior expectations an agent brings into a subsequent interactions with a stranger.
 This transfer is sometimes referred to as ``sharing of strength'' or ``partial pooling'' because pooled data is smoothly integrated with domain-specific knowledge.
+This property has been key to explaining how the human mind solves a range of other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
 
-\subsection{Further challenges}
+\subsection{Specific challenges}
 
 The formulation in the previous section presents the core of our theory.
-Here, we highlight several additional aspects of our model, addressing specific problems raised by prior work on communication. 
+Here, we highlight several additional features of our model, which address more specific challenges raised by prior work on communication. 
+In particular, we follow \citeA{spike_minimal_2017}, which recently distilled three common problems that all accounts of convention must address: (1) the availability of referential feedback, (2) a form of information loss or forgetting, and (3) a systemic bias against ambiguity.
+
+\paragraph{Referential feedback}
+
+Learning and adaptation depends on the availability and quality of observations $D_k$ throughout a communicative interaction.
+If the speaker has no way of assessing the listener's understanding, or if the listener has no way of comparing their interpretation against the speakers intentions, however indirectly, they can only continue to rely on their prior, with no ground for conventions to form  \cite{KraussWeinheimer66_Tangrams,HupetChantraine92_CollaborationOrRepitition,GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}.
+So, what data $D_k$ should each agent use to update their beliefs at a particular point in an interaction?
+
+In principle, we expect that $D_k$ reflects all relevant sources of information that may expose an agent's understanding or misunderstanding, including verbal and non-verbal backchannels (\emph{mmhmm}, nodding), clarification questions, and actions in the world.
+In the narrower setting of a reference game, we consider the full referential feedback provided by the task: $D_k = \{(o^*, u, o')\}_{t=1}^T$, where $o^*$ denotes the speaker's intended target, $u$ denotes the utterance they produced, $o'$ denotes the listener's response.
+In particular, agents should condition on feedback from their \emph{partner's} choices.
+The listener should use the probability that their partner would produce $u$ to refer to the target $o^*$ under different $\phi_k$, and the speaker should likewise use the probability that their partner would produce response $o'$ after hearing utterance $u$.
+
+This symmetrical relationship, where each agent is learning from the other's behavior, creates a clear coordination problem.
+In the case of an error, where the agent in the listener role hears the utterance $u$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the intended target and subsequently condition on the fact that the speaker chose $u$ to convey that target, $P_S(u | o^*)$. 
+Meanwhile, the agent in the speaker role will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance $P_L(o' | u)$.
+In other words, each agent will subsequently condition on slightly different data\footnote{In some settings, agents in one role may be expected to take on more of the burden of adaptation, leading to an asymmetric division of labor \cite<e.g.>{MorenoBaggio14_AsymmetrySignaling}. This may be especially relevant in the presence of asymmetries in power, status, or capability. We leave consideration of these asymmetries for future work.}.
+
+\paragraph{Memory and forgetting}
+
+Second, we must address the limitations imposed by memory and forgetting; it is unrealistic to expect that memories of every element of every past interaction in $D$ is equally available.
+%Some \emph{forgetting} or \emph{discounting} mechanism appears necessary for convention formation. 
+Furthermore, this may be to the agent's advantage. 
+As described in the previous section, early errors are incorporated into the data, leading to mis-coordination much later in an interaction when each agent conditions on different data.
+Without a mechanism to discount these earlier data points, agents may be prevented from ever reaching consensus \cite{spike_minimal_2017}.
+
+Forgetting is typically incorporated into Bayesian models with a decay term in the likelihood function \cite{anderson2000adaptive,angela2009sequential,fudenberg2014recency,kalm2018visual}.
+$$P(D_k | \phi_k) = \prod_{\tau=0}^t \beta^{t-\tau} P(\{o,u\}_\tau | \phi_k)$$
+This decay is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted as the expectation over a process where observations have some probability of dropping out of memory at each time step.
+Alternatively, at the algorithmic level, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}.
 
 \paragraph{Pragmatic reasoning}
 
-The principle of \textit{pragmatic reasoning} plays two distinct roles in our model.
-First, when an agent is inferring their partner's latent representation of meaning from their observable behavior (Eq.~\ref{eq:joint_inference}), we assume that the likelihood reflects Gricean principles.
-In other words, the agent assumes their partner is using language in a cooperative manner.
-Second, agents do not only make passive inferences from data, they actually \emph{use language} in interaction, given their current beliefs.
-We assume that production and comprehension is also guided by Gricean principles.
+A third specific challenge is posed by potential ambiguity about \emph{ad hoc} conventions.
+If a speaker uses an expression to refer to one particular target, it is consistent with that data to believe that the same expression is perfectly acceptable for the other targets as well. 
+How do agents overcome this ambiguity to converge on an \emph{informative} communication system?
+In our account, this problem is naturally solved by the principles of \textit{pragmatic reasoning} \cite{Grice75_LogicConversation}.
 
 %In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
-More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to trade off informativity to an imagined listener against the cost of producing an utterance, while a pragmatic listener $L_1$ inverts their generative model of a speaker to infer the intended target.
-This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, who identifies the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$.
+More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference in a probabilistic framework \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to satisfy the Gricean \emph{maxim of quantity} by balancing informativity to an imagined listener against the cost of producing an utterance. 
+A pragmatic listener $L_1$ then inverts their model of the speaker to infer their likely intended target.
+This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, which is assumed to identify the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$.
 For any utterance $u$ and world state $o$, the function $\mathcal{L}$ function returns the extent to which $u$ applies to $o$.
-
 This model can be specified as follows:
 \begin{align}
 L_0(o | u, \phi_k) &\propto  \mathcal{L}_{\phi_k}(u,o)\hfill\label{eq:RSA}\\
 S_1(u | o, \phi_k) &\propto   \exp\{w_S \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}\nonumber   \\
 L_1(o | u, \phi_k) &\propto   \exp\{w_L \log S_1(u | o, \phi_k)\}\nonumber
 \end{align}
-where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener.
+where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener's choice. 
+As $w_L \rightarrow \infty$, it approaches maximization.
 
-Under any possible value of $\phi_k$, these functions can be used as a likelihood for observations of language use $P(D_k | \phi_k)$ to infer their partner's lexicon (Eq.~\ref{eq:joint_inference}).
-They assign a probability to each word or object that partner $k$ has chosen, assuming that their partner behaved according to Gricean maxims.
-In addition to using RSA as a likelihood for inferring $\Theta$ and $\phi_k$, we assume that the agents use these functions to \emph{act} on each trial of their interaction.
-We sample from their posterior predictive, marginalizing over the agent's current beliefs about $\phi_k$:
+Pragmatic reasoning, formalized in this way, plays two distinct roles in our model.
+First, Gricean agents must assume that their partner is using language in a cooperative manner and account for this when inferring their partner's language model.
+That is, we use these equations as the linking function in the likelihood $P(D_k | \phi_k)$, representing an agent's prediction about how a partner with meaning function $\phi_k$ would actually behave in context (see Equation \ref{eq:joint_inference}). 
+$S_1(u|o,\phi_k)$ is used to learn from observations generated in the speaker role and $L_1(o|u,\phi_k)$ is used to learn from observations generated in the listener role.
+
+Second, agents do not only make passive inferences from observation, they participate in the interaction by \emph{using language} themselves.
+A Gricean agent's own production and comprehension is also guided by cooperative principles.
+To achieve this behavior, they must act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$.
+In other words, they sample actions by marginalizing over the posterior $P(\phi_k | D_k)$ of different language models their partner may be using.
 \begin{align}
-L(o|u) &\propto   \exp\left\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)d\phi_k\right\}\label{eq:marginalized}\\
-S(u|o) &\propto  \exp\left\{ \textstyle{\int_{\phi_k}} P(\phi_k | D_k)  w_S \log L_1(o| u, \phi_k) - w_C c(u)d\phi_k\right\}\nonumber
+L(o|u) &\propto   \exp\left\{ \textstyle{\int} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)d\phi_k\right\}\label{eq:marginalized}\\
+S(u|o) &\propto  \exp\left\{ \textstyle{\int} P(\phi_k | D_k)  w_S \log L_1(o| u, \phi_k) - w_C c(u)d\phi_k\right\}\nonumber
 \end{align}
 
-Many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting two design choices in the specific formulation we give in Eq.~\ref{eq:RSA}. 
-Both the pragmatic speaker and listener are ``action-oriented'' in the sense that they both use a soft-max function to select an action in the reference game, with separate optimality parameters, whereas in many instances of prior work, the listener is ``belief-oriented'' and assumed to simply update their beliefs about the world without taking action \cite{qing2015variations}.
-Additionally, we assume this softmax is the actual decision rule used by agents when taking an action (Eq.~\ref{eq:marginalized}).
-It is possible to use a soft likelihood during updating, but in fact have agents choose utterances and objects by \emph{maximizing} utility. 
+Many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting two technical choices in our formulation.
+First, in the likelihoods given in Eq.~\ref{eq:RSA}, both agents use an ``action-oriented'' representation to update their beliefs about their partner, in the sense that their partner is expected to behave proportional to the utility of different actions, according to a soft-max normalization $\sigma(U(z)) = e^{U(z)}/\sum e^{U(z)}$.
+This contrasts with some RSA models outside the scope of reference games, where the listener is instead assumed to be ``belief-oriented,'' simply inferring the speaker's intended meaning without producing any action of their own \cite{qing2015variations}.
+Additionally, as their decision rule, agents sample actions from their own soft-max distribution (Eq.~\ref{eq:marginalized}).
+That is, while it is possible for agents to use a soft-max likelihood to predict their partner's behavior but \emph{maximize} their own utility when taking action, we have agents use the same soft-max distribution in both cases.
 See Appendix for further details about the definition and implementation of the RSA likelihood.
-
-\paragraph{Miscommunication}
-
-What data $D_k$ should each agent use to update their beliefs at a particular point in an interaction?
-In our simulations, we allow the same agent to switch between the speaker and listener role, so a partner may produce utterances $u$ on some trials and object choices $o$ on other trials; consequently, we assume an agent always conditions on feedback from their \emph{partner's} choices.
-This assumption of symmetry, where each partner equally adjusts to the other, creates a clear coordination problem. 
-In the case of an error, where the agent in the listener role hears the utterance $u$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the correct target and subsequently condition on the likelihood that the speaker chose this utterance to convey this target, $S_1(u | o^*)$. 
-Meanwhile, the agent in the speaker will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance $L_1(o' | u)$.
-In other words, each agent will subsequently condition on slightly different data.
-While we consider this assumption to be the most challenging coordination setting, it is also possible to assume that agents in one role (e.g. the listener role) are expected to adapt more strongly, leading to an asymmetric division of labor and reducing miscoordination \cite{MorenoBaggio14_AsymmetrySignaling}.
-
-\paragraph{Memory and forgetting}
-
-Second, according to \citeA{spike_minimal_2017}, some \emph{forgetting} or \emph{discounting} mechanism appears necessary for convention formation. 
-Without forgetting, early errors may lead to persistent mis-coordination much later in an interaction, preventing agents from reaching consensus.
-Forgetting is typically incorporated into Bayesian models with a decay term \cite{anderson2000adaptive,angela2009sequential,fudenberg2014recency,kalm2018visual}.
-$$P(D_k | \phi_k) = \prod_{\tau=0}^t \beta^{t-\tau} P(\{o,u\}_\tau | \phi_k)$$
-This decay is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted either as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}, or as the expectation over a process where observations have some probability of dropping out of memory at each time step \rdh{Tom, did you say there was a paper making this connection?}
-Some other models of convention formation have instead used finite memory windows, setting a threshold on the most recent $k$ observations \cite{young_evolution_2015}.
-
-\paragraph{The lexicon}
-
-Third, we must say what a lexicon is. 
-For simplicity, we follow prior Bayesian models of word learning \cite{XuTenenbaum07_WordLearningBayesian} and represent the space of meanings as the set of possible sub-trees in a concept taxonomy.
-When objects are conceptually unrelated, as in most prior work on signaling games, this taxonomy is flat, and the space of meanings is equivalent to the set of objects.
-Further, we assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
-There are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. 
-We return to these possibilities in the General Discussion. 
-
-\subsection{Relation to previous models}
-
-One view this model is an argument from the continuity of probabilistic models of language acquisition in development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
-One important theoretical contribution is to generalize Bayesian models of word learning to an interactive referential setting among mature language users. 
-
-Another view is by analogy to the use of hierarchical inference to explain how the human mind solves other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
-From this view, our contribution is to ground conventions -- a fundamentally social phenomenon -- in the same domain-general machinery supporting generalization in non-social domains, where abstract, shared properties also need to be jointly inferred with idiosyncratic particulars of instances.
-The key difference is that the target of inference is the internal state of other agents; social cognition thus enters the model through the likelihood function, which represents the predictions an agent makes about how agents with different internal states are likely to behave in different contexts.
 
 
