@@ -16,38 +16,40 @@ Influential computational accounts explaining how social conventions emerge in p
 These accounts examine groups of interacting agents who update their representation of language after each interaction.
 While the specific update rules range from simple associative mechanisms \cite<e.g.>{steels_self-organizing_1995} or heuristics \cite<e.g>{Young96_EconomicsOfConvention} to sophisticated deep reinforcement learning algorithms \cite{tieleman2019shaping,graesser2019emergent,mordatch2017emergence}, all of these accounts assume that agents update a single, monolithic representation of language to be used with every partner, and that agents do not (knowingly) interact repeatedly with the same partner.
 
-Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} and partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} typically do not specify mechanisms by which community-wide conventions may arise over longer timescales.
+Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} and partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} across extended interactions with the same partner typically do not specify mechanisms by which community-wide conventions may arise over longer timescales.
 The philosopher Donald Davidson articulated one of the most radical of these accounts.
 According to \citeA{davidson1984communication,davidson_nice_1986,davidson1994social}, it is exclusively the ability to coordinate on \emph{partner-specific} meanings that is ultimately responsible for successful communication.
 This line of argument led \citeA{davidson_nice_1986} to memorably conclude that ``there is no such thing as a language'' (p.~265), and to abandon appeals to convention altogether \cite<see also>[for discussion]{heck_idiolect,lepore2007reality,hacking1986nice,dummett1994}.%\footnote{ In Davidson's terminology, the system of meanings given by from convention is called the agent's \emph{prior} theory, while the ad hoc systems they form with their partner on the fly are called their \emph{passing} theories. We maintain this distinction, but instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, respectively, to emphasize their commonality.}.
 
-In this paper, we propose a theory of coordination and convention that reconciles community-level consensus with partner-specific common ground in a unified cognitive model.
-We begin by formalizing the computational problem facing agents who must communicate with one another in a variable and non-stationary world. 
-We argue that three core cognitive mechanisms are needed for an agent to solve this problem: 
+In this paper, we propose a theory of coordination and convention that aims to reconcile the emergence of community-level conventions with partner-specific common ground in a unified cognitive model.
+This theory is motivated by the computational problems facing agents who must communicate with one another in a variable and non-stationary world. 
+We argue that three core cognitive capacities are needed for an agent to solve this problem: 
 \begin{description}
-\item[M1:] \textbf{uncertainty} about what words mean to different partners
-\item[M2:] rapid \textbf{learning} to adapt to particular partners
-\item[M3:] inductive \textbf{generalization} to unseen partners
+\item[M1:] the ability to represent \textbf{uncertainty} about what words will mean to different partners
+\item[M2:] online \textbf{learning} to coordinate on \emph{ad hoc} conventions with particular partners
+\item[M3:] inductive \textbf{generalization} to abstract away stable expectations for new partners
 \end{description}
 %\begin{enumerate}
 %\item \textbf{Lexical uncertainty:} When we first encounter a new communication partner in a new context, we call upon some representation about what we think different signals mean to them. This representation of meaning must be sensitive to the overall statistics of the population: more people are familiar with the use of \emph{dog} to refer to the beloved pet than \emph{sclerotic aorta} to refer to the potentially dangerous health condition. It must also be sensitive to the immediate context of the interaction: a cardiologist should have different expectations about a novel colleague than a novel patient.
 %\item \textbf{Rapid adaptation:} Within a few minutes of conversation, we can considerably strengthen our expectations about our partner's lexicon based on earlier utterances and feedback, and adjust our own usage accordingly. For example, even if we are not initially familiar with the term \emph{sclerotic aorta}, a few minutes spent discussing the condition in simpler terms should make us more confident using the term with that partner in the future. This social learning mechanism must allow for signal \emph{reduction} -- simpler, more efficient ways of referring to the same thing over time -- and \emph{path-dependence}: early reinforcement of certain meanings increases their later usage, however arbitrary or provisional they began. 
 %\item \textbf{Generalization:} When we encounter the same partner in a new context, we should expect some `stickiness' from previous learning. Language does not reset at context boundaries. In addition, the lexical model we've learned within a conversation should be largely \emph{partner-specific}. Just because we now expect Partner A to be familiar with a \emph{sclerotic aorta} shouldn't radically change our expectations about Partner B. Over enough interactions with different language users, however, our initial representations should be able to shift to take these data into account. To generalize appropriately, we must be able to correctly attribute whether a usage is idiosyncratic to a particular speaker, or a global convention we should expect to hold across the whole community.
 %\end{enumerate}
-Finally, we present a hierarchical Bayesian model that satisfies these desiderata and demonstrate that it successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: 
+Finally, we present a hierarchical Bayesian model that satisfies these desiderata and demonstrate that this account successfully explains three key phenomena in the empirical literature that have proved evasive for previous accounts: 
 \begin{description}
-\item[P1:] convergence to more \textbf{efficient} referring expressions with a single partner, 
-\item[P2:] \textbf{context-sensitivity} in which labels become conventionalized
+\item[P1:] convergence to increasingly \textbf{efficient} referring expressions with a single partner
+\item[P2:] \textbf{context-sensitivity} in which labels become \emph{ad hoc} conventions
 \item[P3:] the pattern of \textbf{partner-specificity} as conventions emerge in small networks.
 \end{description}
-In the remainder of this section, we introduce the \emph{repeated reference game} paradigm at the center of this literature, review the empirical evidence for each of these phenomena, and briefly discuss some limitations of previous accounts.
 
-\subsection{Empirical evidence from repeated reference games}
+One of our central theoretical aims is to ground the problem of convention --- a fundamentally interactive, social phenomenon --- in the same domain-general cognitive mechanisms supporting learning in other domains where abstract, shared properties need to be inferred along with idiosyncratic particulars of instances \cite{berniker2008estimating,GoodmanUllmanTenenbaum11_TheoryOfCausality,tenenbaum_how_2011,kleinschmidt2015robust}.
+In the next section, we introduce the \emph{repeated reference game} paradigm at the center of this literature, review the empirical evidence for each of these phenomena, and briefly discuss some limitations of previous accounts.
+
+\section{Empirical evidence from repeated reference games}
 
 A core function of language is \emph{reference}: using words to convey the identity of an entity in the environment. 
 Following \citeA{wittgenstein2009philosophical}, empirical studies of coordination and convention in communication have predominantly focused on the subset of language use captured by simple ``reference games.'' 
 In a reference game task, participants are assigned to speaker and listener roles and shown a context $\mathcal{C}$ of possible referential targets (e.g. images).
-On each trial, the speaker is asked to produce a referring expression $u$ --- typically a noun phrase --- that will allow the listener to select the intended target object $o$ from the distractors in context.
+On each trial, the speaker is asked to produce a referring expression $u$ --- typically a noun phrase --- that will allow the listener to select the intended target object $o^*\in\mathcal{C}$ from among the other objects in the context.
 Critically, a \emph{repeated reference game} asks them to refer to the same targets multiple times as they build up a shared history of interaction, or \emph{common ground,} with their partner (see Table \ref{table:parameters} in Appendix for a review of the different axes along which the design varies).
 
 Unlike general studies of referring expression generation, studies of coordination and convention use novel, ambiguous stimuli that participants do not already have strong conventions for.
@@ -58,15 +60,15 @@ We highlight three findings of particular theoretical significance in this liter
 \paragraph{Increasing efficiency}
 
 The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964, ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
-The first time participants refer to a figure, they tend to use a lengthy, detailed description (``the upside-down martini glass in a wire stand'') but with a small number of repetitions -- between 3 to 6, depending on the pair of participants -- the description may be cut down to the limit of just one or two words (``martini''). 
+The first time participants refer to a figure, they tend to use a lengthy, detailed description (``the upside-down martini glass in a wire stand'') but with a small number of repetitions --- between 3 and 6, depending on the pair of participants --- the description may be cut down to the limit of just one or two words (``martini''). 
 These final messages are as short or shorter than the messages participants choose to allow \emph{themselves} to choose the target in the future  \cite{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
-These observations set up our first puzzle of \emph{ad hoc} convention formation in dyads: how does a short word or phrase that would have been ineffective for communicating under the global conventions of a language become perfectly understandable over mere minutes of interaction? 
+These observations set up our first puzzle of \emph{ad hoc} convention formation in dyads: how does a word or short phrase that would have been ineffective for communicating under the global conventions of a language take on local meaning over mere minutes of interaction? 
 
 \begin{figure}[t!]
 \centering
 \includegraphics[scale=1.2]{./figures/clark92}
 \vspace{1em}
-\caption{Results reproduced from Table 3 in \protect\citeA{wilkes-gibbs_coordinating_1992} showing evidence of both increasing efficiency and partner specificity.}
+\caption{\textit{Classic phenomena in repeated reference games.} Across multiple repetitions of the same referent, speakers converge to increasingly efficient utterances (reps.~1-6). When the listener is  replaced by a new, naive partner, speakers display a key signature of partner-specificity, reverting to longer utterances before converging again with their new partner (reps.~7-12). Reproduced from Table 3 in \protect\citeA{wilkes-gibbs_coordinating_1992}.}
 \label{fig:clark92}
 \end{figure}
 
