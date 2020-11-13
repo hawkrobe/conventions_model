@@ -120,16 +120,17 @@ Critically, the sequence of targets was held constant across conditions; only th
 This task poses several distinct challenges for models of coordination and convention formation.
 First, the context constantly changes, with a subset of only four of the eight total objects shown on each trial.
 Second, the stimuli are embedded in a conceptual taxonomy, where some objects are more similar than others.
-In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{GoodmanFrank16_RSATiCS,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings.
+In this section, we show how our model explains such sensitivity as the consequence of pragmatic reasoning \cite<e.g.>{goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} over a space of taxonomic word meanings.
 
 We evaluate the extent to which local context shapes our agents' conventions through a series of simulations.
 For each dyad in our human dataset, we pair up two artificial agents and present them the same stimulus sequence of targets and contexts that human participants saw.
 Our artificial agents swapped speaker and listener roles on each trial, as human participants did, and updated their beliefs after each trial using their own history: that is, while we matched the stimulus sequence, the models did not observe human data. 
 
-Following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
+Again following \citeA{XuTenenbaum07_WordLearningBayesian}, we consider a space of meanings that reflects the conceptual structure of the stimulus hierarchy. 
 In addition to 8 meanings at the sub-ordinate level (one for each individual object), we populate the hypothesis space with 4 meanings at the basic-level (striped, spotted, blue, red), 2 meanings at the super-ordinate level (circle and square), 1 exhaustive meaning (shape), and 1 ``null'' meaning, which does not apply to any of the objects.
 We populate the utterance space with 8 single-word labels, which simplifies the speaker model: the utterance cost term is constant across all utterances, so it does not have an effect on speaker behavior.
-Finally, we note that the simplicity prior over the lexicon space penalizes meanings with larger extensions, so \emph{a priori}, agents have an inductive bias toward subordinate terms.
+Finally, we will assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
+This simplicity prior over the lexicon space penalizes meanings with larger extensions, so \emph{a priori}, agents have an inductive bias toward subordinate terms.
 For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting parameter of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
 
 \begin{figure}[t]
