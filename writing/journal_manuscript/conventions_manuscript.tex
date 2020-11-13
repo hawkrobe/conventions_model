@@ -17,16 +17,12 @@
 \usepackage{todonotes}
 \usepackage{svg}
 \usepackage{booktabs}
-
+\usepackage{stmaryrd}
 
 \synctex=1
 \usepackage{soul}
 
-\newcommand{\den}[2][]{
-\(
-\left\llbracket\;\text{#2}\;\right\rrbracket^{#1}
-\)
-}
+\newcommand{\den}[1]{\ensuremath{\llbracket #1 \rrbracket}}
 
 \newcommand{\KL}[2]{\ensuremath{D_{KL}({#1}\, \| \, {#2})}}
 \newcommand{\E}[2]{\ensuremath{\mathbb{E}_{#1}\left [#2 \right]}}
@@ -168,7 +164,7 @@ First, when we allow the full space of Boolean lexicons $\phi$, we must confront
 In this case, the normalizing constant is zero, and the literal listener distribution is not well-defined.
 A similar problem may arise when no utterance in the speaker's repertoire is true of the target, in which case the $S_1$ distribution is not well-defined.
 One possible solution is instead to use a `softer' Boolean semantics in the literal listener, where a Boolean value of false does not strictly rule out an object but instead assigns a very low numerical score, e.g. 
-$$\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 0 & \textrm{if $o \in $\den{u}$_\phi$} \\ -100 & \textrm{o.w.} \end{array}\right.$$
+$$\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if $o \in $\den{u}$_\phi$} \\ \epsilon & \textrm{o.w.} \end{array}\right.$$
 This formulation assigns negligible listener probability to objects where $u$ is false whenever there is at least one $o\in\mathcal{C}$ where $u$ is true, but allows the normalization constant to be non-zero even when $u$ is false for all objects in context.
 At the same time, this `soft' semantics leads to unexpected and unintuitive consequences at the level of the pragmatic speaker. 
 After renormalization in $L_0$, an utterance $u$ that fails to refer to any object in context is also by definition equally \emph{successful} for all objects, leading to a uniform probability distribution.
@@ -218,4 +214,18 @@ While this variant is able to derive the desired phenomena, it can be shown that
 This bias was most apparent in our context-sensitivity simulations.
 Mathematically, the only difference between these possibilities is whether the speaker's uncertainty about $\phi_k$ goes inside the renormalization of $L(o|u)$ (as in $S_{alt1}$), outside the renormalization but inside the logarithm (as in $S_{alt2}$), or over the entire utility (as in our main formulation).
  
+ \begin{figure*}
+\centering
+    \includegraphics[scale=.9]{arbitrariness_grid.pdf}
+  \caption{Coordination success (simulation 1.1) fo a range of parameter values. Different memory discount factors $\beta$ shown in different colors, rows represent speaker optimality $w_S$, columns represent listener optimality $w_L$.}
+  \label{fig:arbitrariness_grid}
+\end{figure*}
+
+ \begin{figure*}
+\centering
+    \includegraphics[scale=.8]{reduction_grid_search.pdf}
+  \caption{Speaker efficiency across partners (simulation 3.2) for a range of parameter values. Rows represent speaker optimality $w_S$, columns represent cost weight $w_c$.}
+  \label{fig:arbitrariness_grid}
+\end{figure*}
 \end{document}  
+
