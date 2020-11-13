@@ -2,26 +2,30 @@
 %If our lexical priors -- our global conventions -- serve as a source of stability in meaning over longer timescales, then what accounts for our extraordinary flexibility  over short timescales? How do we coordinate on efficient local conventions, or \emph{conceptual pacts}, for talking about things we've never talked about before? In this section, we review the dynamics of coordination within repeated reference games and explore the possibility, formalized in Chapter 2, that rapid adaptation can be understood in a Bayesian modeling framework as lexical inference given partner-specific data.%: $P(\mathcal{L}_i | D_i, \Theta)$. 
 
 We begin with the phenomenon of increasing efficiency in repeated reference games: speakers use detailed descriptions at the outset but converge to increasingly compressed shorthand while remaining understandable to their partner.
-While this phenomenon has been extensively documented, to the point of serving as a proxy for common ground \cite{}, it has continued to pose a challenge for computational models of language use.
-One simple explanation --- that it is merely an effect of familiarity or repetition on the part of the speaker, not related to \emph{ad hoc} conventions --- can be easily dispelled. 
+While this phenomenon has been extensively documented, to the point of serving as a proxy for measuring common ground, it has continued to pose a challenge for computational models of language use.
+One simple explanation --- that it is merely an effect of familiarity or repetition on the part of the speaker, not related to \emph{ad hoc} conventions --- can be easily dismissed. 
 When participants are asked to repeatedly refer to the same targets for a \emph{hypothetical} partner, no decrease in utterance length is found; in some cases utterances actually get longer \cite{HupetChantraine92_CollaborationOrRepitition}. 
 This control experiment suggests that whatever is changing must be a result of the \emph{interaction} between partners.
 
 It is also not clear how increasing efficiency could be explained by the lower-level alignment mechanisms proposed in \emph{interactive alignment} accounts \cite{pickering2004toward, pickering2006alignment, garrod2009joint}.
-According to these accounts, coordination on meaning proceeds primarily through automatic priming of surface statistics at lower levels.
-While low-level priming is certainly possible in repeated reference tasks, especially when listeners engage in extensive dialogue, it is not clear why priming would favor some words in a long referring expression over others, or lead to words being dropped.
-Furthermore, priming alone cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only indirect feedback about the listener's accuracy is provided \cite{KraussWeinheimer66_Tangrams} and keep using longer descriptions given evidence of errors \cite{hawkins2020characterizing}.
-Explaining why speakers increasingly think that shorter descriptions will suffice requires a mechanism for coordination on meaning even given sparser, non-verbal feedback.
+According to these accounts, coordination on meaning proceeds primarily through automatic priming at lower levels of representation.
+While low-level priming is certainly possible in repeated reference tasks, especially when listeners engage in extensive dialogue or alternate in the speaker role, it is not clear why priming would favor some words in a long referring expression over others, or lead to increasing efficiency.
+Furthermore, priming alone cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only indirect feedback about the listener's response accuracy is provided \cite{KraussWeinheimer66_Tangrams}; conversely, speakers continue using longer descriptions given non-verbal evidence of errors \cite{hawkins2020characterizing}.
+In these cases, there are no linguistic features available for priming or alignment.
+Explaining when and why speakers believe that shorter descriptions will suffice requires a mechanism for coordination on meaning even given sparser, non-verbal feedback.
 
 Finally, we consider agent-based models implementing simple update rules \cite{steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
-These models all share some mechanism that makes utterances more likely to be produced after communicative successes and less likely after communicative failures.
-It is not clear why agents using such rules would initially prefer to produce longer utterance without some notion of uncertainty, or how naively reinforcing initially long descriptions could lead to reduction.% without some mechanism for \emph{credit assignment} to the component words.
-When reduction has been investigated in these models (e.g. phonological erosion), the process has been hard-coded as an $\epsilon$ probability of speakers dropping a token, which listeners are able to use to recover the un-truncated form \cite{beuls2013agent,steels2016agent}.
-\todo[inline]{need a transition here}
+These models all share some mechanism that makes utterances more likely to be produced after communicative successes and less likely after communicative failures, as in Roth-Erev reinforcement learning \cite{erev1998predicting}.
+While this form of reinforcement is a powerful mechanism for allowing groups to reach consensus, it is not clear why an agent using such rules would initially prefer to produce longer utterances, or how reinforcing initially long descriptions could lead to reduction.% without some mechanism for \emph{credit assignment} to the component words.
+When reduction has been investigated in these models (e.g. as in the phenomenon of phonological erosion), the process has simply been hard-coded as an $\epsilon$ probability of speakers dropping a token \cite{beuls2013agent,steels2016agent}.
 
-An alternative explanation suggested by our model is that efficiency is driven by \emph{ad hoc} word learning as communication partners make more observations of one another's usage. 
-Long initial messages may be explained as the result of initial uncertainty in the speaker's lexical prior.
-Then shorter, more efficient messages may be licensed as the speaker grows more confident about the listener's understanding, via feedback.
+In this section, we argue that our Bayesian account provides a natural computational explanation for increasing efficiency in terms of the inferences made by speakers.
+Given that this phenomenon arises in purely dyadic settings, it also provides an opportunity to explore more basic properties of the first two capacities formalized in our model (\emph{uncertainty} and \emph{partner-specific learning}) before introducing the fully hierarchical component in later sections. 
+In brief, we show that increasing efficiency emerges from the Gricean maxim of quantity, as formalized in the speaker's tradeoff between informativity and parsimony (Eq.~\ref{eq:marginalized}), under shifts in their uncertainty about the listener's language model. 
+For novel, ambiguous objects like tangrams, where speakers do not expect strong referential conventions to be shared, longer initial descriptions are motivated by high initial uncertainty in the speaker's lexical prior $P(\phi_k | \Theta)$. 
+Combining multiple partially redundant descriptors hedges against the possibility that particular meanings are not shared by the listener.
+As the interaction goes on, the speaker obtains feedback $D_k$ from the listener responses and updates their posterior beliefs $P(\phi_k | D_k)$ accordingly. 
+As uncertainty gradually decreases, they are able to achieve the same expected informativity with shorter, more efficient messages. 
 
 \subsection{Model simulations}
 
@@ -33,26 +37,28 @@ Then shorter, more efficient messages may be licensed as the speaker grows more 
 \end{figure*}
 
 
-In this section, we show that the mechanism of uncertainty reduction is sufficient to produce reduction in utterance length across repeated interaction.
-\todo[inline]{Give a short version of the explanation here.}
 \paragraph{Simulation 1.1: Coordination}
 
-First, we show how agents updating their meaning functions in this way can coordinate even in the absence of strong initial priors. 
-The initial choices in an interaction can be taken as evidence for a particular lexicon and become the basis for successful communication, even when both speaker and listener are uncertain at the beginning.
-As a simple test case, consider an environment with two objects ($\{o_1, o_2\}$), where the speaker must choose between two utterances ($\{u_1, u_2\}$) with equal production costs. 
+We will build up to our explanation of increasing efficiency through a series of simpler simulations.
+The first of these simulations demonstrates the most fundamental desideratum for any model of \emph{ad hoc} coordination: agents equipped with our inferential machinery are able to coordinate on a communication system in the absence of shared priors. 
+We consider the simplest possible reference game with two objects, $\mathcal{O} = \{o_1, o_2\}$, where the speaker must choose between two one-word utterances $\mathcal{U} = \{u_1, u_2\}$ with equal production cost. 
 
-\todo[inline]{unpack what $\phi_k$ means, what some examples of functions are, etc.}
-To define the prior $P(\phi_k)$ over the meaning of each utterance, we must first say what representation we are using for the lexicon $\mathcal{L}_{\phi_k}$.
-For simplicity, we follow prior Bayesian models of word learning \cite{XuTenenbaum07_WordLearningBayesian} and represent the space of meanings as the set of possible sub-trees in a concept taxonomy.
-When objects are conceptually unrelated, as in most prior work on signaling games, this taxonomy is flat, and the space of meanings is equivalent to the set of objects.
-Further, we assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
-\footnote{There are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. We return to these possibilities in the General Discussion.}
-On the first round both utterances are equally likely to apply to either shape. 
+To define the initial lexical prior $P(\phi)$ over the expected meanings of each utterance, we must first say what representation we are using for the agents' lexicon $\mathcal{L}_{\phi}$.
+For simplicity, we follow prior Bayesian models of word learning \cite<e.g.>{XuTenenbaum07_WordLearningBayesian} and represent the space of meanings for an utterance as the set of nodes in a concept taxonomy\footnote{There are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. We return to these possibilities in the General Discussion.}.
+When objects are conceptually distinct, as assumed in most prior models of signaling games, this taxonomy is flat and the target space of utterance meanings is simply equivalent to the space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$. 
+Then the lexical meaning function is defined to be
+$$
+\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if $\phi(u)=o$} \\ 0 & \textrm{otherwise} \end{array}\right.
+$$
+To explore pure coordination, we initialize agents with uniform priors: $$\phi(u_i) \sim \textrm{unif}\{o_1, o_2\}$$ for all $u_i \in \mathcal{U}$.
 
-If the speaker were trying to get their partner to pick $o_1$, then because each utterance is equally (un)informative, they could only randomly sample one (say, $u_1$), and observe the listener's selection of a shape (say, $o_1$, a correct response). 
-On the next round, the speaker uses the observed pair $\{u_1, o_1\}$ to update their beliefs about their partner's true lexicon, uses these beliefs to generate a new utterance, and so on. 
-To examine expected dynamics over multiple rounds, we forward sample many possible trajectories.
+Due to this uniform prior, both utterances are equally likely to apply to either object on the first round. 
+If the target object on the first round were $o_1$ then because each utterance is equally (un)informative, their best option is to randomly sample an utterance $u~\sim~S(u|o^*~=~o_1)$, say, $u_1$.
+Critically, they then are able to observe the listener's selection of an object $o \sim L(o | u_1)$, say, $o_1$, a correct response.
+The speaker is then able to use the observed pair $\{u_1, o_1\}$ to update their beliefs about their partner's true lexicon $\phi$ and uses their new posterior distribution to generate a new utterance for the next trial's target.
+The listener is similarly able to update their beliefs about the speaker's true lexicon and use this updated distribution to interpret their next utterance.
 
+To examine the dynamics of this process over multiple rounds, we sampled 1000 trajectories.
 We observe several important qualitative effects in our simulations. 
 First, and more fundamentally, the evidence that a knowledgeable listener responded to utterance $u$ by choosing a particular object $o$ provides support for lexicons in which $u$ is a good fit for $o$. 
 Hence, the likelihood of the speaker using $u$ to refer to $o$ will increase on subsequent rounds (see Fig.\ref{fig:sec1model}A). 
