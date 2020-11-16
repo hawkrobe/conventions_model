@@ -20,7 +20,7 @@ var params = {
 
 var pragStr = ('discount:' + params.discountFactor);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,circleScore,squareScore', posttestF);
 
 console.log(params);
 
@@ -87,12 +87,18 @@ var updatePosterior = function(data) {
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
   map(function(word) {
-    var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}));
-    var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}));
-    csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, 
-                   trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
-    csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, 
-                   trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
+    var speaker1TopGuess = marginalize(posterior1, function(x) {return x[word]});
+    var speaker2TopGuess = marginalize(posterior2, function(x) {return x[word]});
+    csv.writeLine([
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      trial.trialNum, trial.speakerID, word,
+      speaker1TopGuess.score('null'), speaker1TopGuess.score('circle'), speaker1TopGuess.score('square')
+    ].join(','), outputFile);
+    csv.writeLine([
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      trial.trialNum, trial.listenerID, word,
+      speaker2TopGuess.score('null'), speaker2TopGuess.score('circle'), speaker2TopGuess.score('square')
+    ].join(','), outputFile);
   }, utterances);
 };
 
