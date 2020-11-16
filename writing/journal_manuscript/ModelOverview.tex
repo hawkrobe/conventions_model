@@ -1,7 +1,7 @@
 
 In this section, we propose an explicit computational account of the cognitive capacities that support the balance between community-level stability and partner-specific flexibility.
-We begin by specifying the core computational problem people must solve to achieve successful communication.
-Classically, this problem has been formalized in terms of coding and compression \cite{Shannon48}. 
+We begin with the core computational problem people must solve to achieve successful communication.
+Classically, this problem has been formalized as one of coding and compression \cite{Shannon48}. 
 An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
 More recently, this literal transmission problem has been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages \cite{FrankeJager16_ProbabilisticPragmatics,goodman_pragmatic_2016}.
 These formulations share a key assumption: that the speaker and listener share roughly the same literal ``protocol'' for encoding and decoding messages.
@@ -49,7 +49,7 @@ Here, we view it as knowledge about \emph{global} conventions that serves as the
 \begin{figure}[t!]
 \includegraphics[scale=0.4]{./figures/task1_model.pdf}
 \vspace{.5em}
-\caption{Schematic of our hierarchical Bayesian model. At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
+\caption{\emph{Schematic of our hierarchical Bayesian model.} At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
 \label{fig:model_schematic}
 \end{figure}
 
