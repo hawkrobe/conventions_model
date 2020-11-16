@@ -7,11 +7,81 @@ output: html_notebook
 library(tidyverse)
 library(ggthemes)
 library(tidyboot)
+library(jsonlite)
 ```
+
+# Simulation 1.1: Coordination
 
 ```{r}
 d <- read_csv('../simulations/cogsci2017/output/arbitrariness_trajectories.csv') 
 ```
+
+Plot accuracy
+
+```{r}
+d.trajectory.boot <- d %>%
+  filter(speakerAlpha == listenerAlpha) %>%
+  filter(discountFactor == 0.8) %>%
+  filter(speakerAlpha %in% c(1, 8, 16)) %>%
+  group_by(speakerAlpha, time) %>%
+  tidyboot_mean(correct, nboot = 100)
+  
+d.trajectory.boot %>%
+  ungroup() %>%
+  filter(speakerAlpha  == 16) %>%
+  ggplot(aes(x = time, y = empirical_stat, color = factor(speakerAlpha))) +
+    geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width =0) +
+    geom_hline(yintercept = c(.5, 1), linetype = 'dotted') +
+    theme_few() +
+    #scale_color_manual(values = c('#9ecae1', '#3182bd', '#08519c')) +
+    theme(aspect.ratio = 1) +
+    scale_color_colorblind() +
+    labs(y = '% accuracy', x = 'trial #')
+ggsave('../writing/journal_manuscript/figures/sec1-convergence.pdf')
+```
+
+## Examine arbitrariness of meanings
+
+```{r}
+raw_meanings <- read_csv('../simulations/cogsci2017/output/meaningTest_discount:0.8_73.csv') %>%
+  mutate(val = gsub("'", "\"", val)) 
+l <- lapply(raw_meanings$val, fromJSON)
+n <- unique(unlist(sapply(l, function(x) x[['support']])))
+probs <- unique(unlist(sapply(l, function(x) x[['probs']])))
+raw_meanings[n[1,1]] <- probs[1,]
+raw_meanings[n[2,1]] <- probs[2,]
+raw_meanings[n[3,1]] <- probs[3,]
+
+meanings <- raw_meanings %>%
+  select(-val) %>%
+  mutate(totalProb = null + circle + square)
+```
+
+```{r}
+meanings %>%
+  mutate(discountFactor = 0.8) %>% 
+  rename(time = trialNum) %>%
+  left_join(d) %>%
+  unite(datachunk, intendedName, topSpeakerChoice, topListenerChoice) %>%
+  group_by(gameNum) %>%
+  mutate(firstdatachunk = first(datachunk)) %>%
+  gather(meaning, score, null,circle,square) %>%
+  group_by(firstdatachunk, time, word, agentID, meaning) %>%
+  summarize(score = mean(score)) %>%
+  filter(word == 'word1') %>%
+  mutate(meaning = fct_relevel(meaning, 'square', 'circle', 'null')) %>%
+  ggplot(aes(x = time, y = score, fill = factor(meaning))) +
+    geom_area(state='identity', alpha = 0.8) +
+    facet_grid(firstdatachunk ~ agentID ) +
+    scale_fill_manual(values = rev(colorblind_pal()(3))) +
+    theme_few() +
+    labs(x = 'trial #', y = 'probability word1 has meaning')
+
+ggsave('../writing/journal_manuscript/figures/sec1-arbitrariness.pdf')
+```
+
+# Appendices: Full grid, arbitrariness
 
 ```{r}
 d.boot <- d %>%
@@ -33,4 +103,16 @@ d.boot %>%
 
 ggsave('../writing/journal_manuscript/figures/arbitrariness_grid.pdf', 
        width = 8, height = 6, unit ='in')
+```
+
+# Sanity check
+
+Look at raw trajectories of different meanings for each game (change less over time, i.e. stability).
+
+```{r}
+meanings %>%
+  gather(meaning, score, null,circle,square) %>%
+  ggplot(aes(x = trialNum, y = score, group = interaction(gameNum, agentID))) +
+    geom_line(alpha = 0.01) +
+    facet_grid(meaning~word)
 ```
