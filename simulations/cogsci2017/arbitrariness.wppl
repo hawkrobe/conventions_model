@@ -3,15 +3,15 @@
 
 var utterances = ['word1', 'word2'];
 var objects = ['circle', 'square'];
-var meanings = ['null', 'circle', 'square'];
+var meanings = ['circle', 'square'];
 var numMeanings = meanings.length;
 
 var params = {
   speakerAlpha : argv.speakerAlpha,
   listenerAlpha: argv.listenerAlpha,
   discountFactor: argv.discountFactor,
-  costWeight: 0,
-  epsilon: 0.000001,
+  guessingEpsilon: argv.guessingEpsilon,
+  costWeight: 1,
   coord: 'diff',
   numTrials: 40,
   utterances: utterances,
@@ -19,90 +19,33 @@ var params = {
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,circleScore,squareScore', posttestF);
+// var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,' +
+//               'trialNum,agentID,word,circleScore,squareScore', posttestF);
 
 console.log(params);
 
-var sampleLexicon = function() {
-  var nullUtterance = {'null' : 'circle_square'};
-  return extend(nullUtterance, _.zipObject(utterances, map(function(utt) {
+var lexicalPrior = Infer({method: 'enumerate'}, function() {
+  return _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
-  }, utterances)));
-};
-
-var extensionSize = function(lexicon) {
-  var flattened = _.flatten(map(function(key) {
-    return filter(function(object) {
-      return _.includes(object.split('_'), lexicon[key]);
-    }, objects);
-  }, _.keys(lexicon)));
-  return flattened.length;
-};
-
-var S = function(object, context, posterior) {
-  return Infer({method: "enumerate"}, function() {
-    var utt = uniformDraw(utterances);
-//    console.log(utt);
-    var utility = expectation(posterior, function(lexicon) {
-//      console.log(lexicon);
-      var config = extend(params, {lexicon: lexicon, context: context});
-//      console.log(refModule.getListenerScore(object, utt, config));
-      return refModule.getListenerScore(object, utt, config);
-    });
-//    console.log(params.speakerAlpha * utility);
-    factor(params.speakerAlpha * utility);
-    return utt;
-  });
-};
-
-var L = function(utt, context, posterior) {
-  return Infer({method: "enumerate"}, function() {
-    var object = uniformDraw(context);
-    var utility = expectation(posterior, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon, context: context});
-      return refModule.getSpeakerScore(utt, object, config);
-    });
-    factor(params.listenerAlpha * utility);
-    return object;
-  });
-};
-
-var updatePosterior = function(data) {
-  return Infer({method: 'enumerate', model : function() { // 
-
-    // Implement simplicity prior (smaller lexicons preferred)
-    var lexicon = sampleLexicon();
-    factor(-extensionSize(lexicon));
-
-    mapData({data: data}, function(trial) { 
-      var discount = Math.pow(params.discountFactor,  data.length - trial.trialNum);
-      var config = {lexicon: lexicon, context: trial.context};
-      var objectToUse = (params.coord == 'diff' & trial.role == 'speaker' ? 
-                         trial.clickedName : trial.intendedName);
-      var pragmaticTerm = (trial.role == 'speaker' ?
-                           refModule.getListenerScore(objectToUse, trial.wordID, extend(params, config)) :
-                           refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
-      factor(discount * pragmaticTerm);
-    });
-    return lexicon;
-  }});
-};
+  }, utterances))
+});
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
+  var shared = [
+    iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+    params.guessingEpsilon, trial.trialNum
+  ];
+
   map(function(word) {
     var speaker1TopGuess = marginalize(posterior1, function(x) {return x[word]});
     var speaker2TopGuess = marginalize(posterior2, function(x) {return x[word]});
-    csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
-      trial.trialNum, trial.speakerID, word,
-      speaker1TopGuess.score('null'), speaker1TopGuess.score('circle'), speaker1TopGuess.score('square')
-    ].join(','), outputFile);
-    csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
-      trial.trialNum, trial.listenerID, word,
-      speaker2TopGuess.score('null'), speaker2TopGuess.score('circle'), speaker2TopGuess.score('square')
-    ].join(','), outputFile);
+    csv.writeLine(shared.concat([
+      trial.speakerID, word, speaker1TopGuess.score('circle'), speaker1TopGuess.score('square')
+    ]).join(','), outputFile);
+    csv.writeLine(shared.concat([
+      trial.listenerID, word, speaker2TopGuess.score('circle'), speaker2TopGuess.score('square')
+    ]).join(','), outputFile);
   }, utterances);
 };
 
@@ -116,23 +59,26 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
     speakerID: (trialNum % 2) == 0 ? 1 : 2,
     listenerID: (trialNum % 2) == 0 ? 2 : 1
   };
-  // run VI on current data
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID]);
+
+  var config = extend(params, {context: currTrial.context});
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
 
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, currTrial.context, speakerPosterior);
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
   var topSpeakerChoice =  sample(speakerOutput);
 
-  var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
+  var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
 
-  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  //postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   // display('speaker distribution')
   // display(speakerOutput);
   // display('listener distribution')
   // display(listenerOutput)
-  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  //console.log(topSpeakerChoice)
+  // console.log(topListenerChoice);
+  display('correct? ' + (topListenerChoice == currTrial.intendedName));
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
@@ -153,15 +99,15 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 };
 
 var f = csv.open('./output/arbitrariness_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,speakerID,listenerID,' +
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,trialNum,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
   console.log('iteration', i);
   iterate(i, f, {1: [], 2: []});
-}, _.range(100));
+}, _.range(1000));
 csv.close(f);
 
-console.log('running posttest')
+//console.log('running posttest')
 //postTest('post', posttestF);
-csv.close(posttestF);
+//csv.close(posttestF);

@@ -1,124 +1,112 @@
-///fold:
-var initList = function(n, val) {
-  return repeat(n, function() {return val})
-}
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
-var uniformPs = function(vs) {
-  return initList(vs.length, 1/vs.length)
-}
-///
-
-// possible states of the world
-var states = ['t1', 't2'];
-var statePrior =  Categorical({vs: states, ps: [1/2, 1/2]});
-
-// possible base utterances, and possible conjunctions
-var unconstrainedUtterances = ['t1_a', 't1_b','t2_a','t2_b'];
-var derivedUtterances = ['t1_a t1_b', 't2_a t2_b', 
-                         't1_b t2_a', 't1_a t2_a', 't1_a t2_b', 't1_b t2_b'];
+var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
+var derivedUtterances = ['word1_word2', 'word3_word4', 'word1_word3','word1_word4',
+                         'word2_word3','word2_word4','word3_word4'];
 var utterances = unconstrainedUtterances.concat(derivedUtterances);
-var utterancePrior = Categorical({vs: utterances, ps: uniformPs(utterances)});
+var objects = ['blue_circle', 'red_square'];
+var meanings = ['null', 'blue_circle', 'red_square'];
+var numMeanings = meanings.length;
 
-// takes a sample from a (biased & discretized) dirichlet distribution for each word,
-// representing the extent to which that word describes each object
-var lexiconPrior = Infer({method: 'enumerate'}, function(){
-  var meanings = map(function(utt) {
-    var t1Bias = utt.split('_')[0] === 't1' 
-    var t1ps = t1Bias ? [.1,.15,.2,.25,.3] : [.3,.25,.2,.15,.1]
-    var t1Prob = categorical({vs: [0.01, 0.25, .5, .75, .99], ps: t1ps})
-    return {'t1' : t1Prob, 't2' : 1-t1Prob};
+var params = {
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  discountFactor: argv.discountFactor,
+  costWeight: argv.costWeight,  
+  guessingEpsilon: argv.guessingEpsilon,
+  numTrials: 20,
+  utterances: utterances,
+  objects: objects
+};
+
+var pragStr = ('discount:' + params.discountFactor);
+//var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+//csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,blueCircleScore,redSquareScore', posttestF);
+
+console.log(params);
+
+var lexicalPrior = Infer({method: 'enumerate'}, function() {
+  return _.zipObject(unconstrainedUtterances, map(function(utt) {
+    var bias = 0.01;
+    var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'blue_circle' : 'red_square');
+    var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/3 + bias : 1/3 - (bias / 2);}, meanings);
+    return sample(Categorical({vs: meanings, ps: ps}));
+  }, unconstrainedUtterances));
+});
+
+var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
+  map(function(word) {
+    var speaker1TopGuess = marginalize(posterior1, function(x) {return x[word]});
+    var speaker2TopGuess = marginalize(posterior2, function(x) {return x[word]});
+    // console.log(word);
+    // console.log(JSON.stringify(speaker2TopGuess));
+    csv.writeLine([
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      trial.trialNum, trial.speakerID, word,
+      speaker1TopGuess.score('null'), speaker1TopGuess.score('blue_circle'), speaker1TopGuess.score('red_square')
+    ].join(','), outputFile);
+    csv.writeLine([
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      trial.trialNum, trial.listenerID, word,
+      speaker2TopGuess.score('null'), speaker2TopGuess.score('blue_circle'), speaker2TopGuess.score('red_square')
+    ].join(','), outputFile);
   }, unconstrainedUtterances);
-  return _.zipObject(unconstrainedUtterances, meanings);
-});
-
-// speaker optimality
-var alpha = 15;
-
-// length-based cost 
-var uttCost = function(utt) {
-  return utt.split(' ').length;
 };
 
-// Looks up the meaning of an utterance in a lexicon object  
-var uttFitness = cache(function(utt, state, lexicon) {
-  return Math.log(reduce(function(subUtt, memo) {
-    return lexicon[subUtt][state] * memo;
-  }, 1, utt.split(' ')));
-});
+// for each point in data, we want the model's predictions 
+var iterate = function(iterationNum, outputFile, dataSoFar) {
+  var trialNum = dataSoFar[1].length;
+  var currTrial = {
+    intendedName: uniformDraw(objects),//(trialNum % 2) == 0 ? objects[0] : objects[1],
+    context : objects,
+    trialNum: trialNum,
+    repNum: Math.floor(trialNum / 2),
+    speakerID: (trialNum % 2) == 0 ? 1 : 2,
+    listenerID: (trialNum % 2) == 0 ? 2 : 1
+  };
 
-// literal listener
-var L0 = cache(function(utt, lexicon) {
-  return Infer({method:"enumerate"}, function(){
-    var state = sample(statePrior);
-    factor(uttFitness(utt, state, lexicon));
-    return state;
-  });
-});
+  var config = extend(params, {context: currTrial.context});
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
 
-// pragmatic speaker
-var S1 = cache(function(state, lexicon) {
-  return Infer({method:"enumerate"}, function(){
-    var utt = sample(utterancePrior);
-    factor(alpha * (L0(utt, lexicon).score(state))
-           - uttCost(utt));
-    return utt;
-  });
-});
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
+  var topSpeakerChoice =  sample(speakerOutput);
 
-// conventional listener
-var L1 = cache(function(utt, lexicon) {
-  return Infer({method:"enumerate"}, function(){
-    var state = sample(statePrior);
-    observe(S1(state, lexicon), utt);
-    return state;
-  });
-});
+  var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
+  var topListenerChoice =  sample(listenerOutput);
+  console.log(topSpeakerChoice);
+//  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
+                 params.coord, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
+                 currTrial.intendedName, topSpeakerChoice, topListenerChoice,
+                 topListenerChoice == currTrial.intendedName
+                ].join(','), outputFile);
 
-var lexiconPosterior = cache(function(originAgent, data) {
-  return Infer({method: 'enumerate'}, function() {
-    var lexicon = sample(lexiconPrior);
-    mapData({data: data}, function(datum){
-      if(originAgent === 'L') {
-        observe(S1(datum.obj, lexicon), datum.utt);
-      } else if(originAgent === 'S') {
-        observe(L1(datum.utt, lexicon), datum.obj);
-      }
-    });
-    return lexicon;
-  });
-});
+  var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
+    return dataSoFar[id].concat(extend(currTrial, {
+      role : id == currTrial.speakerID ? 'speaker' : 'listener',
+      wordID : topSpeakerChoice,
+      clickedName : topListenerChoice
+    }));
+  }, [currTrial.speakerID, currTrial.listenerID]));
 
-// conventional listener (L1, marginalizing over lexicons)
-var L = function(utt, data) {
-  return Infer({method:"enumerate"}, function(){
-    var lexicon = sample(lexiconPosterior('L', data));
-    var state = sample(L1(utt, lexicon));
-    return state;
-  });
+  if(currTrial.trialNum < params.numTrials) {
+    iterate(iterationNum, outputFile, newDataSoFar);
+  } 
 };
 
-// conventional speaker (S1, reasoning about expected listener across lexicons)
-var S = function(state, data) {
-  return Infer({method:"enumerate"}, function(){
-    var utt = sample(utterancePrior);
-    var listener = Infer({method: 'enumerate'}, function() {
-      var lexicon = sample(lexiconPosterior('S', data));
-      return sample(L1(utt, lexicon));
-    });
-    factor(alpha * (listener.score(state))
-           - uttCost(utt));
-    return utt;
-  });
-};
+var f = csv.open('./output/conjunction_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,coord,trialNum,' +
+              'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
+              f);
+map(function(i) {
+  console.log('iteration', i)
+  iterate(i, f, {1: [], 2: []});
+}, _.range(100));
+csv.close(f);
 
-console.log("likelihood of t1_a meaning t1: " + 
-            expectation(lexiconPosterior('S', []), 
-                        function(v) {return v['t1_a']['t1']}))
-//viz(S('t1', []))
-
-console.log("likelihood of t1_a meaning t1 after observations: " + 
-            expectation(lexiconPosterior('S', [{utt: 't1_a t1_b', obj: 't1'},
-                                               {utt: 't1_a', obj: 't1'}]), 
-                        function(v) {return v['t1_a']['t1']}))
-// viz(S('t1', [{utt: 't1_a t1_b', obj: 't1'},
-//              {utt: 't1_a', obj: 't1'}]))
+console.log('running posttest')
+//postTest('post', posttestF);
+//csv.close(posttestF);
