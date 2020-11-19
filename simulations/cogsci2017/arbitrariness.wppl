@@ -9,17 +9,17 @@ var numMeanings = meanings.length;
 var params = {
   speakerAlpha : argv.speakerAlpha,
   listenerAlpha: argv.listenerAlpha,
-  discountFactor: argv.discountFactor,  
+  discountFactor: argv.discountFactor,
+  costWeight: 0,
   epsilon: 0.000001,
   coord: 'diff',
-  costWeight: 0,
-  numTrials: 20,
-  utterances: utterances.concat('null'),
+  numTrials: 40,
+  utterances: utterances,
   objects: objects
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
 csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,circleScore,squareScore', posttestF);
 
 console.log(params);
@@ -43,10 +43,14 @@ var extensionSize = function(lexicon) {
 var S = function(object, context, posterior) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(utterances);
+//    console.log(utt);
     var utility = expectation(posterior, function(lexicon) {
+//      console.log(lexicon);
       var config = extend(params, {lexicon: lexicon, context: context});
+//      console.log(refModule.getListenerScore(object, utt, config));
       return refModule.getListenerScore(object, utt, config);
     });
+//    console.log(params.speakerAlpha * utility);
     factor(params.speakerAlpha * utility);
     return utt;
   });
@@ -124,12 +128,11 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   var topListenerChoice =  sample(listenerOutput);
 
   postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
-  // display('context is ' + currTrial.context);
   // display('speaker distribution')
   // display(speakerOutput);
   // display('listener distribution')
   // display(listenerOutput)
-  // display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
@@ -149,13 +152,14 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   } 
 };
 
-var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
+var f = csv.open('./output/arbitrariness_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
 csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
+  console.log('iteration', i);
   iterate(i, f, {1: [], 2: []});
-}, _.range(1000));
+}, _.range(100));
 csv.close(f);
 
 console.log('running posttest')
