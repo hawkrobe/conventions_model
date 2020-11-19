@@ -1,0 +1,11 @@
+{
+  "name": "refModule",
+  "webppl": {
+    "wppl": ["agents.wppl"]
+  },
+  "dependencies": {
+    "babyparse": "*",
+    "lodash": "~4.17.13",
+    "JSONStream": "*"
+  }
+}
