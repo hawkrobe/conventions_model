@@ -14,9 +14,9 @@ with open('arbitrariness_grid.csv', 'w') as csv_file :
 chainNum = 0
 with open('conjunction_grid.csv', 'w') as csv_file :
     writer = csv.writer(csv_file, delimiter=',')
-    for alpha in [1, 2, 4, 8, 16, 32] :
+    for alpha in range(1, 11) :
         for discountFactor in [0.6, 0.8, 1] :
-            for costWeight in [1, 2, 4, 8, 16, 32] :
+            for costWeight in range(1, 11) :
                 for guessingEpsilon in [0.1, 0.01, 0.001, 0.0001, 0.00001] :
                     writer.writerow([chainNum, alpha, alpha, discountFactor, costWeight, guessingEpsilon])
                     chainNum = chainNum + 1

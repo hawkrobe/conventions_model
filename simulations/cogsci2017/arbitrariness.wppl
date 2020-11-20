@@ -78,7 +78,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   // display(listenerOutput)
   //console.log(topSpeakerChoice)
   // console.log(topListenerChoice);
-  display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
@@ -103,7 +103,7 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,trialNum,
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
-  console.log('iteration', i);
+  //console.log('iteration', i);
   iterate(i, f, {1: [], 2: []});
 }, _.range(1000));
 csv.close(f);

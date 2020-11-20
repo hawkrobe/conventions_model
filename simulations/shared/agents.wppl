@@ -1,7 +1,7 @@
 var getLexiconElement = function(utt, target, lexicon) {
   return _.min(map(function(word) {
     var uttLex = lexicon[word];
-    return target == uttLex ? 1 : 0.0001;
+    return target == uttLex ? 1 : 0;
   }, utt.split('_')));
 };
 
@@ -10,37 +10,28 @@ var getUttCost = function(utt) {
 };
 
 var L0 = cache(function(utt, context, lexicon, guessingEpsilon) {
-  return Mixture({dists: [
-    Categorical({vs: context}),
-    Infer({method: "enumerate"}, function() {
-      var obj = uniformDraw(context);
-      factor(Math.log(getLexiconElement(utt, obj, lexicon)));
-      return obj;
-    })
-  ], ps: [guessingEpsilon, 1 - guessingEpsilon]});
-})
+  return Infer({method: "enumerate"}, function() {
+    var obj = uniformDraw(context);
+    factor(Math.log(getLexiconElement(utt, obj, lexicon)));
+    return flip(guessingEpsilon) ? uniformDraw(context) : obj;
+  });
+});
 
 var S1 = cache(function(obj, params) {
-  return Mixture({dists: [
-    Categorical({vs: params.utterances}),
-    Infer({method: "enumerate"}, function() {
-      var utt = uniformDraw(params.utterances);
-      factor(params.speakerAlpha * L0(utt, params.context, params.lexicon, params.guessingEpsilon).score(obj)
-             - params.costWeight * getUttCost(utt));
-      return utt;
-    })
-  ], ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]});
+  return Infer({method: "enumerate"}, function() {
+    var utt = uniformDraw(params.utterances);
+    factor(params.speakerAlpha * L0(utt, params.context, params.lexicon, params.guessingEpsilon).score(obj)
+           - params.costWeight * getUttCost(utt));
+    return flip(params.guessingEpsilon) ? uniformDraw(params.utterances) : utt;
+  })
 })
 
 var L1 = cache(function(utt, params) {
-  return Mixture({dists: [
-    Categorical({vs: params.context}),
-    Infer({method: "enumerate"}, function() {
-      var obj = uniformDraw(params.context);
-      factor(params.listenerAlpha * S1(obj, params).score(utt));
-      return obj;
-    })
-  ], ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]});
+  return Infer({method: "enumerate"}, function() {
+    var obj = uniformDraw(params.context);
+    factor(params.listenerAlpha * S1(obj, params).score(utt));
+    return flip(params.guessingEpsilon) ? uniformDraw(params.context) : obj;
+  });
 });
 
 var S = function(object, posterior, params) {
