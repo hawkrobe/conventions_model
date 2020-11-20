@@ -22,7 +22,7 @@ var params = {
 
 var pragStr = ('discount:' + params.discountFactor);
 //var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-//csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,blueCircleScore,redSquareScore', posttestF);
+//csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word,nullScore,blueCircleScore,redSquareScore', posttestF);
 
 console.log(params);
 
@@ -42,12 +42,12 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
     // console.log(word);
     // console.log(JSON.stringify(speaker2TopGuess));
     csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
       trial.trialNum, trial.speakerID, word,
       speaker1TopGuess.score('null'), speaker1TopGuess.score('blue_circle'), speaker1TopGuess.score('red_square')
     ].join(','), outputFile);
     csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
       trial.trialNum, trial.listenerID, word,
       speaker2TopGuess.score('null'), speaker2TopGuess.score('blue_circle'), speaker2TopGuess.score('red_square')
     ].join(','), outputFile);
@@ -79,7 +79,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   console.log(topSpeakerChoice);
 //  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
-                 params.coord, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
+                 params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName, topSpeakerChoice, topListenerChoice,
                  topListenerChoice == currTrial.intendedName
                 ].join(','), outputFile);
@@ -98,7 +98,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 };
 
 var f = csv.open('./output/conjunction_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,coord,trialNum,' +
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,' +
               'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
