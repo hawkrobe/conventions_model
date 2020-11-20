@@ -78,8 +78,8 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   // display(listenerOutput)
   //console.log(topSpeakerChoice)
   // console.log(topListenerChoice);
-  display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
+  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
                  topListenerChoice == currTrial.intendedName
@@ -99,11 +99,11 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 };
 
 var f = csv.open('./output/arbitrariness_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,trialNum,speakerID,listenerID,' +
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,trialNum,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
-  console.log('iteration', i);
+//  console.log('iteration', i);
   iterate(i, f, {1: [], 2: []});
 }, _.range(1000));
 csv.close(f);
