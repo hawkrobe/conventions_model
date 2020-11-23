@@ -21,8 +21,8 @@ var params = {
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-//var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-//csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,blueCircleScore,redSquareScore', posttestF);
+var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,trialNum,agentID,word,nullScore,blueCircleScore,redSquareScore', posttestF);
 
 console.log(params);
 
@@ -77,7 +77,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
   console.log(topSpeakerChoice);
-//  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
                  params.coord, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName, topSpeakerChoice, topListenerChoice,
@@ -108,5 +108,5 @@ map(function(i) {
 csv.close(f);
 
 console.log('running posttest')
-//postTest('post', posttestF);
-//csv.close(posttestF);
+postTest('post', posttestF);
+csv.close(posttestF);
