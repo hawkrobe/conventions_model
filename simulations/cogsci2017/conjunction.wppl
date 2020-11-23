@@ -2,11 +2,11 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
 var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
-var derivedUtterances = ['word1_word2', 'word3_word4', 'word1_word3','word1_word4',
+var derivedUtterances = ['word1_word2', 'word1_word3','word1_word4',
                          'word2_word3','word2_word4','word3_word4'];
 var utterances = unconstrainedUtterances.concat(derivedUtterances);
 var objects = ['blue_circle', 'red_square'];
-var meanings = ['null', 'blue_circle', 'red_square'];
+var meanings = ['blue_circle', 'red_square'];
 var numMeanings = meanings.length;
 
 var params = {
@@ -39,17 +39,15 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
   map(function(word) {
     var speaker1TopGuess = marginalize(posterior1, function(x) {return x[word]});
     var speaker2TopGuess = marginalize(posterior2, function(x) {return x[word]});
-    // console.log(word);
-    // console.log(JSON.stringify(speaker2TopGuess));
     csv.writeLine([
       iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
       trial.trialNum, trial.speakerID, word,
-      speaker1TopGuess.score('null'), speaker1TopGuess.score('blue_circle'), speaker1TopGuess.score('red_square')
+      speaker1TopGuess.score('blue_circle'), speaker1TopGuess.score('red_square')
     ].join(','), outputFile);
     csv.writeLine([
       iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
       trial.trialNum, trial.listenerID, word,
-      speaker2TopGuess.score('null'), speaker2TopGuess.score('blue_circle'), speaker2TopGuess.score('red_square')
+      speaker2TopGuess.score('blue_circle'), speaker2TopGuess.score('red_square')
     ].join(','), outputFile);
   }, unconstrainedUtterances);
 };
@@ -58,7 +56,7 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
 var iterate = function(iterationNum, outputFile, dataSoFar) {
   var trialNum = dataSoFar[1].length;
   var currTrial = {
-    intendedName: uniformDraw(objects),//(trialNum % 2) == 0 ? objects[0] : objects[1],
+    intendedName: uniformDraw(objects),
     context : objects,
     trialNum: trialNum,
     repNum: Math.floor(trialNum / 2),
@@ -76,6 +74,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
+  console.log(JSON.stringify(speakerOutput));
   console.log(topSpeakerChoice);
 //  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
@@ -102,7 +101,7 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,gues
               'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
-  console.log('iteration', i)
+//  console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
 }, _.range(100));
 csv.close(f);
