@@ -103,7 +103,6 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
-//  console.log('iteration', i);
   iterate(i, f, {1: [], 2: []});
 }, _.range(1000));
 csv.close(f);

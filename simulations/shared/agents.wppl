@@ -1,7 +1,7 @@
 var getLexiconElement = function(utt, target, lexicon) {
   return _.min(map(function(word) {
     var uttLex = lexicon[word];
-    return target == uttLex ? 1 : 0.0001;
+    return target == uttLex ? 1 : 0.00001;
   }, utt.split('_')));
 };
 
@@ -9,38 +9,44 @@ var getUttCost = function(utt) {
   return utt.split('_').length;
 };
 
-var L0 = cache(function(utt, context, lexicon, guessingEpsilon) {
-  return Mixture({dists: [
-    Categorical({vs: context}),
-    Infer({method: "enumerate"}, function() {
-      var obj = uniformDraw(context);
-      factor(Math.log(getLexiconElement(utt, obj, lexicon)));
-      return obj;
-    })
-  ], ps: [guessingEpsilon, 1 - guessingEpsilon]});
-})
+var L0 = cache(function(utt, params) {
+  return Mixture({
+    dists: [
+      Categorical({vs: params.context}),
+      Infer({method: "enumerate"}, function() {
+        var obj = uniformDraw(params.context);
+        factor(Math.log(getLexiconElement(utt, obj, params.lexicon)));
+        return obj;
+      })],
+    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+  });
+});
 
 var S1 = cache(function(obj, params) {
-  return Mixture({dists: [
-    Categorical({vs: params.utterances}),
-    Infer({method: "enumerate"}, function() {
-      var utt = uniformDraw(params.utterances);
-      factor(params.speakerAlpha * L0(utt, params.context, params.lexicon, params.guessingEpsilon).score(obj)
-             - params.costWeight * getUttCost(utt));
-      return utt;
-    })
-  ], ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]});
+  return Mixture({
+    dists: [
+      Categorical({vs: params.utterances}),
+      Infer({method: "enumerate"}, function() {
+        var utt = uniformDraw(params.utterances);
+        factor(params.speakerAlpha * L0(utt, params).score(obj)
+               - params.costWeight * getUttCost(utt));
+        return utt;
+      })],
+    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+  })
 })
 
 var L1 = cache(function(utt, params) {
-  return Mixture({dists: [
-    Categorical({vs: params.context}),
-    Infer({method: "enumerate"}, function() {
-      var obj = uniformDraw(params.context);
-      factor(params.listenerAlpha * S1(obj, params).score(utt));
-      return obj;
-    })
-  ], ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]});
+  return Mixture({
+    dists: [
+      Categorical({vs: params.context}),
+      Infer({method: "enumerate"}, function() {
+        var obj = uniformDraw(params.context);
+        factor(params.listenerAlpha * S1(obj, params).score(utt));
+        return obj;
+      })],
+    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+  });
 });
 
 var S = function(object, posterior, params) {
@@ -48,8 +54,16 @@ var S = function(object, posterior, params) {
     var utt = uniformDraw(params.utterances);
     var utility = expectation(posterior, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
+      // console.log(lexicon);
+      // console.log(utt, object)
+      // console.log(L0(utt, config))
+      // console.log(S1(object, config))
+      // console.log(L1(utt, config))
+      // console.log(L1(utt, config).score(object))
       return L1(utt, config).score(object);
     });
+    // console.log(params.speakerAlpha * utility)
+    // console.log(params.costWeight * getUttCost(utt))
     factor(params.speakerAlpha * utility -
            params.costWeight * getUttCost(utt));
     return utt;
