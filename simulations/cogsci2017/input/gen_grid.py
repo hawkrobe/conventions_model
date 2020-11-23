@@ -11,12 +11,13 @@ with open('arbitrariness_grid.csv', 'w') as csv_file :
                     writer.writerow([chainNum, speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon])
                     chainNum = chainNum + 1
 
-chainNum = 0
+chainNum = 200000
 with open('conjunction_grid.csv', 'w') as csv_file :
     writer = csv.writer(csv_file, delimiter=',')
-    for alpha in range(1, 11) :
+    for alpha in range(1, 20) :
         for discountFactor in [0.6, 0.8, 1] :
-            for costWeight in range(1, 11) :
+            for costWeight in range(0,20) :
                 for guessingEpsilon in [0.1, 0.01, 0.001, 0.0001, 0.00001] :
-                    writer.writerow([chainNum, alpha, alpha, discountFactor, costWeight, guessingEpsilon])
-                    chainNum = chainNum + 1
+                    if costWeight > 10 or alpha > 10 :
+                        writer.writerow([chainNum, alpha, alpha, discountFactor, costWeight, guessingEpsilon])
+                        chainNum = chainNum + 1
