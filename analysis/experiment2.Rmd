@@ -46,7 +46,6 @@ Filter out incompletes & compute cumulative accuracy. We also divide into quarte
 
 ```{r}
 d <- raw_clicks %>%
-  filter(condition != 'mixedLower') %>%
   mutate(acc = ifelse(correct, 1, 0)) %>%
   filter(!(gameid %in% incompletes)) %>%
   group_by(gameid) %>%
@@ -91,7 +90,7 @@ Want to run these webppl models in parallel, so the input data should be in sepa
 
 ```{r}
 gameIDs = d %>% 
-  filter(!(gameid %in% nonConvergers)) %>%
+  filter(condition != 'mixedLower') %>%
   pull(id) %>%
   unique()
 
@@ -131,7 +130,6 @@ ggsave('~/Downloads/singleLine.pdf', height = 4, width = 6)
 
 ```{r}
 d %>%
-  mutate(condition = ifelse(condition == 'intermediateOnly', 'coarse', 'fine')) %>%
   group_by(condition, trialNum) %>%
   summarize(trialLevelPctCorrect = mean(acc)) %>%
   ggplot(aes(x = trialNum, y = 100 * trialLevelPctCorrect, color = condition)) +

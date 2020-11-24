@@ -10,6 +10,8 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 ```{r}
 library(tidyverse)
 library(ggthemes)
+library(lme4)
+library(lmerTest)
 ```
 
 Make plot from table in Clark paper
@@ -31,7 +33,9 @@ data.frame(prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.
 ggsave('../../dissertation/dissertation/figures/modeling/clark92.pdf', height = 8, width = 8, units = 'cm', useDingbats = F)
 ```
 
-## Simulating models & looking at post-test
+## Phenomenon #2: 
+
+### Simulating models & looking at post-test
 
 ```{r}
 trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "trajectory", full.names = T) %>% # 
@@ -42,12 +46,10 @@ trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "traje
   filter(condition != 'mixedLower') %>%
   mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
 
-  
 trajectories %>%
-  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  filter(discountFactor == 0.8 , coord == 'diff') %>%
   group_by(condition, coord, discountFactor, time) %>%
   tidyboot::tidyboot_mean(correct, nboot=100) %>%
-  filter(discountFactor == 0.8 , coord == 'diff') %>%
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha=0.2) +
     geom_hline(yintercept = 25, lty = 'dashed') +
@@ -64,12 +66,22 @@ ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', useDingb
 
 ```{r}
 trajectories %>%
+  filter(discountFactor == 0.8) %>%
+  filter(coord == 'diff') %>%
+  glmer(correct ~ repNum * condition + (1 + repNum | gameNum),
+        family = 'binomial',
+        data = .) %>%
+  summary()
+```
+
+```{r}
+trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
   group_by(gameNum, condition,coord, discountFactor, repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
   group_by(condition, repNum, coord,discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  filter(discountFactor == 0.8 , coord == 'diff') %>%
+  filter(discountFactor == 0.8, coord == 'diff') %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
     ylim(3.5, 8.5) +
@@ -84,21 +96,181 @@ trajectories %>%
 ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf')
 ```
 
+```{r}
+trajectories %>%
+  filter(discountFactor == 0.8) %>%
+  filter(coord == 'diff') %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition) %>%
+  summarize(m = mean(numUniqueWordsUsed))
+```
+
 
 ```{r}
-softmax <- function(outVec){
-  s.vec <- exp(outVec)/sum(exp(outVec))
-  return(s.vec)
-}
+trajectories %>%
+  filter(discountFactor == 0.8) %>%
+  filter(coord == 'diff') %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  lmer(numUniqueWordsUsed ~ repNum * condition + (1 + repNum | gameNum),
+        data = .) %>%
+  summary()
 
-trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "meaningTest", full.names = T) %>% # 
-  map(~ read_csv(.x) %>% mutate(filename=.x)) %>%
-  reduce(rbind) %>%
-  mutate(quarter = floor((time - 1) / 24)) %>%
-  mutate(repNum = floor((time - 1) / 8)) %>%
-  filter(condition != 'mixedLower') %>%
-  mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
+```
+Compare parameters
 
+```{r}
+trajectories %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(condition, coord, discountFactor, time) %>%
+  tidyboot::tidyboot_mean(correct, nboot=100) %>%
+  ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
+    geom_point(alpha=0.2) +
+    geom_hline(yintercept = 25, lty = 'dashed') +
+    geom_smooth(se=T) +
+    facet_grid(coord ~ paste0('discount:', discountFactor)) +
+    labs(y = '% correct', x = 'trial #') +
+    theme_few() +
+    scale_color_colorblind() +
+    ylim(0,100) +
+    theme(aspect.ratio = 1)
+```
+
+```{r}
+trajectories %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition, repNum, coord,discountFactor) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
+    geom_line() +
+    ylim(3.5, 8.5) +
+    geom_hline(yintercept = c(4, 8)) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    facet_grid(coord ~ paste0('discount:', discountFactor)) +
+    theme_few() +
+    scale_color_colorblind() +
+    labs(y = "number unique words used") +
+    theme(aspect.ratio = 1)
+```
+## Look at evolution of meanings
+
+Read in files:
+
+```{r}
+meanings <- dir(path = "../simulations/cogsci2018/output/", pattern = "meaningTest", full.names = T) %>% # 
+  map(~ read_csv(.x, 
+                 skip = 1, 
+                 col_names = c('i','gameNum','speakerAlpha','listenerAlpha',
+                               'time','agentID','word','meaning','prob')) %>% 
+        mutate(filename = .x)) %>%
+  reduce(rbind) 
+```
+
+Plot proportion of levels across words
+
+```{r}
+final.meanings <- meanings %>%
+  left_join(trajectories %>% group_by(gameNum) %>% summarize(condition = first(condition))) %>%
+  filter(agentID %in% c(1,2)) %>%
+  separate(filename, into = c('garbage', 'discount', 'coord'), sep = '_') %>%
+  separate(discount, into = c('garbage', 'discountFactor'), sep = ':') %>%
+  separate(coord, into = c('garbage', 'coord'), sep = ':') %>%
+  mutate(level = case_when(
+    meaning == 'null' ~ 'null',
+    meaning %in% c('circle', 'square') ~ 'super',
+    meaning %in% c('blue', 'red', 'striped', 'spotted') ~ 'basic',
+    TRUE ~ 'sub'
+  ))
+
+final.meanings %>%
+  filter(discountFactor == 0.8, coord == 'diff') %>%
+  group_by(gameNum, agentID, time, word) %>%
+  filter(prob == max(prob)) %>%
+  group_by(time, level, condition) %>%
+  tally() %>%
+  group_by(condition, time) %>%
+  mutate(prob = n / sum(n))  %>%
+  ungroup() %>%
+  mutate(level = fct_relevel(level, 'null', 'sub', 'basic')) %>%
+  ggplot(aes(x = time, y = prob, fill = level)) +
+    geom_area(state='identity', alpha = 0.8) +
+    facet_wrap(~ condition) +
+    labs(x = 'trial #', y = 'proportion of words at level') +
+    theme_few()
+
+ggsave('../writing/journal_manuscript/figures/evolution.pdf', height = 4, width = 4)
+```
+
+Statistical test of rates on final round:
+
+```{r}
+final.meanings %>%
+  filter(discountFactor == 0.8, coord == 'diff') %>%
+  group_by(gameNum, agentID, time, word) %>%
+  filter(prob == max(prob)) %>%
+  group_by(time, level, condition) %>%
+  tally() %>%
+  filter(time == 96) %>%
+  group_by(condition) %>%
+  mutate(s = sum(n), prop = n / sum(n)) %>%
+  arrange(condition)
+
+# compare proportions of sub-ordinate
+prop.test(x = c(47, 290), n = c(512, 368))
+
+# compare proportions of basic-level
+prop.test(x = c(231, 31), n = c(512, 368))
+```
+
+```{r}
+meaning.toplot <- meanings %>%
+  left_join(trajectories %>% group_by(gameNum) %>% summarize(condition = first(condition))) %>%
+  filter(agentID %in% c(1,2)) %>%
+  separate(filename, into = c('garbage', 'discount'), sep = '_') %>%
+  separate(discount, into = c('garbage', 'discountFactor'), sep = ':') %>%
+  mutate(level = case_when(
+    meaning == 'null' ~ 'null',
+    meaning %in% c('circle', 'square') ~ 'super',
+    meaning %in% c('blue', 'red', 'striped', 'spotted') ~ 'basic',
+    TRUE ~ 'sub'
+  )) %>%
+  group_by(gameNum, agentID, time, word, level, condition, discountFactor) %>%
+  summarize(n = length(prob), prob = sum(prob)) 
+
+meaning.toplot %>%
+  group_by(condition, discountFactor, time, level) %>%
+  summarize(m = mean(prob))  %>%
+  ggplot(aes(x = time, y = m, color = level)) +
+    geom_line() +
+    facet_grid(condition ~ discountFactor)
+```
+
+```{r}
+meaning.toplot %>%
+  filter(discountFactor == 0.8) %>%
+  group_by(gameNum, word, condition, discountFactor, time, agentID) %>%
+  filter(prob == max(prob)) %>%
+  group_by(gameNum, agentID, time, condition, discountFactor, level) %>%
+  tally() %>%
+  ungroup() %>%
+  select(-discountFactor) %>%
+  complete(nesting(gameNum, agentID, time, condition), level, fill = list(n=0)) %>%
+  group_by(time, condition, level) %>%
+  summarize(m = mean(n)) %>%
+  ggplot(aes(x = time, y = m, color = level)) +
+    geom_line() +
+    facet_grid(condition ~ .) +
+    theme_few()
+
+```
+
+
+```{r}
 postTest %>%
   filter(trialNum == 96) %>%
   mutate(aboveThreshold = val > -1) %>%
