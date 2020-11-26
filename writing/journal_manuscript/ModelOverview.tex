@@ -134,18 +134,18 @@ How do agents overcome this ambiguity to converge on an \emph{informative} commu
 In our account, this problem is naturally solved by the principles of \textit{pragmatic reasoning} \cite{Grice75_LogicConversation}.
 
 %In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
-More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference in a probabilistic framework \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics}.~A pragmatic speaker denoted by $S_1$ attempts to satisfy the Gricean \emph{maxim of quantity} by balancing informativity to an imagined listener against the cost of producing an utterance. 
+More specifically, we draw upon the recent Rational Speech Act (RSA) framework, which formalizes the Gricean assumption of cooperativity as recursive social inference in a probabilistic framework \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics}.
+A pragmatic speaker denoted by $S_1$ attempts to satisfy the Gricean \emph{maxim of quantity} by balancing informativity to an imagined listener against the cost of producing an utterance. 
 A pragmatic listener $L_1$ then inverts their model of the speaker to infer their likely intended target.
-This chain of recursive reasoning grounds out in a \emph{literal listener} $L_0$, which is assumed to identify the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$.
-For any utterance $u$ and world state $o$, the function $\mathcal{L}$ function returns the extent to which $u$ applies to $o$.
-This model can be specified as follows:
+This chain of recursive reasoning grounds out in an imagined \emph{literal listener} $L_0$, who is assumed to identify the intended target directly using a softmax over the parameterized lexical meaning function $\mathcal{L}_{\phi_k}$, which evaluates the literal meaning of $u$ on $o$.
+This model of pragmatic reasoning can be specified as follows:
 \begin{align}
 L_0(o | u, \phi_k) &\propto  \mathcal{L}_{\phi_k}(u,o)\hfill\label{eq:RSA}\\
 S_1(u | o, \phi_k) &\propto   \exp\{w_S \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}\nonumber   \\
 L_1(o | u, \phi_k) &\propto   \exp\{w_L \log S_1(u | o, \phi_k)\}\nonumber
 \end{align}
 where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener's choice. 
-As $w_L \rightarrow \infty$, it approaches maximization.
+As $w_L \rightarrow \infty$, it approaches maximizing utility\footnote{Note that the normalization constant may be exactly zero for some $\phi_k$, in which case the distribution is not well-defined. To address this issue, we add a noise model to each agent in (4); with probability $\epsilon$, they choose uniformly from the support, ensuring non-zero probability to every outcome. See Appendix A for additional details.}.
 
 Pragmatic reasoning, formalized in this way, plays two distinct roles in our model.
 First, Gricean agents must assume that their partner is using language in a cooperative manner and account for this when inferring their partner's language model.
