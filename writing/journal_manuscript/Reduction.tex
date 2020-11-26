@@ -29,13 +29,20 @@ As uncertainty gradually decreases, they are able to achieve the same expected i
 
 \subsection{Model simulations}
 
-\begin{figure*}
+\begin{figure}
 \centering
-    \includegraphics[scale=.9]{sec1-modelResults.pdf}
-  \caption{Schematic of model}
+    \includegraphics[scale=1]{sec1-convergence.pdf}
+  \caption{\emph{Agents learn to successfully coordinate over repeated interactions.} Error bars are bootstrapped 95\% CIs.}
   \label{fig:sec1model}
-\end{figure*}
+\end{figure}
 
+  \begin{figure*}
+\centering
+    \includegraphics[scale=.9]{sec1-arbitrariness}
+    \vspace{1em}
+  \caption{\emph{Path-dependence of conventions.} The trajectory of each agent's beliefs about $\phi(u_1)$ in Simulation 1.1 are shown following all possible outcomes of the first trial. The top four rows are cases where the listener happened to correctly choose the target. In these cases, agents condition on the same data and rapidly converge on a system of meaning consistent with this feedback, e.g. when $u_1$ was successfully used to refer to the circle (shown in orange), both agents subsequently believe that $u_1$ means \emph{circle}. The bottom four rows show cases where the listener initially chooses the incorrect object. In these cases, the agents condition on different data (reflected in diverging beliefs on trial 2) but ultimately recover from this mis-coordination depending on subsequent rounds.}
+  \label{fig:path-dependence}
+\end{figure*}
 
 \paragraph{Simulation 1.1: Coordination}
 
@@ -59,7 +66,7 @@ Because each utterance is equally (un)informative, the speaker must randomly sam
 They may then observe the listener's selection of an object $o \sim L(o | u_1)$ --- say, $o_1$, a correct response.
 Finally, they may use the observed pair $D = \{u_1, o_1\}$ to update their beliefs about the listener's true lexicon $P(\phi | D)\propto L_1(o_1 | u_1, \phi)P(\phi)$.
 The listener is similarly able to update their beliefs about the speaker's true lexicon $P(\phi | D)\propto S_1(u_1 | o_1, \phi)P(\phi)$. 
-Both agents then proceed to the next trial, where they use this posterior distribution.
+Both agents then proceed to the next trial, where they use this posterior distribution to produce or interpret language.
 
 To examine how the dynamics of this process unfold over multiple rounds, we conducted a simulation running these models forward for 1000 different trajectories.
 We have the agents swap speaker and listener roles on each trial, and randomly sample the target on each trial from the set of $\{o_1, o_2\}$.
@@ -67,23 +74,29 @@ We use enumeration to exactly compute each agent's posterior beliefs about $\phi
 Trajectories diverge when different actions are sampled at a time step.
 For example, if the speaker had sampled $u_2$ instead of $u_1$ on the first trial, or if the listener had made an error by choosing $o_2$, then they would subsequently condition on these observations instead.
 
-We highlight several key results.
-First, most fundamentally, the communicative success of the dyad rises over the course of interaction; the listener is able to more accurately select the true target object (see Fig. \ref{fig:sec1model}A). 
+We highlight several key results from these simulations at soft-max optimality parameter values $w_L = w_S = 16$ and memory discounting parameter $\beta = 0.8$ (see Appendix Fig.~\ref{fig:arbitrariness_grid} for an exploration of other values).
+First, most fundamentally, the communicative success of the dyad rises over the course of interaction; the listener is able to more accurately select the true target object (see Fig.~\ref{fig:sec1model}). 
 Second, the initial symmetry between the meanings is broken by initial choices, leading to \emph{arbitrary} but \emph{stable} mappings in future rounds.
-This can be seen by examining the path-dependence of different lexicons across the 1000 simulations (see Fig.\ref{fig:sec1model}B). 
-Third, because one's partner is assumed to be cooperative during belief updating, agents can also learn about \emph{unheard} utterances. 
-Observing $D = \{(u_1, o_1)\}$ also provides evidence that $u_2$ is \emph{not} a good fit for $o_1$.
-This effect arises from Gricean maxims: if $u_2$ were a better fit for $o_1$, the speaker would have used it instead \cite{Grice75_LogicConversation}. 
-Fourth, \emph{failed references} can lead to conventions just as effectively as successful references: if the speaker intends $o_1$ and says $u_1$, but then the listener incorrectly picks $o_2$, the speaker will take this as evidence that $u_1$ actually means $o_2$ in their partner's lexicon and become increasingly likely to use it that way on subsequent rounds.
-\todo[inline]{Show some result for this?}
+This can be seen by examining the path-dependence of beliefs following all possible outcomes of the initial trial (see Fig.~\ref{fig:path-dependence}). 
+Third, because each agent assumes their partner is using language cooperatively, they can also make inferences about \emph{unheard} utterances. 
+Observing $D = \{(u_2, o_1)\}$ also provides evidence that $u_1$ is \emph{not} a good fit for $o_1$ (e.g. see third row of Fig.~\ref{fig:path-dependence}).
+This effect arises from Gricean pragmatic reasoning: if $u_2$ were a better fit for $o_1$, the speaker would have used it instead \cite{Grice75_LogicConversation}. 
+Fourth, conventions may form based on \emph{failed references} as well as successful ones: if the speaker intends $o_1$ and says $u_1$, but then the listener incorrectly picks $o_2$, the speaker will take this as evidence that $u_1$ actually means $o_2$ in their partner's lexicon and become increasingly likely to use it that way on subsequent rounds.
 
 \paragraph{Simulation 1.2: Efficiency}
 
+\begin{figure*}
+\centering
+    \includegraphics[scale=1.2]{sec1-reduction_example}
+  \caption{\emph{Agent converge on more efficient utterances over repeated interactions.}}
+  \label{fig:sec1efficiency}
+\end{figure*}
+
+
 Next, we show how our model explains reduction of utterance length over multiple interactions. 
-\todo[inline]{Splinter off panel C to show illustration of how this works}
 For utterances to be reduced, of course, they must vary in length, so we extend our grammar to include \emph{conjunctions}. 
 Conjunctions are one of the simplest ways to construct longer, non-atomic utterances compositionally from lexical primitives, using the product rule \cite<see also>[who instead consider negation]{SteinertThrelkeld16_CompositionalSignaling}:
-$$\mathcal{L}(u_i \textrm{ and } u_j, o) = \mathcal{L}(u_i, o) \times \mathcal{L}(u_j, o)$$
+$$\mathcal{L}_\phi(u_iu_j, o) = \mathcal{L}_\phi(u_i, o) \times \mathcal{L}_\phi(u_j, o)$$
 We consider a scenario where two objects $\{o_1, o_2\}$ differ along two different features. 
 The speaker thus has four primitive words at their disposal -- two words for the first feature ($\{u_{11}, u_{12}\}$) and two for the second $\{u_{21}, u_{22}\}$. 
 While we established in the previous section that conventions can emerge over a reference game in the complete absence of initial preferences, players often bring such preferences to the table. 
@@ -91,8 +104,16 @@ A player who hears `ice skater' on the first round of a tangrams task is more li
 To show that our model can accommodate this fact, we allow the speaker's initial prior meanings to be slightly biased. 
 We assume $u_{11}$ and $u_{21}$ are a priori more likely to mean $o_1$ and $u_{12}$ and $u_{22}$ are more likely to mean $o_2$.
 
+\begin{figure}
+\centering
+    \includegraphics[scale=1]{sec1-efficiency-explanation}
+  \caption{\emph{Agent converge on more efficient utterances over repeated interactions.} (A) Results of simulation 1.2. Error bars are bootstrapped 95\% CIs. (B) More efficient utterances gradually gain in utility as a tradeoff between informativity and efficiency.}
+  \label{fig:sec1efficiency}
+\end{figure}
+
+
 We ran 1000 forward samples of 6 rounds of speaker-listener interaction, and averaged over the utterance length at each round \footnote{In our simulations, we used $\alpha = 10$ but found the basic reduction effect over a range of different biases}. 
-Our results are shown in Figure \ref{fig:sec1model}C: the expected utterance length decreases systematically over each round. 
+Our results are shown in Figure \ref{fig:sec1efficiency}: the expected utterance length decreases systematically over each round. 
 To illustrate in more detail how this dynamic is driven by an initial rational preference for redundancy relaxing as reference becomes more reliable, we walk step-by-step through a single trajectory. 
 Consider a speaker who wants to refer to object $o_1$. 
 They believe their knowledgeable partner is slightly more likely to interpret their language using a lexicon in which $u_{11}$ and $u_{12}$ apply to this object, due to their initial bias. 
@@ -103,13 +124,13 @@ In the trade-off between informativity and cost, the shorter utterances remain p
 Once the speaker chooses one of them, the symmetry collapses and that utterance remains most probable in future rounds. 
 In this way, meaningful sub-phrases are omitted over time as the speaker becomes more confident about the true lexicon. 
 
-\paragraph{Model comparison}
-
-Here we compare this model to several simpler baselines to establish which components of the model are necessary and sufficient for the desired behavior.
-
-\rdh{e.g., no pragmatics, pragmatics only in learning rule or only in decision rule instead of both, simpler pragmatics (reasoning about $L_0$ instead of $L_1$), point estimate instead of uncertainty, effect of different parameter regimes.} 
-
-\rdh{It may also be useful to explicitly show that the simpler Roth-Erev RL updating from this literature doesn't reduce, or even better show that this kind of simpler update rule is equivalent to something within our framework as a point estimate representation with maximum likelihood or something...?}
+%\paragraph{Model comparison}
+%
+%Here we compare this model to several simpler baselines to establish which components of the model are necessary and sufficient for the desired behavior.
+%
+%\rdh{e.g., no pragmatics, pragmatics only in learning rule or only in decision rule instead of both, simpler pragmatics (reasoning about $L_0$ instead of $L_1$), point estimate instead of uncertainty, effect of different parameter regimes.} 
+%
+%\rdh{It may also be useful to explicitly show that the simpler Roth-Erev RL updating from this literature doesn't reduce, or even better show that this kind of simpler update rule is equivalent to something within our framework as a point estimate representation with maximum likelihood or something...?}
 
 %In the limit, it doesn't matter whether you have pragmatics in both learning rule or decision rule. 
 %In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
