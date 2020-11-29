@@ -11,14 +11,12 @@ On each trial, participants were paired with a random neighbor but were not info
 
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings.
 Knowledge about a partner's identity is both available and relevant for conversation \cite{eckert_three_2012, davidson_nice_1986}.
-Extensive evidence from psycholinguistics has demonstrated the \emph{partner-specificity} of our language use \cite{clark_using_1996}. 
-Because meaning is grounded in the evolving 'common ground' shared with each partner, meanings established over a history of interaction with one partner are not necessarily transferred to other partners \cite{wilkes-gibbs_coordinating_1992,metzing_when_2003,horton_revisiting_2016}.
 Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner.
 We call this a \emph{no-pooling} model.
 The problem with no-pooling is that agents are forced to start from scratch with each partner.
 Community-level expectations never get off the ground.
 
-We argue that our \emph{partial-pooling} account offers a compromise between these extremes.
+We argue that our hierarchical \emph{partial-pooling} account offers a compromise between these extremes.
 Unlike complete-pooling and no-pooling models, we propose that beliefs about meaning have hierarchical structure.
 That is, the meanings used by different partners are expected to be drawn from a shared community-wide distribution but are also allowed to differ from one another in systematic, partner-specific ways.
 This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience.
@@ -58,7 +56,7 @@ For all simulations, we used variational inference as implemented in WebPPL \cit
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
 Specifically, we make a \emph{mean-field} approximation and assume that the full posterior can be factored into independent Gaussians for each random variable. 
 We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>{murphy2012machine}.
-On each trial, we run 50,000 gradient steps on previous observations to obtain a posterior (Eq.\ 1) and compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the variational guide (Eq. 4) \footnote{These details were chosen to ensure high-quality estimates of the model's behavior; see Discussion for other possible algorithms.}
+On each trial, we run 50,000 gradient steps on previous observations to obtain a posterior (Eq.\ 1) and compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the variational guide (Eq. 4)\footnote{These details were chosen to ensure high-quality estimates of the model's behavior; see Discussion for other possible algorithms.}.
 
 \paragraph{Simulation 3.1: Listener accuracy across partners}
 

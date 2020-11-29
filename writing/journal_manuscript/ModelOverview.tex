@@ -49,7 +49,7 @@ Here, we view it as knowledge about \emph{global} conventions that serves as the
 \begin{figure}[t!]
 \includegraphics[scale=0.4]{./figures/task1_model.pdf}
 \vspace{.5em}
-\caption{\emph{Schematic of our hierarchical Bayesian model.} At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
+\caption{\emph{Schematic of hierarchical Bayesian model.} At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
 \label{fig:model_schematic}
 \end{figure}
 
@@ -145,7 +145,7 @@ S_1(u | o, \phi_k) &\propto   \exp\{w_S \log L_0(o | u, \phi_k) - w_C \cdot c(u)
 L_1(o | u, \phi_k) &\propto   \exp\{w_L \log S_1(u | o, \phi_k)\}\nonumber
 \end{align}
 where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener's choice. 
-As $w_L \rightarrow \infty$, it approaches maximizing utility\footnote{Note that the normalization constant may be exactly zero for some $\phi_k$, in which case the distribution is not well-defined. To address this issue, we add a noise model to each agent in (4); with probability $\epsilon$, they choose uniformly from the support, ensuring non-zero probability to every outcome. See Appendix A for additional details.}.
+As $w_L \rightarrow \infty$, it approaches maximizing utility\footnote{Note that the normalization constant may be exactly zero for some $\phi_k$, in which case the distribution is not well-defined. To address this issue, we add a noise model to each agent in (4); with probability $\epsilon$, they choose uniformly from the support, ensuring non-zero probability to every outcome. Unless otherwise specified, we set $\epsilon = 0.01$. See Appendix A for additional details.}.
 
 Pragmatic reasoning, formalized in this way, plays two distinct roles in our model.
 First, Gricean agents must assume that their partner is using language in a cooperative manner and account for this when inferring their partner's language model.
