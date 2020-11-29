@@ -16,24 +16,23 @@ Plot accuracy for fig in main text
 ```{r}
 d.trajectory.boot <- read_csv('../simulations/cogsci2017/output/arbitrariness_trajectory_discount:0.8_123456789.csv')  %>%
   mutate(repNum = floor(trialNum/2)) %>%
-  #filter(discountFactor == 0.8) %>%
-  #filter(speakerAlpha %in% c(1, 8, 16)) %>%
   group_by(speakerAlpha, repNum) %>%
-  tidyboot_mean(correct, nboot = 100)
+  tidyboot_mean(correct, nboot = 1000)
   
 d.trajectory.boot %>%
+  filter(repNum < 15) %>%
+  mutate(repNum = repNum+1) %>%
   ungroup() %>%
-  #filter(speakerAlpha  == 16) %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = factor(speakerAlpha))) +
     geom_line() +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width =0) +
     geom_hline(yintercept = c(.5, 1), linetype = 'dotted') +
     theme_few() +
-    #scale_color_manual(values = c('#9ecae1', '#3182bd', '#08519c')) +
-    theme(aspect.ratio = 1, legend.position = 'none') +
+    scale_x_continuous(breaks =c(1,5,10,15)) +
+    theme(aspect.ratio = 2/3, legend.position = 'none') +
     scale_color_colorblind() +
-    labs(y = '% accuracy', x = 'trial #')
-ggsave('../writing/journal_manuscript/figures/sec1-convergence.pdf', width = 3, height = 3, unit = 'in')
+    labs(y = '% accuracy', x = 'repetition #')
+ggsave('../writing/journal_manuscript/figures/sec1-convergence.pdf', width = 3, height = 2, unit = 'in')
 ```
 
 ## Examine arbitrariness/path-dependence of meanings
@@ -47,8 +46,6 @@ read_csv('../simulations/cogsci2017/output/arbitrariness_meaningTest_discount:0.
   gather(meaning, score,circleScore,squareScore) %>%
   group_by(firstdatachunk, trialNum, word, agentID, meaning) %>%
   mutate(score =exp(score)) %>%
-  # filter(time < 2) %>%
-  # arrange(gameNum)
   summarize(score = mean(score)) %>%
   filter(word == 'word1', trialNum < 9) %>%
   ungroup() %>%
@@ -79,21 +76,20 @@ ggsave('../writing/journal_manuscript/figures/sec1-arbitrariness-raw.pdf')
 d.efficiency.boot <- read_csv('../simulations/cogsci2017/output/conjunction_trajectory_discount:0.8_123456789.csv') %>%
   mutate(utt_length = str_count(topSpeakerChoice, '_') + 1,
          repNum = floor(trialNum / 2)) %>%
-  group_by(trialNum) %>%
+  group_by(repNum) %>%
   tidyboot_mean(utt_length, nboot = 100)
 
 d.efficiency.boot %>%
-  filter(trialNum < 7) %>%
-  mutate(trialNum = trialNum + 1) %>%
-  ggplot(aes(x = trialNum, y = empirical_stat)) +
-    #geom_point() +
+  mutate(repNum = repNum + 1) %>%
+  ggplot(aes(x = repNum, y = empirical_stat)) +
     geom_line() +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), 
                   width = 0, alpha = 0.5) +
     theme_few() +
-    scale_x_continuous(breaks=c(1,3,5,7)) +
-    labs(y = '# words', x = 'trial #')
-ggsave('../writing/journal_manuscript/figures/sec1-efficiency.pdf', width = 3, height = 3, unit = 'in')
+    theme(aspect.ratio = 2/3) +
+    scale_x_continuous(breaks=c(1,2,3,4,5,6))+
+    labs(y = '# words', x = 'repetition #')
+ggsave('../writing/journal_manuscript/figures/sec1-efficiency.pdf', width = 3, height = 2, unit = 'in')
 ```
 
 Show example from one game:
@@ -107,52 +103,84 @@ example.plot.input <- read_csv('../simulations/cogsci2017/output/conjunction_mea
          word4_belief = exp(word4_belief),
          word1_production = exp(word1_production),
          word2_production = exp(word2_production),
-         word1word2_production = exp(word1word2_production)) %>%
+         word1word2_production = exp(word1word2_production),
+         word1_cost = -word1_cost,
+         word2_cost = -word2_cost,
+         word1word2_cost = -word1word2_cost,
+         word1_utility = word1_inform + word1_cost,
+         word2_utility = word2_inform + word2_cost,
+         word1word2_utility = word1word2_inform + word1word2_cost) %>%
   gather(measure, value, starts_with('word')) %>%
   separate(measure, into = c('words', 'measure')) 
 
 example.plot.input %>%
-  filter(gameNum == 290) %>%
+  filter(gameNum == 30) %>%
   filter(measure == 'production') %>%
   spread(words,value) %>%
-  mutate(other = 1 - word1 - word2 - word1word2) %>%
+  mutate(other = 1 - word1 - word2 - word1word2,
+         trialNum = trialNum + 1) %>%
   gather(words, value, word1:other) %>%
   mutate(words = fct_relevel(words, 'other', 'word1word2')) %>%
-  filter(trialNum < 7) %>%
+  filter(trialNum < 10) %>%
   ggplot(aes(x = trialNum, y = value, fill = words)) +
     geom_area() +
     #scale_fill_manual(values = rev(colorblind_pal()(3))) +
     scale_fill_colorblind() +
     theme_classic() +
-    labs(x = 'trial #', y = 'probability word1 has meaning')
-ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_production.pdf')
+    theme(aspect.ratio = 1/3)+
+    scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9))+
+    labs(x = 'trial #', y = 'S(u | bluecircle)')
+ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_production.pdf', 
+       width = 6, height = 2, unit = 'in')
 ```
 
 ```{r}
 example.plot.input %>%
-  filter(measure != 'production') %>%
-  filter(gameNum == 290) %>%
-  filter(trialNum < 7) %>%
-  mutate(words = as.factor(words)) %>%
+  filter(gameNum == 30) %>%
+  filter(measure == 'belief') %>%
+  mutate(words = fct_relevel(words, 'other', 'word1word2'),
+         trialNum = trialNum + 1) %>%
+  filter(trialNum < 10) %>%
+  ggplot(aes(x = trialNum, y = value, color = words)) +
+    geom_hline(yintercept = 0.5, linetype = 'dotted') +
+    geom_line() +
+    scale_color_colorblind() +
+    theme_classic() +
+    theme(aspect.ratio = 1/3)+
+    ylim(0,1) +
+    #facet_grid(~ words) +
+    scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9))+
+    labs(x = 'trial #', y = 'P(phi(w) = bluecircle)')
+ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_beliefs.pdf', 
+       width = 6, height = 2, unit = 'in')
+```
+
+```{r}
+example.plot.input %>%
+  filter(measure %in% c('cost', 'inform', 'utility')) %>%
+  filter(gameNum == 30) %>%
+  mutate(words = as.factor(words),
+         trialNum = trialNum + 1,
+         measure = fct_relevel(measure, 'utility', 'inform'),
+) %>%
+  filter(trialNum < 10) %>%
   ggplot(aes(x = trialNum, y = value, color = words)) +
     geom_line(position = position_dodge(.2)) +
-    geom_point(position = position_dodge(.2)) +
-    facet_grid(measure ~ ., scales = 'free') +
+    facet_grid( ~ measure, scales = 'free') +
     #scale_fill_manual(values = rev(colorblind_pal()(3))) +
-    scale_color_colorblind() +
+    #scale_color_colorblind() +
     theme_few() +
+    scale_x_continuous(breaks=c(1,3,5,7,9))+
     labs(x = 'trial #', y = 'probability word1 has meaning') +
-    theme(aspect.ratio = 1/2)
-ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_belief.pdf')
+    theme(aspect.ratio = 1, legend.position = 'none')
+ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_values.pdf',
+       width = 4, height = 2, unit = 'in')
 ```
 Break out by what happens?
 
 ```{r}
     # unite(datachunk, intendedName, topSpeakerChoice, topListenerChoice) %>%
   #gather(beliefWord, belief, word1belief, word2belief) %>%
-  # mutate(word1_utility = word1_inform - word1_cost,
-  #        word2_utility = word2_inform - word2_cost,
-  #        word1word2_utility = word1word2_inform - word1word2_cost) %>%
   # group_by(gameNum, trialNum, beliefWord, inputWord) %>%
   # mutate(firstdatachunk = first(datachunk)) %>%
   #gather(meaning, score,blueCircleScore,redSquareScore) %>%
