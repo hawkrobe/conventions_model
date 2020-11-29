@@ -14,6 +14,7 @@
 \usepackage{apacite}
 \usepackage{listings}
 \usepackage{multirow}
+\usepackage{stfloats}
 \usepackage{todonotes}
 \usepackage{svg}
 \usepackage{booktabs}
@@ -224,9 +225,17 @@ Mathematically, the only difference between these possibilities is whether the s
 
  \begin{figure*}
 \centering
+    \includegraphics[scale=1.1]{conjuction_grid.pdf}
+  \caption{Coordination success (simulation 1.1) fo a range of parameter values. Different memory discount factors $\beta$ shown in different colors, rows represent speaker optimality $w_S$, columns represent listener optimality $w_L$.}
+  \label{fig:conjunction_grid}
+\end{figure*}
+
+
+ \begin{figure*}
+\centering
     \includegraphics[scale=.8]{reduction_grid_search.pdf}
   \caption{Speaker efficiency across partners (simulation 3.2) for a range of parameter values. Rows represent speaker optimality $w_S$, columns represent cost weight $w_c$.}
-  \label{fig:arbitrariness_grid}
+  \label{fig:partnerspecificity_grid}
 \end{figure*}
 \end{document}  
 
