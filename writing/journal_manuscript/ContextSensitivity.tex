@@ -7,7 +7,7 @@
 \begin{figure*}[t]
 \begin{center}
 {\includegraphics[scale=.63]{./figures/Sec2-design.png}}
-{\caption{{(A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
+{\caption{{\emph{Domain for context-sensitivity.} (A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
 \vspace{-2ex}
 \end{center}
 \end{figure*}
@@ -70,7 +70,7 @@ Finally, the (log) response time taken by the speaker to choose an utterance als
 \begin{figure*}[t]
 \begin{center}
 \includegraphics[scale=0.75]{Sec2-results.pdf}
-\caption{Pragmatic demands of context shape the formation of abstractions. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Number of unique words used by speakers in each repetition block. (C)  Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms. }
+\caption{\emph{Empirical results suggesting that context shapes the formation of abstractions}. (A) Mean number of words participants reported with specific meanings (applying to 1 object) or abstract meanings (applying to 2 objects). (B) Number of unique words used by speakers in each repetition block. (C)  Diversity of terms within reported lexica: many participants in the \emph{coarse} condition reported a mixture of abstract and specific terms. }
 \label{fig:lexiconContent}
 \end{center}
 \end{figure*}
@@ -131,13 +131,14 @@ In addition to 8 meanings at the sub-ordinate level (one for each individual obj
 We populate the utterance space with 8 single-word labels, which simplifies the speaker model: the utterance cost term is constant across all utterances, so it does not have an effect on speaker behavior.
 Finally, we will assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
 This simplicity prior over the lexicon space penalizes meanings with larger extensions, so \emph{a priori}, agents have an inductive bias toward subordinate terms.
-For ease of presentation, we consider the parameter setting of $\alpha_L=5,\alpha_S=10$ and memory discounting parameter of $\beta = 0.8$ (see Model comparison below for a more thorough evaluation of these parameters).
+For ease of presentation, we consider the parameter setting of $w_L=5,w_S=10$ and memory discounting parameter of $\beta = 0.8$.% (see Model comparison below for a more thorough evaluation of these parameters).
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.6]{./figures/sec2-modelFig.pdf}
 \vspace{-1ex}
-{\caption{{Model simulations. (A) Speakers gradually use a larger lexicon size across conditions, and (B) coordinate more quickly in the coarse condition than the fine condition, as observed in the empirical data.}  \label{fig:sec2model}}}
+{\caption{\emph{Results from Simulation 2.1}. (A) Speakers gradually use a larger lexicon size across conditions, and (B) coordinate more quickly in the coarse condition than the fine condition, as observed in the empirical data.} }
+\label{fig:sec2model}
 \end{center}
 \vspace{-3ex}
 \end{figure}
@@ -177,23 +178,23 @@ After the first repetition block, however, agents in the coarse condition begin 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.75]{evolution.pdf}
-\caption{Proportion of terms at different levels of abstraction in our model's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of basic-level terms; in the fine condition, however, agents become more confident of subordinate terms.}
+\caption{\emph{Dynamics of lexical beliefs over time in Simulation 2.1.} Regions represent the average proportion of words at each level of abstraction in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of basic-level terms; in the fine condition, however, agents become more confident of subordinate terms.}
 \label{fig:evolution}
 \end{center}
 \end{figure}
 
 
-\paragraph{Model comparison}
+%\paragraph{Model comparison}
 
-\rdh{TODO: we need to decide which comparisons are most interesting. may need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for a more explicit comparison to models outside our class of Bayesian agents...}
+%\rdh{TODO: we need to decide which comparisons are most interesting. may need to implement baseline model from other papers (e.g. Steels-style, or Spike et al. implementation?) for a more explicit comparison to models outside our class of Bayesian agents...}
 
-We compare our model to (1) a simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt, and (2) ask what happens when we manipulate forgetting parameter, or remove it?
-
-In a non-pragmatic variant of our model, agents use words proportional to their literal meaning and assume their partner is doing the same. 
-In this case, their lexicon converges to a degenerate 1-word (shape) state.
-Because an initial usage is consistent with all levels of abstraction, one of the agents will eventually extend the same word to different object. 
-Then the only way to subsequently accommodate this extension in the interaction history is to rule out more specific meanings. 
-The non-pragmatic agent has no way of knowing that this degenerate solution is confusing to their partner, and will continue to prefer it because it's literally true of every object.
+%We compare our model to (1) a simpler case when both agents condition on the same data (i.e. the true target) even after an unsuccessful communication attempt, and (2) ask what happens when we manipulate forgetting parameter, or remove it?
+%
+%In a non-pragmatic variant of our model, agents use words proportional to their literal meaning and assume their partner is doing the same. 
+%In this case, their lexicon converges to a degenerate 1-word (shape) state.
+%Because an initial usage is consistent with all levels of abstraction, one of the agents will eventually extend the same word to different object. 
+%Then the only way to subsequently accommodate this extension in the interaction history is to rule out more specific meanings. 
+%The non-pragmatic agent has no way of knowing that this degenerate solution is confusing to their partner, and will continue to prefer it because it's literally true of every object.
 
 \subsection{Discussion}
 

@@ -49,8 +49,8 @@ P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
 P(\phi_{ij} | \Theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
 \end{array}$$
 These priors represent assumptions about how far partner-specific learning can drift from the community-wide value.
-Throughout the following simulations, we set $w_I = 11,~w_C = 7$. 
-A grid search over parameter space revealed other regimes of behavior, but we leave broader exploration of this space to future work.
+Throughout the following simulations, we set $w_S = 11,~w_C = 7$. 
+A grid search over parameter space revealed similar regimes of behavior as in Simulation 1.2 (see Fig.~\ref{fig:partnerspecificity_grid}).
 
 For all simulations, we used variational inference as implemented in WebPPL \cite{GoodmanStuhlmuller14_DIPPL}
 Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
@@ -81,11 +81,12 @@ Complete-pooling accounts predict no reversion in number of words when a new par
 No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor  (Fig. \ref{fig:model_results}B, bottom row). 
 Here we show that a partial pooling account predicts a more complex pattern of generalization.
 
-As in our first set of simulations, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into conjunctions, e.g. $\{u_1+u_2, u_3+u_4\}$, which are assumed to have twice the utterance cost.
+As in Simulation 1.2, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into conjunctions, e.g. $\{u_1u_2, u_3u_4, \dots\}$, which are assumed to have twice the utterance cost.
 The meanings of these conjunctions were determined compositionally from the values of the primitive utterances using a standard product T-norm for conjunction. 
-Because our values come from a Gaussian prior and the T-norm is defined over $[0,1]$, we used logistic and logit function to map values to the unit interval and back.
-Speakers do not typically begin at chance over their \emph{entire} vocabulary, so we introduced a weakly biased prior for $\Theta$: two of the primitive utterances initially applied more strongly to $o_1$ and the other two more strongly to $o_2$.
-This weak bias leads to a preference for conjunctions at the outset and thus allows us examine reduction.
+Again, we introduced a weakly biased prior for $\Theta$: two of the primitive utterances were expected to apply slightly more strongly to $o_1$ and the other two more strongly to $o_2$.
+%Because our values come from a Gaussian prior and the T-norm is defined over $[0,1]$, we used logistic and logit function to map values to the unit interval and back.
+%Speakers do not typically begin at chance over their \emph{entire} vocabulary,
+%This weak bias leads to a preference for conjunctions at the outset and thus allows us examine reduction.
 
 We paired the speaker model with a fixed listener who always selected the target, and ran 48 independent simulations.
 First, as in our earlier simulations, we found that descriptions become more efficient over interaction with a single partner: the model becomes more confident that shorter utterances will be meaningful, so the marginal informativity provided by the conjunction is not worth the additional cost.
@@ -110,7 +111,7 @@ Under a no-pooling model (Fig. \ref{fig:model_results}C, bottom row), subsequent
 Under a complete-pooling model (Fig. \ref{fig:model_results}C, middle row), agents persist with mis-calibrated expectations learned from previous partners rather than adapting to their new partner, and \emph{within-dyad} alignment deteriorates.
 By contrast, under our partial-pooling model, alignment across dyads increases, suggesting that hierarchical inference leads to emergent consensus (Fig. \ref{fig:model_results}C, top row).
 
-\subsection{Behavioral methods}
+\subsection{Behavioral experiment}
 
 \begin{figure*}
 \includegraphics[scale=.95]{./figures/sec3-design.pdf}
