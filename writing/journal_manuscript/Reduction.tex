@@ -29,12 +29,13 @@ As uncertainty gradually decreases, they are able to achieve the same expected i
 
 \subsection{Simulation 1.1: Pure coordination}
 
-\begin{figure}[b]
+\begin{figure*}[b]
 \centering
     \includegraphics[scale=1]{sec1-convergence.pdf}
-  \caption{\emph{Agents learn to successfully coordinate over repeated interactions.} Error bars are bootstrapped 95\% CIs within each block, across 1000 simulated trajectories.}
+        \includegraphics[scale=1]{sec1-efficiency}
+  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} Results from 1000 simulated trajectories in (A) Simulation 1.1 and (B) Simulation 1.2. Error bars are bootstrapped 95\% CIs within each block of two trials.}
   \label{fig:sec1model}
-\end{figure}
+\end{figure*}
 
   \begin{figure*}
 \centering
@@ -45,8 +46,8 @@ As uncertainty gradually decreases, they are able to achieve the same expected i
 \end{figure*}
 
 
-We build up to our explanation of increasing efficiency through a series of simpler simulations.
-The first of these simulations demonstrates the most fundamental desideratum for any model of \emph{ad hoc} coordination: agents equipped with our inferential machinery are able to coordinate on a communication system in the absence of shared priors. 
+We build up to our explanation of increasing efficiency by first exploring a simpler simulation.
+This first simulation demonstrates the most fundamental desideratum for any model of \emph{ad hoc} coordination: agents equipped with our inferential machinery are able to coordinate on a communication system in the absence of shared priors. 
 We consider the simplest possible reference game with two objects, $\mathcal{O} = \{o_1, o_2\}$, where the speaker must choose between two one-word utterances $\mathcal{U} = \{u_1, u_2\}$ with equal production cost. 
 
 To define the agents' initial lexical prior $P(\phi)$ over the expected meanings of each utterance, we must first say what representation we are using for the agents' lexicon $\mathcal{L}_{\phi}$.
@@ -77,7 +78,7 @@ For example, if the speaker samples $u_2$ instead of $u_1$ on the first trial, o
 
 
 We highlight several key results from these simulations.
-First, most fundamentally, the communicative success of the dyad rises over the course of interaction; the listener is able to more accurately select the true target object (see Fig.~\ref{fig:sec1model}). 
+First, most fundamentally, the communicative success of the dyad rises over the course of interaction; the listener is able to more accurately select the true target object (see Fig.~\ref{fig:sec1model}A). 
 Second, the initial symmetry between the meanings is broken by initial choices, leading to \emph{arbitrary} but \emph{stable} mappings in future rounds.
 This can be seen by examining the path-dependence of beliefs, following all possible outcomes of the initial trial (see Fig.~\ref{fig:path-dependence}). 
 Third, because each agent assumes their partner is using language cooperatively, they also make inferences about \emph{unheard} utterances. 
@@ -91,7 +92,8 @@ These simulations were conducted at soft-max optimality parameter values $w_L = 
 \begin{figure*}
 \centering
     \includegraphics[scale=1.5]{sec1-reduction_example}
-  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} \rdh{use initial round lexicon here} The speaker begins the trial with some uncertainty about the meanings in the listener's lexicon (e.g. assigning 80\% probability to the lexicon where utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
+    \vspace{1em}
+  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
   \label{fig:sec1efficiency}
 \end{figure*}
 
@@ -99,53 +101,63 @@ Next, we show how our inferential model explains speakers' gains in efficiency o
 For efficiency to change at all, speakers must be able to produce utterances that vary in length. 
 For this simulation, we therefore extend the grammar to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with conjunctions.
 Specifically, we consider a scenario with the same two objects as in Simulation 1.1, but giving the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two. 
-The meaning of longer utterances are then derived compositionally from these primitives using the product $t$-norm\footnote{We focus on conjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
+Critically, the meaning of longer utterances are derived compositionally from these primitives using the product $t$-norm\footnote{We focus on conjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
 $$\mathcal{L}_\phi(u_iu_j, o) = \mathcal{L}_\phi(u_i, o) \times \mathcal{L}_\phi(u_j, o)$$
 
 
-While we established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, human participants in repeated reference games typically bring some prior expectations into the interaction.
+While we established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, human participants in repeated reference games typically bring some prior expectations about language into the interaction.
 For example, a participant who hears `ice skater' on the first round of a task with tangram stimuli may be more likely to select some objects more than others while still having substantial uncertainty about the intended target.
 This observation is key to understanding why speakers may initially use longer utterances in repeated reference games with ambiguous stimuli. 
 Under a completely uniform prior, where all words are expected to be equally meaningless to one's partner, longer utterances have no additional value. 
-Under a completely concentrated prior, where there already exists a strong convention and a single label is expected to suffice, longer utterances are redundant.
-We thus initialize our agents with weak lexical beliefs where longer utterances have value
-$$P(\phi(u_1) = o_1) = P(\phi(u_2) = o_1) = 0.5 + \epsilon$$ 
-$$P(\phi(u_3) = o_1) = P(\phi(u_4) = o_1) = 0.5 - \epsilon$$
-and show how our inferential model predicts increasing preferences for shorter utterances.
-\begin{figure}[b]
-\centering
-    \includegraphics[scale=1]{sec1-efficiency}
-  \caption{\emph{Agent converge on more efficient utterances over repeated interactions.} Error bars are bootstrapped 95\% CIs across 1000 simulated trajectories.}
-  \label{fig:sec1efficiency}
-\end{figure}
+Under a completely concentrated prior, where there already exists a strong convention for a short label, that label would suffice and a longer utterances is redundant.
+We thus initialize both agents with weak lexical beliefs
+$$P(\phi(u_1) = o_1) = P(\phi(u_2) = o_1) = 0.55$$ 
+$$P(\phi(u_3) = o_1) = P(\phi(u_4) = o_1) = 0.45$$
+and show how our model predicts an initial preferences for long utterances but increasing preferences for shorter utterances given communicative success.
+
+%\begin{figure}[b]
+%\centering
+%  \caption{\emph{Agent converge on more efficient utterances over repeated interactions.} Error bars are bootstrapped 95\% CIs across 1000 simulated trajectories.}
+%  \label{fig:sec1efficiency}
+%\end{figure}
 
 
 \begin{figure*}[t]
 \centering
     \includegraphics[scale=1.2]{sec1-reduction_schematic}
+    \vspace{1em}
   \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, it updates its beliefs and becomes more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
   \label{fig:sec1internals}
 \end{figure*}
 
-\rdh{Describe simulation details here, i.e. same as 1.1, swapping roles, randomly sampling objects, etc.}
-We ran 1000 simulations of 6 rounds of speaker-listener interaction.
-To illustrate in detail how our model derives a reduction in utterance length, we walk step-by-step through a single trajectory (Fig. \ref{fig:sec1internals}).
+As in Simulation 1.1, we simulated 1000 trajectories of dyadic interaction between agents.
+Target objects were randomly sampled on each trial, agents swapped roles, and the agents' lexical posteriors $P(\phi | D)$ were computed after each trial using exact enumeration. 
+Utterance cost is defined to be the number of `words' in an utterance, so $c(u_1) =1$ and $c(u_1u_2)=2$.
+Results are shown in Fig.~\ref{fig:sec1model}B.
+As in repeated reference games between human participants (e.g. Fig.~\ref{fig:clark92}), our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block).
 
-\rdh{Ground first round in Fig. 7, emphasize lexicon update}
+To illustrate in detail how our model derives this phenomenon as a consequence of rational inference, we walk step-by-step through a single trial (Fig. \ref{fig:sec1efficiency}).
 Consider a speaker who wants to refer to object $o_1$. 
-They believe their knowledgeable partner is slightly more likely to interpret their language using a lexicon in which $u_{11}$ and $u_{12}$ apply to this object, due to their initial bias. 
-However, there is still a reasonable chance that one or the other alone actually refers more strongly to $o_2$ in the true lexicon. 
-Thus, it is useful to produce the conjunction "$u_{11}$ and $u_{12}$" to hedge against this possibility, despite its higher cost. 
-Upon observing the listener's response (say, $o_1$), the evidence is indeterminate about the separate meanings of $u_{11}$ and $u_{12}$ but both become increasingly likely to refer to $o_1$. 
+They expect their partner to be slightly more likely to interpret their language using a lexicon in which $u_{1}$ and $u_{2}$ apply to this object, due to their weak initial biases. 
+However, there is still a reasonable chance ($p=0.45$) that either $u_1$ or $u_2$ alone will be interpreted to mean $o_2$ by their partner, which would lead to an incorrect response. 
+Thus, it is more informative to produce the conjunction $u_{1}u_{2}$ to hedge against this possibility, despite its higher production cost. 
 
-\rdh{Now shift to subsequent dynamics. Longer utterance decreases in probabilistic as lexical uncertainty decreases.}
-In the trade-off between informativity and cost, the shorter utterances remain probable options. 
-Once the speaker chooses one of them, the symmetry collapses and that utterance remains most probable in future rounds. 
-Our model therefore explains efficiency as a rational consequence of the speaker's initial preference for redundancy under lexical uncertainty relaxing as reference becomes more reliable, 
-Sub-phrases are omitted over time as the speaker becomes more confident about the true lexicon. 
-Results are shown in Figure \ref{fig:sec1efficiency}: the expected utterance length decreases systematically over each round. 
-\rdh{Mention that accuracy also goes up, as in Simulation 1.1, and give numbers.}
-For these simulations, we used $w_S = w_L = 10, w_c = 2, \beta=0.8$ the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
+To see why this is the case, consider the expected informativity of the utterance under different possible listener lexicons.
+The possibility with highest probability is that both $u_1$ and $u_2$ will mean $o_1$ in the listener's lexicon ($p = 0.55^2 \approx 0.3$), in which case the listener will correctly identify the target with high probability.
+The possibility that both $u_1$ and $u_2$ will mean $o_2$ in the listener's lexicon is only $p=0.45^2 \approx 0.2$, leading the listener to erroneously select $o_2$ with high probability. 
+In the mixed cases, where just one of $u_1$ or $u_2$ means $o_2$ in the listener's lexicon ($p = 2 \cdot 0.45 * 0.55 \approx 0.5$), the listener will choose between the objects at chance, which yields an intermediate informativity.
+When expected informativity is calculated across these outcomes, it is more valuable to produce the longer conjunction than the shorter component utterances.
+Finally, upon observing the listener's response to the conjunction (say, $o_1$), the speaker becomes more confident that the component utterances $u_1$ and $u_2$ mean $o_1$ in their updated posterior over the listener's lexicon.
+This credit assignment to individual lexical items is a consequence of the compositional meaning of longer utterances in our simple grammar.
+
+Fig.~\ref{fig:sec1internals} shows the trajectories of internal components of the speaker utility as the interaction continues.
+We assume for illustrative purposes that $o_1$ continues to be the target on each trial and the same agent continues to be the speaker.
+As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the conjunction and the shorter components gradually decreases (center left).
+As a consequence, production cost increasingly dominates the utility (center-right). 
+After several trials of observing a successful listener response given the conjunction, the utility of the shorter utterances reaches parity with the conjunction.
+Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
+Thus, increasing efficiency is derived as a rational consequence of inference about the listener's lexical.
+For these simulations, we used $w_S = w_L = 7, w_c = 11, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
 %\paragraph{Model comparison}
 %
 %Here we compare this model to several simpler baselines to establish which components of the model are necessary and sufficient for the desired behavior.
@@ -168,13 +180,15 @@ Hedges are expressions like \emph{sort of} or \emph{like}, and morphemes like \e
 \citeA{BrennanClark96_ConceptualPactsConversation} found a much greater occurrence of hedges on the first round than the final round (26\% and 2\%, respectively).
 Additionally, very few hedges were found on early trials in less ambiguous contexts (e.g. referring to a shoe in the context of dogs and fish), lending support for the specific use of hedges to mark uncertainty rather than a generic social use when first beginning to talk with a new partner.
 
-While the limitations of simple reinforcement learning models are clear, It is plausible that reinforcement learning models using more sophisticated algorithms could predict patterns of reduction with the addition of a cost term.
-For instance, architectures that appropriately incorporate compositionality and recurrence into production may be able to implicitly ground shorter utterances in prior usage using gradient-based learning \cite{hawkins2019continual}.
+While we have already discussed the limitations of the simple reinforcement learning models proposed in prior work -- namely, that a successful response only reinforces the longer utterance -- it is plausible that model-based reinforcement learning using more sophisticated architectures could predict similar patterns of increasing efficiency.
+For instance, architectures that appropriately incorporate compositionality and recurrence into the speaker's production model may be able to implicitly ground shorter utterances in the shared history \cite<e.g>{hawkins2019continual}.
+However, such an architecture would be much closer to a re-implementation of our inferential model than the model-free agents in the existing literature.
 We return to this issue in our discussion of the scalability of our model in the General Discussion.
 
 Finally, our simulations in this section are consistent with recent analyses of exactly \emph{what} gets reduced \cite{hawkins2020characterizing}.
-Is the speaker adopting a fragment shorthand by randomly and noisily dropping words, or are they simplifying or narrowing their descriptions to names by systematically omitting redundant details?
-Closed-class parts of speech like determiners and prepositions \emph{are} much more likely to be dropped than open-class parts of speech like adjectives and nouns, and entire modifying clauses are more likely to be dropped together than expected by random corruption.
-This accords with early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the short names that participants converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
-These more fine-grained analyses suggest that reduction is grounded in the prior lexical content of the interaction and the speaker's increasing confidence in how the listener will interpret an initially ambiguous label. 
+That is, is the speaker adopting a fragment shorthand by randomly and noisily dropping words, or are they simplifying or narrowing their descriptions to names by systematically omitting redundant details?
+Closed-class parts of speech like determiners and prepositions are empirically much more likely to be dropped than open-class parts of speech like adjectives and nouns, and entire modifying clauses are more likely to be dropped together than expected by random corruption.
+This observation accords with early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the short names that participants converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
+While our simulation only considered two-word conjunctions with equal (weak) uncertainty, it is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty in the initial lexical prior.
+Thus, asymmetries in reduction may be attributable to the lexical priors associated with different attributes of the target.
 
