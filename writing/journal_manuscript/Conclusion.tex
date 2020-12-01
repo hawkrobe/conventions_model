@@ -6,27 +6,36 @@ This unified model resolves several puzzles that have posed challenges from prio
 
 We conclude by discussing several broader questions raised by the theoretical perspective we have advanced, and corresponding pathways for future work.
 
-\paragraph{Language acquisition}
+\paragraph{Implications for language acquisition}
 
-One way of viewing our account is an argument for the continuity of probabilistic models of language acquisition across development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
-In other words, we have aimed to generalize Bayesian models of word learning, traditionally used in developmental science, to explain the continual learning required by mature language users. 
+Through one theoretical lens, our model provides an argument for the continuity of probabilistic models of language acquisition across development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
+In other words, we have aimed to generalize Bayesian models of word learning, traditionally used in developmental science, to explain the continual \emph{ad hoc} learning required by mature language users. 
 Conversely, this suggests that the lexical learning mechanisms adults use to coordinate on conventions \emph{within} dyadic interactions may be the same as those supporting language acquisition more broadly.
-Our partial pooling model may suggests a new emphasis on the role of partner-specificity and generalization in development.
+Our hierarchical partial pooling model suggests a new emphasis on the role of partner-specificity and generalization in development.
 Most laboratory tasks investigating cross-situational word learning in children use only use a single speaker, and even sophisticated models of cross-situational word learning \cite[e.g.]{FrankGoodmanTenenbaum09_Wurwur} collapse over \emph{who} is talking. 
 
-Yet, as we have argued throughout this work, there is substantial variability across different speakers that poses a challenge for children. 
+Yet, as we have argued, there is substantial variability in systems of meaning across different speakers and contexts; calibrating one's lexical priors to reflect this variability is an important aspect of learning a language.
 If the majority of child-directed speech only comes from a single primary caregiver, then the child may face a difficult generalization problem once they begin interacting with others. 
-Upon hearing an unfamiliar word from a novel speaker, or a familiar word utterance with an unfamiliar meaning, it could be a quirk of that particular speaker \emph{or} indicative of a globally shared convention. 
+When first hearing a new word from a novel speaker, or a familiar word used in an unfamiliar way, children face the same inductive problem we have studied: it is unclear whether the new observation is a quirk of that particular speaker \emph{or} indicative of a globally shared convention. 
 There may therefore be substantial path-dependence in acquisition, as children develop their lexical prior and become better attuned to the overall variability in the population \cite<see>[Chap. 6]{Clark09_FirstLanguageAcquisition}. 
 
-This slow-developing lexical prior is one of several explanation for why young children are so terrible at coordinating on local conventions in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
-When an experimenter feeds them the messages that adult speakers produced naturally, they had no trouble, even as they reduced down to one- or two-word utterances. 
-When they played with one another, however,  Kindergardeners continued to make errors even after 15-16 repetitions; children as old as fifth grade only improved with assistance from the experimenter and never approached the perfect levels of adult performance. 
-Instead of beginning with the long indefinite descriptions full of hedges and modifiers that adults provide, nursery-school speakers began with short, highly idiosyncratic descriptions like \emph{Mother's dress}. 
-If adult speakers' long hedge-filled messages are indeed motivated by lexical uncertainty, then perhaps young children have simply not obtained enough linguistic variability to calibrate their lexical prior. 
-Alternatively, if the pragmatic reasoning required to produce informative utterance depends on theory of mind, then the high processing demands of the task may simply be inhibited performance \cite<e.g.>{SetohScottBaillargeon16_FalseBelief}. 
+Our work also suggests a new explanation for why young children struggle to coordinate on \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
+When an experimenter feeds them messages produced by adult speakers in other games, they are able to maintain high accuracy even as the utterance reduce down to one- or two-word label. 
+When Kindergarteners play with one another, however, they continue to make errors even after 15 repetitions.
+Children as old as fifth grade only improved with assistance from the experimenter and never approached the perfect levels of adult performance. 
+Instead of beginning with the long indefinite descriptions full of hedges and modifiers that adults provide, it was observed that children began with short, idiosyncratic descriptions like \emph{Mother's dress}. 
 
-\rdh{discuss whether we think it's just that children have not obtained enough linguistic variability, or do you think there is some representational constraint (e.g., lack of repesentational capacity that allows children to use lexical priors that are different from their own, like in a FB-task failure kind of way)? i guess another way to ask this question is -- are lexical priors essentially representations of others' beliefs, or knowledge/epistemic states? such that the ability to retrieve or use them is constrained by ToM development? or is this a separate thing? at least even infants seem to be sensitive to foreign vs native language speakers, or speaker differences in accents.}
+While these failures were widely attributed to limits on theory of mind use, this explanation has been complicated by findings that children cannot even interpret their own utterances after a delay \cite{asher1976children}, suggesting that the source of the problem is \emph{not} rigid adherence to one's own preferred label but instead a more broadly impoverished lexical prior for the novel object.
+Recent work by \citeA{LeungEtAl20_Pacts} explored this hypothesis by observing parent-child interactions in a repeated reference task. 
+The data suggested that, unlike pairs of children, parent-child pairs were able to successful coordinate on \emph{ad hoc} conventions.
+Parents helped to interactively scaffold these conventions: younger children were more likely to adopt the labels used by their parents.
+In other words, children may begin with more substantial lexical uncertainty over what labels may be appropriate than their parents, and consequently take their parents' usage as an authoritative cue to the underlying lexicon. 
+
+While these preliminary data are intriguing, more work is needed to explore the role of inter-partner variability and partner-specificity in language learning. 
+For example, is the child's lexical prior better viewed as a representation of others' beliefs about the lexicon, or as an (asocial) epistemic state? 
+To what extent is the ability to retrieve or use this lexical prior constrained by theory of mind development? 
+Are childrens' lexical priors impoverished simply because they have not obtained enough variability in their linguistic input, or is there a more fundamental representational constraint that prevents children from accounting for partner-specific differences? 
+Even infants are sensitive to coarse social distinctions based on foreign vs. native language \cite{KinzlerDupouxSpelke07_LanguageGroups}, or accent \cite{KinzlerEtAl09_AccentRace}, but when do fully partner-specific representations develop?
 
 \paragraph{Similarities and differences across communication modalities}
 
@@ -102,7 +111,7 @@ Given present data it is not clear how these two sources of uncertainty could be
 Thus, we expect both levels of coordination are likely to play an important role. 
 Our probabilistic model could be extended to handle additional levels of coordination by placing uncertainty over a hyper-parameter corresponding to the intended feature dimension that must be jointly inferred with the correspondence along that dimension. 
 
-\rdh{TODO: paragraph citing Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model?}
+%\rdh{TODO: paragraph citing Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model?}
 
 \paragraph{Additional layers of social structure}
 
@@ -128,7 +137,7 @@ While the reasons that speakers produce such constructions are complex, we would
 
 \paragraph{Conclusion}
 
-Language is not some rigid body of knowledge that we acquire at an early age and deploy mechanically for the rest of our lives. 
+Language is not a rigid body of knowledge that we acquire at an early age and deploy mechanically for the rest of our lives. 
 Nor is its evolution a slow, inter-generational drift. 
 It is a means for communication -- a shared interface between minds -- and must therefore adapt over the rapid timescales required by communication. 
 In other words, we are constantly learning language. 
