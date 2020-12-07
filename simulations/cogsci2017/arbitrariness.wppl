@@ -11,7 +11,7 @@ var params = {
   listenerAlpha: argv.listenerAlpha,
   discountFactor: argv.discountFactor,
   guessingEpsilon: argv.guessingEpsilon,
-  costWeight: 1,
+  costWeight: 0,
   coord: 'diff',
   numTrials: 40,
   utterances: utterances,
@@ -19,9 +19,9 @@ var params = {
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-// var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,' +
-//               'trialNum,agentID,word,circleScore,squareScore', posttestF);
+var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,' +
+              'trialNum,agentID,word,circleScore,squareScore', posttestF);
 
 console.log(params);
 
@@ -71,14 +71,14 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
 
-  //postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   // display('speaker distribution')
   // display(speakerOutput);
   // display('listener distribution')
   // display(listenerOutput)
   //console.log(topSpeakerChoice)
   // console.log(topListenerChoice);
-  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  display('correct? ' + (topListenerChoice == currTrial.intendedName));
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
@@ -103,10 +103,8 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
+  console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
-}, _.range(1000));
+}, _.range(100));
 csv.close(f);
-
-//console.log('running posttest')
-//postTest('post', posttestF);
-//csv.close(posttestF);
+csv.close(posttestF);

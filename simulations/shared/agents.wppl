@@ -28,8 +28,9 @@ var S1 = cache(function(obj, params) {
       Categorical({vs: params.utterances}),
       Infer({method: "enumerate"}, function() {
         var utt = uniformDraw(params.utterances);
-        factor(params.speakerAlpha * L0(utt, params).score(obj)
-               - params.costWeight * getUttCost(utt));
+        var utility = ((1-params.costWeight) * L0(utt, params).score(obj)
+                       - params.costWeight * getUttCost(utt));
+        factor(params.speakerAlpha * utility);
         return utt;
       })],
     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
@@ -52,20 +53,14 @@ var L1 = cache(function(utt, params) {
 var S = function(object, posterior, params) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
-    var utility = expectation(posterior, function(lexicon) {
+    var inf = expectation(posterior, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      // console.log(lexicon);
-      // console.log(utt, object)
-      // console.log(L0(utt, config))
-      // console.log(S1(object, config))
-      // console.log(L1(utt, config))
-      // console.log(L1(utt, config).score(object))
-      return L1(utt, config).score(object);
+      return L0(utt, config).score(object);
     });
-    // console.log(params.speakerAlpha * utility)
-    // console.log(params.costWeight * getUttCost(utt))
-    factor(params.speakerAlpha * utility -
-           params.costWeight * getUttCost(utt));
+    var utility = ((1-params.costWeight) * inf
+                   - params.costWeight * getUttCost(utt));
+
+    factor(params.speakerAlpha * utility);
     return utt;
   });
 };
@@ -90,7 +85,7 @@ var updatePosterior = function(data, lexicalPrior, params) {
       var object = (params.coord == 'diff' & trial.role == 'speaker' ? 
                     trial.clickedName : trial.intendedName);
       if(trial.role == 'speaker') {
-        factor(beta * L1(trial.wordID, extend(params, {lexicon})).score(object));
+        factor(beta * L0(trial.wordID, extend(params, {lexicon})).score(object));
       } else {
         factor(beta * S1(object, extend(params, {lexicon})).score(trial.wordID));
       }

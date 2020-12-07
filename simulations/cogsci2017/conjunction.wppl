@@ -15,41 +15,58 @@ var params = {
   discountFactor: argv.discountFactor,
   costWeight: argv.costWeight,  
   guessingEpsilon: argv.guessingEpsilon,
-  numTrials: 20,
+  numTrials: 10,
+  context: objects,
   utterances: utterances,
   objects: objects
 };
 
 var pragStr = ('discount:' + params.discountFactor);
 var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word,blueCircleScore,redSquareScore', posttestF);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestF);
 
 console.log(params);
 
 var lexicalPrior = Infer({method: 'enumerate'}, function() {
   return _.zipObject(unconstrainedUtterances, map(function(utt) {
-    var bias = 0.01;
+    var bias = 0.05;
     var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'blue_circle' : 'red_square');
-    var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/3 + bias : 1/3 - (bias / 2);}, meanings);
+    var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/2 + bias : 1/2 - bias;}, meanings);
     return sample(Categorical({vs: meanings, ps: ps}));
   }, unconstrainedUtterances));
 });
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
-  map(function(word) {
-    var speaker1TopGuess = marginalize(posterior1, function(x) {return x[word]});
-    var speaker2TopGuess = marginalize(posterior2, function(x) {return x[word]});
-    csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
-      trial.trialNum, trial.speakerID, word,
-      speaker1TopGuess.score('blue_circle'), speaker1TopGuess.score('red_square')
-    ].join(','), outputFile);
-    csv.writeLine([
-      iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
-      trial.trialNum, trial.listenerID, word,
-      speaker2TopGuess.score('blue_circle'), speaker2TopGuess.score('red_square')
-    ].join(','), outputFile);
-  }, unconstrainedUtterances);
+  var word1Meaning = marginalize(posterior1, function(x) {return x['word1']});
+  var word2Meaning = marginalize(posterior1, function(x) {return x['word2']});
+  var word3Meaning = marginalize(posterior1, function(x) {return x['word3']});
+  var word4Meaning = marginalize(posterior1, function(x) {return x['word4']});
+  csv.writeLine([
+    iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
+    trial.trialNum, trial.speakerID,
+    params.costWeight * getUttCost('word1'),
+    params.speakerAlpha * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon});
+      return L0('word1', config).score('blue_circle');
+    }),
+    params.costWeight * getUttCost('word2'),
+    params.speakerAlpha * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon});
+      return L0('word2', config).score('blue_circle');
+    }),
+    params.costWeight * getUttCost('word1_word2'),      
+    params.speakerAlpha * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon});
+      return L0('word1_word2', config).score('blue_circle');
+    }),
+    S('blue_circle', posterior1,params).score('word1'),
+    S('blue_circle', posterior1,params).score('word2'),
+    S('blue_circle', posterior1,params).score('word1_word2'),        
+    word1Meaning.score('blue_circle'),
+    word2Meaning.score('blue_circle'),
+    word3Meaning.score('blue_circle'),
+    word4Meaning.score('blue_circle')
+  ].join(','), outputFile);
 };
 
 // for each point in data, we want the model's predictions 
@@ -64,17 +81,20 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
     listenerID: (trialNum % 2) == 0 ? 2 : 1
   };
 
-  var config = extend(params, {context: currTrial.context});
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
 
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, params);
   var topSpeakerChoice =  sample(speakerOutput);
 
-  var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
-  var topListenerChoice =  sample(listenerOutput);
-  console.log(JSON.stringify(speakerOutput));
+  // var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
+  var topListenerChoice = currTrial.intendedName// sample(listenerOutput);
+  //console.log(JSON.stringify(speakerOutput));
+  // console.log(expectation(speakerPosterior, function(lexicon) {
+  //   var config = extend(params, {lexicon: lexicon});
+  //   return L0('word1_word2', config).score('blue_circle');
+  // })),
   console.log(topSpeakerChoice);
   postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
@@ -101,11 +121,8 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,gues
               'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
-//  console.log('iteration', i)
+  console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
-}, _.range(100));
+}, _.range(1000));
 csv.close(f);
-
-console.log('running posttest')
-postTest('post', posttestF);
 csv.close(posttestF);
