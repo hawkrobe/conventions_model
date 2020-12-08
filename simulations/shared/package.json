@@ -1,8 +1,11 @@
 {
-  "name": "refModule",
+  "name": "shared",
   "webppl": {
-    "wppl": ["agents.wppl"]
+    "wppl": [
+      "agents.wppl"
+    ]
   },
+  "main": "main.js",
   "dependencies": {
     "babyparse": "*",
     "lodash": "~4.17.13",
