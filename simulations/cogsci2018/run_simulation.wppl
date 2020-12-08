@@ -1,17 +1,15 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
-
-var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
+var data = shared.readCSV('input/' + argv.gameNum + '.csv');
 var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['shape_circle_striped_highstriped', 'shape_circle_striped_lowstriped',
                'shape_circle_spotted_highspotted', 'shape_circle_spotted_lowspotted',
                'shape_square_red_lightred', 'shape_square_red_darkred',
                'shape_square_blue_lightblue', 'shape_square_blue_darkblue'];
-var meanings = ['null', 'shape', 'circle', 'striped', 'spotted', 
+var meanings = ['shape', 'circle', 'striped', 'spotted', 
                 'highstriped', 'lowstriped', 'lowspotted', 'highspotted',
-                'square', 'red', 'blue',
-                'lightred', 'lightblue', 'darkred', 'darkblue'];
+                'square', 'red', 'blue', 'lightred', 'lightblue', 'darkred', 'darkblue'];
 var objectLookup = {
   'redSquare1' : 'shape_square_red_lightred', 'redSquare2' : 'shape_square_red_darkred',
   'blueSquare1' : 'shape_square_blue_lightblue', 'blueSquare2' : 'shape_square_blue_darkblue',
@@ -21,71 +19,118 @@ var objectLookup = {
 var numMeanings = meanings.length;
 
 var params = {
-  speakerAlpha : 10,
-  listenerAlpha: 5,
-  epsilon: 0.000001,
-  coord: argv.coord,
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  guessingEpsilon: argv.guessingEpsilon,
   discountFactor: argv.discountFactor,
+  coord: 'diff',
   costWeight: 0,
-  utterances: utterances.concat('null'),
-  objects: objects
+  utterances: utterances,
+  objects: objects,
+  inferOptions: {method: 'MCMC', samples:2000, burn:5000, lag:1, verbose:true}
 };
 
 var pragStr = ('discount:' + params.discountFactor + '_coord:' + params.coord);
-var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('i,gameNum,speakerAlpha,listenerAlpha,discountFactor,time,condition,agentID,word,meaning,prob', posttestF);
+// var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
 
 console.log(params);
 
-var sampleLexicon = function() {
-  var nullUtterance = {'null' : 'shape'};
-  return extend(nullUtterance, _.zipObject(utterances, map(function(utt) {
+var lexicalPrior = function() {
+  return _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
-  }, utterances)));
+  }, utterances));
 };
 
-var sampleUtterance = function() {
-  return flip(0.01) ? 'null' : uniformDraw(utterances);
-};
+// var sampleUtterance = function() {
+//   return flip(0.01) ? 'null' : uniformDraw(utterances);
+// };
 
-var sampleObject = function(context) {
-  var nullObject = 'shape_striped_spotted_highstriped_highspotted_lowstriped_lowspotted_null';
-  return flip(0.01) ? nullObject : uniformDraw(context);
-};
+// var sampleObject = function(context) {
+//   var nullObject = 'shape_striped_spotted_highstriped_highspotted_lowstriped_lowspotted_null';
+//   return flip(0.01) ? nullObject : uniformDraw(context);
+// };
+// impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
+// condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
 
-var extensionSize = function(lexicon) {
-  var flattened = _.flatten(map(function(key) {
-    return filter(function(object) {
-      return _.includes(object.split('_'), lexicon[key])
-    }, objects);
-  }, _.keys(lexicon)));
-  return flattened.length;
-};
+// stricter mutual exclusivity
+//console.log(lexicon);
+// var flattened = _.flatten(map(function(key) {
+//   return filter(function(object) {
+//     return _.includes(object.split('_'), lexicon[key])
+//   }, objects);
+// }, _.keys(lexicon)));
+// console.log(flattened);
+// console.log(_.uniq(flattened).length == flattened.length);
+//condition(_.uniq(flattened).length == flattened.length);
 
-var S = function(object, context, posterior) {
-  return Infer({method: "enumerate"}, function() {
-    var utt = uniformDraw(utterances);
-    var utility = expectation(posterior, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon, context: context});
-      return refModule.getListenerScore(object, utt, config);
-    });
-    factor(params.speakerAlpha * utility);
-    return utt;
-  });
-};
+// var L0 = function(utt, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var obj = sampleObject(context);
+//     condition(_.includes(obj.split('_'), lexicon[utt]));
+//     return obj;
+//   });
+// };
 
-var L = function(utt, context, posterior) {
-  return Infer({method: "enumerate"}, function() {
-    var object = uniformDraw(context);
-    var utility = expectation(posterior, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon, context: context});
-      return refModule.getSpeakerScore(utt, object, config);
-    });
-    factor(params.listenerAlpha * utility);
-    return object;
-  });
-};
+// var S1 = function(obj, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var utt = sampleUtterance();
+//     factor(params.alpha * L0(utt, context, lexicon).score(obj));
+//     return utt;
+//   });
+// };
 
+// var L1 = function(utt, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var obj = sampleObject(context);
+//     factor(params.listenerAlpha * S1(obj, context, lexicon).score(utt));
+//     return obj;
+//   });
+// };
+
+// var validLexicon = function(lexicon) {
+//   var flattened = _.flatten(map(function(key) {
+//     return filter(function(object) {
+//       return _.includes(object.split('_'), lexicon[key])
+//     }, objects);
+//   }, _.keys(lexicon)));
+//   return _.uniq(flattened).length == objects.length;
+// };
+
+// var extensionSize = function(lexicon) {
+//   var flattened = _.flatten(map(function(key) {
+//     return filter(function(object) {
+//       return _.includes(object.split('_'), lexicon[key])
+//     }, objects);
+//   }, _.keys(lexicon)));
+//   return flattened.length;
+// };
+
+// var S = function(object, context, posterior) {
+//   return Infer({method: "enumerate"}, function() {
+//     var utt = uniformDraw(utterances);
+//     var utility = expectation(posterior, function(lexicon) {
+//       var config = extend(params, {lexicon: lexicon, context: context});
+//       return refModule.getListenerScore(object, utt, config);
+//     });
+//     factor(params.speakerAlpha * utility);
+//     return utt;
+//   });
+// };
+
+// var L = function(utt, context, posterior) {
+//   return Infer({method: "enumerate"}, function() {
+//     var object = uniformDraw(context);
+//     var utility = expectation(posterior, function(lexicon) {
+//       var config = extend(params, {lexicon: lexicon, context: context});
+//       return refModule.getSpeakerScore(utt, object, config);
+//     });
+//     factor(params.listenerAlpha * utility);
+//     return object;
+//   });
+// };
+
+<<<<<<< HEAD
 var updatePosterior = function(data) {
   return Infer({method: 'MCMC', samples:2000,burn:10000,lag:1, model : function() { // 
 
@@ -119,8 +164,41 @@ var postTest = function(trial, outputFile, posterior1, posterior2) {
   }, utterances);
 };
 
+// var updatePosterior = function(data) {
+//   return Infer({method: 'MCMC', samples:2500,burn:10000,lag:2, model : function() { // 
+
+//     // Implement simplicity prior (smaller lexicons preferred)
+//     var lexicon = sampleLexicon();
+//     factor(-1*extensionSize(lexicon));
+
+//     mapData({data: data}, function(trial) { 
+//       var discount = Math.pow(params.discountFactor,  data.length - trial.trialNum);
+//       var config = {lexicon: lexicon, context: trial.context};
+//       var objectToUse = (params.coord == 'diff' & trial.role == 'speaker' ? 
+//                          trial.clickedName : trial.intendedName);
+//       var pragmaticTerm = (trial.role == 'speaker' ?
+//                            refModule.ogetListenerScore(objectToUse, trial.wordID, extend(params, config)) :
+//                            refModule.getSpeakerScore(trial.wordID, objectToUse, extend(params, config)));
+//       factor(discount * pragmaticTerm);
+//     });
+//     return lexicon;
+//   }});
+// };
+
+// var postTest = function(trial, outputFile, posterior1, posterior2) {
+//   map(function(word) {
+//     var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}));
+//     var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}));
+//     csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
+//                    trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
+//     csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
+//                    trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
+//   }, utterances);
+// };
+
 // for each point in data, we want the model's predictions 
 var iterate = function(outputFile, remainingTrials, dataSoFar) {
+  console.log(remainingTrials.length, 'remaining')
   var currTrialRaw = first(remainingTrials);
   var currTrial = extend(currTrialRaw, {
     context : map(function(v) {return objectLookup[v];},
@@ -128,31 +206,36 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
                    currTrialRaw.object3name, currTrialRaw.object4name]),
     intendedName: objectLookup[currTrialRaw['intendedName']]
   });
-
-  // run VI on current data
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID]);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID]);
-
+  var config = extend(params, {context: currTrial.context});
+  
+  // update posteriors
+  console.log('updating posteriors')
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID],
+                                         lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID],
+                                          lexicalPrior, config);
+  console.log('done running update')
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, currTrial.context, speakerPosterior);
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
   var topSpeakerChoice =  sample(speakerOutput);
 
-  var listenerOutput = L(topSpeakerChoice, currTrial.context, listenerPosterior);
+  var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
 
-  postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
-  display('context is ' + currTrial.context);
-  display('top speaker choice is ' + topSpeakerChoice);
-  display('top listener choice is ' + topListenerChoice);
-  display('intended: ' + currTrial.intendedName);
+  //postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
+  // display('context is ' + currTrial.context);
+  // display('top speaker choice is ' + topSpeakerChoice);
+  // display('top listener choice is ' + topListenerChoice);
+  // display('intended: ' + currTrial.intendedName);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
-                 currTrial.trialNum, currTrial.condition, currTrial.contextType,
-                 currTrial.speakerID, currTrial.listenerID,
-                 currTrial.intendedName,
-                 topSpeakerChoice, topListenerChoice,
-                 topListenerChoice == currTrial.intendedName
-                ].join(','), outputFile);
+  csv.writeLine([
+    argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.coord, 
+    currTrial.trialNum, currTrial.condition, currTrial.contextType,
+    currTrial.speakerID, currTrial.listenerID,
+    currTrial.intendedName,
+    topSpeakerChoice, topListenerChoice,
+    topListenerChoice == currTrial.intendedName
+  ].join(','), outputFile);
 
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
     return dataSoFar[id].concat(extend(currTrial, {
@@ -174,5 +257,5 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,cond
 iterate(f, data, {1: [], 2: []});
 csv.close(f);
 
-postTest('post', posttestF);
-csv.close(posttestF);
+// postTest('post', posttestF);
+// csv.close(posttestF);

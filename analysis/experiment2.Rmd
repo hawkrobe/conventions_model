@@ -15,6 +15,9 @@ library(tidyverse)
 library(ggthemes)
 library(lme4)
 library(lmerTest)
+
+pal = colorblind_pal()(3)
+condition_pal = c(pal[1], pal[3], pal[2])
 ```
 
 # Import data  
@@ -55,16 +58,9 @@ d <- raw_clicks %>%
   left_join(raw_drops, by = c('gameid', 'trialNum', 'intendedName')) %>%
   select(-ends_with('y'), -ends_with('x'), -correct) %>%
   left_join(masterWordIDLookup) %>%#, by = c('gameid', 'text'))  
-  left_join(masterGameIDLookup)
+  left_join(masterGameIDLookup) %>%
+  ungroup()
 
-# Exclude people who are below 75% in final quarter
-nonConvergers <- (d %>% 
-  filter(quarter == 3) %>%
-  group_by(gameid, condition) %>%
-  summarize(percentCorrect = mean(acc)) %>%
-  filter(percentCorrect < 0.75))$gameid
-
-cat('excluded', length(nonConvergers), 'games that never converged')
 d %>% 
   filter(quarter == 3) %>%
   group_by(gameid, condition) %>%
@@ -126,7 +122,15 @@ ggsave('~/Downloads/singleLine.pdf', height = 4, width = 6)
 ```
 
 
-## Accuracy by condition
+# Partners successfully learn to communicate (Fig. 8)
+
+What is the intercept?
+
+```{r}
+t.test((d %>% ungroup() %>% filter(trialNum == 1))$acc, mu = 0.25)
+```
+
+Make Fig. 8
 
 ```{r}
 d %>%
@@ -137,7 +141,7 @@ d %>%
     theme_few() +
     geom_hline(yintercept = 25, lty = 'dashed') +
     geom_smooth(method = 'loess') +
-    scale_color_colorblind() +
+    scale_color_manual(values = condition_pal) +
     theme(aspect.ratio = 1) +
     labs(x = 'trial #', y = '% correct') +
     ylim(0, 100)
@@ -146,193 +150,26 @@ ggsave('../writing/journal_manuscript/figures/Exp2_empirical_accuracy.pdf', widt
        useDingbats=FALSE)
 ```
 
-
-The overall increase is significant... 
+The overall increase is significant...and adding condition improves model fit.
 
 ```{r}
-trialOnly = glmer(acc ~ trialNum + (1 + trialNum | gameid), family = 'binomial', data = d %>% ungroup())
-trialAndCondition = glmer(acc ~ trialNum + condition + (1 + trialNum | gameid), family = 'binomial', data = d %>% ungroup())
+trialOnly <- glmer(acc ~ trialNum + (1 + trialNum | gameid), family = 'binomial', data = d)
+trialAndCondition <- glmer(acc ~ trialNum + condition + (1 + trialNum | gameid), family = 'binomial', data = d)
+
+trialOnly %>% summary()
 anova(trialOnly, trialAndCondition)
 ```
 
-What is the intercept?
-
-```{r}
-t.test((d %>% ungroup() %>% filter(trialNum == 1))$acc, mu = 0.25)
-```
-
-## Unique words
-
-```{r}
-d %>%
-  #filter(!(gameid %in% nonConvergers)) %>%
-  mutate(repNum = floor((trialNum - 1) / 8)) %>%
-  group_by(gameid, condition, repNum) %>%
-  mutate(numUniqueWordsUsed = length(unique(wordID))) %>%
-  group_by(condition, repNum) %>%
-  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
-    geom_line() +
-    ylim(3.5, 8.5) +
-    geom_hline(yintercept = c(4, 8)) +
-    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    theme_few() +
-    scale_color_colorblind() +
-    theme(aspect.ratio = 1) +
-    labs(y = "number unique words used")
-
-ggsave('../writing/journal_manuscript/figures/Exp2_empirical_numwords.pdf', width = 5, height = 4, useDingbats = F)
-```
-
-```{r}
-d %>%
-  mutate(repNum = floor((trialNum - 1) / 8)) %>%
-  group_by(gameid, condition, repNum) %>%
-  mutate(numUniqueWordsUsed = length(unique(wordID))) %>%
-  group_by(condition) %>%
-  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100)
-
-d %>%
-  mutate(repNum = floor((trialNum - 1) / 8)) %>%
-  group_by(gameid, condition, repNum) %>%
-  summarize(numUniqueWordsUsed = length(unique(wordID))) %>%
-  lmer(numUniqueWordsUsed ~ scale(repNum, scale=F) * condition + (1 + repNum | gameid),
-       data = .,
-       contrasts = list(condition = contr.sum(2))) %>%
-  summary()
-```
-
-## Reaction times
+Response times also go down
 
 ```{r}
 d %>% 
-  mutate(condition = ifelse(condition == 'intermediateOnly', 'pure intermediate',
-                          'pure subordinate')) %>%
-  group_by(trialNum, condition) %>%
-  summarize(RT = mean(timeFromRoundStart)) %>%
-  ggplot(aes(x = trialNum, y = RT/1000, color = condition)) +
-    geom_point(alpha = 0.2) +
-    theme_few() + 
-    guides(color = FALSE) +
-    scale_color_colorblind() +
-    geom_smooth(method = 'loess', span = 0.4) +
-    ylim(0, NA) +
-    ylab("reaction time (seconds)")
-ggsave('../writing/cogsci18/figures/RTByCondiiton.pdf', width = 5, height = 4)
-```
-
-```{r}
-summary(lmer(timeFromRoundStart ~ trialNum + (1 + trialNum| gameid),  
-             data = d %>% 
-               ungroup() %>% 
-               mutate(timeFromRoundStart = log(timeFromRoundStart/1000), 
-                      trialNum = scale(trialNum, center=F,scale= T))))
-```
-
-## Additional exploratory analyses
-
-### *Individual* cumulative accuracy curves over time
-
-Here we see very clearly the different pairs separate out (some never converge)
-
-```{r}
-ggplot(d, aes(x = trialNum, y = cumAcc, group = gameid)) +
-  geom_line() +
-  theme_few() + 
-  guides(color = FALSE) +
-  ylab("cumulative accuracy")
-```
-
-### Accuracy distributions by quartile of game
-
-So we can clearly see the distributions... 
-
-```{r}
-d %>% 
-  group_by(gameid, quarter) %>%
-  summarize(percentCorrect = mean(acc)) %>%
-  ggplot(aes(x = percentCorrect)) +
-    geom_histogram(bins = 10) +
-    theme_few() + 
-    guides(color = FALSE) +
-    facet_wrap(~ quarter) 
-```
-
-We see a slightly bimodal distribution where some people never converge (we'll exclude these for lexicon analyses).
-
-# Post-test results
-
-```{r}
-postTest_word = read_delim('../data/experiment2/allWordPostTest.csv', '\t') %>%
-  gather(object, meaning, blueSquare1:stripedCircle2) %>%
-  mutate(blue = grepl('blue', object),
-         red = grepl('red', object),
-         striped = grepl('striped', object),
-         spotted = grepl('spotted', object),
-         circle = grepl("Circle", object),
-         square = grepl("Square", object)) %>%
-  right_join(d) %>%
-  select(iterationName:square, condition) %>%
-  group_by_at(vars(-condition)) %>%
-  summarize(condition = first(condition)) %>%
-  rename(text = target) %>%
-  left_join(masterWordIDLookup) %>%
-  left_join(masterGameIDLookup) 
-length(unique(postTest_word$gameid))
-```
-
-## Consistency across two post-tests?
-
-Read in individually because headers are all unique
-
-```{r results="hide"}
-file_list <- list.files('../data/experiment2/postTest_object/')
-postTest_obj = data.frame()
-for(file in file_list) {
-  result <- read_delim(file = paste0('../data/experiment2/postTest_object/', file), delim = '\t') %>%
-    gather(word, meaning, -iterationName, -gameid, -time, -target, -finalRole, -eventType)
-  postTest_obj = rbind(postTest_obj, result)
-}
-```
-
-Combine post-tests; take intersection of meanings as the best estimate of true meaning (more conservative)
-
-```{r}
-postTest_raw <- postTest_obj %>% 
-  rename(object = target, text = word, objectToWordMeaning = meaning) %>%
-  left_join(masterWordIDLookup) %>%
-  inner_join(postTest_word %>% rename(wordToObjectMeaning = meaning), by = c('gameid', 'object', 'finalRole', 'wordID')) %>%
-  select(-ends_with('.x'), -ends_with('.y')) %>%
-  mutate(internalConsistency = objectToWordMeaning == wordToObjectMeaning) %>%
-  mutate(meaning = objectToWordMeaning & wordToObjectMeaning)
-```
-
-Look at internal consistency
-
-```{r}
-cat('have both post-test measures for', 
-    length(unique(paste0(postTest_raw$gameid, postTest_raw$finalRole))),
-    'participants')
-
-cat('average number of mismatches is ', median((postTest_raw %>%
-  group_by(gameid, finalRole) %>%
-  summarize(pctConsistent = 128-sum(internalConsistency)) %>% 
-  ungroup())$pctConsistent))
-
-postTest_raw %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(pctConsistent = 128- sum(internalConsistency)) %>%
-  group_by(condition) %>%
-  summarize(m = median(pctConsistent))
-
-postTest_raw %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(pctConsistent = 128- sum(internalConsistency)) %>%
-  ggplot(aes(x = pctConsistent)) +
-    geom_histogram(bins = 35) +
-    theme_few() +
-    facet_wrap(~ condition) +
-    xlab('% of mismatches among post-test responses')
+  ungroup() %>% 
+  mutate(timeFromRoundStart = log(timeFromRoundStart/1000), 
+         trialNum = scale(trialNum, center=F,scale= T)) %>%
+  lmer(timeFromRoundStart ~ trialNum + (1 + trialNum| gameid),  
+               data = .) %>%
+    summary()
 ```
 
 ## Consistency across partners
@@ -400,55 +237,162 @@ ggplot(mismatchVsAcc, aes(x = acc, y = numMismatches, color = condition)) +
 cor(mismatchVsAcc$numMismatches,mismatchVsAcc$acc, method = 'spearman')
 ```
 
-## Any violations of contrast, or things that are described by more than one word?
+## Partners converge on similar conventions
 
-Basically, only this team?
+Read in post-test results
 
 ```{r}
-'0888-836cf6dd-4836-4d3e-bc34-2ad06f1a5352'
+postTest_word = read_delim('../data/experiment2/allWordPostTest.csv', '\t') %>%
+  gather(object, meaning, blueSquare1:stripedCircle2) %>%
+  mutate(blue = grepl('blue', object),
+         red = grepl('red', object),
+         striped = grepl('striped', object),
+         spotted = grepl('spotted', object),
+         circle = grepl("Circle", object),
+         square = grepl("Square", object)) %>%
+  right_join(d) %>%
+  select(iterationName:square, condition) %>%
+  group_by_at(vars(-condition)) %>%
+  summarize(condition = first(condition)) %>%
+  rename(text = target) %>%
+  left_join(masterWordIDLookup) %>%
+  left_join(masterGameIDLookup) 
+length(unique(postTest_word$gameid))
 ```
 
-## Main results
+## Consistency across two post-tests?
 
-We remove nonConvergers for subsequent analyses
+Read in individually because headers are all unique
 
-```{r}
-postTest_clean <- postTest_raw %>%
-  filter(!(gameid %in% nonConvergers)) 
-print(length(unique(postTest_clean$gameid)))
+```{r results="hide"}
+file_list <- list.files('../data/experiment2/postTest_object/')
+postTest_obj = data.frame()
+for(file in file_list) {
+  result <- read_delim(file = paste0('../data/experiment2/postTest_object/', file), delim = '\t') %>%
+    gather(word, meaning, -iterationName, -gameid, -time, -target, -finalRole, -eventType)
+  postTest_obj = rbind(postTest_obj, result)
+}
 ```
 
-### Check whether cleaning out non-covergers basically equates internal consistency across conditions
+Combine post-tests; take intersection of meanings as the best estimate of true meaning (more conservative)
 
 ```{r}
-postTest_clean %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(pctConsistent = 128- sum(internalConsistency)) %>%
-  group_by(condition) %>%
-  summarize(m = mean(pctConsistent))
+postTest_raw <- postTest_obj %>% 
+  rename(object = target, text = word, objectToWordMeaning = meaning) %>%
+  left_join(masterWordIDLookup) %>%
+  inner_join(postTest_word %>% rename(wordToObjectMeaning = meaning), by = c('gameid', 'object', 'finalRole', 'wordID')) %>%
+  select(-ends_with('.x'), -ends_with('.y')) %>%
+  mutate(internalConsistency = objectToWordMeaning == wordToObjectMeaning) %>%
+  mutate(meaning = objectToWordMeaning & wordToObjectMeaning) %>%
+  mutate(condition = case_when(condition == 'subOnly' ~ 'fine',
+                               condition == 'mixedLower' ~ 'mixed',
+                               TRUE ~ 'coarse'),
+         condition = fct_relevel(condition, 'coarse', 'mixed', 'fine'))
+
 ```
 
-### Result 1: Vocab size by condition.
+Look at internal consistency
 
 ```{r}
-lexiconSize <- postTest_clean %>%
+cat('have both post-test measures for', 
+    length(unique(paste0(postTest_raw$gameid, postTest_raw$finalRole))),
+    'participants')
+
+cat('median number of internal mismatches is ', median((postTest_raw %>%
+  group_by(gameid, finalRole) %>%
+  summarize(pctConsistent = 128-sum(internalConsistency)) %>% 
+  ungroup())$pctConsistent))
+
+cat('mean number of internal mismatches is ', mean((postTest_raw %>%
+  group_by(gameid, finalRole) %>%
+  summarize(pctConsistent = 128-sum(internalConsistency)) %>% 
+  ungroup())$pctConsistent))
+```
+
+How often do players align on meanings? We look at total overlap of matrix (i.e. how many cells differ). Compare the different measurements of meanings. 
+
+```{r}
+mismatches <- postTest_raw %>%
+  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
+  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
+  spread(finalRole, value) %>%
+  group_by(gameid, object, wordID, condition, meaningType) %>%
+  summarize(match = listener == speaker) %>%
+  group_by(gameid, condition, meaningType) %>%
+  summarize(numMismatches = 128-sum(match))
+
+missingPostTests <- unique((mismatches %>% filter(is.na(numMismatches)))$gameid)
+cat('have both post-test measures for', 
+    length(unique((mismatches %>% filter(!(gameid %in% missingPostTests)))$gameid)),
+    'pairs')
+```
+
+But note that pairs that didn't technically align that well on the post-test could still perform pretty well if one partner simply has a stricter meaning than the other but the difference is never relevant.
+
+```{r}
+mismatches <- postTest_raw %>%
+  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
+  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
+  spread(finalRole, value) %>%
+  group_by(gameid, object, wordID, condition, meaningType) %>%
+  summarize(match = listener == speaker) %>%
+  group_by(gameid, condition, meaningType) %>%
+  summarize(numMismatches = 128-sum(match)) %>% 
+  filter(!(gameid %in% missingPostTests))
+
+mismatches %>% ungroup() %>% filter(meaningType == 'meaning') %>% summarize(m = median(numMismatches))
+```
+
+Pairs with more similar lexica perform better.
+
+```{r}
+mismatchVsAcc <- mismatches %>% 
+  inner_join(d) %>%
+  group_by(gameid, condition) %>%
+  summarize(acc = mean(overallAcc), numMismatches = mean(numMismatches)) %>%
+  filter(!is.na(numMismatches))
+
+ggplot(mismatchVsAcc, aes(x = acc, y = numMismatches, color = condition)) +
+    geom_point() +
+    geom_smooth(method = 'lm') +
+    theme_few()
+
+cor.test(mismatchVsAcc$numMismatches,mismatchVsAcc$acc)
+```
+
+```{r}
+accuracies <- d %>% 
+  filter(quarter == 3) %>%
+  group_by(gameid, condition) %>%
+  summarize(percentCorrect = mean(acc))
+
+nonConvergers <- accuracies %>% filter(percentCorrect < 0.75) %>% pull(gameid)
+
+accuracies %>% 
+  group_by(condition) %>% 
+  mutate(nGames = length(gameid)) %>% 
+  filter(percentCorrect < 0.75) %>% 
+  summarize(n = n(), pctGames = n / mean(nGames))
+```
+## Contextual pressures shape the lexicon
+
+Raw vocabulary size by condition?
+
+```{r}
+postTest_raw %>%
   group_by(gameid, finalRole, wordID, condition) %>%
   summarize(numObjects = sum(meaning)) %>%
   filter(numObjects > 0) %>%
   group_by(gameid, finalRole, condition) %>%
-  tally() %>%
-  group_by(condition, gameid) %>%
-  summarize(vocabSize = median(n, na.rm = T)) 
-
-summary(lm(vocabSize ~ condition, data = lexiconSize))
+  summarize(vocabSize = n()) %>%
+  lmer(vocabSize ~ condition + (1 | gameid), data = .) %>%
+  summary()
 ```
 
-### Coverage in shared lexicon? 
-
-This is pretty conservative, since it uses the 'intersection' metric of internal consistency: a word is only in a particular player's lexicon if they marked it in both directions, hence we're probably under-estimating their vocab. If we've underestimated both peoples' vocabs, we've also underestimated their overlap, which is probably dragging these down. Still, we get a median coverage of 7 words... 
+Coverage in shared lexicon? This analysis pretty conservative, since it uses the 'intersection' metric of internal consistency: a word is only in a particular player's lexicon if they marked it in both directions, hence we're probably under-estimating their vocab. If we've underestimated both peoples' vocabs, we've also underestimated their overlap, which is probably dragging these down.
 
 ```{r}
- coverageDF <- postTest_clean %>%
+ coverageDF <- postTest_raw %>%
   select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
   filter(!(gameid %in% missingPostTests)) %>%
   gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
@@ -462,41 +406,225 @@ This is pretty conservative, since it uses the 'intersection' metric of internal
   summarize(numObjectsWithSingleWord = sum(numWord == 1),
             numObjectsWithMultipleWords = sum(numWord > 1))
 
+coverageDF %>%
+  group_by(condition) %>% 
+  summarize(median(numObjectsWithSingleWord)) 
 
-coverageDF %>% group_by(condition) %>% summarize(m1 = mean(numObjectsWithSingleWord), mMore = mean(numObjectsWithMultipleWords))
-
-ggplot(coverageDF, aes(x = condition, y = numObjectsWithSingleWord)) +
-    geom_violin() +
-    ylab('# objects with shared words') +
-    theme_few()
+coverageDF %>% 
+  lm(numObjectsWithSingleWord ~ condition, data = .) %>%
+  summary()
 ```
 
-### Result 2: How many abstract vs. specific terms overall?
+Unique words?
 
 ```{r}
-lexiconCounts <- postTest_clean %>% 
+d %>%
+  mutate(repNum = floor((trialNum - 1) / 8)) %>%
+  group_by(gameid, condition, repNum) %>%
+  mutate(numUniqueWordsUsed = length(unique(wordID))) %>%
+  group_by(condition, repNum) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
+    geom_line() +
+    ylim(3.5, 8.5) +
+    geom_hline(yintercept = c(4, 8)) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    theme_few() +
+    scale_color_manual(values = condition_pal) +
+    theme(aspect.ratio = 1) +
+    labs(y = "number unique words used")
+
+ggsave('../writing/journal_manuscript/figures/Exp2_empirical_numwords.pdf', width = 5, height = 4, useDingbats = F)
+```
+
+```{r}
+uniqueWords <- d %>%
+  mutate(repNum = floor((trialNum - 1) / 8)) %>%
+  group_by(gameid, condition, repNum) %>%
+  summarize(numUniqueWordsUsed = length(unique(wordID))) %>%
+  mutate(centeredRep = scale(repNum, scale=T))
+
+uniqueWords %>%
+  lmer(numUniqueWordsUsed ~ centeredRep * condition + (1 + centeredRep | gameid),
+       data = .) %>%
+  summary()
+```
+
+How many abstract vs. specific terms?
+
+```{r}
+lexiconCounts <- postTest_raw %>% 
   group_by(gameid, finalRole, wordID, condition) %>%
   summarize(numMeanings = sum(meaning)) %>%
   group_by(condition, numMeanings) %>%
   tally() %>%
   group_by(condition) %>%
-  mutate(pct = n/sum(n), ci = 1.96*sqrt(pct*(1-pct)/sum(n))) 
+  mutate(pct = n / sum(n)) %>%
+  filter(numMeanings < 3) %>%
+  ungroup() 
 
-ggplot(lexiconCounts, aes(x = condition, fill = factor(numMeanings), y = pct)) +
-    geom_bar(stat = 'identity', position = position_fill(reverse = FALSE), width=.5) +
-    #geom_errorbar(aes(ymax = pct + ci, ymin = pct - ci), data = lexiconCounts %>% filter(numMeanings < 3), width = 0, stat = 'identity', position = 'identity') +
-    #facet_wrap(~ condition) +
+lexiconCounts %>%
+  mutate(numWords = 16*pct) %>%
+ggplot(aes(x = condition, y = numWords, fill = fct_relevel(factor(numMeanings), '0', '2', '1'))) +
+    geom_bar(stat = 'identity', width=.75) +
+    scale_fill_manual(values = c('#E6E6E5','#97A5A4', '#231F20')) +
+    scale_y_continuous(breaks = c(0,4,8,12,16)) +
     theme_few() +
-    xlab("# objects words refer to") +
-      guides(fill=FALSE)
-
+    labs(x = "", y = '# words with post-test meaning') +
+    theme(aspect.ratio = 2)
 ggsave('../writing/cogsci18/figures/lexiconContent.pdf', width = 3, height = 3)
 ```
+
+What is modal response in each condition?
+
+```{r}
+postTest_raw %>% 
+  group_by(gameid, finalRole, wordID) %>%
+  filter(meaning == 1) %>%
+  summarize(subordinate = sum(meaning) == 1,
+            basic = (sum(meaning) == 2 & 
+                       (all(red) | all(blue) | all(striped) | all(spotted)))) %>%
+  group_by(gameid, finalRole) %>%
+  summarize(numSub = sum(subordinate),
+            numBasic = sum(basic)) %>%
+  left_join(d) %>%
+  group_by(gameid, finalRole, condition) %>%
+  summarize(numSub = mean(numSub), numBasic=mean(numBasic)) %>%
+  group_by(condition, numSub, numBasic) %>%
+  tally() %>%
+  group_by(condition) %>%
+  mutate(pct = n/sum(n)) %>%
+  select(-n) %>%
+  filter(pct == max(pct))
+```
+
+Test proportion of specific vs. abstract distribution within lexicon.
+
+How many objects does each label correspond to (i.e. how many meanings at sub-level vs. basic-level)
+
+```{r}
+pctDF <- postTest_raw %>%
+  group_by(gameid, finalRole, wordID, condition) %>%
+  filter(meaning == 1) %>%
+  summarize(specific = sum(meaning) == 1,
+            abstract = sum(meaning) > 1) %>%
+  group_by(gameid, finalRole, condition) %>%
+  summarize(nSpecific = sum(specific),
+            nAbstract = sum(abstract),
+            pctSpecific = nSpecific/(nSpecific + nAbstract),
+            pctAbstract = nAbstract/(nSpecific + nAbstract))
+
+lmer(nAbstract ~ condition + (1 | gameid), data = pctDF) %>%
+  summary()
+```
+
+
+# Additional exploratory analyses
+
+## Vizualize response times
+
+```{r}
+d %>% 
+  group_by(trialNum, condition) %>%
+  summarize(RT = mean(timeFromRoundStart)) %>%
+  ggplot(aes(x = trialNum, y = RT/1000, color = condition)) +
+    geom_point(alpha = 0.2) +
+    theme_few() + 
+    guides(color = FALSE) +
+    scale_color_colorblind() +
+    geom_smooth(method = 'loess', span = 0.4) +
+    ylim(0, NA) +
+    ylab("reaction time (seconds)")
+```
+
+### *Individual* cumulative accuracy curves over time
+
+Here we see very clearly the different pairs separate out (some never converge)
+
+```{r}
+ggplot(d, aes(x = trialNum, y = cumAcc, group = gameid)) +
+  geom_line() +
+  theme_few() + 
+  guides(color = FALSE) +
+  ylab("cumulative accuracy")
+```
+
+### Accuracy distributions by quartile of game
+
+So we can clearly see the distributions... 
+
+```{r}
+d %>% 
+  group_by(gameid, condition, quarter) %>%
+  summarize(percentCorrect = mean(acc)) %>%
+  ggplot(aes(x = percentCorrect, fill = condition)) +
+    geom_histogram(bins = 12) +
+    geom_vline(xintercept = 0.75) +
+    geom_vline(xintercept = 0.25, linetype = 'dotted') +
+    theme_few() + 
+    guides(fill = FALSE) +
+    xlim(-0.1,1.1) +
+    scale_x_continuous(breaks = c(0,.25,.5,.75,1)) +
+    scale_fill_manual(values = condition_pal) +
+    facet_grid(condition ~ quarter, scales = 'free_y') 
+
+ggsave('../writing/journal_manuscript/figures/exp2-acc-grid.pdf', units = 'in', width = 8, height = 6)
+```
+
+We see a slightly bimodal distribution where some people never converge.
+
+### Visualize internal consistency oon post-test (mismatches)
+
+```{r}
+postTest_raw %>%
+  group_by(gameid, finalRole, condition) %>%
+  summarize(pctConsistent = 128- sum(internalConsistency)) %>%
+  ggplot(aes(x = pctConsistent)) +
+    geom_histogram(bins = 35) +
+    theme_few() +
+    facet_wrap(~ condition) +
+    xlab('% of mismatches among post-test responses')
+```
+
+Check whether cleaning out non-covergers basically equates internal consistency across conditions
+
+```{r}
+postTest_raw %>%
+  #filter(!(gameid %in% nonConvergers)) %>%
+  group_by(gameid, finalRole, condition) %>%
+  summarize(pctConsistent = 128- sum(internalConsistency)) %>%
+  group_by(condition) %>%
+  summarize(m = mean(pctConsistent))
+```
+
+## Check differences in cross-partner mismatches across conditions
+
+```{r}
+ggplot(mismatches, aes(x = numMismatches)) +
+    geom_histogram(binwidth = 1) +
+    theme_few() +
+    xlab('# mismatches') +
+   facet_wrap(meaningType ~ condition)
+```
+
+```{r}
+mismatches %>% 
+  group_by(condition) %>% 
+  filter(meaningType == 'meaning') %>% 
+  summarize(m = median(numMismatches))
+
+mismatches %>% 
+  ungroup() %>% 
+  filter(meaningType == 'meaning') %>%
+  lm(numMismatches ~ condition, data = .) %>%
+  summary()
+```
+
 
 ### Proportion of specific & abstract within single lexicon?
 
 ```{r}
-postTest_clean %>% 
+postTest_raw %>% 
   group_by(gameid, finalRole, condition, wordID) %>%
   filter(meaning) %>%
   summarize(specific = sum(meaning) == 1,
@@ -522,44 +650,13 @@ postTest_clean %>%
 ggsave("../writing/cogsci18/figures/fullLexiconReport.pdf", width = 6, height =3)
 ```
 
-What is modal response in each condition?
+
+
+### Any violations of contrast, or things that are described by more than one word?
+
+Basically, only this team?
 
 ```{r}
-postTest_clean %>% 
-  group_by(gameid, finalRole, wordID) %>%
-  filter(meaning == 1) %>%
-  summarize(subordinate = sum(meaning) == 1,
-            basic = (sum(meaning) == 2 & 
-                       (all(red) | all(blue) | all(striped) | all(spotted)))) %>%
-  group_by(gameid, finalRole) %>%
-  summarize(numSub = sum(subordinate),
-            numBasic = sum(basic)) %>%
-  left_join(d) %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(numSub = mean(numSub), numBasic=mean(numBasic)) %>%
-  group_by(condition, numSub, numBasic) %>%
-  tally() %>%
-  group_by(condition) %>%
-  mutate(pct = n/sum(n)) %>%
-  select(-n) %>%
-  filter(pct == max(pct))
+'0888-836cf6dd-4836-4d3e-bc34-2ad06f1a5352'
 ```
 
-## Proportion of specific vs. abstract distribution within lexicon
-
-How many objects does each label correspond to (i.e. how many meanings at sub-level vs. basic-level)
-
-```{r}
-pctDF <- postTest_clean %>%
-  group_by(gameid, finalRole, wordID, condition) %>%
-  filter(meaning == 1) %>%
-  summarize(specific = sum(meaning) == 1,
-            abstract = sum(meaning) > 1) %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(pctSpecific = sum(specific)/(sum(specific) + sum(abstract)),
-            pctAbstract = sum(abstract)/(sum(specific) + sum(abstract))) %>% 
-  group_by(condition) %>%
-  summarize(m = mean(pctSpecific))
-
-summary(lm(pctAbstract ~ condition, data = pctDF))
-```
