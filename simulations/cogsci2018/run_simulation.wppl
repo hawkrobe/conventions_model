@@ -1,12 +1,6 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
 
-var intersect = function(a_of_a) {
-  return reduce(function(i, acc) {
-    return _.intersection(i, acc);
-  }, a_of_a[0], a_of_a);
-};
-
 var data = refModule.readCSV('input/' + argv.gameNum + '.csv');
 var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
@@ -25,7 +19,6 @@ var objectLookup = {
   'spottedCircle1' : 'shape_circle_spotted_lowspotted', 'spottedCircle2' : 'shape_circle_spotted_highspotted'
 };
 var numMeanings = meanings.length;
-var lexDims = [1];
 
 var params = {
   speakerAlpha : 10,
@@ -40,13 +33,9 @@ var params = {
 
 var pragStr = ('discount:' + params.discountFactor + '_coord:' + params.coord);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
+csv.writeLine('i,gameNum,speakerAlpha,listenerAlpha,discountFactor,time,condition,agentID,word,meaning,prob', posttestF);
 
 console.log(params);
-console.log(lexDims);
-var tensorSoftplus = function(x) {
-  return T.log(T.add(T.exp(x), 1));
-};
 
 var sampleLexicon = function() {
   var nullUtterance = {'null' : 'shape'};
@@ -63,52 +52,6 @@ var sampleObject = function(context) {
   var nullObject = 'shape_striped_spotted_highstriped_highspotted_lowstriped_lowspotted_null';
   return flip(0.01) ? nullObject : uniformDraw(context);
 };
-// impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
-// condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
-
-// stricter mutual exclusivity
-//console.log(lexicon);
-// var flattened = _.flatten(map(function(key) {
-//   return filter(function(object) {
-//     return _.includes(object.split('_'), lexicon[key])
-//   }, objects);
-// }, _.keys(lexicon)));
-// console.log(flattened);
-// console.log(_.uniq(flattened).length == flattened.length);
-//condition(_.uniq(flattened).length == flattened.length);
-
-// var L0 = function(utt, context, lexicon) {
-//   return Infer({method: 'enumerate'}, function() {
-//     var obj = sampleObject(context);
-//     condition(_.includes(obj.split('_'), lexicon[utt]));
-//     return obj;
-//   });
-// };
-
-// var S1 = function(obj, context, lexicon) {
-//   return Infer({method: 'enumerate'}, function() {
-//     var utt = sampleUtterance();
-//     factor(params.alpha * L0(utt, context, lexicon).score(obj));
-//     return utt;
-//   });
-// };
-
-// var L1 = function(utt, context, lexicon) {
-//   return Infer({method: 'enumerate'}, function() {
-//     var obj = sampleObject(context);
-//     factor(params.listenerAlpha * S1(obj, context, lexicon).score(utt));
-//     return obj;
-//   });
-// };
-
-// var validLexicon = function(lexicon) {
-//   var flattened = _.flatten(map(function(key) {
-//     return filter(function(object) {
-//       return _.includes(object.split('_'), lexicon[key])
-//     }, objects);
-//   }, _.keys(lexicon)));
-//   return _.uniq(flattened).length == objects.length;
-// };
 
 var extensionSize = function(lexicon) {
   var flattened = _.flatten(map(function(key) {
@@ -144,10 +87,11 @@ var L = function(utt, context, posterior) {
 };
 
 var updatePosterior = function(data) {
-  return Infer({method: 'MCMC', samples:2500,burn:10000,lag:2, model : function() { // 
+  return Infer({method: 'MCMC', samples:2000,burn:10000,lag:1, model : function() { // 
 
     // Implement simplicity prior (smaller lexicons preferred)
     var lexicon = sampleLexicon();
+    //condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
     factor(-1*extensionSize(lexicon));
 
     mapData({data: data}, function(trial) { 
@@ -165,13 +109,13 @@ var updatePosterior = function(data) {
 };
 
 var postTest = function(trial, outputFile, posterior1, posterior2) {
+  var data = [argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+              trial.trialNum, trial.condition];
   map(function(word) {
-    var speaker1TopGuess = JSON.stringify(marginalize(posterior1, function(x) {return x[word]}));
-    var speaker2TopGuess = JSON.stringify(marginalize(posterior2, function(x) {return x[word]}));
-    csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
-                   trial.trialNum, trial.speakerID, word, speaker1TopGuess].join(','), outputFile);
-    csv.writeLine([argv.gameNum, params.speakerAlpha, params.listenerAlpha, 
-                   trial.trialNum, trial.listenerID, word, speaker2TopGuess].join(','), outputFile);
+    csv.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
+                       outputFile, data.concat([trial.speakerID, word]));
+    csv.writeMarginals(marginalize(posterior2, function(x) {return x[word];}),
+                       outputFile, data.concat([trial.listenerID, word]));
   }, utterances);
 };
 
@@ -230,6 +174,5 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,coord,time,cond
 iterate(f, data, {1: [], 2: []});
 csv.close(f);
 
-console.log('running posttest')
-//postTest('post', posttestF);
+postTest('post', posttestF);
 csv.close(posttestF);

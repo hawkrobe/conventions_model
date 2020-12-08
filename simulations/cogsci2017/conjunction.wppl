@@ -15,15 +15,15 @@ var params = {
   discountFactor: argv.discountFactor,
   costWeight: argv.costWeight,  
   guessingEpsilon: argv.guessingEpsilon,
-  numTrials: 10,
+  numTrials: 14,
   context: objects,
   utterances: utterances,
   objects: objects
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestF);
+// var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestF);
 
 console.log(params);
 
@@ -95,8 +95,8 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   //   var config = extend(params, {lexicon: lexicon});
   //   return L0('word1_word2', config).score('blue_circle');
   // })),
-  console.log(topSpeakerChoice);
-  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  //console.log(topSpeakerChoice);
+  //postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
                  params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName, topSpeakerChoice, topListenerChoice,
@@ -123,6 +123,6 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,gues
 map(function(i) {
   console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
-}, _.range(1000));
+}, _.range(100));
 csv.close(f);
-csv.close(posttestF);
+//csv.close(posttestF);

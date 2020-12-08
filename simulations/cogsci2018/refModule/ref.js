@@ -51,6 +51,59 @@ var normalize = function(truth, sum) {
 //   return lexiconElement;
 // };
 
+// impose principle of contrast in prior (only consider lexica where words have non-overlapping meanings)
+// condition(_.uniq(_.values(lexicon)).length == _.keys(lexicon).length);
+
+// stricter mutual exclusivity
+//console.log(lexicon);
+// var flattened = _.flatten(map(function(key) {
+//   return filter(function(object) {
+//     return _.includes(object.split('_'), lexicon[key])
+//   }, objects);
+// }, _.keys(lexicon)));
+// console.log(flattened);
+// console.log(_.uniq(flattened).length == flattened.length);
+//condition(_.uniq(flattened).length == flattened.length);
+
+// var L0 = function(utt, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var obj = sampleObject(context);
+//     condition(_.includes(obj.split('_'), lexicon[utt]));
+//     return obj;
+//   });
+// };
+
+// var S1 = function(obj, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var utt = sampleUtterance();
+//     factor(params.alpha * L0(utt, context, lexicon).score(obj));
+//     return utt;
+//   });
+// };
+
+// var L1 = function(utt, context, lexicon) {
+//   return Infer({method: 'enumerate'}, function() {
+//     var obj = sampleObject(context);
+//     factor(params.listenerAlpha * S1(obj, context, lexicon).score(utt));
+//     return obj;
+//   });
+// };
+
+// var validLexicon = function(lexicon) {
+//   var flattened = _.flatten(map(function(key) {
+//     return filter(function(object) {
+//       return _.includes(object.split('_'), lexicon[key])
+//     }, objects);
+//   }, _.keys(lexicon)));
+//   return _.uniq(flattened).length == objects.length;
+// };
+
+// var intersect = function(a_of_a) {
+//   return reduce(function(i, acc) {
+//     return _.intersection(i, acc);
+//   }, a_of_a[0], a_of_a);
+// };
+
 var logit = function(p) {
   return ad.scalar.sub(ad.scalar.log(p), ad.scalar.log(ad.scalar.sub(1, p)));
 }
@@ -155,7 +208,7 @@ var supportWriter = function(s, handle) {
     fs.writeSync(handle, sLst[i].join(',') + '\n');
   }
 };
-
+ 
 module.exports = {
   getL0Score, getSpeakerScore, getListenerScore, getLexiconElement, k_combinations,
   reformatData, bayesianErpWriter, readCSV
