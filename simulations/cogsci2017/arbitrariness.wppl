@@ -15,7 +15,8 @@ var params = {
   coord: 'diff',
   numTrials: 40,
   utterances: utterances,
-  objects: objects
+  objects: objects,
+  inferOptions: {method: 'enumerate'}
 };
 
 var pragStr = ('discount:' + params.discountFactor);
@@ -25,11 +26,11 @@ var pragStr = ('discount:' + params.discountFactor);
 
 //console.log(params);
 
-var lexicalPrior = Infer({method: 'enumerate'}, function() {
+var lexicalPrior = function() {
   return _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
   }, utterances))
-});
+};
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
   var shared = [
