@@ -1,6 +1,5 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
-var data = shared.readCSV('input/' + argv.gameNum + '.csv');
 var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['shape_circle_striped_highstriped', 'shape_circle_striped_lowstriped',
@@ -27,27 +26,16 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
+  numTrials: 48,
   inferOptions: {method: 'MCMC', samples:1000, burn:5000, lag:10, verbose:true}//{method: 'enumerate'}//
 };
 
+var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
 var pragStr = ('discount:' + params.discountFactor);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
 // csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
 
 console.log(params);
-var extensionSizeLookup = {
-  'circle' : 4, 'square' : 4,
-  'red'    : 2,  'blue'   : 2,  'spotted': 2, 'striped': 2,//['circle', 'striped', 'highstriped','lowstriped'],
-  'highstriped':1,//['striped', 'circle','highstriped'],
-  'highspotted':1,//['spotted', 'circle', 'highspotted'],
-  'lowstriped':1,//['striped', 'circle', 'lowstriped'],
-  'lowspotted':1,//['spotted', 'circle','lowspotted'],
-  'darkred':1,//['red', 'square','darkred'],
-  'lightred':1,//['red', 'square','lightred'],
-  'darkblue':1,//['blue', 'square', 'darkblue'],
-  'lightblue':1,//['blue', 'square','lightblue']
-  'null':0
-};
 
 var extensionLookup = {
   'circle' : ['circle', 'striped', 'highstriped','lowstriped', 'spotted', 'highspotted', 'lowspotted'],
