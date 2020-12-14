@@ -21,7 +21,7 @@ var L0 = cache(function(utt, params) {
       })],
     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
   });
-}, 10000);
+});
 
 var S1 = cache(function(obj, params) {
   return Mixture({
@@ -36,7 +36,7 @@ var S1 = cache(function(obj, params) {
       })],
     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
   })
-}, 10000)
+})
 
 var L1 = function(utt, params) {
   return Mixture({
@@ -56,7 +56,7 @@ var S = function(object, posterior, params) {
     var utt = uniformDraw(params.utterances);
     var inf = expectation(posterior, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return shared.getL0Score(object, utt, config)
+      return shared.getL0Score(object, utt, config);
     });
 
     var utility = ((1-params.costWeight) * inf
@@ -90,7 +90,6 @@ var updatePosterior = function(data, lexicalPrior, params) {
       if(trial.role == 'speaker') {
         factor(beta * shared.getL0Score(object, trial.wordID, config));
       } else {
-
         factor(beta * shared.getS1Score(trial.wordID, object, config));
       }
     });

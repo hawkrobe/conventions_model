@@ -1,5 +1,5 @@
 var babyparse = require('babyparse');
-var fs = require('fs')
+var fs = require('fs');
 
 function readCSV(filename){
   return babyparse.parse(fs.readFileSync(filename, 'utf8'),
