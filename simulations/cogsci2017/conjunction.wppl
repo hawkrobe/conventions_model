@@ -31,7 +31,7 @@ console.log(params);
 var lexicalPrior = function() {
   return _.zipObject(unconstrainedUtterances, map(function(utt) {
     var bias = 0.05;
-    var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'blue_circle' : 'red_square');
+    var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'bluecircle' : 'redsquare');
     var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/2 + bias : 1/2 - bias;}, meanings);
     return sample(Categorical({vs: meanings, ps: ps}));
   }, unconstrainedUtterances));
@@ -48,25 +48,25 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
     params.costWeight * getUttCost('word1'),
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L0('word1', config).score('blue_circle');
+      return L0('word1', config).score('bluecircle');
     }),
     params.costWeight * getUttCost('word2'),
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L1('word2', config).score('blue_circle');
+      return L1('word2', config).score('bluecircle');
     }),
     params.costWeight * getUttCost('word1_word2'),      
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L1('word1_word2', config).score('blue_circle');
+      return L1('word1_word2', config).score('bluecircle');
     }),
-    S('blue_circle', posterior1,params).score('word1'),
-    S('blue_circle', posterior1,params).score('word2'),
-    S('blue_circle', posterior1,params).score('word1_word2'),        
-    word1Meaning.score('blue_circle'),
-    word2Meaning.score('blue_circle'),
-    word3Meaning.score('blue_circle'),
-    word4Meaning.score('blue_circle')
+    S('bluecircle', posterior1,params).score('word1'),
+    S('bluecircle', posterior1,params).score('word2'),
+    S('bluecircle', posterior1,params).score('word1_word2'),        
+    word1Meaning.score('bluecircle'),
+    word2Meaning.score('bluecircle'),
+    word3Meaning.score('bluecircle'),
+    word4Meaning.score('bluecircle')
   ].join(','), outputFile);
 };
 
@@ -84,11 +84,14 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
   var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
-
+  // display(speakerPosterior)
+  // display(listenerPosterior)
   // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, speakerPosterior, params);
+  // display(speakerPosterior)  
+  // display(speakerOutput)
   var topSpeakerChoice =  sample(speakerOutput);
-
+  console.log(topSpeakerChoice);
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
   var topListenerChoice = sample(listenerOutput);
 
@@ -117,6 +120,7 @@ csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,gues
               'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
+  console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
 }, _.range(50));
 csv.close(f);

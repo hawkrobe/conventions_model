@@ -11,7 +11,7 @@ var normalize = function(truth, sum) {
 };
 
 var getLexiconElement = function(utt, target, params) {
-  return _.min(_.map(utt.split('_'), function(word) {
+  return _.max(_.map(utt.split('_'), function(word) {
     var uttLex = params.lexicon[word];
     return _.includes(target.split('_'), uttLex) ? 1 : 0;
   }));
@@ -31,6 +31,7 @@ var getL0Score = function(target, utt, params) {
 
   // Assume null object in context, so only possibility of picking object for which utterance
   // is false comes from guessing
+//  console.log(target, utt, params.lexicon, targetMeaning)
   if(targetMeaning == 0) {
     return Math.log(noiseProb * params.guessingEpsilon);
   } 
