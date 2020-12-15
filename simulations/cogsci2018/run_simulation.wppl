@@ -30,11 +30,6 @@ var params = {
   inferOptions: {method: 'MCMC', samples:1000, burn:7500, lag:5, verbose:true}//{method: 'enumerate'}//
 };
 
-var exptAgents = agents(params);
-var S = exptAgents.S;
-var L = exptAgents.L;
-var updatePosterior = exptAgents.updatePosterior;
-
 var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
 var pragStr = ('discount:' + params.discountFactor);
 var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
@@ -108,15 +103,15 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   var config = extend(params, {context: currTrial.context});
   
   // update posteriors
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior);
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
 
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, speakerPosterior, currTrial.context);
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
   var topSpeakerChoice =  sample(speakerOutput);
   display(speakerOutput)
 
-  var listenerOutput = L(topSpeakerChoice,  listenerPosterior, currTrial.context);
+  var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
   display(listenerOutput)
 
