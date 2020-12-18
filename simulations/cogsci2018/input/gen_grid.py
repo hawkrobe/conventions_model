@@ -14,10 +14,14 @@ with open('context_sensitivity_grid.csv', 'w') as csv_file :
             for listenerAlpha in [1, 2, 4, 16, 64] : 
                 for discountFactor in [0.6, 0.8, 1] :
                     for guessingEpsilon in [0.1, 0.01, 0.001, 0.00001] :
-                        writer.writerow([f, speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon])
+                        writer.writerow([chainNum, f, speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon])
+                        chainNum += 1
 
-with open('micro_grid.csv', 'w') as csv_file :
+chainNum = 200000
+with open('micro-grid.csv', 'w') as csv_file :
     writer = csv.writer(csv_file, delimiter=',')
     for f in files :
-        writer.writerow([f, 5, 5, 0.8, 0.01])
+        for iterationNum in range(5) :
+            writer.writerow([chainNum, f, 10, 5, 0.8, 0.01])
+            chainNum += 1 
 
