@@ -26,14 +26,14 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 48,
+  numTrials: 24,
   inferOptions: {method: 'MCMC', samples:1000, burn:7500, lag:5, verbose:true}//{method: 'enumerate'}//
 };
 
 var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
-var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttestF);
+var posttest_file = shared.open('./output/meaningTest_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttest_file);
+//csv.close(posttest_file);
 
 console.log(params);
 
@@ -76,17 +76,17 @@ var lexicalPrior = function() {
   return lexicon;
 };
 
-var postTest = function(trial, outputFile, posterior1, posterior2) {
+var postTest = function(trial, posterior1, posterior2) {
   var data = [argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
               trial.trialNum, trial.condition];
   map(function(word) {
-    console.log(word)
-    console.log(marginalize(posterior1, function(x) {return x[word];}))
-    console.log(marginalize(posterior2, function(x) {return x[word];}))
-    // csv.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
-    //                    outputFile, data.concat([trial.speakerID, word]));
-    // csv.writeMarginals(marginalize(posterior2, function(x) {return x[word];}),
-    //                    outputFile, data.concat([trial.listenerID, word]));
+    // console.log(word)
+    // console.log(marginalize(posterior1, function(x) {return x[word];}))
+    // console.log(marginalize(posterior2, function(x) {return x[word];}))
+    shared.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
+                       posttest_file, data.concat([trial.speakerID, word]));
+    shared.writeMarginals(marginalize(posterior2, function(x) {return x[word];}),
+                       posttest_file, data.concat([trial.listenerID, word]));
   }, utterances);
 };
 
@@ -115,14 +115,14 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   var topListenerChoice =  sample(listenerOutput);
   display(listenerOutput)
 
-  postTest(currTrial, posttestF, speakerPosterior, listenerPosterior);
+  postTest(currTrial, speakerPosterior, listenerPosterior);
   display('context is ' + currTrial.context);
   display('top speaker choice is ' + topSpeakerChoice);
   display('top listener choice is ' + topListenerChoice);
   display('intended: ' + currTrial.intendedName);
   display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([
-    argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+  shared.writeLine([
+    argv.chainNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
     currTrial.trialNum, currTrial.condition, currTrial.contextType,
     currTrial.speakerID, currTrial.listenerID,
     currTrial.intendedName,
@@ -143,12 +143,10 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   } 
 };
 
-var f = csv.open('./output/trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,condition,contextType,speakerID,listenerID,' +
+var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('chainNum,gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,condition,contextType,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 iterate(f, data, {1: [], 2: []});
-csv.close(f);
-
-// postTest('post', posttestF);
-csv.close(posttestF);
+shared.close(f);
+shared.close(posttest_file);
