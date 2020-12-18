@@ -44,10 +44,8 @@ var S = function(object, posterior, params) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
     var inf = expectation(posterior, function(lexicon) {
-      return shared.getL0Score(object, utt, extend(params, {lexicon}));
+      return shared.getL1Score(object, utt, extend(params, {lexicon}));
     });
-    // console.log(utt);
-    // console.log(inf);
     var utility = ((1-params.costWeight) * inf
                    - params.costWeight * shared.getUttCost(utt));
 
