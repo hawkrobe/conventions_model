@@ -1,66 +1,53 @@
-var getLexiconElement = function(utt, target, lexicon) {
-  return _.min(map(function(word) {
-    var uttLex = lexicon[word];
-    return _.includes(target.split('_'), uttLex) ? 1 : 0.00001;
-  }, utt.split('_')));
-};
+// var L0 = cache(function(utt, params) {
+//   return Mixture({
+//     dists: [
+//       Categorical({vs: params.context}),
+//       Infer({method: "enumerate"}, function() {
+//         console.log(params)
+//         var obj = uniformDraw(params.context);
+//         factor(Math.log(shared.getLexiconElement(utt, obj, params)));
+//         return obj;
+//       })],
+//     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+//   });
+// }, 10000);
 
-var getUttCost = function(utt) {
-  return utt.split('_').length;
-};
+// var S1 = cache(function(obj, params) {
+//   return Mixture({
+//     dists: [
+//       Categorical({vs: params.utterances}),
+//       Infer({method: "enumerate"}, function() {
+//         var utt = uniformDraw(params.utterances);
+//         var utility = ((1-params.costWeight) * L0(utt, params).score(obj)
+//                        - params.costWeight * shared.getUttCost(utt));
+//         factor(params.speakerAlpha * utility);
+//         return utt;
+//       })],
+//     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+//   })
+// }, 10000)
 
-var L0 = cache(function(utt, params) {
-  return Mixture({
-    dists: [
-      Categorical({vs: params.context}),
-      Infer({method: "enumerate"}, function() {
-        var obj = uniformDraw(params.context);
-        //console.log(obj, getLexiconElement(utt, obj, params.lexicon))
-        factor(Math.log(getLexiconElement(utt, obj, params.lexicon)));
-        return obj;
-      })],
-    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
-  });
-}, 10000);
-
-var S1 = cache(function(obj, params) {
-  return Mixture({
-    dists: [
-      Categorical({vs: params.utterances}),
-      Infer({method: "enumerate"}, function() {
-        var utt = uniformDraw(params.utterances);
-        var utility = ((1-params.costWeight) * L0(utt, params).score(obj)
-                       - params.costWeight * getUttCost(utt));
-        factor(params.speakerAlpha * utility);
-        return utt;
-      })],
-    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
-  })
-}, 10000)
-
-var L1 = function(utt, params) {
-  return Mixture({
-    dists: [
-      Categorical({vs: params.context}),
-      Infer({method: "enumerate"}, function() {
-        var obj = uniformDraw(params.context);
-        factor(params.listenerAlpha * S1(obj, params).score(utt));
-        return obj;
-      })],
-    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
-  });
-};
+// var L1 = function(utt, params) {
+//   return Mixture({
+//     dists: [
+//       Categorical({vs: params.context}),
+//       Infer({method: "enumerate"}, function() {
+//         var obj = uniformDraw(params.context);
+//         factor(params.listenerAlpha * shared.getS1Score(utt, obj, params)); //S1(obj, params).score(utt));
+//         return obj;
+//       })],
+//     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+//   });
+// };
 
 var S = function(object, posterior, params) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
     var inf = expectation(posterior, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon});
-      return shared.getL0Score(object, utt, config)
+      return shared.getL1Score(object, utt, extend(params, {lexicon}));
     });
-
     var utility = ((1-params.costWeight) * inf
-                   - params.costWeight * getUttCost(utt));
+                   - params.costWeight * shared.getUttCost(utt));
 
     factor(params.speakerAlpha * utility);
     return utt;
@@ -71,8 +58,7 @@ var L = function(utt, posterior, params) {
   return Infer({method: "enumerate"}, function() {
     var object = uniformDraw(params.context);
     var utility = expectation(posterior, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon});
-      return shared.getS1Score(utt, object, config);
+      return shared.getS1Score(utt, object, extend(params, {lexicon}));
     });
     factor(params.listenerAlpha * utility);
     return object;
@@ -80,18 +66,15 @@ var L = function(utt, posterior, params) {
 };
 
 var updatePosterior = function(data, lexicalPrior, params) {
-  return Infer(params.inferOptions, function() { 
+  return Infer(params.inferOptions, function() {
     var lexicon = lexicalPrior();
     mapData({data: data}, function(trial) {
       var beta = Math.pow(params.discountFactor,  data.length - trial.trialNum);
-      var config = extend(params, {context: trial.context, lexicon});
-      var object = (params.coord == 'diff' & trial.role == 'speaker' ? 
-                    trial.clickedName : trial.intendedName);
+      var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
       if(trial.role == 'speaker') {
-        factor(beta * shared.getL0Score(object, trial.wordID, config));
+        factor(beta * shared.getL1Score(object, trial.wordID, extend(params, {context: trial.context, lexicon})));
       } else {
-
-        factor(beta * shared.getS1Score(trial.wordID, object, config));
+        factor(beta * shared.getS1Score(trial.wordID, object, extend(params, {context: trial.context, lexicon})));
       }
     });
     return lexicon;

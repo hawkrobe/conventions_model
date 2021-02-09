@@ -5,8 +5,8 @@ var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
 var derivedUtterances = ['word1_word2', 'word1_word3','word1_word4',
                          'word2_word3','word2_word4','word3_word4'];
 var utterances = unconstrainedUtterances.concat(derivedUtterances);
-var objects = ['blue_circle', 'red_square'];
-var meanings = ['blue_circle', 'red_square'];
+var objects = ['bluecircle', 'redsquare'];
+var meanings = ['bluecircle', 'redsquare'];
 var numMeanings = meanings.length;
 
 var params = {
@@ -15,27 +15,27 @@ var params = {
   discountFactor: argv.discountFactor,
   costWeight: argv.costWeight,  
   guessingEpsilon: argv.guessingEpsilon,
-  numTrials: 10,
+  numTrials: 14,
   context: objects,
   utterances: utterances,
   objects: objects,
   inferOptions: {method: 'enumerate'}
 };
 
-var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/conjunction_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestF);
+
+// var posttestF = csv.open('./output/conjunction_meaningTest_' + argv.gameNum + '.csv');
+// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestF);
 
 console.log(params);
 
-var lexicalPrior = Infer({method: 'enumerate'}, function() {
+var lexicalPrior = function() {
   return _.zipObject(unconstrainedUtterances, map(function(utt) {
     var bias = 0.05;
-    var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'blue_circle' : 'red_square');
+    var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'bluecircle' : 'redsquare');
     var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/2 + bias : 1/2 - bias;}, meanings);
     return sample(Categorical({vs: meanings, ps: ps}));
   }, unconstrainedUtterances));
-});
+};
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
   var word1Meaning = marginalize(posterior1, function(x) {return x['word1']});
@@ -48,25 +48,25 @@ var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2)
     params.costWeight * getUttCost('word1'),
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L0('word1', config).score('blue_circle');
+      return L0('word1', config).score('bluecircle');
     }),
     params.costWeight * getUttCost('word2'),
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L0('word2', config).score('blue_circle');
+      return L1('word2', config).score('bluecircle');
     }),
     params.costWeight * getUttCost('word1_word2'),      
     params.speakerAlpha * expectation(posterior1, function(lexicon) {
       var config = extend(params, {lexicon: lexicon});
-      return L0('word1_word2', config).score('blue_circle');
+      return L1('word1_word2', config).score('bluecircle');
     }),
-    S('blue_circle', posterior1,params).score('word1'),
-    S('blue_circle', posterior1,params).score('word2'),
-    S('blue_circle', posterior1,params).score('word1_word2'),        
-    word1Meaning.score('blue_circle'),
-    word2Meaning.score('blue_circle'),
-    word3Meaning.score('blue_circle'),
-    word4Meaning.score('blue_circle')
+    S('bluecircle', posterior1,params).score('word1'),
+    S('bluecircle', posterior1,params).score('word2'),
+    S('bluecircle', posterior1,params).score('word1_word2'),        
+    word1Meaning.score('bluecircle'),
+    word2Meaning.score('bluecircle'),
+    word3Meaning.score('bluecircle'),
+    word4Meaning.score('bluecircle')
   ].join(','), outputFile);
 };
 
@@ -84,20 +84,18 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
   var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
-
+  // display(speakerPosterior)
+  // display(listenerPosterior)
   // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, speakerPosterior, params);
+  // display(speakerPosterior)  
+  // display(speakerOutput)
   var topSpeakerChoice =  sample(speakerOutput);
-
-  // var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
-  var topListenerChoice = currTrial.intendedName// sample(listenerOutput);
-  //console.log(JSON.stringify(speakerOutput));
-  // console.log(expectation(speakerPosterior, function(lexicon) {
-  //   var config = extend(params, {lexicon: lexicon});
-  //   return L0('word1_word2', config).score('blue_circle');
-  // })),
   console.log(topSpeakerChoice);
-  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
+  var topListenerChoice = sample(listenerOutput);
+
+  //postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
                  params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
                  currTrial.intendedName, topSpeakerChoice, topListenerChoice,
@@ -117,13 +115,13 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   } 
 };
 
-var f = csv.open('./output/conjunction_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
+var f = csv.open('./output/conjunction_trajectory_' + argv.gameNum + '.csv');
 csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,' +
               'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
   console.log('iteration', i)
   iterate(i, f, {1: [], 2: []});
-}, _.range(1000));
+}, _.range(50));
 csv.close(f);
-csv.close(posttestF);
+//csv.close(posttestF);

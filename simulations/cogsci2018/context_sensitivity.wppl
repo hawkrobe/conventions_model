@@ -1,0 +1,152 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
+var numUtterances = 8;
+var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
+var objects = ['shape_circle_striped_highstriped', 'shape_circle_striped_lowstriped',
+               'shape_circle_spotted_highspotted', 'shape_circle_spotted_lowspotted',
+               'shape_square_red_lightred', 'shape_square_red_darkred',
+               'shape_square_blue_lightblue', 'shape_square_blue_darkblue'];
+var meanings = ['null', 'circle', 'striped', 'spotted', 
+                'highstriped', 'lowstriped', 'lowspotted', 'highspotted',
+                'square', 'red', 'blue', 'lightred', 'lightblue', 'darkred', 'darkblue'];
+
+var objectLookup = {
+  'redSquare1' : 'shape_square_red_lightred', 'redSquare2' : 'shape_square_red_darkred',
+  'blueSquare1' : 'shape_square_blue_lightblue', 'blueSquare2' : 'shape_square_blue_darkblue',
+  'stripedCircle1' : 'shape_circle_striped_lowstriped', 'stripedCircle2' :'shape_circle_striped_highstriped',
+  'spottedCircle1' : 'shape_circle_spotted_lowspotted', 'spottedCircle2' : 'shape_circle_spotted_highspotted'
+};
+var numMeanings = meanings.length;
+
+var params = {
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  guessingEpsilon: argv.guessingEpsilon,
+  discountFactor: argv.discountFactor,
+  costWeight: 0,
+  utterances: utterances,
+  objects: objects,
+  numTrials: 24,
+  inferOptions: {method: 'MCMC', samples:1000, burn:7500, lag:5, verbose:true}//{method: 'enumerate'}//
+};
+
+var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
+var posttest_file = shared.open('./output/meaningTest_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttest_file);
+//csv.close(posttest_file);
+
+console.log(params);
+
+var extensionLookup = {
+  'circle' : ['circle', 'striped', 'highstriped','lowstriped', 'spotted', 'highspotted', 'lowspotted'],
+  'square' : ['square', 'blue', 'red', 'darkred', 'darkblue', 'lightred', 'lightblue'],
+  'red'    : ['red', 'darkred', 'lightred'],
+  'blue'   : ['blue', 'darkblue', 'darkred'],
+  'spotted': ['spotted', 'highspotted', 'lowspotted'],
+  'striped': ['striped', 'highstriped', 'lowstriped'],
+  'highstriped':['highstriped'],
+  'highspotted':['highspotted'],
+  'lowstriped':['lowstriped'],
+  'lowspotted':['lowspotted'],
+  'darkred':['darkred'],
+  'lightred':['lightred'],
+  'darkblue':['darkblue'],
+  'lightblue':['lightblue'],
+  'null':[]
+};
+
+var extensionSize = function(lexicon) {
+  return sum(map(function(value) {
+    return extensionSizeLookup[value];
+  }, _.values(lexicon)));
+};
+
+var overlap = function(lexicon) {
+  var combinedExtensions = reduce(function(value, rest) {
+    return rest.concat(extensionLookup[value]);
+  }, [], _.values(lexicon));
+  return combinedExtensions.length - _.uniq(combinedExtensions).length;
+};
+
+var lexicalPrior = function() {
+  var lexicon = _.zipObject(utterances, map(function(utt) {
+    return sample(Categorical({vs: meanings}));
+  }, utterances));
+  factor(-1*overlap(lexicon));
+  return lexicon;
+};
+
+var postTest = function(trial, posterior1, posterior2) {
+  var data = [argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+              trial.trialNum, trial.condition];
+  map(function(word) {
+    // console.log(word)
+    // console.log(marginalize(posterior1, function(x) {return x[word];}))
+    // console.log(marginalize(posterior2, function(x) {return x[word];}))
+    shared.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
+                       posttest_file, data.concat([trial.speakerID, word]));
+    shared.writeMarginals(marginalize(posterior2, function(x) {return x[word];}),
+                       posttest_file, data.concat([trial.listenerID, word]));
+  }, utterances);
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(outputFile, remainingTrials, dataSoFar) {
+  console.log(remainingTrials.length, 'remaining');
+  var currTrialRaw = first(remainingTrials);
+  var currTrial = extend(currTrialRaw, {
+    context : map(function(v) {return objectLookup[v];},
+                  [currTrialRaw.object1name, currTrialRaw.object2name,
+                   currTrialRaw.object3name, currTrialRaw.object4name]),
+    intendedName: objectLookup[currTrialRaw['intendedName']]
+  });
+  var config = extend(params, {context: currTrial.context});
+  
+  // update posteriors
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
+
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
+  var topSpeakerChoice =  sample(speakerOutput);
+  display(speakerOutput)
+
+  var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
+  var topListenerChoice =  sample(listenerOutput);
+  display(listenerOutput)
+
+  postTest(currTrial, speakerPosterior, listenerPosterior);
+  display('context is ' + currTrial.context);
+  display('top speaker choice is ' + topSpeakerChoice);
+  display('top listener choice is ' + topListenerChoice);
+  display('intended: ' + currTrial.intendedName);
+  display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  shared.writeLine([
+    argv.chainNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+    currTrial.trialNum, currTrial.condition, currTrial.contextType,
+    currTrial.speakerID, currTrial.listenerID,
+    currTrial.intendedName,
+    topSpeakerChoice, topListenerChoice,
+    topListenerChoice == currTrial.intendedName
+  ].join(','), outputFile);
+
+  var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
+    return dataSoFar[id].concat(extend(currTrial, {
+      role : id == currTrial.speakerID ? 'speaker' : 'listener',
+      wordID : topSpeakerChoice,
+      clickedName : topListenerChoice
+    }));
+  }, [currTrial.speakerID, currTrial.listenerID]));
+
+  if(!_.isEmpty(rest(remainingTrials))) {
+    iterate(outputFile, rest(remainingTrials), newDataSoFar);
+  } 
+};
+
+var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('chainNum,gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,condition,contextType,speakerID,listenerID,' +
+              'intendedName,topSpeakerChoice,topListenerChoice,correct',
+              f);
+iterate(f, data, {1: [], 2: []});
+shared.close(f);
+shared.close(posttest_file);

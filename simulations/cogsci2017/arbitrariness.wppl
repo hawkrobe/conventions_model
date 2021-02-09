@@ -20,17 +20,17 @@ var params = {
 };
 
 var pragStr = ('discount:' + params.discountFactor);
-var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,' +
-              'trialNum,agentID,word,circleScore,squareScore', posttestF);
+//var posttestF = csv.open('./output/arbitrariness_meaningTest_' + pragStr + '_' + argv.gameNum + '.csv');
+// csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,' +
+//               'trialNum,agentID,word,circleScore,squareScore', posttestF);
 
-console.log(params);
+//console.log(params);
 
-var lexicalPrior = Infer({method: 'enumerate'}, function() {
+var lexicalPrior = function() {
   return _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
   }, utterances))
-});
+};
 
 var postTest = function(iterationNum, trial, outputFile, posterior1, posterior2) {
   var shared = [
@@ -72,15 +72,15 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
 
-  postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
+  //postTest(iterationNum, currTrial, posttestF, speakerPosterior, listenerPosterior);
   // display('speaker distribution')
   // display(speakerOutput);
   // display('listener distribution')
   // display(listenerOutput)
   //console.log(topSpeakerChoice)
   // console.log(topListenerChoice);
-  display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+  //display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.costWeight, params.discountFactor, params.guessingEpsilon,
                  currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
                  topSpeakerChoice, topListenerChoice,
                  topListenerChoice == currTrial.intendedName
@@ -100,7 +100,7 @@ var iterate = function(iterationNum, outputFile, dataSoFar) {
 };
 
 var f = csv.open('./output/arbitrariness_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,trialNum,speakerID,listenerID,' +
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guessingEpsilon,trialNum,speakerID,listenerID,' +
               'intendedName,topSpeakerChoice,topListenerChoice,correct',
               f);
 map(function(i) {
@@ -108,4 +108,4 @@ map(function(i) {
   iterate(i, f, {1: [], 2: []});
 }, _.range(100));
 csv.close(f);
-csv.close(posttestF);
+//csv.close(posttestF);
