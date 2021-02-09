@@ -47,14 +47,15 @@ trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "traje
   mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
 
 trajectories %>%
-  filter(discountFactor == 0.8 , coord == 'diff') %>%
-  group_by(condition, coord, discountFactor, time) %>%
+  filter(discountFactor == 0.9) %>%
+  group_by(condition, discountFactor, time) %>%
   tidyboot::tidyboot_mean(correct, nboot=100) %>%
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha=0.2) +
+    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = 25, lty = 'dashed') +
-    geom_smooth(se=T) +
-    facet_grid(paste0('discount:', discountFactor) ~ coord) +
+    #geom_smooth(se=T) +
+    facet_grid(~ paste0('discount:', discountFactor)) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_colorblind() +
@@ -77,17 +78,17 @@ trajectories %>%
 ```{r}
 trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  group_by(gameNum, condition,discountFactor, repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum, coord,discountFactor) %>%
+  group_by(condition, repNum,discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  filter(discountFactor == 0.8, coord == 'diff') %>%
+  #filter(discountFactor == 0.8) %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
     ylim(3.5, 8.5) +
     geom_hline(yintercept = c(4, 8)) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    facet_grid(paste0('discount:', discountFactor) ~coord) +
+    facet_grid(~ paste0('discount:', discountFactor) ) +
     theme_few() +
     scale_color_colorblind() +
     labs(y = "number unique words used") +
@@ -157,6 +158,7 @@ trajectories %>%
     labs(y = "number unique words used") +
     theme(aspect.ratio = 1)
 ```
+
 ## Look at evolution of meanings
 
 Read in files:
