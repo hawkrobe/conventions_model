@@ -18,7 +18,8 @@ var params = {
   numTrials: 10,
   context: objects,
   utterances: utterances,
-  objects: objects
+  objects: objects,
+  inferOptions: {method: 'enumerate'}
 };
 
 var pragStr = ('discount:' + params.discountFactor);
