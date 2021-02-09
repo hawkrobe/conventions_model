@@ -179,51 +179,34 @@ example.plot.input %>%
 ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_values.pdf',
        width = 4, height = 2, unit = 'in')
 ```
-Break out by what happens?
-
-```{r}
-    # unite(datachunk, intendedName, topSpeakerChoice, topListenerChoice) %>%
-  #gather(beliefWord, belief, word1belief, word2belief) %>%
-  # group_by(gameNum, trialNum, beliefWord, inputWord) %>%
-  # mutate(firstdatachunk = first(datachunk)) %>%
-  #gather(meaning, score,blueCircleScore,redSquareScore) %>%
- # mutate(belief =exp(belief)) %>%
-  # filter(time < 2) %>%
-  # arrange(gameNum)
-  # summarize(inputVal = mean(inputVal),
-  #           belief = mean(belief)) %>%
-  # filter(word == 'word1') %>%
-  # filter(startsWith(firstdatachunk, 'blue_circle')) %>%
-  # mutate(meaning = gsub('Score', '', meaning, fixed=TRUE),
-  #        meaning = fct_relevel(meaning, 'blueCircle', 'redSquare')) %>%
-```
 
 # Appendices: Full grid, arbitrariness
 
 ```{r}
-d.arbitrariness.all <- read_csv('../simulations/cogsci2017/output/arbitrariness_trajectories.csv') %>%
-  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, trialNum) %>%
+d.arbitrariness.all <- read_csv('../simulations/cogsci2017/output/arbitrariness.csv') %>%
+  filter(speakerAlpha == listenerAlpha) %>%
+  filter(guessingEpsilon == 0.01) %>%
+  mutate(repNum = floor(trialNum/2)) %>%
+  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, repNum) %>%
   summarize(probCorrect = mean(correct))
 
 d.arbitrariness.all %>%
   ungroup() %>%
-  filter(speakerAlpha == listenerAlpha) %>%
-  #filter(guessingEpsilon == 0.1) %>%
   mutate(discountFactor = discountFactor,
          guessingEpsilon = factor(guessingEpsilon),
          alpha = speakerAlpha) %>%
-  ggplot(aes(x = trialNum, y = probCorrect, 
+  ggplot(aes(x = repNum, y = probCorrect, 
              color = discountFactor,
              group= discountFactor)) +
     geom_line() +
     geom_hline(yintercept = c(.5, 1), linetype = 'dotted') +
-    facet_grid(alpha ~guessingEpsilon) +
+    facet_grid(alpha ~discountFactor) +
     theme_few() +
-    theme(aspect.ratio = 1) +
-    labs(y = '% accuracy')
+    theme(aspect.ratio = 1, legend.position = 'none') +
+    labs(x = 'repetition #', y = '% accuracy')
 
-ggsave('../writing/journal_manuscript/figures/arbitrariness_grid.pdf', 
-       width = 8, height = 6, unit ='in')
+ggsave('../writing/journal_manuscript/figures/arbitrariness_grid_raw.pdf', 
+       width = 8, height = 7, unit ='in')
 ```
 
 ```{r}

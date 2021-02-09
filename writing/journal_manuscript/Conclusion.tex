@@ -1,7 +1,7 @@
 %!TEX root = ../dissertation.tex
 In this paper, we considered the computational challenge faced by agents trying to communicate in a variable and non-stationary landscape of meaning.
-We advanced a Bayesian meta-learning approach  in which agents continually adapt their beliefs about the semantics used each partner, in turn.
-We formalized this approach by integrating three core cognitive mechanisms in a probabilistic framework: (1) initial uncertainty about what a partner thinks words mean, (2) partner-specific adaptation based on observations of language use in context, and (3) hierarchical structure for graded generalization to new partners.
+We advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the semantics used each partner, in turn.
+We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: (1) representing initial uncertainty about what a partner thinks words mean, (2) partner-specific adaptation based on observations of language use in context, and (3) hierarchical structure for graded generalization to new partners.
 This unified model resolves several puzzles that have posed challenges from prior models, including (1) why referring expressions shorten over repeated interactions with the same partner, (2) why context shapes the level of abstraction of conventions with a partner, and (3) how partner-specific common ground may coexist with the emergence of conventions at the population level. 
 
 We conclude by discussing several broader questions raised by the theoretical perspective we have advanced, and corresponding pathways for future work.
@@ -12,7 +12,7 @@ Through one theoretical lens, our model provides an argument for the continuity 
 In other words, we have aimed to generalize Bayesian models of word learning, traditionally used in developmental science, to explain the continual \emph{ad hoc} learning required by mature language users. 
 Conversely, this suggests that the lexical learning mechanisms adults use to coordinate on conventions \emph{within} dyadic interactions may be the same as those supporting language acquisition more broadly.
 Our hierarchical partial pooling model suggests a new emphasis on the role of partner-specificity and generalization in development.
-Most laboratory tasks investigating cross-situational word learning in children use only use a single speaker, and even sophisticated models of cross-situational word learning \cite[e.g.]{FrankGoodmanTenenbaum09_Wurwur} collapse over \emph{who} is talking. 
+Most laboratory tasks investigating cross-situational word learning in children use only use a single speaker, and even sophisticated models of cross-situational word learning \cite<e.g.>{FrankGoodmanTenenbaum09_Wurwur} collapse over \emph{who} is talking. 
 
 Yet, as we have argued, there is substantial variability in systems of meaning across different speakers and contexts; calibrating one's lexical priors to reflect this variability is an important aspect of learning a language.
 If the majority of child-directed speech only comes from a single primary caregiver, then the child may face a difficult generalization problem once they begin interacting with others. 
@@ -51,7 +51,7 @@ Directly comparing behavior in repeated reference games across different modalit
 
 Second, at the same time, our hierarchical learning model claims a critical role for the priors we build up across interactions with many individuals.
 We therefore predict that different communication modalities should display certain systematic differences due to the representational structure of the communication channel.
-For example, in the verbal modality, the tangram shapes from \cite{ClarkWilkesGibbs86_ReferringCollaborative} are highly innominate -- most people do not have much experience naming or describing them with words, so the global prior is weak and local adaptation plays a greater role.
+For example, in the verbal modality, the tangram shapes from \citeA{ClarkWilkesGibbs86_ReferringCollaborative} are highly innominate -- most people do not have much experience naming or describing them with words, so the global prior is weak and local adaptation plays a greater role.
 In the graphical modality, where communication takes place by drawing on a shared sketchpad, agents can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common} -- drawing a quick sketch of the tangram's outline may suffice for understanding.
 Other stimuli have precisely the opposite property: to distinguish between natural images of dogs, agents may have developed strong global conventions in the linguistic modality (e.g. `husky', `poodle', `pug', etc) but drawing the necessary fine distinctions in the graphical modality may be initially very costly for novices, requiring the formation of local conventions. 
 Gesture also has its own distinctive prior, which also allows communicators to use time and the space around them to convey mimetic or depictive meanings that may be difficult to encode verbally or graphically \cite{goldin-meadow_role_1999,clark2016depicting,mcneill1992hand}. 
@@ -76,7 +76,7 @@ Either individual may say anything at any point in time, thus allowing for inter
 Without elaborating the generative model of the listener to include these verbal behaviors, we cannot explain the inferences a speaker will make upon hearing them.
 Such an elaboration will thus be critical to explaining why listeners send fewer messages in response over time and what impact early listener responses on conventionalization. 
 
-Additionally, this elaboration would allow our model capture early, important empirical results from \citeA{KraussWeinheimer64_ReferencePhrases}, which manipulated the feedback channel.
+Additionally, this elaboration would allow our model capture early, important empirical results from \citeA{KraussWeinheimer66_Tangrams}, which manipulated the feedback channel.
 In one condition, participants were able to talk bidirectionally, and in another the channel was unidirectional: the speaker was unable to hear the listener's responses. 
 This real-time feedback manipulation was crossed with a behavioral feedback manipulation where the experimenters intercepted the listener's responses: one group of speakers was told that their partner made the correct response 100\% of the trials (regardless of their real responses), while another was told on half of the trials that their partner made the incorrect response. 
 
