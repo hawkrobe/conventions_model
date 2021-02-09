@@ -176,51 +176,34 @@ example.plot.input %>%
 ggsave('../writing/journal_manuscript/figures/sec1-convergence_example_values.pdf',
        width = 4, height = 2, unit = 'in')
 ```
-Break out by what happens?
-
-```{r}
-    # unite(datachunk, intendedName, topSpeakerChoice, topListenerChoice) %>%
-  #gather(beliefWord, belief, word1belief, word2belief) %>%
-  # group_by(gameNum, trialNum, beliefWord, inputWord) %>%
-  # mutate(firstdatachunk = first(datachunk)) %>%
-  #gather(meaning, score,blueCircleScore,redSquareScore) %>%
- # mutate(belief =exp(belief)) %>%
-  # filter(time < 2) %>%
-  # arrange(gameNum)
-  # summarize(inputVal = mean(inputVal),
-  #           belief = mean(belief)) %>%
-  # filter(word == 'word1') %>%
-  # filter(startsWith(firstdatachunk, 'blue_circle')) %>%
-  # mutate(meaning = gsub('Score', '', meaning, fixed=TRUE),
-  #        meaning = fct_relevel(meaning, 'blueCircle', 'redSquare')) %>%
-```
 
 # Appendices: Full grid, arbitrariness
 
 ```{r}
-d.arbitrariness.all <- read_csv('../simulations/cogsci2017/output/arbitrariness_trajectories.csv') %>%
-  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, trialNum) %>%
+d.arbitrariness.all <- read_csv('../simulations/cogsci2017/output/arbitrariness.csv') %>%
+  filter(speakerAlpha == listenerAlpha) %>%
+  filter(guessingEpsilon == 0.01) %>%
+  mutate(repNum = floor(trialNum/2)) %>%
+  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, repNum) %>%
   summarize(probCorrect = mean(correct))
 
 d.arbitrariness.all %>%
   ungroup() %>%
-  filter(speakerAlpha == listenerAlpha) %>%
-  #filter(guessingEpsilon == 0.1) %>%
   mutate(discountFactor = discountFactor,
          guessingEpsilon = factor(guessingEpsilon),
          alpha = speakerAlpha) %>%
-  ggplot(aes(x = trialNum, y = probCorrect, 
+  ggplot(aes(x = repNum, y = probCorrect, 
              color = discountFactor,
              group= discountFactor)) +
     geom_line() +
     geom_hline(yintercept = c(.5, 1), linetype = 'dotted') +
-    facet_grid(alpha ~guessingEpsilon) +
+    facet_grid(alpha ~discountFactor) +
     theme_few() +
-    theme(aspect.ratio = 1) +
-    labs(y = '% accuracy')
+    theme(aspect.ratio = 1, legend.position = 'none') +
+    labs(x = 'repetition #', y = '% accuracy')
 
-ggsave('../writing/journal_manuscript/figures/arbitrariness_grid.pdf', 
-       width = 8, height = 6, unit ='in')
+ggsave('../writing/journal_manuscript/figures/arbitrariness_grid_raw.pdf', 
+       width = 8, height = 7, unit ='in')
 ```
 
 ```{r}
@@ -229,31 +212,33 @@ d.conjunction.all <- read_csv('../simulations/cogsci2017/output/conjunction_traj
          repNum = floor(trialNum / 2))
 
 d.conjunction.all %>%
-  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, costWeight, trialNum) %>%
+  group_by(speakerAlpha, listenerAlpha, discountFactor, guessingEpsilon, costWeight, repNum) %>%
   summarize(empirical_stat = mean(utt_length)) %>%
   ungroup() %>%
-  filter(speakerAlpha == listenerAlpha) %>%
-  filter(guessingEpsilon == 0.01, discountFactor == 1) %>%
-  # filter(alpha == 10) %>%
-  # filter(costWeight == 10) %>%
+  filter(discountFactor == 0.8, guessingEpsilon == 0.01) %>%
+  #filter(speakerAlpha > 10) %>%
+  #filter(costWeight < 0.6) %>%
   #filter(discountFactor == 1) %>%
-  mutate(discountFactor = factor(discountFactor),
-         guessingEpsilon = log(guessingEpsilon),
-         alpha = speakerAlpha) %>%
-  ggplot(aes(x = trialNum, y = empirical_stat, 
+  # mutate(guessingEpsilon = log(guessingEpsilon),
+  #        alpha = speakerAlpha) %>%
+  mutate(repNum = repNum + 1) %>%
+  ggplot(aes(x = repNum, y = empirical_stat, 
              color = guessingEpsilon,
-             linetype = discountFactor,
-             group = interaction(discountFactor, guessingEpsilon))) +
+             group = guessingEpsilon)) +
     geom_line() +
-    geom_hline(yintercept = c(2,1), linetype = 'dotted') +
-    facet_grid(alpha ~ costWeight) +
+    #geom_hline(yintercept = c(2,1), linetype = 'dotted') +
+    facet_grid(speakerAlpha ~ costWeight) +
     theme_few() +
-    theme(aspect.ratio = 2) +
-    labs(y = '# words')
+    theme(aspect.ratio = 1) +
+    cowplot::panel_border(color = "grey95") +
+    scale_x_continuous(breaks=c(1,3,5))+
+    scale_y_continuous(breaks=c(1,0.5,2), limits = c(0.75, 2.25))+
+    labs(y = '# words', x ='repetition #')
 
-ggsave('../writing/journal_manuscript/figures/conjuction_grid.pdf', 
-       width = 8, height = 6, unit ='in')
+  ggsave('../writing/journal_manuscript/figures/conjuction_grid_raw.pdf', 
+       width = 10, height = 10, unit ='in')
 ```
+
 # Sanity check
 
 Look at raw trajectories of different meanings for each game (change less over time, i.e. stability).
