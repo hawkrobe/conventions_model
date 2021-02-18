@@ -1,9 +1,8 @@
 %!TEX root = ../dissertation.tex
 In this paper, we considered the computational challenge faced by agents trying to communicate in a variable and non-stationary landscape of meaning.
 We advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the semantics used each partner, in turn.
-We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: (1) representing initial uncertainty about what a partner thinks words mean, (2) partner-specific adaptation based on observations of language use in context, and (3) hierarchical structure for graded generalization to new partners.
-This unified model resolves several puzzles that have posed challenges from prior models, including (1) why referring expressions shorten over repeated interactions with the same partner, (2) why context shapes the level of abstraction of conventions with a partner, and (3) how partner-specific common ground may coexist with the emergence of conventions at the population level. 
-
+We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: representing initial uncertainty about what a partner thinks words mean \textbf{(C1)}, partner-specific adaptation based on observations of language use in context \textbf{(C2)}, and hierarchical structure for graded generalization to new partners \textbf{(C3)}.
+This unified model resolves several puzzles that have posed challenges from prior models of coordination and convention formation: why referring expressions shorten over repeated interactions with the same partner \textbf{(P1)}, how partner-specific common ground may coexist with the emergence of conventions at the population level \textbf{(P2)}, and how context shapes which conventions emerge \textbf{(P3)}.
 We conclude by discussing several broader questions raised by the theoretical perspective we have advanced, and corresponding pathways for future work.
 
 \paragraph{Implications for language acquisition}
@@ -18,6 +17,11 @@ Yet, as we have argued, there is substantial variability in systems of meaning a
 If the majority of child-directed speech only comes from a single primary caregiver, then the child may face a difficult generalization problem once they begin interacting with others. 
 When first hearing a new word from a novel speaker, or a familiar word used in an unfamiliar way, children face the same inductive problem we have studied: it is unclear whether the new observation is a quirk of that particular speaker \emph{or} indicative of a globally shared convention. 
 There may therefore be substantial path-dependence in acquisition, as children develop their lexical prior and become better attuned to the overall variability in the population \cite<see>[Chap. 6]{Clark09_FirstLanguageAcquisition}. 
+
+Hierarchical Bayesian models have several other properties of theoretical interest for convention formation and language acquisition.
+First, they offer a blessing of abstraction \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality}, where community-level conventions may be learned even with relatively sparse input from each partner, as long as there is not substantial variance in the population. 
+Second, they are more robust to partner-specific deviations from conventions (e.g. interactions with other children or non-native speakers) than complete-pooling models relying on a fixed set of memory slots or a single mental inventory. 
+This robustness is due to their ability to explain away outliers without community-level expectations being affected. 
 
 Our work also suggests a new explanation for why young children struggle to coordinate on \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
 When an experimenter feeds them messages produced by adult speakers in other games, they are able to maintain high accuracy even as the utterance reduce down to one- or two-word label. 
