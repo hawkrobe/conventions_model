@@ -86,7 +86,7 @@ Want to run these webppl models in parallel, so the input data should be in sepa
 
 ```{r}
 gameIDs = d %>% 
-  filter(condition != 'mixedLower') %>%
+  #filter(condition != 'mixedLower') %>%
   pull(id) %>%
   unique()
 
@@ -99,6 +99,11 @@ for(i in gameIDs) {
     select(-gameid, -text, -acc, -quarter, -cumAcc, -overallAcc, -timeFromRoundStart)  
   write_csv(toWrite, path = paste0('../simulations/cogsci2018/input/', i, '.csv'))
 }
+
+d %>%
+  select(id, condition) %>%
+  unique() %>%
+  write_csv( path = '../simulations/cogsci2018/input/all_gameids.csv')
 ```
 
 # Behavioral Results 
@@ -174,71 +179,6 @@ d %>%
 
 ## Consistency across partners
 
-How often do players align on meanings?
-
-We look at total overlap of matrix (i.e. how many cells differ). Compare the different measurements of meanings. 
-
-```{r}
-mismatches <- postTest_raw %>%
-  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
-  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
-  spread(finalRole, value) %>%
-  group_by(gameid, object, wordID, condition, meaningType) %>%
-  summarize(match = listener == speaker) %>%
-  group_by(gameid, condition, meaningType) %>%
-  summarize(numMismatches = 128-sum(match))
-
-missingPostTests <- unique((mismatches %>% filter(is.na(numMismatches)))$gameid)
-cat('have both post-test measures for', 
-    length(unique((mismatches %>% filter(!(gameid %in% missingPostTests)))$gameid)),
-    'pairs')
-
-ggplot(mismatches, aes(x = numMismatches)) +
-    geom_histogram(binwidth = 1) +
-    #geom_vline(aes(xintercept = mean(numMatching))) +
-    #xlim(-0.1,1.1) + 
-    theme_few() +
-    xlab('# mismatches') +
-   facet_wrap(meaningType ~ condition)
-```
-
-But note that pairs that didn't technically align that well on the post-test could still perform pretty well if one partner simply has a stricter meaning than the other but the difference is never relevant.
-
-```{r}
-mismatches <- postTest_raw %>%
-  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
-  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
-  spread(finalRole, value) %>%
-  group_by(gameid, object, wordID, condition, meaningType) %>%
-  summarize(match = listener == speaker) %>%
-  group_by(gameid, condition, meaningType) %>%
-  summarize(numMismatches = 128-sum(match)) %>% 
-  filter(!(gameid %in% missingPostTests))
-
-mismatches %>% ungroup() %>% filter(meaningType == 'meaning') %>% summarize(m = median(numMismatches))
-mismatches %>% group_by(condition) %>% filter(meaningType == 'meaning') %>% summarize(m = median(numMismatches))
-summary(lm(numMismatches ~ condition, data = mismatches %>% ungroup() %>%filter(meaningType == 'meaning')))
-```
-
-## Do pairs with more similar lexica perform better?
-
-```{r}
-mismatchVsAcc <- mismatches %>% 
-  inner_join(d) %>%
-  group_by(gameid, condition) %>%
-  summarize(acc = mean(overallAcc), numMismatches = mean(numMismatches)) %>%
-  filter(!is.na(numMismatches))
-
-ggplot(mismatchVsAcc, aes(x = acc, y = numMismatches, color = condition)) +
-    geom_point() +
-    geom_smooth(method = 'lm') +
-    theme_few()
-
-cor(mismatchVsAcc$numMismatches,mismatchVsAcc$acc, method = 'spearman')
-```
-
-## Partners converge on similar conventions
-
 Read in post-test results
 
 ```{r}
@@ -259,8 +199,6 @@ postTest_word = read_delim('../data/experiment2/allWordPostTest.csv', '\t') %>%
   left_join(masterGameIDLookup) 
 length(unique(postTest_word$gameid))
 ```
-
-## Consistency across two post-tests?
 
 Read in individually because headers are all unique
 
@@ -291,6 +229,72 @@ postTest_raw <- postTest_obj %>%
 
 ```
 
+### Internal consistency across two post-tests?
+
+How often do players align on meanings? We look at total overlap of matrix (i.e. how many cells differ). Compare the different measurements of meanings. 
+
+```{r}
+mismatches <- postTest_raw %>%
+  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
+  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
+  spread(finalRole, value) %>%
+  group_by(gameid, object, wordID, condition, meaningType) %>%
+  summarize(match = listener == speaker) %>%
+  group_by(gameid, condition, meaningType) %>%
+  summarize(numMismatches = 128-sum(match))
+
+missingPostTests <- unique((mismatches %>% filter(is.na(numMismatches)))$gameid)
+cat('have both post-test measures for', 
+    length(unique((mismatches %>% filter(!(gameid %in% missingPostTests)))$gameid)),
+    'pairs')
+
+ggplot(mismatches, aes(x = numMismatches)) +
+    geom_histogram(binwidth = 1) +
+    #geom_vline(aes(xintercept = mean(numMatching))) +
+    #xlim(-0.1,1.1) + 
+    theme_few() +
+    xlab('# mismatches') +
+   facet_wrap(meaningType ~ condition)
+```
+
+Note that pairs that didn't technically align that well on the post-test could still perform pretty well if one partner simply has a stricter meaning than the other but the difference is never relevant. Still, no significant difference across conditions (though mixed vs. coarse is marginal).
+
+```{r}
+mismatches %>%
+  filter(!(gameid %in% missingPostTests)) %>%
+  ungroup() %>% 
+  filter(meaningType == 'meaning') %>% 
+  ggplot(aes(x = condition, y = numMismatches)) +
+    geom_boxplot() +
+    theme_few()
+
+mismatches %>% 
+  filter(!(gameid %in% missingPostTests)) %>%
+  ungroup() %>%
+  filter(meaningType == 'meaning') %>%
+  lm(numMismatches ~ condition, data = .) %>%
+  summary()
+```
+
+## Do pairs with more similar lexica perform better?
+
+```{r}
+mismatchVsAcccc <- mismatches %>% 
+  inner_join(d, by = c('gameid')) %>%
+  group_by(gameid, condition.x) %>%
+  summarize(acc = mean(overallAcc), numMismatches = mean(numMismatches)) %>%
+  filter(!is.na(numMismatches))
+
+ggplot(mismatchVsAcc, aes(x = acc, y = numMismatches, color = condition.x)) +
+    geom_point() +
+    geom_smooth(method = 'lm') +
+    theme_few()
+
+cor(mismatchVsAcc$numMismatches,mismatchVsAcc$acc, method = 'spearman')
+```
+
+## Partners converge on similar conventions
+
 Look at internal consistency
 
 ```{r}
@@ -309,56 +313,7 @@ cat('mean number of internal mismatches is ', mean((postTest_raw %>%
   ungroup())$pctConsistent))
 ```
 
-How often do players align on meanings? We look at total overlap of matrix (i.e. how many cells differ). Compare the different measurements of meanings. 
-
-```{r}
-mismatches <- postTest_raw %>%
-  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
-  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
-  spread(finalRole, value) %>%
-  group_by(gameid, object, wordID, condition, meaningType) %>%
-  summarize(match = listener == speaker) %>%
-  group_by(gameid, condition, meaningType) %>%
-  summarize(numMismatches = 128-sum(match))
-
-missingPostTests <- unique((mismatches %>% filter(is.na(numMismatches)))$gameid)
-cat('have both post-test measures for', 
-    length(unique((mismatches %>% filter(!(gameid %in% missingPostTests)))$gameid)),
-    'pairs')
-```
-
-But note that pairs that didn't technically align that well on the post-test could still perform pretty well if one partner simply has a stricter meaning than the other but the difference is never relevant.
-
-```{r}
-mismatches <- postTest_raw %>%
-  select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
-  gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
-  spread(finalRole, value) %>%
-  group_by(gameid, object, wordID, condition, meaningType) %>%
-  summarize(match = listener == speaker) %>%
-  group_by(gameid, condition, meaningType) %>%
-  summarize(numMismatches = 128-sum(match)) %>% 
-  filter(!(gameid %in% missingPostTests))
-
-mismatches %>% ungroup() %>% filter(meaningType == 'meaning') %>% summarize(m = median(numMismatches))
-```
-
-Pairs with more similar lexica perform better.
-
-```{r}
-mismatchVsAcc <- mismatches %>% 
-  inner_join(d) %>%
-  group_by(gameid, condition) %>%
-  summarize(acc = mean(overallAcc), numMismatches = mean(numMismatches)) %>%
-  filter(!is.na(numMismatches))
-
-ggplot(mismatchVsAcc, aes(x = acc, y = numMismatches, color = condition)) +
-    geom_point() +
-    geom_smooth(method = 'lm') +
-    theme_few()
-
-cor.test(mismatchVsAcc$numMismatches,mismatchVsAcc$acc)
-```
+Look categorically at pairs that didn't 'fully converge'
 
 ```{r}
 accuracies <- d %>% 
@@ -374,6 +329,7 @@ accuracies %>%
   filter(percentCorrect < 0.75) %>% 
   summarize(n = n(), pctGames = n / mean(nGames))
 ```
+
 ## Contextual pressures shape the lexicon
 
 Raw vocabulary size by condition?
@@ -392,7 +348,7 @@ postTest_raw %>%
 Coverage in shared lexicon? This analysis pretty conservative, since it uses the 'intersection' metric of internal consistency: a word is only in a particular player's lexicon if they marked it in both directions, hence we're probably under-estimating their vocab. If we've underestimated both peoples' vocabs, we've also underestimated their overlap, which is probably dragging these down.
 
 ```{r}
- coverageDF <- postTest_raw %>%
+coverageDF <- postTest_raw %>%
   select(-blue, -red, -striped, -spotted, -circle, -square, -internalConsistency) %>%
   filter(!(gameid %in% missingPostTests)) %>%
   gather(meaningType, value, meaning, objectToWordMeaning, wordToObjectMeaning) %>%
