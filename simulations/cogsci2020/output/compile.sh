@@ -1,2 +1,4 @@
-head -1 $1no_pooling0.csv > $1_compiled.csv;
-tail -n +2 -q $1*.csv >> $1_compiled.csv;
+head -1 no_pooling0.csv > networkOutput_compiled.csv;
+tail -n +2 -q no_pooling*.csv >> networkOutput_compiled.csv;
+tail -n +2 -q complete_pooling*.csv >> networkOutput_compiled.csv;
+tail -n +2 -q hierarchical*.csv >> networkOutput_compiled.csv;
