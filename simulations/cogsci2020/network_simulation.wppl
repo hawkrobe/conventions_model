@@ -2,8 +2,7 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
 
 var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
-var derivedUtterances = ['word1_word2', 'word3_word4']; // 'word1_word3','word1_word4',
-//'word2_word3','word2_word4',
+var derivedUtterances = ['word1_word2', 'word3_word4']; 
 var utterances = unconstrainedUtterances.concat(derivedUtterances);
 var objects = ['bluecircle', 'redsquare'];
 var meanings = ['bluecircle', 'redsquare'];
@@ -20,51 +19,64 @@ var params = {
   context: objects,
   utterances: utterances,
   objects: objects,
-  inferOptions: {method: 'MCMC', samples:5000, burn:10000, lag:30, verbose:true}
+  inferOptions: {method: 'MCMC', samples:5000, burn:10000, lag:5, verbose:true}
 };
 
 console.log(params);
+var f = csv.open('./output/' + argv.model + argv.chainNum + '.csv');
+csv.writeLine('model,chainNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guessingEpsilon,\
+              trialNum,speakerID,listenerID,partnerID,intendedName,speakerChoice,listenerChoice,\
+              longUttScore,correctProb', f);
+
+var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput, listenerOutput) {
+  csv.writeLine([
+    params.model, params.chainNum, params.speakerAlpha, params.listenerAlpha,
+    params.costWeight, params.discountFactor, params.guessingEpsilon,
+    currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
+    currTrial.intendedName, speakerChoice, listenerChoice,
+    Math.exp(speakerOutput.score('word1_word2')) + Math.exp(speakerOutput.score('word3_word4')),
+    listenerOutput.score(currTrial.intendedName),
+  ].join(','), f);
+};
 
 var sampleProbs = function(utt) {
-  var bias = utt == 'word1' || utt == 'word2' ? [.5, 1.5] : [1.5,.5];
+  var bias = utt == 'word1' || utt == 'word2' ? [.9, 1.1] : [1.1,.9];
   var hyperConcentration = Vector(bias);
   var hyperScale = exponential({a: 1});
   return T.mul(hyperConcentration, hyperScale);
 };
 
-var sampleLexicon = function(utt, popProbs, partnerProbs) {
-  // no pooling model; sample new params for every partner
-  // complete pooling model: use same popProbs across all partners
-  // partial pooling model: use partnerProbs, sampled from shared hyperParams
-  if(params.model == 'no_pooling') {
-    return categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))});
-  } else if (params.model == 'complete_pooling') {
-    return categorical({vs: meanings, ps: popProbs});
-  } else if (params.model == 'hierarchical') {
-    return categorical({vs: meanings, ps: partnerProbs});
-  } else {
-    console.error("uh oh, model not recognized" + params.model);
-  }
-}
-
 var lexicalPrior = function() {
-  var lexicons = map(function(utt) {
-    var hyperParams = sampleProbs(utt);
-    var popProbs = dirichlet(hyperParams);
-    // console.log('P(meaning0)', utt, T.get(hyperParams, 0), T.get(popProbs, 0));
-    // console.log('P(meaning1)', utt, T.get(hyperParams, 1), T.get(popProbs, 1));     
-    return map(function(partnerID) {
-      var partnerProbs = dirichlet(hyperParams);
-      return sampleLexicon(utt, popProbs, partnerProbs);
-    }, [1,2,3,4]);
+  var partnerMeaning = map(function(utt) {
+    if(params.model == 'no_pooling') {
+      var ps = utt == 'word1' || utt == 'word2' ? [.4,.6] : [.6, .4];
+      return repeat(4, function() {return categorical({vs: meanings, ps: ps});});
+    } else if (params.model == 'complete_pooling') {
+      var sharedLexicon = categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))});
+      return repeat(4, function() {return sharedLexicon;});
+    } else {
+      var hyperParams = dirichlet(sampleProbs(utt));
+      return repeat(4, function() {return categorical({vs: meanings, ps: hyperParams});});
+    }
   }, unconstrainedUtterances);
-
-  // have to invert this to make the formatting work...
-  return _.zipObject([1,2,3,4], map(function(partnerID) {
-    return _.zipObject(unconstrainedUtterances, map(function(utt_i) {
-      return lexicons[utt_i][partnerID];
-    }, _.range(unconstrainedUtterances.length)));
-  }, _.range(lexicons.length)));
+  return {
+    '1' : {
+      'word1' : partnerMeaning[0][0], 'word2' : partnerMeaning[1][0],
+      'word3' : partnerMeaning[2][0], 'word4' : partnerMeaning[3][0]
+    },
+    '2' : { 
+      'word1' : partnerMeaning[0][1], 'word2' : partnerMeaning[1][1],
+      'word3' : partnerMeaning[2][1], 'word4' : partnerMeaning[3][1],
+    },
+    '3' : {
+      'word1' : partnerMeaning[0][2], 'word2' : partnerMeaning[1][2],
+      'word3' : partnerMeaning[2][2], 'word4' : partnerMeaning[3][2],
+    },
+    '4' : {
+      'word1' : partnerMeaning[0][3], 'word2' : partnerMeaning[1][3],
+      'word3' : partnerMeaning[2][3], 'word4' : partnerMeaning[3][3]
+    }
+  }
 };
 
 // for each point in data, we want the model's predictions 
@@ -75,31 +87,17 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   // run VI on current data
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
   var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
-  console.log(marginalize(speakerPosterior, function(v) {return v['1']['word3']}));
-  console.log(marginalize(speakerPosterior, function(v) {return v['2']['word3']}));  
-  console.log(marginalize(speakerPosterior, function(v) {return v['3']['word3']}));
-  console.log(marginalize(speakerPosterior, function(v) {return v['4']['word3']}));
 
   // get marginal prediction of next data point over lexicon posterior
   var trialParams = extend(params, {partnerID: currTrial.partnerID});
   var speakerOutput = S(currTrial.intendedName, speakerPosterior, trialParams);
-  console.log(speakerOutput);
   var nextUtt = sample(speakerOutput);
 
   var listenerOutput = L(nextUtt, listenerPosterior, trialParams);
-  console.log(listenerOutput);
   var nextChoice = sample(listenerOutput);
   
-  console.log('chosen utt for partner ' + currTrial.partnerID + ' is: ' + nextUtt);
-  console.log('chosen object for partner ' + currTrial.partnerID + ' is: ' + nextChoice);
-  console.log('intended: ' + currTrial.intendedName);
-  console.log('correct: ' + (nextChoice == currTrial.intendedName));    
-  csv.writeLine([argv.model, argv.chainNum, params.alpha, params.costWeight, currTrial.trialNum,
-                 currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
-                 nextUtt, speakerOutput.score('word1_word2'),
-                 speakerOutput.score('word1'), nextChoice, listenerOutput.score('object1')].join(','), outputFile);
-
-  var newDataSoFar = _.zipObject(_.range(1, 5), map(function(id) {
+  writeLine(currTrial, nextUtt, nextChoice, speakerOutput, listenerOutput);
+  var newDataSoFar = _.zipObject(_.range(1, 6), map(function(id) {
     var trialPacket = extend(currTrial, {
       role: id == currTrial.speakerID ? "speaker" : "listener",
       wordID: nextUtt,
@@ -107,7 +105,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     });
     return (id == currTrial.speakerID || id == currTrial.listenerID ?
             dataSoFar[id].concat(trialPacket) : dataSoFar[id]);
-  }, _.range(1, 5)));
+  }, _.range(1, 6)));
 
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), newDataSoFar);
@@ -115,45 +113,66 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 };
 
 var trials = [
+  // first partner
   {trialNum: 1, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'bluecircle'},
   {trialNum: 2, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 3, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'bluecircle'},
   {trialNum: 4, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
-  {trialNum: 5, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
-  {trialNum: 6, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 5, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 6, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 7, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'bluecircle'},
   {trialNum: 8, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
-  // {trialNum: 1, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
-  // {trialNum: 2, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
-  // {trialNum: 3, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
-  // {trialNum: 4, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 9, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
-  {trialNum: 10, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'bluecircle'},
+
+  {trialNum: 1, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 2, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
+  {trialNum: 3, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 4, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
+  {trialNum: 5, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 6, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
+  {trialNum: 7, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
+  {trialNum: 8, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
+  // second partner
+  {trialNum: 9, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'bluecircle'},
+  {trialNum: 10, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 11, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'bluecircle'},
   {trialNum: 12, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 13, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'bluecircle'},
   {trialNum: 14, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 15, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'bluecircle'},
   {trialNum: 16, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
-  // {trialNum: 5, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
-  // {trialNum: 6, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
-  // {trialNum: 7, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
-  // {trialNum: 8, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
+
+  {trialNum: 9, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
+  {trialNum: 10, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
+  {trialNum: 11, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
+  {trialNum: 12, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
+  {trialNum: 13, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
+  {trialNum: 14, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
+  {trialNum: 15, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
+  {trialNum: 16, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
+  // third partner
   {trialNum: 17, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'bluecircle'},
   {trialNum: 18, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 19, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'bluecircle'},
   {trialNum: 20, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
-  {trialNum: 21, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
-  {trialNum: 22, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 23, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
-  {trialNum: 24, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'bluecircle'},
-  // {trialNum: 9, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
-  // {trialNum: 10, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'},
-  // {trialNum: 11, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
-  // {trialNum: 12, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'}
+  {trialNum: 21, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 22, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
+  {trialNum: 23, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 24, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
+
+  {trialNum: 17, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 18, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
+  {trialNum: 19, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 20, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
+  {trialNum: 21, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 22, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
+  {trialNum: 23, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'},
+  {trialNum: 24, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
+  // generalization
+  {trialNum: 25, speakerID: 1, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  {trialNum: 25, speakerID: 2, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  {trialNum: 25, speakerID: 3, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  {trialNum: 25, speakerID: 4, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
 ];
 
-var f = csv.open('./output/networkOutput' + argv.model + argv.chainNum + '.csv');
-csv.writeLine('model,chainNum,alpha,costWeight,time,speakerID,listenerID,partnerID,utt,longUttScore,word1Score,objectPicked,bluecircleScore',f);
-iterate(f, trials, {1: [], 2: [], 3: [], 4: []});
+iterate(f, trials, {1: [], 2: [], 3: [], 4: [], 5: []});
 csv.close(f);
