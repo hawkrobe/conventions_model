@@ -1,6 +1,6 @@
 // run using, e.g.:
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
-var numUtterances = 8;
+var numUtterances = 16;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['shape_circle_striped_highstriped', 'shape_circle_striped_lowstriped',
                'shape_circle_spotted_highspotted', 'shape_circle_spotted_lowspotted',
@@ -26,8 +26,8 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 24,
-  inferOptions: {method: 'MCMC', samples:1000, burn:7500, lag:5, verbose:true}//{method: 'enumerate'}//
+  numTrials: 96,
+  inferOptions: {method: 'MCMC', samples:5000, burn:10000, lag:0, verbose:true}//{method: 'enumerate'}//
 };
 
 var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
@@ -101,16 +101,16 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
   var topSpeakerChoice =  sample(speakerOutput);
-
+  console.log(speakerOutput)
   var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
-
+  console.log(listenerOutput);
 //  postTest(currTrial, speakerPosterior, listenerPosterior);
-  // display('context is ' + currTrial.context);
-  // display('top speaker choice is ' + topSpeakerChoice);
-  // display('top listener choice is ' + topListenerChoice);
-  // display('intended: ' + currTrial.intendedName);
-  // display('correct? ' + (topListenerChoice == currTrial.intendedName));
+  display('context is ' + currTrial.context);
+  display('top speaker choice is ' + topSpeakerChoice);
+  display('top listener choice is ' + topListenerChoice);
+  display('intended: ' + currTrial.intendedName);
+  display('correct? ' + (topListenerChoice == currTrial.intendedName));
   shared.writeLine([
     argv.chainNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
     currTrial.trialNum, currTrial.condition, currTrial.contextType,
