@@ -5,8 +5,8 @@ For example, one possibility is that speakers coordinate on meaning through prim
 
 \begin{figure*}[b]
 \centering
-    \includegraphics[scale=1]{sec1-convergence.pdf}
-        \includegraphics[scale=1]{sec1-efficiency}
+    \includegraphics[scale=1.1]{sec1-convergence.pdf}
+        \includegraphics[scale=1.1]{sec1-efficiency}
   \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} Results from 1000 simulated trajectories in (A) Simulation 1.1 and (B) Simulation 1.2. Error bars are bootstrapped 95\% CIs within each block of two trials.}
   \label{fig:sec1model}
 \end{figure*}
@@ -60,6 +60,13 @@ They may then observe the listener's selection of an object $o \sim L(o | u_1)$ 
 Finally, they may use the observed pair $D = \{u_1, o_1\}$ to update their beliefs about the listener's true lexicon $P(\phi | D)\propto L_1(o_1 | u_1, \phi)P(\phi)$.
 The listener is similarly able to update their beliefs about the speaker's true lexicon $P(\phi | D)\propto S_1(u_1 | o_1, \phi)P(\phi)$. 
 Both agents then proceed to the next trial, where they use this updated posterior distribution to produce or interpret language.
+\begin{figure*}
+\centering
+    \includegraphics[scale=1.5]{sec1-reduction_example}
+    \vspace{1em}
+  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
+  \label{fig:sec1efficiency}
+\end{figure*}
 
 To examine how the dynamics of this process unfold over multiple rounds, we simulated 1000 trajectories, each of which was 30 trials in length, organized into 15 blocks.
 Agents swapped speaker and listener roles on each trial, and we randomized the target sequence within each block.
@@ -78,20 +85,12 @@ This effect arises from Gricean pragmatic reasoning --- if $u_2$ were a better f
 
 \subsection{Simulation 1.2: Efficiency}
 
-\begin{figure*}
-\centering
-    \includegraphics[scale=1.5]{sec1-reduction_example}
-    \vspace{1em}
-  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
-  \label{fig:sec1efficiency}
-\end{figure*}
-
 Next, we show how our inferential model explains speakers' gains in efficiency over multiple interactions. 
 For efficiency to change at all, speakers must be able to produce utterances that vary in length. 
-For this simulation, we therefore extend the grammar to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with conjunctions.
+For this simulation, we therefore extend the grammar to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with disjunctive semantics.
 Specifically, we consider a scenario with the same two objects as in Simulation 1.1, but giving the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two. 
-Critically, the meaning of longer utterances are derived compositionally from these primitives using the product $t$-norm\footnote{We focus on disjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
-$$\mathcal{L}_\phi(u_iu_j, o) = \max\{\mathcal{L}_\phi(u_i, o)  \mathcal{L}_\phi(u_j, o)\}$$
+Critically, the meaning of longer utterances are derived compositionally from these primitives using the maximum $t$-conorm\footnote{We focus on disjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
+$$\mathcal{L}_\phi(u_iu_j, o) = \max\{\mathcal{L}_\phi(u_i, o) , \mathcal{L}_\phi(u_j, o)\}$$
 
 
 While we established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, human participants in repeated reference games typically bring some prior expectations about language into the interaction.
@@ -129,21 +128,21 @@ To illustrate in detail how our model derives this phenomenon as a consequence o
 Consider a speaker who wants to refer to object $o_1$. 
 They expect their partner to be slightly more likely to interpret their language using a lexicon in which $u_{1}$ and $u_{2}$ apply to this object, due to their weak initial biases. 
 However, there is still a reasonable chance ($p=0.45$) that either $u_1$ or $u_2$ alone will be interpreted to mean $o_2$ by their partner, which would lead to an incorrect response. 
-Thus, it is more informative to produce the conjunction $u_{1}u_{2}$ to hedge against this possibility, despite its higher production cost. 
+Thus, it is more informative to produce the longer utterance $u_{1}u_{2}$ to hedge against this possibility, despite its higher production cost. 
 
 To see why this is the case, consider the expected informativity of the utterance under different possible listener lexicons.
 The possibility with highest probability is that both $u_1$ and $u_2$ will mean $o_1$ in the listener's lexicon ($p = 0.55^2 \approx 0.3$), in which case the listener will correctly identify the target with high probability.
 The possibility that both $u_1$ and $u_2$ will mean $o_2$ in the listener's lexicon is only $p=0.45^2 \approx 0.2$, leading the listener to erroneously select $o_2$ with high probability. 
 In the mixed cases, where just one of $u_1$ or $u_2$ means $o_2$ in the listener's lexicon ($p = 2 \cdot 0.45 * 0.55 \approx 0.5$), the listener will choose between the objects at chance, which yields an intermediate informativity.
-When expected informativity is calculated across these outcomes, it is more valuable to produce the longer conjunction than the shorter component utterances.
-Finally, upon observing the listener's response to the conjunction (say, $o_1$), the speaker becomes more confident that the component utterances $u_1$ and $u_2$ mean $o_1$ in their updated posterior over the listener's lexicon.
+When expected informativity is calculated across these outcomes, it is more valuable to produce the longer disjunction than the shorter component utterances.
+Finally, upon observing the listener's response to the disjunction (say, $o_1$), the speaker becomes more confident that the component utterances $u_1$ and $u_2$ mean $o_1$ in their updated posterior over the listener's lexicon.
 This credit assignment to individual lexical items is a consequence of the compositional meaning of longer utterances in our simple grammar.
 
 Fig.~\ref{fig:sec1internals} shows the trajectories of internal components of the speaker utility as the interaction continues.
 We assume for illustrative purposes that $o_1$ continues to be the target on each trial and the same agent continues to be the speaker.
-As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the conjunction and the shorter components gradually decreases (center left).
+As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the disjunction and the shorter components gradually decreases (center left).
 As a consequence, production cost increasingly dominates the utility (center-right). 
-After several trials of observing a successful listener response given the conjunction, the utility of the shorter utterances reaches parity with the conjunction.
+After several trials of observing a successful listener response given the disjunction, the utility of the shorter utterances reaches parity with the disjunction.
 Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
 Thus, increasing efficiency is derived as a rational consequence of inference about the listener's lexical.
 For these simulations, we used $w_S = w_L = 7, w_c = 11, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 

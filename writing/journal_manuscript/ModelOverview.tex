@@ -9,17 +9,18 @@ In the next section, we will review this basic framework and then raise two fund
 
 \subsection{RSA models of communication with static meaning}
 
-In the RSA formulation of referential communication, a pragmatic speaker denoted by $S_1$ must choose an utterance $u$ from a space of possible utterances $\mathcal{U}$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$.
-They attempt to satisfy the Gricean \emph{maxim of quantity} by balancing informativity to an imagined listener against the cost of producing an utterance. 
+In the RSA formulation of referential communication, a pragmatic speaker denoted by $S_1$ must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$.
+They attempt to satisfy the Gricean \emph{maxim of quantity} by using a utility function $U$ that balances informativity to an imagined listener against the cost of producing an utterance. 
 A pragmatic listener $L_1$ then inverts their internal model of the speaker to infer which intended referent $o\in\mathcal{C}$ would best explain the speaker's choice of utterance $u$.
 This chain of recursive reasoning grounds out in an imagined \emph{literal listener} $L_0$, who is assumed to identify the intended target directly using a static lexical meaning function $\mathcal{L}(u,o)$, which evaluates the literal meaning\footnote{$\mathcal{L}$ is traditionally a truth-conditional function evaluating whether a given utterance is true or false of any state of the world. However, this formulation is also consistent with continuous semantics \cite{degen2020redundancy} as may be learned by a (grounded) neural network \cite{potts2019case}.} of $u$ on $o$.
 This model can be specified as follows:
 \begin{align}
-L_0(o | u, \mathcal{C}) &\propto  \mathcal{L}(u,o)\hfill\label{eq:RSA}\\
-S_1(u | o, \mathcal{C}) &\propto   \exp\{w_S \cdot \log L_0(o | u, \phi_k) - w_C \cdot c(u)\}\nonumber   \\
-L_1(o | u, \mathcal{C}) &\propto   \exp\{w_L \cdot \log S_1(u | o, \phi_k)\}\nonumber
+L_0(o | u) &\propto  \mathcal{L}(u,o)\hfill\label{eq:RSA}\\
+U(u; o) & = (1-w_C) \cdot \log L_0(o | u) - w_C \cdot c(u) \nonumber \\
+S_1(u | o) &\propto   \exp\{w_S \cdot U(u; o)\}\nonumber  \\
+L_1(o | u) &\propto   \exp\{w_L \cdot \log S_1(u | o)\}\nonumber
 \end{align}
-where $c(u)$ is a function giving the cost of producing $u$; $w_S$ and $w_C$ are free parameters controlling the relative weights of the speaker's informativity and parsimony, respectively; and $w_L$ controls the optimality of the listener's softmax decision rule over objects in context\footnote{Note that the normalization constant may be exactly zero for some lexicons, in which case the distribution is not well-defined. To address this issue, we add a noise model to each agent in (4); with probability $\epsilon$, they choose uniformly from the support, ensuring non-zero probability of every outcome. Unless otherwise specified, we set $\epsilon = 0.01$. See Appendix A for additional details.}.
+where $c(u)$ is a function giving the cost of producing $u$; $w_C \in [0,1]$ controls the relative weight of the speaker's informativity and parsimony; and $w_S,w_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{Note that normalization constant may be exactly zero for some lexicons, in which case these distribution are not well-defined. To address this issue, we add a noise model at each level of recursion; with probability $\epsilon$, agents choose uniformly from the support, ensuring non-zero probability of every outcome. Unless otherwise specified, we set $\epsilon = 0.01$. See Appendix A for further details motivating this choice.}.
 
 \subsection{Fundamental problems for static meaning}
 
@@ -29,7 +30,8 @@ In this section, we highlight two under-appreciated challenges of communication 
 
 The first challenge is \emph{variability} in linguistic meaning throughout a language community. 
 Different listeners may recover systematically different meanings from the same message, and different speakers may encode the same message in different ways.
-For example, doctors may fluently communicate with one another about medical conditions using terminology that is meaningless to a patient; the vocabulary itself may be unfamiliar, and even everyday words may be used in non-standard ways.
+For example, doctors may fluently communicate with one another about medical conditions using specialized terminology that is meaningless to a patient. 
+The words may not be in the patient's lexicon, and even common words may be used in non-standard ways.
 That is, being fluent speakers of the same language does not ensure perfect overlap for the relevant meanings that need to be transmitted in every context: different partners may simply be using different functions $\mathcal{L}$.
 
 The second challenge is the \emph{non-stationarity} of the world. 
@@ -58,7 +60,7 @@ Second, this representation should also, in principle, be sensitive to the socia
 The first desideratum, representing population variability, motivates a \emph{probabilistic} formulation.
 Instead of holding a single static function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. one $\phi$ for the whole population), we assume each agent maintains \emph{uncertainty} over the exact meaning of words as used by different partners.
 In a Bayesian framework, this uncertainty is specified by a prior probability distribution over possible values of $\phi$.
-The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, and in the context of iterated dyadic interactions \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}. 
+The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, and in the context of iterated dyadic interactions \cite{smith_learning_2013}. 
 
 The second desideratum, sensitivity to partner-specific meanings, motivates a \emph{hierarchical} model, where uncertainty is represented by a multi-level prior. 
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis" about the overall distribution of possible partners. 
@@ -66,8 +68,8 @@ $\Theta$ then parameterizes the agent's \emph{partner-specific} uncertainty $P(\
 To integrate this uncertainty into our speaker and listener models, we assume they each act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$.
 In other words, they sample actions by marginalizing over the posterior $P(\phi_k | D_k)$ of different language models their partner may be using.
 \begin{align}
-L(o|u) &\propto   \exp\left\{ \textstyle{\int} P(\phi_k | D_k) w_L \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\label{eq:marginalized}\\
-S(u|o) &\propto  \exp\left\{ \textstyle{\int} P(\phi_k | D_k)  w_S \log L_1(o| u, \phi_k) - w_C c(u)\,\,d\phi_k\right\}\nonumber
+L(o|u) &\propto   \exp\left\{w_L \textstyle{\int} P(\phi_k | D_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\label{eq:marginalized}\\
+S(u|o) &\propto  \exp\left\{w_S \textstyle{\int} P(\phi_k | D_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\nonumber
 \end{align}
 
 \paragraph{Partner-specific learning}
@@ -93,7 +95,7 @@ P(\phi_k, \Theta | D_k)  & \propto &  P(D_k | \phi_k, \Theta) P(\phi_k, \Theta) 
 \end{equation}
 This joint inference decomposes the learning problem into two terms, a prior term $P(\phi_k | \Theta)P(\Theta)$ and a likelihood term $P(D_k | \phi_k)$.
 The prior term captures the idea that, in the absence of strong evidence of partner-specific language use, the agent ought to regularize toward their background knowledge of conventions: the aspects of meaning that all partners are expected to share in common.
-The likelihood term represents predictions about how a partner would use language in context under different underlying systems of meaning (see below for more details).
+The likelihood term represents predictions about how a partner would use language in context under different underlying systems of meaning (i.e. based on Eq.~\ref{eq:RSA}: see \emph{Referential Feedback} section below).
 
 Importantly, this posterior allows agents to maintain partner-specific expectations about $\phi_k$, as used in Eq.~\ref{eq:marginalized}, by marginalizing over community-level uncertainty:
 \begin{equation}
@@ -154,32 +156,30 @@ $$P(D_k | \phi_k) = \prod_{\tau=0}^t \beta^{t-\tau} P(\{o,u\}_\tau | \phi_k)$$
 This decay is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted as the expectation over a process where observations have some probability of dropping out of memory at each time step.
 Alternatively, at the algorithmic level, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}.
 
-\paragraph{Pragmatic reasoning}
+\paragraph{Bias against ambiguity}
 
 A third specific challenge is posed by potential ambiguity about \emph{ad hoc} conventions.
 If a speaker uses an expression to refer to one particular target, it is consistent with that data to believe that the same expression is perfectly acceptable for the other targets as well. 
-How do agents overcome this ambiguity to converge on an \emph{informative} communication system?
+%How do agents overcome this ambiguity to converge on an \emph{informative} communication system?
 In our account, this problem is naturally solved by the principles of \textit{pragmatic reasoning} \cite{Grice75_LogicConversation}.
-
-%In this reference game setting, we can explicitly specify the likelihood and prior terms in Eq. (1). 
 Pragmatic reasoning plays two distinct roles in our model.
 First, Gricean agents must assume that their partner is using language in a cooperative manner and account for this when inferring their partner's language model.
-That is, we use these equations as the linking function in the likelihood $P(D_k | \phi_k)$, representing an agent's prediction about how a partner with meaning function $\phi_k$ would actually behave in context (see Eq.~\ref{eq:joint_inference}). 
+That is, we use these equations as the linking function in the likelihood $P(D_k | \phi_k)$, representing an agent's prediction about how a partner with meaning function $\phi_k$ would actually behave in context (Eq.~\ref{eq:joint_inference}). 
 $S_1$ is used to learn from observations generated in the speaker role and $L_1$ is used to learn from observations generated in the listener role.
 Second, agents do not only make passive inferences from observation, they participate in the interaction by \emph{using language} themselves.
-A Gricean agent's own production and comprehension is also guided by cooperative principles.
+A Gricean agent's own production and comprehension is also guided by cooperative principles (Eq.~\ref{eq:marginalized}).
 
 Many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting two technical choices in our formulation.
 First, in the likelihoods given in Eq.~\ref{eq:RSA}, both agents use an ``action-oriented'' representation to update their beliefs about their partner, in the sense that their partner is expected to behave proportional to the utility of different actions, according to a soft-max normalization $\sigma(U(z)) = e^{U(z)}/\sum e^{U(z)}$.
 This contrasts with some RSA models outside the scope of reference games, where the listener is instead assumed to be ``belief-oriented,'' simply inferring the speaker's intended meaning without producing any action of their own \cite{qing2015variations}.
-Additionally, as their decision rule, agents sample actions from their own soft-max distribution (Eq.~\ref{eq:marginalized}).
+Additionally, as their decision rule, agents sample actions proportion to their own soft-max distribution (Eq.~\ref{eq:marginalized}).
 That is, while it is possible for agents to use a soft-max likelihood to predict their partner's behavior but \emph{maximize} their own utility when taking action, we have agents use the same soft-max distribution in both cases.
 See Appendix for further details about the definition and implementation of the RSA likelihood.
 
 \paragraph{Inference details}
 
-While our simulations in the remainder of the papers each require slightly different settings to capture different scenarios, we have aimed to hold as many details as possible constant throughout the paper.
-We must first say what functional representation we are using for the agents' lexicon $\mathcal{L}_{\phi}$.
+While our simulations in the remainder of the papers each address different scenarios, we have aimed to hold as many details as possible constant throughout the paper.
+First, we must first say what functional representation we are using for the agents' lexicon $\mathcal{L}_{\phi}$.
 For consistency with previous Bayesian models of word learning \cite<e.g.>{XuTenenbaum07_WordLearningBayesian} we have chosen to represent the space of meanings for an utterance as the set of nodes in a concept taxonomy\footnote{Note there are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. We return to these possibilities in the General Discussion.}.
 When targets of reference are conceptually distinct, as assumed in most prior models of signaling games, the taxonomy is flat and the target space of utterance meanings reduces to the space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$, where different values of $\phi$ correspond to different mappings between utterances and objects. 
 However, in our simulations for \textbf{P3}, we will also consider sets of referents with more complex  conceptual structure, and more abstract meanings applying to multiple referents.
@@ -190,9 +190,10 @@ $$
 We then assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
 
 We have implemented all of our simulations in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL}, and have made them available online along with materials for reproducing our experiments and analyses\footnote{\url{github.com/hawkrobe/conventions_model}}.
-In all cases, we run our simulations by iterating the following trial-level loop: (1) sample an utterance from the speaker's utterance distribution, given the target object, (2) sample an utterance from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations and, (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
+In all cases, we run our simulations by iterating the following trial-level loop: (1) sample an utterance from the speaker's utterance distribution, given the target object, (2) sample an utterance from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations, and (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
 
-We use enumeration to derive the exact analytic base speaker and listener distributions in Eq.~\ref{eq:RSA} and prefer to use enumeration for posterior inference in Eq.~\ref{eq:joint_inference} as well, but as the space of possible lexicons $\phi$ grows, this approach becomes intractable.
+To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), we use enumeration for exact inference.
+We would also prefer to use enumeration to obtain posteriors over lexical meaning (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, this approach becomes intractable.
 For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from the posterior, and take the expectations in Eq.~\ref{eq:marginalized} as a sum over these samples. 
 Finally, because we are emphasizing a set of phenomena where our model makes qualitatively different predictions than previous models, our goal in this paper is to illustrate and evaluate these \emph{qualitative} predictions rather than provide exact quantitative fits to empirical data.
 As such, we will proceed by deriving predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that make the strongest predictions, and leave the identification of the best-fitting parameters for future work. 
