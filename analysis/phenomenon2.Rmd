@@ -10,13 +10,18 @@ library(tidyverse)
 library(ggthemes)
 library(tidyboot)
 
-clicks <- read_csv('../data/clicks.csv')
-messages <- read_csv('../data/messages.csv')
+clicks <- read_csv('../data/experiment3/clicks.csv')
+messages <- read_csv('../data/experiment3/messages.csv')
 ```
 
 ```{r}
 completeNetworks <- clicks %>% 
-  distinct() %>% group_by(networkid) %>% tally() %>% filter(n == 96) %>% pull(networkid)
+  distinct() %>% 
+  group_by(networkid) %>% 
+  tally() %>% 
+  filter(n == 96) %>% 
+  pull(networkid)
+
 length(completeNetworks)
 
 relevantMessages <- messages %>% 
@@ -28,7 +33,8 @@ relevantMessages <- messages %>%
   mutate(repnum = repnum + 1) %>%
   group_by(participantid, partnernum) %>%
   mutate(ordinalrep = ifelse(repnum == min(repnum), 'first', 'second')) %>%
-  group_by(participantid, networkid, roomid, target, partnernum, repnum, ordinalrep) %>%
+  group_by(participantid, networkid, roomid, target, 
+           partnernum, repnum, ordinalrep) %>%
   summarize(m = sum(uttLength)) 
 ```
 
@@ -113,14 +119,14 @@ disconnects
 ### Convergence
 
 ```{r}
-
 partnerLookup <- messages %>%
   group_by(networkid) %>%
   do(., mutate(., speakerID = group_indices(., participantid))) %>%
   group_by(networkid, roomid, partnernum, speakerID) %>%
   tally() %>%
   group_by(networkid, roomid) %>%
-  mutate(partnerID = ifelse(speakerID == first(speakerID), last(speakerID), first(speakerID))) %>%
+  mutate(partnerID = ifelse(speakerID == first(speakerID), 
+                            last(speakerID), first(speakerID))) %>%
   ungroup() %>%
   mutate(speaker1 = as.factor(speakerID)) %>%
   select(-n, -roomid) 
@@ -184,58 +190,56 @@ glmer(match ~ ordinalrep * partnernum * partnerType + (1 | target) + (1 + partne
 Network simulations 
 
 ```{r}
+path <- '../simulations/cogsci2020/output/networkOutput_compiled.csv'
+modelNetworks <- read_csv(path) %>%
+  group_by(chainNum, partnerID) %>%
+  mutate(repNum = floor(((trialNum - 1) %% 8) / 2),
+       correct = speakerChoice == intendedName) 
+```
 
-unfinished <- read_csv('../simulations/hierarchical/compiled_network_output.csv') %>%
-  group_by(chainNum) %>%
-  tally() %>%
-  filter(n < 24) %>%
-  pull(chainNum)
-
-modelNetworks <- read_csv('../simulations/hierarchical/compiled_network_output.csv') %>%
-  filter(!(chainNum %in% unfinished)) %>%
-  mutate(row_number = row_number() - 1,
-       chainNum = floor(row_number / 24),
-       repNum = row_number %% 4,
-       correct = objectPicked == 'object1') 
-
+```{r}
 # first look at accuracy...
 modelNetworks %>%
-  group_by(time, partnerID) %>%
-  summarize(s = mean(exp(object1Score)))
-  
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(correct)) %>%
+  arrange(model, partnerID, repNum)
+```
+
+```{r}
 # then look at reduction...
 modelNetworks %>%
-  group_by(time, partnerID, speakerID) %>%
-  tidyboot_mean(exp(longUttScore))
-  
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(longUttScore)) %>%
+  arrange(model, partnerID, repNum)
+```
 
-  
+```{r}
 # convergence metric...
 modelconvergence.toPlot <- modelNetworks %>%
-  filter(!(chainNum %in% unfinished)) %>%
-  group_by(chainNum, speakerID, partnerID) %>%
-  mutate(ordinalRep = ifelse(time == first(time), 'first', 'second')) %>%
-  select(ordinalRep, speakerID,  partnerID, utt, chainNum) %>%
-  group_by(chainNum, ordinalRep, partnerID) %>%
-  tidybayes::gather_pairs(speakerID, utt, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
-  mutate(partnerType = case_when(partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
-                                                            (speaker1 == 4 && speaker2 == 3),
-                                                          'within', 'between'),
-                                 partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
-                                                            (speaker1 == 4 && speaker2 == 2),
-                                                          'within', 'between'),
-                                 partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
-                                                            (speaker1 == 3 && speaker2 == 2),
-                                                          'within', 'between')),
-         match = utt1 == utt2) %>%
-  filter(utt1 %in% c('word1', 'word2') && utt2 %in% c('word1', 'word2')) %>%
-  group_by( partnerID, partnerType) %>%
+  group_by(model, chainNum, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+  select(ordinalRep, speakerID,  partnerID, speakerChoice, chainNum) %>%
+  group_by(model, chainNum, ordinalRep, partnerID) %>%
+  tidybayes::gather_pairs(speakerID, speakerChoice, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  mutate(partnerType = case_when(
+    partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 3),
+                            'within', 'between'),
+    partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 2),
+                            'within', 'between'),
+    partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
+                            (speaker1 == 3 && speaker2 == 2),
+                            'within', 'between')),
+    match = utt1 == utt2) %>%
+  filter(utt1 %in% c('word1', 'word2') && 
+         utt2 %in% c('word1', 'word2')) %>%
+  group_by(model, partnerID, partnerType) %>%
   tidyboot_mean(match) 
 
 modelconvergence.toPlot %>%
   ungroup() %>%
   mutate(partnerID = paste0('partner ', partnerID)) %>%
-#  mutate(ordinalRep = ifelse(ordinalRep == 'first', 'first half', 'second half')) %>%
   mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
   ggplot(aes(x = partnerID, y = empirical_stat, color = comparison, group = comparison)) +
     geom_line() +

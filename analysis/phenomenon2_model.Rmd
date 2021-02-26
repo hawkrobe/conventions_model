@@ -1,0 +1,94 @@
+---
+title: "Phenomenon #2: Model results"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(tidyboot)
+```
+
+# Analyze model output
+
+Import network simulations 
+
+```{r}
+path <- '../simulations/cogsci2020/output/networkOutput_compiled.csv'
+modelNetworks <- read_csv(path) %>%
+  mutate(chainNum = floor((row_number() - 1) / 52)) %>%
+  group_by(chainNum, partnerID) %>%
+  mutate(repNum = floor(((trialNum - 1) %% 8) / 2),
+       correct = speakerChoice == intendedName) 
+```
+
+```{r}
+# first look at accuracy...
+modelNetworks %>%
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(correct)) %>%
+  ggplot(aes(x = 4*partnerID + repNum, y = s, group = partnerID)) +
+    geom_point() +
+  geom_line() +
+    #geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = F) +
+    facet_wrap(~ model) +
+    theme_few()
+```
+
+```{r}
+# then look at reduction...
+modelNetworks %>%
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(longUttScore)) %>%
+  arrange(model, partnerID, repNum) %>%
+  ggplot(aes(x = 4*partnerID + repNum, y = s, group = partnerID)) +
+    geom_point() +
+    geom_line() +
+    #geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = F) +
+    facet_wrap(~ model) +
+    theme_few() +
+    theme(aspect.ratio = 1)
+
+```
+
+```{r}
+# convergence metric...
+modelconvergence.toPlot <- modelNetworks %>%
+  group_by(model, chainNum, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+  select(ordinalRep, speakerID,  partnerID, speakerChoice, chainNum) %>%
+  group_by(model, chainNum, ordinalRep, partnerID) %>%
+  tidybayes::gather_pairs(speakerID, speakerChoice, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  mutate(partnerType = case_when(
+    partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 3),
+                            'within', 'between'),
+    partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 2),
+                            'within', 'between'),
+    partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
+                            (speaker1 == 3 && speaker2 == 2),
+                            'within', 'between')),
+    match = utt1 == utt2) %>%
+  filter(utt1 %in% c('bluecircle', 'redsquare') && 
+         utt2 %in% c('bluecircle', 'redsquare')) %>%
+  group_by(model, partnerID, partnerType) %>%
+  tidyboot_mean(match) 
+
+modelconvergence.toPlot %>%
+  ungroup() %>%
+  mutate(partnerID = paste0('partner ', partnerID)) %>%
+  mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
+  ggplot(aes(x = partnerID, y = empirical_stat, color = comparison, group = comparison)) +
+    geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    ggtitle('model prediction') +
+    theme_few() +
+    ylab("alignment (% word matches)") +
+  facet_wrap(~ model) +
+    xlab("") +
+    ylim(0, 1) +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1.5)
+
+ggsave('./convergence_model.pdf', width = 8, height = 4, unit = 'in')
+```
