@@ -55,7 +55,16 @@
 \author{Various people}
 \affiliation{Various Universities}
 
-\abstract{Abstract TBD}
+\abstract{Languages are powerful solutions to the coordination problems that arise between agents.
+They provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads. 
+Yet we use language in a highly variable and non-stationary social environment, requiring linguistic representations to be flexible. 
+Old words are given new partner-specific or context-specific meanings on the fly. 
+In this paper, we introduce a hierarchical Bayesian account aiming to reconcile the long-standing tension between these perspectives. 
+More specifically, we argue that the central computational problem of communication is not simply transmission, as classical accounts have assumed, but \emph{learning} and \emph{adaptation} over multiple timescales.
+Under our account, social conventions are stable priors that have been abstracted from interactions with multiple partners, while rapid learning within interactions allows for the formation of partner- and context-specific common ground.
+We present new empirical data alongside simulations showing how our model explains several phenomena that have posed a challenge for previous accounts: (1) the convergence to more efficient referring expressions across repeated interaction with the same partner, (2) the gradual transfer of partner-specific common ground to novel partners, and (3) the influence of context on which conventions eventually form.
+%Finally, we discuss several broader consequences of our framework, grounding community-level social conventions in basic individual-level learning mechanisms,  suggests new perspectives on continual language learning beyond development. 
+}
 
 \keywords{Keywords TBD}
 
@@ -159,33 +168,36 @@ Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_n
 
 Our setting poses several technical challenges for the Rational Speech Act (RSA) framework.
 In this Appendix, we describe these challenges in more detail and justify our choices.
-First, when we allow the full space of Boolean lexicons $\phi$, we must confront settings where an utterance $u$ does not apply to any of the objects under the given lexicon, i.e. where $\mathcal{L}_\phi(o, u) = 0$ for all $o\in \mathcal{C}$. 
-In this case, the normalizing constant is zero, and the literal listener distribution is not well-defined.
+
+\subsection{Handling degenerate lexicons}
+
+First, when we allow the full space of possible lexicons $\phi$, we must confront degenerate lexicons where an utterance $u$ is literally false of every object in context, i.e. where $\mathcal{L}_\phi(o, u) = 0$ for all $o\in \mathcal{C}$. 
+In this case, the normalizing constant in Eq.~\ref{eq:RSA} is zero, and the literal listener distribution is not well-defined.
 A similar problem may arise when no utterance in the speaker's repertoire is true of the target, in which case the $S_1$ distribution is not well-defined.
+
 Several solutions to this problem were outlined by \citeA{bergen_pragmatic_2016}.
-One of these solutions is to use a `softer' semantics in the literal listener, where a Boolean value of false does not strictly rule out an object but instead assigns a low numerical score, e.g. 
+One of these solutions is to use a `softer' semantics in the literal listener, where a Boolean value of false does not strictly rule out an object but instead assigns a very low numerical score, e.g. 
 $$\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if $o \in $\den{u}$_\phi$} \\ \epsilon & \textrm{o.w.} \end{array}\right.$$
 Whenever there is at least one $o\in\mathcal{C}$ where $u$ is true, this formulation assigns negligible listener probability to objects where $u$ is false, but ensures that the normalization constant to is non-zero even when $u$ is false for all objects.
 
-While this solution suffices for one-shot pragmatics under lexical uncertainty, where $\epsilon$ may be calibrated, it runs into several complications in an iterated setting.
-At sufficiently high values of $w_L$ and $w_S$, numerical overflow at higher levels of recursion may lead to similarly problematic normalization constants as elements drop entirely out of the support.
-We generalize the same solution by adding a noise model at every level of recursion.
-That is, every agent chooses randomly with noise probability $\epsilon$, ensuring a non-zero floor on the likelihood of each element of the support.
+While this solution suffices for one-shot pragmatics under lexical uncertainty, where $\epsilon$ may be calibrated to be appropriately large, it runs into several technical complications in an iterated setting.
+First, due to numerical overflow at sufficiently high values of $w_L$ and $w_S$ on later iteration, elements may drop entirely out of the support at higher levels of recursion (e.g. $L_1$), leading the normalization constant to return to zero. 
+Second, this `soft' semantics creates unexpected and unintuitive consequences at the level of the pragmatic speaker. 
+After renormalization in $L_0$, an utterance $u$ that fails to refer to any object in context is also by definition equally \emph{successful} for all objects (i.e. evaluating to $\epsilon$ for every object), leading to a uniform selection distribution.
+Consequently, when $S_1$ reasons about this listener, an utterance that is literally false of every object may ultimately be preferred over some utterances which are true.
+
+Instead of injecting $\epsilon$ into the lexical meaning, we ensure that the normalization constant is well-defined by adapting another method suggested by \citeA{bergen_pragmatic_2016}.
+First, we add a `null' object to every context so that, even when a particular utterance is false of every real object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen.
+Intuitively, this null object can be interpreted as recognizing a failure to refer to anything.
+Second, we add an explicit noise model at every level of recursion.
+That is, we assume every agent has a probability $\epsilon$ of choosing a random element of the support, ensuring a fixed non-zero floor on the likelihood of each element that is constant across levels of recursion.
 Formally this corresponds to a mixture distribution, e.g. 
 $$L_0^{\epsilon}(o|u,\phi) = \epsilon \cdot P_{unif}(o) + (1-\epsilon) \cdot L_0(o|u,\phi)$$
+$$S_1^{\epsilon}(u|o,\phi) = \epsilon \cdot P_{unif}(u) + (1-\epsilon) \cdot S_1(u|o,\phi)$$
 
-%At the same time, this `soft' semantics leads to unexpected and unintuitive consequences at the level of the pragmatic speaker. 
-%After renormalization in $L_0$, an utterance $u$ that fails to refer to any object in context is also by definition equally \emph{successful} for all objects, leading to a uniform probability distribution.
-%Consequently, when $S_1$ reasons about this listener, an utterance that is literally false in the lexicon may be preferred over some true utterances.
-
-%We ensure that the normalization constant is well-defined  using another method.
-%, we define (1) a `null' utterance, which is true of all objects, and (2) a `null' object, for which all utterances are true. 
-%We add this fixed null utterance to every lexicon, and add this fixed null object to every context.
-%Two consequences follow: (1) when a particular utterance does not apply to any object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen under the $L_0$ and (2) when no utterances apply to the target object, the speaker will fall back on the `null' utterance.
-%Intuitively, the null utterance can be interpreted as choosing not to speak, and the null object can be interpreted as recognizing a failure to refer to anything.
-
-Second, when the speaker and listener agents marginalize over their beliefs about $\phi_k$ in selecting actions (Eq. 5), a question arises over where exactly the expectation ought to be taken. 
-In our formulation, the expectation is taken over the \emph{utility} each agent is using to act, i.e. if the speaker and listener utilities are defined to be 
+\subsection{Marginalizing over $\phi_k$}
+Another major theoretical question arises about exactly how speaker and listener agents ought to marginalize over their uncertainty about $\phi_k$ when selecting actions (Eq.~\ref{eq:marginalized}). 
+In our formulation, the expectation is taken over the entire \emph{utility} each agent is using to act, i.e. if the speaker and listener utilities are defined to be 
 $$
 \begin{array}{rcl}
 U_L(o;u, \phi_k) & = & w_L \cdot \log S_1(u|o, \phi_k)\\
@@ -201,16 +213,18 @@ S(u|o) & \propto & \exp\left\{\int P(\phi_k | D_k) \cdot U_S(u; o, \phi_k) \, d 
 $$
 We may interpret this formulation as each agent choosing an action proportional to its expected utility across different possible values of $\phi_k$, weighted by the agent's current posterior beliefs about the value their partner is using.
 
-One alternative, suggested by \citeA{bergen_pragmatic_2016}, is to assume the expectation take places at a single level of recursion, say the $L_1$, as above, and then derive the other agent's behavior by reasoning directly about this marginalized distribution, e.g.
+This formulation contrasts with the one suggested by \citeA{bergen_pragmatic_2016}, which assumes the expectation takes places at a single level of recursion, say the $L_1$, as above, and then derives the other agent's behavior by reasoning directly about this marginalized distribution, e.g.
 $$
 \begin{array}{rcl}
 S_{alt1}(u|o) & \propto & \exp\left\{w_S \cdot \log L(o|u) - w_C \cdot c(u)\right\} \\
 \end{array}
 $$
+where $L(o|u)$ is defined as above.
 This may be interpreted as an assumption on the part of the speaker that the listener is already accounting for their own uncertainty, and best responding to such a listener.
 Isolating lexical uncertainty over $\phi$ to a single level of recursion is a natural formulation for one-shot pragmatic phenomena, where additional layers of recursion can build on top of this marginal distribution to derive implicatures.
 However, the interpretation is messier for the multi-agent setting, since it (1) induces an asymmetry where one agent considers the other's uncertainty but not vice versa, and (2) requires the speaker to use their own current posterior beliefs to reason about the listener's marginalization.
-A final variant is to place the expectation outside the listener distribution but inside the speaker's informativity term.
+
+A third variant we considered is to place the expectation outside the listener distribution but inside the speaker's informativity term.
 $$
 \begin{array}{rcl}
 L_{avg} & = & \int P(\phi_k | D_k) L(o|u, \phi_k) d\phi_k \\
@@ -219,9 +233,47 @@ S_{alt2}(u|o) & \propto & \exp\left\{w_S \cdot \log L_{avg}(o|u) - w_C \cdot c(u
 $$
 The interpretation of this variant is that the speaker first derives a distribution representing how the listener would respond \emph{on expectation} and then computes their surprisal relative to this composite listener.
 While this variant is able to derive the desired phenomena, it can be shown that it induces an unintuitive initial bias under a uniform lexical prior, since the logarithm cannot distribute over the integral in the normalization constant. 
-This bias was most apparent in the case of context-sensitivity (Simulation 2.1), where utterances could apply at different levels of abstraction.
-Mathematically, the difference between these possibilities is whether the speaker's uncertainty about $\phi_k$ goes inside the renormalization of $L(o|u)$ (as in $S_{alt1}$), outside the renormalization but inside the logarithm (as in $S_{alt2}$), or over the entire utility (as in our main formulation).
- 
+This bias was most apparent in the case of context-sensitivity (Simulation 3).
+Mathematically, the difference between these possibilities is whether the speaker's uncertainty about $\phi_k$ goes inside the renormalization of $L(o|u)$ (as in $S_{alt1}$), outside the renormalization but inside the logarithm (as in $S_{alt2}$), or over the entire utility (as in our chosen formulation).
+
+\subsection{Alternative lexical representations}
+
+In this section, we re-consider two specific choices we made about how to represent lexical meanings.
+
+First, for simplicity and consistency with earlier models of Bayesian word learning, we adopted a traditional truth-conditional representation of lexical meaning throughout the paper. 
+Each word in the lexicon is mapped to a single `concept' to , e.g. $w_1 = `blue square'$, where this utterance is true of objects the fall in the given concept, and false otherwise. 
+The inference problem over lexicons therefore requires searching over this discrete space of word-concept mappings. 
+However, it is important to emphasize that our model is entirely consistent with alternative lexical representations.
+
+For example, for some settings, a \emph{continuous, real-valued} representation may be preferred, or a higher-dimensional vector representation.
+Rather than assigning each word a discrete concept in the lexicon, we may simply assign each word-object pair $(w_i,o_j)$ a scalar meaning representing the extent to which word $w_i$ applies to object $o_j$, such that $\phi$ is a real-valued matrix:
+$$
+\phi = \begin{bmatrix}
+\phi^{(11)} & \phi^{(12)} & \cdots & \phi^{(1i)} \\
+\phi^{(21)} & \phi^{(22)} & \cdots & \phi^{(2j)} \\
+\vdots & \vdots &\ddots & \vdots \\
+\phi^{(j1)} & \phi^{(j2)} & \cdots & \phi^{(ij)} 
+\end{bmatrix}
+$$
+and $\mathcal{L}_\phi(w_i, o_j) = \phi^{(ij)}$. 
+In this case, rather than discrete categorical priors over meanings, we may place Gaussian priors over the entries of this matrix:
+\begin{align}
+\Theta^{(ij)} & \sim \mathcal{N}(0,1)\nonumber \\
+\phi^{(ij)} & \sim \mathcal{N}(\Theta^{(ij)} | 1)\nonumber
+\end{align}
+We have previously achieved similar results using this alternative lexical representations in earlier versions of this manuscript \cite{hawkins_convention-formation_2017,hawkins2020generalizing}.
+
+Second, we introduced a simple disjunctive operation allowing the speaker agent to derive longer utterances from primitive utterances.  
+While disjunction was the simplest such function for the purposes of our simulations, we also considered conjunctive operator, defined as a $t$-norm.
+\begin{align}
+\mathcal{L}(u_1+u_2, o) & = \min\{\mathcal{L}(u_1, o), \mathcal{L}(u_2, o)\} \nonumber\\
+\end{align}
+While we were also able to derive the basic reduction phenomenon using the conjunction operation \cite{hawkins_convention-formation_2017,hawkins2020generalizing}, this result depended on whether or not we included a `null' object (see \emph{Handling degenerate lexicons} above). 
+Specifically, the conjunction operation only allows for reduction in the \emph{absence} of a null object, where the listener is assumed to choose randomly between the objects when an utterance evaluates to false for all of them.
+Speakers will initially prefer the longer utterance $u_1+u_2$ because it has a higher probably of cancelling out and leading to random guessing for lexicons where either $u_1$ or $u_2$ or both are false of the target.
+In other words, when both $u_1$ and $u_2$ are true of the target, the listener will choose it with perfect accuracy, and in the other three cases they will choose it with 50\% accuracy.
+Once a null object is introduced, however, these same lexicons will lead to only \epsilon accuracy (since the listener will choose the null object instead of the target when the utterance is false), making the conjunction riskier than simply choosing one of the component utterances.
+
 
  \begin{figure*}
 \centering
