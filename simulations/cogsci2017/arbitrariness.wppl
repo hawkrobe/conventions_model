@@ -27,9 +27,9 @@ var header = 'gameNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guess
 csv.writeLine(header, outputFile);
 
 var lexicalPrior = function() {
-  return _.zipObject(utterances, map(function(utt) {
+  return {'1' : _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
-  }, utterances));
+  }, utterances))};
 };
 
 var writeLine = function(iterationNum, currTrial, topListenerChoice, topSpeakerChoice) {
@@ -49,20 +49,20 @@ var iterate = function(iterationNum, dataSoFar) {
     intendedName: uniformDraw(objects),
     trialNum: trialNum,
     partnerID: 1,
+    context: objects,
     speakerID: (trialNum % 2) == 0 ? 1 : 2,
     listenerID: (trialNum % 2) == 0 ? 2 : 1
   };
 
-  var config = extend(params, {context: currTrial.context});
-  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
-  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
 
   // get marginal prediction of next data point over lexicon posterior
-  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, params);
   var topSpeakerChoice =  sample(speakerOutput);
 
   
-  var listenerOutput = L(topSpeakerChoice, listenerPosterior, config);
+  var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
   var topListenerChoice =  sample(listenerOutput);
   
   writeLine(params, currTrial, topListenerChoice, topSpeakerChoice);
