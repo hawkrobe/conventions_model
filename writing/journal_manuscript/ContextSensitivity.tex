@@ -19,7 +19,7 @@ This phenomenon is most immediately motivated by recent behavioral results findi
 However, our broader theoretical aim is to suggest that \emph{diachronic} patterns in the long-term evolution of a community's lexical conventions, as highlighted by the Optimal Semantic Expressivity (OSE) hypothesis \cite{frankblogpost}, may be explained as a result of the \emph{synchronic} processes at play in individual dyads' \emph{ad hoc} coordination on meaning.
 For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have labels exclusively referring to each individual tree in our yards.
 %If we need to refer to a specific tree, we instead create a referring expression \emph{on the fly} (e.g. ``the one with the bright red leaves close to the street'').
-Meanwhile, we \emph{do} often have conventionalized labels (i.e. proper nouns) for individual people and places that we regularly encounter in our daily lives.
+Meanwhile, we \emph{do} often have conventionalized labels (i.e. proper nouns) for individual people and places that we regularly encounter in our daily lives. \ks{If you want to be cute: there are some very famous trees that have their own names - the Fortingall Yew is my favourite, there's also that huge redwood in the US, General Sherman or whatever.}
 
 %What determines the extension of different conventions?
 As a first step toward explaining these diachronic patterns, we aim to establish in this section that our model allows a dyad's \emph{ad hoc} conventions to be shaped by context over short timescales.
@@ -29,6 +29,7 @@ First, we show that context-sensitivity naturally emerges from our model, as a d
 We then empirically evaluate this account by manipulating the context in an artificial-language repeated reference game, allowing us to observe the emergence of \emph{ad hoc} conventions in the absence of global priors.
 %This experiment manipulates the context of distractors in a repeated reference game where participants must interactively coordinate on an artificial language from scratch. 
 In both the empirical data and our model simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success and that pragmatic reasoning is needed for these effects to arise. 
+\ks{Again, I think you need to cite the Winters et al 2018 paper somewhere here - I don't think it undermines the novelty of what you are doing and it doesn't include a model, plus it's not well-suited to modelling because the signal space was entirely open-ended.}
 
 \subsection{Model predictions}
 
@@ -43,7 +44,7 @@ We populate the utterance space with 8 single-word labels.
 
 To satisfy the second desideratum, we only displayed four of the eight objects in the context on a given trial.
 Distractors could differ from the target at various level of the hierarchy, creating different types of contexts defined by the finest distinction that had to be drawn. 
-In the \emph{fine} condition, we ensure that there is always a subordinate distractor (e.g. Fig.~\ref{fig:context_design}A), while in the \emph{coarse} condition, there are only basic-level distractors (e.g. a blue square when the target is a red square).
+In the \emph{fine} condition, we ensure that there is always a subordinate distractor (e.g. Fig.~\ref{fig:context_design}A), while in the \emph{coarse} condition, there are only basic-level distractors (e.g. a blue square when the target is a red square) \ks{I confess I still get confused about fine vs coarse - might help to give another example in the figure and also explain the intuitions about what lexical item meanings you expect to get in the two conditions?}.
 We constructed the trial sequence identically for the two conditions: there are 12 blocks, where all 8 objects appeared as the target once per block (in a randomized order ensuring that no target appeared more than once in a row).
 We randomly sampled the other three distractors on each trial according to the constraints of the condition.
 As before, the agents swap roles on each trial, and we run 75 distinct trajectories with parameter settings of $w_L=5, w_S=10$ and memory discounting parameter of $\beta = 0.8$.% (see Model comparison below for a more thorough evaluation of these parameters).
@@ -72,13 +73,13 @@ In an identical mixed-effects model, we find an overall main effect of condition
 However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition, while it stayed roughly constant in in the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}D.
 
 Finally, we examine more closely the emergence of terms at different levels of abstraction.
-We have access not only to the outward behavior of our simulated agents, but also their internal \emph{beliefs} about their partner's lexicon.
-So we can not only query these beliefs at the very \emph{end} of the game, as we did in our empirical post-test, we can also directly examine the evolution of these beliefs from the very beginning of the interaction.
+We have access not only to the signalling behavior of our simulated agents, but also their internal \emph{beliefs} about their partner's lexicon, which allows us to directly examine the evolution of these beliefs from the beginning of the interaction.
+%So we can not only query these beliefs at the very \emph{end} of the game, as we did in our empirical post-test \ks{order messed up here, you haven't introduced the experiment yet}, we can also directly examine the evolution of these beliefs from the beginning of the interaction.
 At each time point in each game, we take the single meaning with highest probability for each word.
 In Fig. \ref{fig:evolution}, we show the proportion of words with meanings at each level of abstraction, collapsing across all games in each condition.
 
-Qualitatively, we observe that agents begin with assumptions of `null' meanings due to their simplicity prior but quickly begin assigning meanings based on their partner's usage.
-In both conditions, basic-level meanings and simpler subordinate-meanings are equally consistent with the initial data, and agents prefer simpler meanings.
+Qualitatively, we observe that agents begin with assumptions of `null' meanings \todo{I didn't follow the stuff about null meanings at all} due to their simplicity prior but quickly begin assigning meanings based on their partner's usage.
+In both conditions, basic-level meanings and simpler subordinate-meanings \ks{I think this relates to my failure to grasp why lots of specific meanings is simple, but I was surprised to see this described as the simpler system} are equally consistent with the initial data, and agents prefer simpler meanings.
 After the first repetition block, however, agents in the coarse condition begin pruning out some of the subordinate-level terms and become increasingly confident of basic-level meanings.
 Agents in the fine condition become even more confident of subordinate level meanings.
 Eventually, by the \emph{final} trial, the proportion of basic-level vs. subordinate-level terms is significantly different across the coarse and fine conditions.
@@ -111,7 +112,7 @@ These arrays were held constant across trials.
 To match our model as closely as possible, pairs were assigned one of the same sequences of trials that we constructed for our simulations. 
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
 This bidirectional measure allowed us to check the internal validity of the lexica reported.
-For comparison, we also added a \emph{mixed} condition, where half of the targets appeared in \emph{fine} contexts with subordinate distractors and the other half appeared in \emph{coarse} contexts.
+For comparison, we also added a \emph{mixed} condition \ks{don't you need to justify why you aren't modelling the mixed condition?}, where half of the targets appeared in \emph{fine} contexts with subordinate distractors and the other half appeared in \emph{coarse} contexts.
 Pairs were randomly assigned to one of three different conditions, yielding $n=36$ dyads in the \emph{coarse} condition, $n=38$ in the \emph{fine} condition, and $n=53$ in the \emph{mixed} condition after excluding participants who disconnected before completion.
 
 %\begin{figure}[t]
@@ -147,7 +148,7 @@ These effects track the qualitative results of our simulations: our artificial a
 \begin{center}
 \includegraphics[scale=0.8]{sec2-results-compressed.pdf}
 \vspace{1ex}
-\caption{\emph{Comparison of simulation results to empirical data}. (A) Participants in our behavioral experiment learned to coordinate on a successful communication system, but converged faster in the coarse condition than the fine condition. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits. (B) The number of unique words used by speakers in each repetition block increased in the fine condition but stayed roughly constant in the coarse condition. (C-D) The same metrics computed on the output of our simulation, qualitatively matching the patterns observed in the empirical data.}
+\caption{\emph{Comparison of simulation results to empirical data}. \ks{are the "model" and "empirical" labels reversed here?} (A) Participants in our behavioral experiment learned to coordinate on a successful communication system, but converged faster in the coarse condition than the fine condition. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits. (B) The number of unique words used by speakers in each repetition block increased in the fine condition but stayed roughly constant in the coarse condition. (C-D) The same metrics computed on the output of our simulation, qualitatively matching the patterns observed in the empirical data.}
 \label{fig:sec2Results}
 \end{center}
 \end{figure*}
@@ -178,20 +179,20 @@ One coarse signature of this prediction lies in the \emph{efficiency} of the res
 
 To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words for which they marked at least one object in the post-test in an internally consistent way). 
 We then conducted a mixed-effects models predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
-We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.\ \ref{fig:sec2Results}A). 
+We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient \ks{more efficient in what sense? not just simpler?} lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.\ \ref{fig:sec2Results}A). 
 %At the same time, smaller vocabularies did not lead to poorer coverage over objects: the median number of objects where participants agreed on the same word was 7 out of 8 in the \emph{coarse} condition, compared to 6 in the \emph{mixed} condition and 5.5 in the \emph{fine} condition. 
 %Differences across conditions do not reach significance ($p = 0.4, p = 0.09$, respectively), but may reflect the relative sub-populations of participants who did not fully converge. 
 
 How did these lexica emerge over the course of interaction? 
 We use the same measure of unique words produced in each repetition block that we used in our simulations. 
 We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
-As in the post-test reports, we found an overall main effect of condition, with participants in the fine condition using significantly fewer words across all repetition blocks: $m = 4.9$ in coarse, compared to $m=5.8, t(124)=6.1, p <0.001,$ in mixed $m=6.8, t(124) =11.4, p < 0.001$).
-Critically, however, we also found a significant interaction between the coarse and fine conditions. 
+As in the post-test reports, we found an overall main effect of condition, with participants in the fine\ks{coarse?} condition using significantly fewer words across all repetition blocks: $m = 4.9$ in coarse, compared to $m=5.8, t(124)=6.1 \ks{which condition is this?}, p <0.001,$ in mixed $m=6.8, t(124) =11.4, p < 0.001$).
+Critically, however, we also found a significant interaction between the coarse and fine conditions \ks{shouldn't this be "between block and condition" or something?}. 
 The effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.12, t = 4.5, p < 0.001$, see Fig. \ref{fig:sec2Results}B.
 This interaction, where participants initially attempt to reuse the same terms across targets in the fine condition, is consistent with a gradual differentiation based on communicative need.
 
 Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? 
-We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and `abstract' terms (e.g.~words that refer to two objects) in the post-test. 
+We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and `abstract' \ks{I would avoid "abstract" here to be honest, in favour of "more general" or "less specific" or something} terms (e.g.~words that refer to two objects) in the post-test. 
 We found that the likelihood of lexicalizing abstractions differed systematically across conditions.
 Participants in the \emph{coarse} condition reported significantly more abstract terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
 The modal system in the fine condition was exactly eight specific terms with no abstract terms, and the modal system in the coarse condition was exactly four abstract terms (red, blue, striped, spotted) with no specific terms.
@@ -221,7 +222,7 @@ In other common settings, context is central but held constant throughout intera
 
 One of the most sophisticated studies of context in prior work is the Discrimination Game of \citeA{steels2005coordinating}, which examined the joint formation of color categories and color naming conventions.
 As in our experiments, contexts were generated randomly on each trial from a large space and stimuli are embedded in a similarity space (with similarity based on Euclidean distance in continuous space rather than taxonomic relations).
-Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart  \cite<see also>[which found that imposing a realistic Just Noticeable Difference function as the minimum distance on communicative contexts leads to human-like color naming systems]{baronchelli2010modeling}.
+Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart  \cite<see also>[which found that imposing a realistic Just Noticeable Difference function as the minimum distance on communicative contexts leads to human-like color naming systems]{baronchelli2010modeling}. \ks{not clear what point you were making in this paragraph}
 
 In models using simple update rules, the referential context is sometimes accounted for with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional}.
 If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite<see also>{steels2005coordinating}.

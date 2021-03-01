@@ -1,4 +1,4 @@
-We begin by considering the phenomenon of increasing efficiency in repeated reference games: speakers use detailed descriptions at the outset but converge to increasingly compressed shorthand while remaining understandable to their partner.
+We begin by considering the phenomenon of increasing efficiency in repeated reference games: speakers use detailed descriptions at the outset but converge to an increasingly compressed shorthand while remaining understandable to their partner.
 While this phenomenon has been extensively documented, to the point of serving as a proxy for measuring common ground, it has continued to pose a challenge for models of communication.
 For example, one possibility is that speakers coordinate on meaning through priming mechanisms at lower levels of representation, as proposed by influential  \emph{interactive alignment} accounts \cite{pickering2004toward, pickering2006alignment, garrod2009joint}.
 
@@ -7,7 +7,7 @@ For example, one possibility is that speakers coordinate on meaning through prim
 \centering
     \includegraphics[scale=1.1]{sec1-convergence.pdf}
         \includegraphics[scale=1.1]{sec1-efficiency}
-  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} Results from 1000 simulated trajectories in (A) Simulation 1.1 and (B) Simulation 1.2. Error bars are bootstrapped 95\% CIs within each block of two trials.}
+  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} Results from 1000 simulated trajectories in (A) Simulation 1.1 and (B) Simulation 1.2 \ks{Think you need to explain the differenc ebetween these two simulations (briefly!) in the caption}. Error bars are bootstrapped 95\% CIs within each block of two trials.}
   \label{fig:sec1model}
 \end{figure*}
 
@@ -21,7 +21,7 @@ For example, one possibility is that speakers coordinate on meaning through prim
 
 
 While low-level priming may be at play in repeated reference tasks, especially when listeners engage in extensive dialogue or alternate roles, it is not clear why alignment would lead to increasing efficiency or prefer to omit certain words over others from a long referring expression.
-Furthermore, priming alone cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only indirect feedback about the listener's response accuracy is provided \cite{KraussWeinheimer66_Tangrams}; conversely, speakers continue using longer descriptions given non-verbal feedback about errors \cite{hawkins2020characterizing}.
+Furthermore, priming alone cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only indirect feedback about the listener's response accuracy is provided \cite{KraussWeinheimer66_Tangrams}; conversely, speakers continue using longer descriptions given non-verbal feedback about errors \cite{hawkins2020characterizing}.\ks{I couldn't follow the bit after conversely, it seems like you are contradicting yourself, since it sounds both like speakers get more and less efficient given only indirect feedback?}
 In these cases, there are no linguistic features available for priming or alignment mechanisms.
 Explaining when and why speakers believe that shorter descriptions will suffice requires a mechanism for coordination on meaning even given sparser, non-verbal feedback.
 
@@ -69,7 +69,7 @@ Both agents then proceed to the next trial, where they use this updated posterio
 \end{figure*}
 
 To examine how the dynamics of this process unfold over multiple rounds, we simulated 1000 trajectories, each of which was 30 trials in length, organized into 15 blocks.
-Agents swapped speaker and listener roles on each trial, and we randomized the target sequence within each block.
+Agents swapped speaker and listener roles on each trial, and we randomized the target sequence within each block \ks{I found this wording a bit confusing; there are two meanings, so basically this is each block they see them both in random order?}.
 This simulation was conducted at soft-max optimality parameter values $w_L = w_S = 16$ and memory discounting parameter $\beta = 0.8$, but see Appendix Fig.~\ref{fig:arbitrariness_grid} for an exploration of behavior at other values.
 Agents were initialized with the same priors in every trajectory, such that trajectories only diverged when different actions happen to be sampled.
 For example, if the speaker samples $u_2$ instead of $u_1$ on the first trial, or if the listener makes an error by choosing $o_2$, then they will subsequently condition on these observations instead, leading to different downstream beliefs and behavior (see Fig. \ref{fig:path-dependence} for the average trajectories resulting from all possible combinations of speaker and listener choices on the first trial).
@@ -80,18 +80,18 @@ Second, the initial symmetry between the meanings is broken by initial choices, 
 This can be seen by examining the path-dependence of beliefs, following all possible outcomes of the initial trial (see Fig.~\ref{fig:path-dependence}). 
 Third, because each agent assumes their partner is using language cooperatively, they also make inferences about \emph{unheard} utterances. 
 Observing $D = \{(u_2, o_1)\}$ also provides evidence that $u_1$ is \emph{not} a good fit for $o_1$ (e.g.~see the third row of Fig.~\ref{fig:path-dependence}).
-This effect arises from Gricean pragmatic reasoning --- if $u_2$ were a better fit for $o_1$, the listener assumes the speaker would have used it instead --- and has been explicitly linked to \emph{mutual exclusivity} in word learning \cite{FrankGoodmanTenenbaum09_Wurwur,smith_learning_2013}.
+This effect arises from Gricean pragmatic reasoning --- if $u_2$ were a better fit for $o_1$, the listener assumes the speaker would have used it instead --- and has been explicitly linked to \emph{mutual exclusivity} in word learning \cite{FrankGoodmanTenenbaum09_Wurwur,smith_learning_2013} \ks{Possibly being a bit too generous to Mike et al here, I am pretty sure e.g. Bloom has the same line of argument in his 2000 book How children learn the meaning of words}.
 %Fourth, conventions may form based on \emph{failed references} as well as successful ones: if the speaker intends $o_1$ and says $u_1$, but then the listener incorrectly picks $o_2$, the speaker will take this as evidence that $u_1$ actually means $o_2$ in their partner's lexicon and become increasingly likely to use it that way on subsequent rounds.
 
 \subsection{Simulation 1.2: Efficiency}
 
 Next, we show how our inferential model explains speakers' gains in efficiency over multiple interactions. 
 For efficiency to change at all, speakers must be able to produce utterances that vary in length. 
-For this simulation, we therefore extend the grammar to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with disjunctive semantics.
+For this simulation, we therefore extend the grammar\ks{model?} to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with disjunctive semantics.
 Specifically, we consider a scenario with the same two objects as in Simulation 1.1, but giving the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two. 
 Critically, the meaning of longer utterances are derived compositionally from these primitives using the maximum $t$-conorm\footnote{We focus on disjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
 $$\mathcal{L}_\phi(u_iu_j, o) = \max\{\mathcal{L}_\phi(u_i, o) , \mathcal{L}_\phi(u_j, o)\}$$
-
+\ks{This bit of maths confused the bejesus out of me until I eventually realised (I think?) that \mathcal{L}_\phi(u_i, o) is binary, i.e. it's either 1 or 0 for any particular lexicon. I was looking at these plus the probabilities in fig 5 and wondering what on earth stringing a couple of signals together was going to add. A brief e.g. might help.}
 
 While we established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, human participants in repeated reference games typically bring some prior expectations about language into the interaction.
 For example, a participant who hears `ice skater' on the first round of a task with tangram stimuli may be more likely to select some objects more than others while still having substantial uncertainty about the intended target.
@@ -143,7 +143,7 @@ We assume for illustrative purposes that $o_1$ continues to be the target on eac
 As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the disjunction and the shorter components gradually decreases (center left).
 As a consequence, production cost increasingly dominates the utility (center-right). 
 After several trials of observing a successful listener response given the disjunction, the utility of the shorter utterances reaches parity with the disjunction.
-Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
+Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention. \ks{Doesn't this suffer from the same criticism you level at Beule and Steels, namely any word could be dropped?}
 Thus, increasing efficiency is derived as a rational consequence of inference about the listener's lexical.
 For these simulations, we used $w_S = w_L = 7, w_c = 11, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
 %\paragraph{Model comparison}
@@ -177,5 +177,5 @@ Finally, our explanation of reduction in this section is consistent with recent 
 These analyses found that entire modifying clauses are more likely to be dropped at once than expected by random corruption, and function words like determiners are mostly dropped as parts of larger noun phases or prepositional phrases rather than omitted on their own.
 In other words, speakers apparently begin by combining multiple descriptive labels and collapse to one of these labels, rather than randomly dropping words because the listener can be expected to recover the intended longer utterance, as predicted by a ``noisy channel'' model.
 This claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
-While our simulation only considered two-word descriptions with homogenous uncertainty over the components, it is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction.
+While our simulation only considered two-word descriptions with homogenous uncertainty over the components, it is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction. \ks{So this is dealing with the Beule and Steels thing now, but it reads as relatively weak here}
 
