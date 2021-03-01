@@ -9,7 +9,7 @@ In the next section, we will review this basic framework and then raise two fund
 
 \subsection{RSA models of communication with static meaning}
 
-In the RSA formulation of referential communication, a pragmatic speaker denoted by $S_1$ must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$.
+In the RSA formulation of referential communication, a pragmatic speaker denoted by $S_1$ must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$. \ks{You frame it as a reference task, labelling objects - isn't it potentially more general than that, or do you think there's something inherent in the maths that makes it a bad model of any kind of meaning transmission?}
 They attempt to satisfy the Gricean \emph{maxim of quantity} by using a utility function $U$ that balances informativity to an imagined listener against the cost of producing an utterance. 
 A pragmatic listener $L_1$ then inverts their internal model of the speaker to infer which intended referent $o\in\mathcal{C}$ would best explain the speaker's choice of utterance $u$.
 This chain of recursive reasoning grounds out in an imagined \emph{literal listener} $L_0$, who is assumed to identify the intended target directly using a static lexical meaning function $\mathcal{L}(u,o)$, which evaluates the literal meaning\footnote{$\mathcal{L}$ is traditionally a truth-conditional function evaluating whether a given utterance is true or false of any state of the world. However, this formulation is also consistent with continuous semantics \cite{degen2020redundancy} as may be learned by a (grounded) neural network \cite{potts2019case}.} of $u$ on $o$.
@@ -20,11 +20,12 @@ U(u; o) & = (1-w_C) \cdot \log L_0(o | u) - w_C \cdot c(u) \nonumber \\
 S_1(u | o) &\propto   \exp\{w_S \cdot U(u; o)\}\nonumber  \\
 L_1(o | u) &\propto   \exp\{w_L \cdot \log S_1(u | o)\}\nonumber
 \end{align}
+\ks{I think people might need a bit more help understanding what these mean! I know a bit about how these models work and I found this quite compressed - I think the trick will be to provide enough verbal explanation so we don't lose the bulk of the readership at this point.}
 where $c(u)$ is a function giving the cost of producing $u$; $w_C \in [0,1]$ controls the relative weight of the speaker's informativity and parsimony; and $w_S,w_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{Note that normalization constant may be exactly zero for some lexicons, in which case these distribution are not well-defined. To address this issue, we add a noise model at each level of recursion; with probability $\epsilon$, agents choose uniformly from the support, ensuring non-zero probability of every outcome. Unless otherwise specified, we set $\epsilon = 0.01$. See Appendix A for further details motivating this choice.}.
 
 \subsection{Fundamental problems for static meaning}
 
-This basic framework has accounted for a vast range of empirical phenomena in language use \cite{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
+This basic framework has accounted for a vast \ks{is it really vast?} range of empirical phenomena in language use \cite{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
 Yet it retains a key assumption from classical models: that the speaker and listener must share the same literal ``protocol'' $\mathcal{L}$ for encoding and decoding messages.
 In this section, we highlight two under-appreciated challenges of communication that complicate this assumption. 
 
@@ -39,13 +40,13 @@ Agents are continually presented with new thoughts, feelings, and entities, whic
 For example, when new technology is developed, the community of developers and early adopters must find ways of referring to the new concepts they are working on (e.g. \emph{e-mailing}, \emph{the Internet}). 
 Or, when researchers design a new experiment with multiple conditions, they must find ways of talking about their own \emph{ad hoc} abstractions, often converging on idiosyncratic names that can be used seamlessly in meetings.
 That is, any literal protocol $\mathcal{L}$ that we may write down at one time would be quickly outdated at a later time \cite<see>[for a demonstration of the related problems posed by non-stationary for large neural language models]{lazaridou2021pitfalls}.
-We must have some ability to extend our systems of meaning on the fly as needed.
+We must have some ability to extend our systems of meaning \ks{you quite often talk about `meaning' when I think you might mean something more general, i.e. meaning and the way it is encoded in linguistic expressions, which I would call `language' rather than `meaning'} on the fly as needed.
 
 \subsection{A hierarchical model of dynamic meaning}
 
 %The model we present in this section aims to provide an explanation for how agents may  these fundamental problems.
 Rather than assuming a monolithic, universally shared system of meaning, we argue that agents solve the core problems posed by variability and non-stationary by attempting to continually, adaptively \emph{infer} the system of meaning used by their partner in context.
-When all agents are continually learning in this way, we will show that they are not only able to locally coordinate with specific partners but also able to abstract away structure representing shared linguistic conventions.
+When all agents are continually learning in this way, we will show that they are not only able to locally coordinate with specific partners but also able to abstract away structure representing shared linguistic conventions \ks{"abstract away structure representing shared linguistic conventions" is super hard to parse!}.
 We introduce our model in three steps, corresponding to three core capacities: uncertainty about meaning, online partner-specific learning, and inductive generalization.
 
 \paragraph{Hierarchical uncertainty for flexibility in lexical meaning} 
@@ -59,7 +60,7 @@ Second, this representation should also, in principle, be sensitive to the socia
 
 The first desideratum, representing population variability, motivates a \emph{probabilistic} formulation.
 Instead of holding a single static function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. one $\phi$ for the whole population), we assume each agent maintains \emph{uncertainty} over the exact meaning of words as used by different partners.
-In a Bayesian framework, this uncertainty is specified by a prior probability distribution over possible values of $\phi$.
+In a Bayesian framework, this uncertainty is specified by a prior probability distribution over possible values of $\phi$ \ks{I found this quite hard to interpret because phi is quite abstract at the moment}.
 The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, and in the context of iterated dyadic interactions \cite{smith_learning_2013}. 
 
 The second desideratum, sensitivity to partner-specific meanings, motivates a \emph{hierarchical} model, where uncertainty is represented by a multi-level prior. 
@@ -104,6 +105,8 @@ P(\phi_k | D_k) =  \int_{\Theta}P(\phi_k, \Theta | D_k)  d\Theta
 This posterior can be viewed as the ``idiolect'' that has been fine-tuned to account for partner-specific common ground from previous interactions.
 We will show that when agents learn about their partner in this way, and adjust their own production or comprehension accordingly (i.e.~Eq.~\ref{eq:marginalized}), they are able to coordinate on stable \emph{ad hoc} conventions.
 
+\ks{I had a crappy non-hierarchical model in this 2017 paper, basically comparing the two extremes you talk about later (complete pooling and no pooloing): http://dx.doi.org/10.1098/rstb.2016.0051} 
+
 \paragraph{Inductive generalization}
 
 The posterior in Eq.~\ref{eq:joint_inference} also provides an inductive pathway for partner-specific data to inform beliefs about community-wide conventions.
@@ -139,7 +142,8 @@ In particular, agents should condition on feedback from their \emph{partner's} c
 The listener should use the probability that their partner would produce $u$ to refer to the target $o^*$ under different $\phi_k$, and the speaker should likewise use the probability that their partner would produce response $o'$ after hearing utterance $u$.
 
 This symmetrical relationship, where each agent is learning from the other's behavior, creates a clear coordination problem.
-In the case of an error, where the agent in the listener role hears the utterance $u$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the intended target and subsequently condition on the fact that the speaker chose $u$ to convey that target, $P_S(u | o^*)$. 
+In the case of an error, where the agent in the listener role hears the utterance $u$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the intended target and subsequently condition on the fact that the speaker chose $u$ to convey that target, $P_S(u | o^*)$. \ks{Worth pointing out that you are assuming that the speaker's target and the listener's response are at some point manifest to both?}
+\ks{I also realised just now that you are using modality-specific terminology of "speaker" and "listener" - there are no good modality-neutral terms that I have seen, but just to flag up that people working on sign find this annoying.}
 Meanwhile, the agent in the speaker role will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance $P_L(o' | u)$.
 In other words, each agent will subsequently condition on slightly different data\footnote{In some settings, agents in one role may be expected to take on more of the burden of adaptation, leading to an asymmetric division of labor \cite<e.g.>{MorenoBaggio14_AsymmetrySignaling}. This may be especially relevant in the presence of asymmetries in power, status, or capability. We leave consideration of these asymmetries for future work.}.
 
@@ -178,19 +182,20 @@ See Appendix for further details about the definition and implementation of the 
 
 \paragraph{Inference details}
 
-While our simulations in the remainder of the papers each address different scenarios, we have aimed to hold as many details as possible constant throughout the paper.
+While our simulations in the remainder of the paper each address different scenarios, we have aimed to hold as many details as possible constant throughout the paper.
 First, we must first say what functional representation we are using for the agents' lexicon $\mathcal{L}_{\phi}$.
 For consistency with previous Bayesian models of word learning \cite<e.g.>{XuTenenbaum07_WordLearningBayesian} we have chosen to represent the space of meanings for an utterance as the set of nodes in a concept taxonomy\footnote{Note there are many alternative representational choices compatible with our core model, including parameterized vector embeddings and multi-layer neural networks, which may be more appropriate for scaling our model to larger spaces of words and referents. We return to these possibilities in the General Discussion.}.
-When targets of reference are conceptually distinct, as assumed in most prior models of signaling games, the taxonomy is flat and the target space of utterance meanings reduces to the space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$, where different values of $\phi$ correspond to different mappings between utterances and objects. 
+When targets of reference are conceptually distinct, as assumed in most prior models of signaling games, the taxonomy is flat and the target space of utterance meanings reduces to the space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$, where different values of $\phi$ correspond to different mappings between utterances and objects \ks{again, might need to unpack this a bit}. 
 However, in our simulations for \textbf{P3}, we will also consider sets of referents with more complex  conceptual structure, and more abstract meanings applying to multiple referents.
 To cover all of these cases, the lexical meaning function is defined to be
 $$
 \mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if $o \in \phi(u)$} \\ 0 & \textrm{otherwise} \end{array}\right.
 $$
-We then assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}.
+\ks{and more explanation needed here}
+We then assume a simplicity prior over possible lexicons, $P(\phi) \propto \exp\{|\phi|\}$, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary \cite{FrankGoodmanTenenbaum09_Wurwur}. \ks{If I am reading it right, this isn't actually what I was expecting the simplicity prior to be - are you favouring small word meanings, rather than small numbers of words? Seems potentially contentious to me, I would go absolutely the opposite direction!}
 
 We have implemented all of our simulations in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL}, and have made them available online along with materials for reproducing our experiments and analyses\footnote{\url{github.com/hawkrobe/conventions_model}}.
-In all cases, we run our simulations by iterating the following trial-level loop: (1) sample an utterance from the speaker's utterance distribution, given the target object, (2) sample an utterance from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations, and (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
+In all cases, we run our simulations by iterating the following trial-level loop: (1) sample an utterance from the speaker's utterance distribution, given the target object, (2) sample an utterance\ks{should be object?} from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations, and (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
 
 To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), we use enumeration for exact inference.
 We would also prefer to use enumeration to obtain posteriors over lexical meaning (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, this approach becomes intractable.
