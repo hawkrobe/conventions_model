@@ -2,7 +2,8 @@
 // webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
 
 var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
-var derivedUtterances = ['word1_word2', 'word3_word4']; 
+var derivedUtterances = ['word1_word2', 'word3_word4']//, 'word1_word3', 'word1_word4',
+//                         'word2_word3', 'word2_word4']; 
 var utterances = unconstrainedUtterances.concat(derivedUtterances);
 var objects = ['bluecircle', 'redsquare'];
 var meanings = ['bluecircle', 'redsquare'];
@@ -15,11 +16,12 @@ var params = {
   costWeight: argv.costWeight,
   guessingEpsilon: argv.guessingEpsilon,
   model: argv.model,
+  chainNum: argv.chainNum,
   numTrials: 14,
   context: objects,
   utterances: utterances,
   objects: objects,
-  inferOptions: {method: 'MCMC', samples:5000, burn:10000, lag:5, verbose:true}
+  inferOptions: {method: 'MCMC', samples:2500, burn:5000, lag:5, verbose:true}
 };
 
 console.log(params);
@@ -105,7 +107,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     });
     return (id == currTrial.speakerID || id == currTrial.listenerID ?
             dataSoFar[id].concat(trialPacket) : dataSoFar[id]);
-  }, _.range(1, 6)));
+  }, _.range(1, 5)));
 
   if(!_.isEmpty(rest(remainingTrials))) {
     iterate(outputFile, rest(remainingTrials), newDataSoFar);
@@ -115,64 +117,64 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
 var trials = [
   // first partner
   {trialNum: 1, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 2, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 2, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 3, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 4, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 4, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 5, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 6, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 6, speakerID: 1, listenerID: 2, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 7, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 8, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 8, speakerID: 2, listenerID: 1, partnerID: 1, intendedName: 'redsquare'},
 
   {trialNum: 1, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 2, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 2, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 3, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 4, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 4, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 5, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 6, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 6, speakerID: 3, listenerID: 4, partnerID: 1, intendedName: 'redsquare'},
   {trialNum: 7, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 8, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
+//  {trialNum: 8, speakerID: 4, listenerID: 3, partnerID: 1, intendedName: 'redsquare'},
   // second partner
   {trialNum: 9, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 10, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 10, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 11, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 12, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 12, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 13, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 14, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 14, speakerID: 1, listenerID: 3, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 15, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 16, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 16, speakerID: 3, listenerID: 1, partnerID: 2, intendedName: 'redsquare'},
 
   {trialNum: 9, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 10, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 10, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 11, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 12, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 12, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 13, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 14, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 14, speakerID: 2, listenerID: 4, partnerID: 2, intendedName: 'redsquare'},
   {trialNum: 15, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'bluecircle'},
-  {trialNum: 16, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
+//  {trialNum: 16, speakerID: 4, listenerID: 2, partnerID: 2, intendedName: 'redsquare'},
   // third partner
   {trialNum: 17, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 18, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 18, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 19, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 20, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 20, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 21, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 22, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 22, speakerID: 1, listenerID: 4, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 23, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 24, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 24, speakerID: 4, listenerID: 1, partnerID: 3, intendedName: 'redsquare'},
 
   {trialNum: 17, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 18, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 18, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 19, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 20, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 20, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 21, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 22, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 22, speakerID: 2, listenerID: 3, partnerID: 3, intendedName: 'redsquare'},
   {trialNum: 23, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'bluecircle'},
-  {trialNum: 24, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
+//  {trialNum: 24, speakerID: 3, listenerID: 2, partnerID: 3, intendedName: 'redsquare'},
   // generalization
-  {trialNum: 25, speakerID: 1, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
-  {trialNum: 25, speakerID: 2, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
-  {trialNum: 25, speakerID: 3, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
-  {trialNum: 25, speakerID: 4, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  // {trialNum: 25, speakerID: 1, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  // {trialNum: 25, speakerID: 2, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  // {trialNum: 25, speakerID: 3, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
+  // {trialNum: 25, speakerID: 4, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
 ];
 
-iterate(f, trials, {1: [], 2: [], 3: [], 4: [], 5: []});
+iterate(f, trials, {1: [], 2: [], 3: [], 4: []});
 csv.close(f);
