@@ -6,7 +6,49 @@ output: html_notebook
 ```{r}
 library(tidyverse)
 library(tidyboot)
+
+# convergence metric...
+getConvergence <- function(d) {
+  d %>%
+    group_by(model,  chainNum, speakerID, partnerID) %>%
+    mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+    select(model, ordinalRep, speakerID,  partnerID, speakerChoice, chainNum) %>%
+    group_by(chainNum, model, ordinalRep, partnerID) %>%
+    tidybayes::gather_pairs(speakerID, speakerChoice, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+    mutate(partnerType = case_when(
+      partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
+                              (speaker1 == 4 && speaker2 == 3),
+                              'within', 'between'),
+      partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
+                              (speaker1 == 4 && speaker2 == 2),
+                              'within', 'between'),
+      partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
+                              (speaker1 == 3 && speaker2 == 2),
+                              'within', 'between')),
+      match = utt1 == utt2) %>%
+    filter(utt1 %in% c('word1', 'word2', 'word3', 'word4') &&
+           utt2 %in% c('word1', 'word2', 'word3', 'word4')) %>%
+    group_by(model, partnerID, partnerType) %>%
+    summarize(m = mean(match)) %>%
+    return()
+}
+
+makeParamGrid <- function(d, desired_model) {
+  d %>%
+    filter(listenerAlpha == 1) %>%
+    filter(discountFactor %in% c(0.6, 0.8, 1)) %>%
+    filter(model == desired_model) %>%
+    group_by(model,trialNum,speakerAlpha, partnerID, listenerAlpha,costWeight,discountFactor) %>%
+    summarize(longUttScore = mean(longUttScore), correctProb = mean(exp(correctProb))) %>%
+    ggplot(aes(x = trialNum, y = longUttScore, color=discountFactor, group = interaction(partnerID, discountFactor))) +
+      geom_line() +
+      geom_vline(xintercept = c(8, 16, 24), color = 'grey') +
+      facet_grid(speakerAlpha ~ costWeight) +
+      theme_few() +
+      theme(aspect.ratio = 1/2)
+}
 ```
+
 
 # Analyze model output
 
@@ -15,21 +57,29 @@ Import network simulations
 ```{r}
 path <- '../simulations/cogsci2020/output/networkOutput_compiled.csv'
 modelNetworks <- read_csv(path) %>%
-  mutate(chainNum = floor((row_number() - 1) / 52)) %>%
   group_by(chainNum, partnerID) %>%
   mutate(repNum = floor(((trialNum - 1) %% 8) / 2),
-       correct = speakerChoice == intendedName) 
+         oldSpeakerChoice = listenerChoice,
+         listenerChoice = speakerChoice,
+         speakerChoice = oldSpeakerChoice,
+         correct = listenerChoice == intendedName) 
+
+incompleteGames <- modelNetworks %>% 
+  group_by(chainNum) %>%
+  tally() %>%
+  filter(n != 72) %>%
+  pull(chainNum)
 ```
 
 ```{r}
 # first look at accuracy...
 modelNetworks %>%
-  group_by(model, repNum, partnerID) %>%
-  summarize(s = mean(correct)) %>%
-  ggplot(aes(x = 4*partnerID + repNum, y = s, group = partnerID)) +
+  filter(speakerAlpha == 4, listenerAlpha == 1, discountFactor == 0.8, costWeight == 0.4) %>%
+  group_by(model,  trialNum, partnerID) %>%
+  summarize(s = mean(exp(correctProb))) %>%
+  ggplot(aes(x = trialNum, y = s, group = partnerID)) +
     geom_point() +
-  geom_line() +
-    #geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = F) +
+    geom_line() +
     facet_wrap(~ model) +
     theme_few()
 ```
@@ -37,6 +87,7 @@ modelNetworks %>%
 ```{r}
 # then look at reduction...
 modelNetworks %>%
+  filter(speakerAlpha == 4, listenerAlpha == 1, discountFactor == 0.8, costWeight == 0.4) %>%
   group_by(model, repNum, partnerID) %>%
   summarize(s = mean(longUttScore)) %>%
   arrange(model, partnerID, repNum) %>%
@@ -51,44 +102,110 @@ modelNetworks %>%
 ```
 
 ```{r}
-# convergence metric...
-modelconvergence.toPlot <- modelNetworks %>%
-  group_by(model, chainNum, speakerID, partnerID) %>%
-  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
-  select(ordinalRep, speakerID,  partnerID, speakerChoice, chainNum) %>%
-  group_by(model, chainNum, ordinalRep, partnerID) %>%
-  tidybayes::gather_pairs(speakerID, speakerChoice, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
-  mutate(partnerType = case_when(
-    partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
-                            (speaker1 == 4 && speaker2 == 3),
-                            'within', 'between'),
-    partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
-                            (speaker1 == 4 && speaker2 == 2),
-                            'within', 'between'),
-    partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
-                            (speaker1 == 3 && speaker2 == 2),
-                            'within', 'between')),
-    match = utt1 == utt2) %>%
-  filter(utt1 %in% c('bluecircle', 'redsquare') && 
-         utt2 %in% c('bluecircle', 'redsquare')) %>%
-  group_by(model, partnerID, partnerType) %>%
-  tidyboot_mean(match) 
-
-modelconvergence.toPlot %>%
+modelNetworks %>%
+  filter(speakerAlpha == 8, listenerAlpha == 1, discountFactor == 0.8, costWeight == 0.2) %>%
+  getConvergence() %>%
   ungroup() %>%
   mutate(partnerID = paste0('partner ', partnerID)) %>%
   mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
-  ggplot(aes(x = partnerID, y = empirical_stat, color = comparison, group = comparison)) +
+  ggplot(aes(x = partnerID, y = m, color = comparison, group = comparison)) +
     geom_line() +
-    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
-    ggtitle('model prediction') +
     theme_few() +
     ylab("alignment (% word matches)") +
-  facet_wrap(~ model) +
+    facet_wrap(~ model) +
     xlab("") +
     ylim(0, 1) +
     scale_color_colorblind() +
     theme(aspect.ratio = 1.5)
 
 ggsave('./convergence_model.pdf', width = 8, height = 4, unit = 'in')
+```
+
+
+# Parameter sweep
+
+Import network simulations 
+
+```{r}
+modelNetworks %>%
+  makeParamGrid('complete_pooling')
+```
+
+```{r}
+modelNetworks %>%
+  makeParamGrid('no_pooling')
+```
+
+```{r}
+modelNetworks %>%
+  makeParamGrid('hierarchical')
+```
+
+detect cases where number of words goes up in other models
+
+```{r}
+modelNetworks %>% 
+  filter(!(chainNum %in% incompleteGames)) %>%
+  group_by(model,  chainNum, speakerAlpha, listenerAlpha, discountFactor, costWeight, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+  unite("key", partnerID, ordinalRep) %>%
+  select(model, chainNum, speakerID, key, longUttScore, speakerAlpha, listenerAlpha, discountFactor, costWeight) %>%
+  group_by(chainNum, speakerID) %>%
+  spread(key, longUttScore) %>% 
+  mutate(firstjump = `2_first` - `1_second`, secondjump = `3_first` - `2_second`) %>% 
+  select(model, chainNum, speakerID, firstjump, secondjump, speakerAlpha, listenerAlpha, discountFactor, costWeight) %>%
+  group_by(model, speakerAlpha, listenerAlpha, discountFactor, costWeight) %>%
+  summarize(totaljumpsize = mean(firstjump + secondjump)) %>%
+  ggplot(aes(x = totaljumpsize)) +
+    geom_histogram(binwidth = 0.05) +
+    geom_vline(xintercept = 0, color = 'grey', alpha = 0.2) +
+    facet_wrap(~ model) +
+    xlim(-1.1, 1.1) +
+    theme_few() +
+    theme(aspect.ratio = 1)
+```
+
+
+```{r}
+modelNetworks %>% 
+  filter(!(chainNum %in% incompleteGames)) %>%
+  group_by(model,  chainNum, speakerAlpha, listenerAlpha, discountFactor, costWeight, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+  unite("key", partnerID, ordinalRep) %>%
+  select(model, chainNum, speakerID, key, longUttScore, speakerAlpha, listenerAlpha, discountFactor, costWeight) %>%
+  group_by(chainNum, speakerID) %>%
+  spread(key, longUttScore) %>% 
+  mutate(firstjump = `2_first` - `1_second`, 
+         secondjump = `3_first` - `2_second`) %>% 
+  group_by(model, speakerAlpha, listenerAlpha, discountFactor, costWeight) %>%
+  summarize(totaljumpsize = mean(firstjump + secondjump)) %>%
+  filter(listenerAlpha == 1) %>%
+  filter(discountFactor %in% c(0.6, 0.8, 1)) %>%
+  ggplot(aes(x = factor(speakerAlpha), y = factor(costWeight), 
+             fill = totaljumpsize, color = totaljumpsize > 0.03)) +
+    geom_tile(width=0.8, height=0.8, size=.3) +
+    facet_grid(model ~ discountFactor) +
+    theme_few() +
+    scale_fill_gradient2() +
+    scale_color_manual(values = c('white', 'black')) +
+    theme(aspect.ratio = 1)
+```
+
+convergence 
+
+```{r}
+avgConvergences <- modelNetworks %>% 
+  filter(!(chainNum %in% incompleteGames)) %>% 
+  getConvergence()
+
+avgConvergences %>%
+  ggplot(aes(x = partnerID, y = m, color = partnerType, group = partnerType)) +
+    geom_line() +
+    theme_few() +
+    ylab("alignment (% word matches)") +
+    facet_wrap(~ model) +
+    xlab("") +
+    ylim(0, 1) +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1.5)
 ```
