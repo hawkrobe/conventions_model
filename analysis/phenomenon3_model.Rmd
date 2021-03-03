@@ -3,29 +3,29 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
-
 ```{r}
 library(tidyverse)
 library(ggthemes)
+library(here)
 library(lme4)
 library(lmerTest)
 ```
 
-Make plot from table in Clark paper
+## Make plot from table in Clark paper
 
 ```{r}
-data.frame(prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.2, 7.8, 6.7),
-           t = seq(1,12),
-           partner = factor(c(1,1,1,1,1,1,2,2,2,2,2,2))) %>%
+data.frame(
+    prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.2, 7.8, 6.7),
+    t = seq(1,12),
+    partner = factor(c(1,1,1,1,1,1,2,2,2,2,2,2))
+  ) %>%
   ggplot(aes(x = t, y = prediction, color = partner)) +
     geom_point() +
     geom_line() +
     theme_few() +
     xlab('repetition # for speaker') +
     ylab("# words") +
+    ylim(0,42) +
     scale_x_continuous(breaks = c(1,3,5,7,9,11)) +
     geom_vline(aes(xintercept = 6.5)) +
     theme(aspect.ratio = 1/2)
@@ -33,29 +33,27 @@ data.frame(prediction = c(40.7, 19.1, 13.1, 11.0, 9.2, 8.2, 30.4, 18.1, 13.4, 8.
 ggsave('../writing/journal_manuscript/figures/clark92.pdf', height = 8, width = 8, units = 'cm', useDingbats = F)
 ```
 
-## Phenomenon #2: 
-
-### Simulating models & looking at post-test
+## Examine trajectory of model simulations
 
 ```{r}
-trajectories <- dir(path = "../simulations/cogsci2018/output/", pattern = "trajectory", full.names = T) %>% # 
-  map(~ read_csv(.x) %>% mutate(filename=.x)) %>%
-  reduce(rbind) %>%
+trajectories <- read_csv(here('simulations/cogsci2018/output/extended_trajectories.csv')) %>%
   mutate(quarter = floor((time - 1) / 24)) %>%
-  mutate(repNum = floor((time - 1) / 8)) %>%
-  filter(condition != 'mixedLower') %>%
-  mutate(condition = ifelse(condition == 'subOnly', 'fine', 'coarse'))
+  mutate(repNum = floor((time - 1) / 16)) %>%
+  mutate(condition = case_when(condition == 'subOnly' ~ 'fine', 
+                               condition == 'mixedLower' ~ 'mixed', 
+                               TRUE ~ 'coarse')) %>%
+  filter(speakerAlpha == 10, listenerAlpha == 10) %>%
+  filter(chainNum >= 400000)
 
 trajectories %>%
-  filter(discountFactor == 0.9) %>%
-  group_by(condition, discountFactor, time) %>%
-  tidyboot::tidyboot_mean(correct, nboot=100) %>%
+  group_by(discountFactor, condition, time) %>%
+  summarize(empirical_stat = mean(correct)) %>% 
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha=0.2) +
-    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
+  #geom_line() +
     geom_hline(yintercept = 25, lty = 'dashed') +
-    #geom_smooth(se=T) +
-    facet_grid(~ paste0('discount:', discountFactor)) +
+    geom_smooth(method = 'loess', se=F) +
+  facet_wrap(~discountFactor) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_colorblind() +
@@ -67,8 +65,6 @@ ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', useDingb
 
 ```{r}
 trajectories %>%
-  filter(discountFactor == 0.8) %>%
-  filter(coord == 'diff') %>%
   glmer(correct ~ repNum * condition + (1 + repNum | gameNum),
         family = 'binomial',
         data = .) %>%
@@ -78,11 +74,10 @@ trajectories %>%
 ```{r}
 trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition,discountFactor, repNum) %>%
+  group_by(gameNum, discountFactor, chainNum, condition,  repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum,discountFactor) %>%
+  group_by(condition, repNum, discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  #filter(discountFactor == 0.8) %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
     ylim(3.5, 8.5) +
@@ -99,22 +94,18 @@ ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf')
 
 ```{r}
 trajectories %>%
-  filter(discountFactor == 0.8) %>%
-  filter(coord == 'diff') %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  group_by(gameNum, discountFactor, condition, repNum) %>%
   summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition) %>%
+  group_by(discountFactor,condition,repNum) %>%
   summarize(m = mean(numUniqueWordsUsed))
 ```
 
 
 ```{r}
 trajectories %>%
-  filter(discountFactor == 0.8) %>%
-  filter(coord == 'diff') %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  group_by(gameNum, condition,  repNum) %>%
   summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
   lmer(numUniqueWordsUsed ~ repNum * condition + (1 + repNum | gameNum),
         data = .) %>%
@@ -143,16 +134,15 @@ trajectories %>%
 ```{r}
 trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, condition,coord, discountFactor, repNum) %>%
+  group_by(gameNum, condition, discountFactor, repNum) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum, coord,discountFactor) %>%
+  group_by(condition, repNum,discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
   ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
     geom_line() +
     ylim(3.5, 8.5) +
     geom_hline(yintercept = c(4, 8)) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    facet_grid(coord ~ paste0('discount:', discountFactor)) +
     theme_few() +
     scale_color_colorblind() +
     labs(y = "number unique words used") +

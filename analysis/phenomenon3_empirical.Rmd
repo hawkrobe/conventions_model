@@ -86,7 +86,7 @@ Want to run these webppl models in parallel, so the input data should be in sepa
 
 ```{r}
 gameIDs = d %>% 
-  #filter(condition != 'mixedLower') %>%
+  filter(condition == 'mixedLower') %>%
   pull(id) %>%
   unique()
 
