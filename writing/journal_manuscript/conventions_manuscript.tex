@@ -55,14 +55,12 @@
 \author{Various people}
 \affiliation{Various Universities}
 
-\abstract{Languages are powerful solutions to the coordination problems that arise between agents \ks{Are you using `agents' to refer to both simulated agents and real people? I haven't seen it used in the latter way, I find it slightly weird - but in this sentence I think you could just ditch everything after ``coordination problems" and not lose any clarity.}.
-They provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads. 
-Yet we use language in a highly variable and non-stationary social environment, requiring linguistic representations to be flexible. 
-Old words are given new partner-specific or context-specific meanings on the fly. 
-In this paper, we introduce a hierarchical Bayesian account aiming to reconcile the long-standing tension between these perspectives. 
-More specifically, we argue that the central computational problem of communication is not simply transmission, as classical accounts have assumed, but \emph{learning} and \emph{adaptation} over multiple timescales.
-Under our account, social conventions are stable priors that have been abstracted from interactions with multiple partners, while rapid learning within interactions allows for the formation of partner- and context-specific common ground.
-We present new empirical data alongside simulations showing how our model explains several phenomena that have posed a challenge for previous accounts: (1) the convergence to more efficient referring expressions across repeated interaction with the same partner, (2) the gradual transfer of partner-specific common ground to novel partners, and (3) the influence of context on which conventions eventually form.
+\abstract{Languages are powerful solutions to coordination problems: they provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads. 
+Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc}, partner-specific meaning on the fly. 
+In this paper, we introduce a hierarchical Bayesian theory of convention formation that aims to reconcile the long-standing tension between these two basic observations.
+More specifically, we argue that the central computational problem of communication is not simply transmission, as in classical formulations, but \emph{learning} and \emph{adaptation} over multiple timescales.
+Under our account, rapid learning within dyadic interactions allows for coordination on partner-specific common ground, while social conventions are stable priors that have been abstracted away from interactions with multiple partners.
+We present new empirical data alongside simulations showing how our model provides a cognitive foundation for explaining several phenomena that have posed a challenge for previous accounts: (1) the convergence to more efficient referring expressions across repeated interaction with the same partner, (2) the gradual transfer of partner-specific common ground to novel partners, and (3) the influence of communicative context on which conventions eventually form.
 %Finally, we discuss several broader consequences of our framework, grounding community-level social conventions in basic individual-level learning mechanisms,  suggests new perspectives on continual language learning beyond development. 
 }
 
@@ -74,16 +72,7 @@ We present new empirical data alongside simulations showing how our model explai
 \maketitle
 
 \begin{quote}
-\ks{I'm not sure this is the most helpful place for this quote - you do a much better job of explaining the issues in your own words, I find this quote much less clear and it's got bits in it (prior theories, passing theories that aren't defined. If you want to put the whole thing in maybe a better place is where you quite Davidson again in the intro.} 
 %The speaker wants to be understood [...] %, so he intends to speak in such a way that he will be interpreted in a certain way. 
-\emph{In order to judge how he will be interpreted, [the speaker] uses his starting theory of interpretation. % interpreter’s readiness to interpret along certain lines. %Central to this picture is what the speaker believes is 
-%The speaker does not necessarily speak in such a way as to prompt the interpreter to apply this prior theory; he may deliberately dispose the interpreter to modify his prior theory. But the speaker’s view of the interpreter’s prior theory is not irrelevant to what he says, nor to what he means by his words; it is an important part of what he has to go on if he wants to be understood.
-As speaker and interpreter talk, their ``prior'' theories become more alike; so do their ``passing'' theories. 
-%The asymptote of agreement and understanding is when passing theories coincide. 
-%But the passing theory cannot in general correspond to an interpreter’s linguistic competence. 
-Not only does it have its changing list of proper names and gerrymandered vocabulary, but it includes every successful use of any other word or phrase, no matter how far out of the ordinary [...] 
-%Every deviation from ordinary usage, as long as it is agreed on for the moment [...] is in the passing theory as a feature of what the words mean on that occasion. 
-Such meanings, transient though they may be, are literal. \\-- \citeA{davidson_nice_1986}.}
 
 \end{quote}
 
@@ -273,7 +262,7 @@ While we were also able to derive the basic reduction phenomenon using the conju
 Specifically, the conjunction operation only allows for reduction in the \emph{absence} of a null object, where the listener is assumed to choose randomly between the objects when an utterance evaluates to false for all of them.
 Speakers will initially prefer the longer utterance $u_1+u_2$ because it has a higher probably of cancelling out and leading to random guessing for lexicons where either $u_1$ or $u_2$ or both are false of the target.
 In other words, when both $u_1$ and $u_2$ are true of the target, the listener will choose it with perfect accuracy, and in the other three cases they will choose it with 50\% accuracy.
-Once a null object is introduced, however, these same lexicons will lead to only \epsilon accuracy (since the listener will choose the null object instead of the target when the utterance is false), making the conjunction riskier than simply choosing one of the component utterances.
+Once a null object is introduced, however, these same lexicons will lead to only $\epsilon$ accuracy (since the listener will choose the null object instead of the target when the utterance is false), making the conjunction riskier than simply choosing one of the component utterances.
 
 
  \begin{figure*}
