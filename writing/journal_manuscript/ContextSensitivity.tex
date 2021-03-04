@@ -7,7 +7,7 @@
 \begin{figure*}[t]
 \begin{center}
 {\includegraphics[scale=.63]{./figures/Sec2-design.png}}
-{\caption{{\emph{Domain for context-sensitivity.} (A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any abstract label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface, where the label ``niwa'' has been selected. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
+{\caption{{\emph{Domain for context-sensitivity.} (A) Example of \emph{fine} context where one of the distractors belongs to the same fine-grained branch of the hierarchy as the target (i.e.\ another striped circle), so any less specific label would be insufficient to disambiguate them. The target is highlighted for the speaker with a black square. (B) Drag-and-drop chat box interface, where the label ``niwa'' has been selected. (C) Hierarchical organization of stimuli.\label{fig:context_design}}}}
 \vspace{-2ex}
 \end{center}
 \end{figure*}
@@ -54,7 +54,7 @@ As before, the agents swap roles on each trial, and we run 75 distinct trajector
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.9]{evolution.pdf}
-\caption{\emph{Dynamics of lexical beliefs over time in Simulation 2.1.} Regions represent the average proportion of words at each level of abstraction in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of basic-level terms; in the fine condition, however, agents become more confident of subordinate terms.}
+\caption{\emph{Dynamics of lexical beliefs over time in Simulation 2.1.} Regions represent the average proportion of words at each level of generality in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of basic-level terms; in the fine condition, however, agents become more confident of subordinate terms.}
 \label{fig:evolution}
 \end{center}
 \end{figure}
@@ -72,13 +72,13 @@ Because all eight objects appeared as the target once in each block, this measur
 In an identical mixed-effects model, we find an overall main effect of condition, with agents in the fine condition using significantly fewer words across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
 However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition, while it stayed roughly constant in in the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}D.
 
-Finally, we examine more closely the emergence of terms at different levels of abstraction.
+Finally, we examine more closely the emergence of terms at different levels of generality.
 We have access not only to the signalling behavior of our simulated agents, but also their internal \emph{beliefs} about their partner's lexicon, which allows us to directly examine the evolution of these beliefs from the beginning of the interaction.
 %So we can not only query these beliefs at the very \emph{end} of the game, as we did in our empirical post-test \ks{order messed up here, you haven't introduced the experiment yet}, we can also directly examine the evolution of these beliefs from the beginning of the interaction.
 At each time point in each game, we take the single meaning with highest probability for each word.
-In Fig. \ref{fig:evolution}, we show the proportion of words with meanings at each level of abstraction, collapsing across all games in each condition.
+In Fig. \ref{fig:evolution}, we show the proportion of words with meanings at each level of generality, collapsing across all games in each condition.
 
-Qualitatively, we observe that agents begin with assumptions of `null' meanings \todo{I didn't follow the stuff about null meanings at all} due to their simplicity prior but quickly begin assigning meanings based on their partner's usage.
+Qualitatively, we observe that agents begin with assumptions of `null' meanings \ks{I didn't follow the stuff about null meanings at all} due to their simplicity prior but quickly begin assigning meanings based on their partner's usage.
 In both conditions, basic-level meanings and simpler subordinate-meanings \ks{I think this relates to my failure to grasp why lots of specific meanings is simple, but I was surprised to see this described as the simpler system} are equally consistent with the initial data, and agents prefer simpler meanings.
 After the first repetition block, however, agents in the coarse condition begin pruning out some of the subordinate-level terms and become increasingly confident of basic-level meanings.
 Agents in the fine condition become even more confident of subordinate level meanings.
@@ -127,7 +127,7 @@ Pairs were randomly assigned to one of three different conditions, yielding $n=3
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=1]{./figures/Exp2_postTest}
-\caption{\emph{Different lexicons emerge in different contexts.} Mean number of words, out of a word bank of 16 words, that human participants reported giving specific meanings (black; applying to 1 object) or abstract meanings (dark grey; applying to 2 objects).}
+\caption{\emph{Different lexicons emerge in different contexts.} Mean number of words, out of a word bank of 16 words, that human participants reported giving more specific meanings (black; applying to 1 object) or less specific meanings (dark grey; applying to 2 objects).}
 \label{fig:sec2postTest}
 \end{center}
 \end{figure}
@@ -174,12 +174,12 @@ We therefore conservatively take a participant's final lexicon to be the \emph{i
 \paragraph{Contextual pressures shape the lexicon}
 
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). 
-Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize more abstract terms.
-One coarse signature of this prediction lies in the \emph{efficiency} of the resulting lexicon: lexicalizing abstract terms should require participants to use fewer terms overall.
+Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize less specific terms.
+One coarse signature of this prediction lies in the \emph{compression} of the resulting lexicon: less specific conventions should allow participants to achieve the same communicate accuracy with a smaller vocabulary.
 
 To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words for which they marked at least one object in the post-test in an internally consistent way). 
 We then conducted a mixed-effects models predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
-We found that participants in the \emph{coarse} condition reported significantly smaller, more efficient \ks{more efficient in what sense? not just simpler?} lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.\ \ref{fig:sec2Results}A). 
+We found that participants in the \emph{coarse} condition reported significantly smaller, simpler lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.\ \ref{fig:sec2Results}A). 
 %At the same time, smaller vocabularies did not lead to poorer coverage over objects: the median number of objects where participants agreed on the same word was 7 out of 8 in the \emph{coarse} condition, compared to 6 in the \emph{mixed} condition and 5.5 in the \emph{fine} condition. 
 %Differences across conditions do not reach significance ($p = 0.4, p = 0.09$, respectively), but may reflect the relative sub-populations of participants who did not fully converge. 
 
@@ -192,11 +192,11 @@ The effective vocabulary size gradually increased over time in the fine conditio
 This interaction, where participants initially attempt to reuse the same terms across targets in the fine condition, is consistent with a gradual differentiation based on communicative need.
 
 Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? 
-We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and `abstract' \ks{I would avoid "abstract" here to be honest, in favour of "more general" or "less specific" or something} terms (e.g.~words that refer to two objects) in the post-test. 
-We found that the likelihood of lexicalizing abstractions differed systematically across conditions.
-Participants in the \emph{coarse} condition reported significantly more abstract terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
-The modal system in the fine condition was exactly eight specific terms with no abstract terms, and the modal system in the coarse condition was exactly four abstract terms (red, blue, striped, spotted) with no specific terms.
-However, even in the coarse condition, many individual participants reported a mixture of terms (see Fig.\ \ref{fig:sec2Results}B).
+We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and more `general' terms (e.g.~words that refer to two objects) in the post-test. 
+We found that the likelihood of lexicalizing more general terms differed systematically across conditions.
+Participants in the \emph{coarse} condition reported significantly more general terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
+The modal system in the fine condition was exactly eight specific terms with no more general terms, and the modal system in the coarse condition was exactly four general terms (red, blue, striped, spotted) with no specific terms.
+However, many individual participants reported a mixture of terms at different levels of generality. 
 
 
 %\paragraph{Model comparison}
@@ -213,22 +213,26 @@ However, even in the coarse condition, many individual participants reported a m
 
 \subsection{Discussion}
 
-There is abundant evidence that languages adapt to the needs of their users, and the context-sensitive emergence of abstractions demonstrated in this section suggests that the driver of this adaptation may lie in the rapid adaptability of agents in individual dyadic interaction. 
-By manipulating context statistics in a real-time experiment, we evaluated the extent to which our model captured patterns of context-sensitivity in the behavioral data.
+There is abundant evidence that languages adapt to the needs of their users.
+Our model provides a cognitive account of how people coordinate on \emph{ad hoc} linguistic conventions that suit their immediate needs.
+In this section, we evaluated predictions about context-sensitivity using new data from a real-time communication task.
+When combined with the generalization mechanisms explored in the previous section, such rapid learning within dyadic interactions may be a powerful contributor allowing languages to adapt at the population-level over longer time scales.
 
-Previous proposals have handled context-sensitivity in different ways.
-In some common settings for convention formation, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{steels2012experiments,baronchelli2008depth}. 
-In other common settings, context is central but held constant throughout interactions, as in Lewis signaling games \cite{lewis_convention:_1969}, where agents use a fixed set of messages to communicate a fixed set of world states \cite{skyrms2010signals,BrunerEtAl14_LewisConventions}.
+Previous studies of convention formation have addressed context-sensitivity in different ways.
+In some common settings, there is no explicit representation of context at all, as in the task known as the ``Naming Game'' where agents coordinate on names for objects in isolation \cite{steels2012experiments,baronchelli2008depth}. 
+In other settings, communication is situated in a referential context, but this context is held constant, as in Lewis signaling games \cite{lewis_convention:_1969} where agents must distinguish between a fixed set of world states \cite{skyrms2010signals,BrunerEtAl14_LewisConventions}.
+Finally, in the Discrimination Game \cite{steels2005coordinating,baronchelli2010modeling}, contexts are randomly generated on each trial, but have not been manipulated to assess context-sensitivity of the convention formation process.
 
-One of the most sophisticated studies of context in prior work is the Discrimination Game of \citeA{steels2005coordinating}, which examined the joint formation of color categories and color naming conventions.
-As in our experiments, contexts were generated randomly on each trial from a large space and stimuli are embedded in a similarity space (with similarity based on Euclidean distance in continuous space rather than taxonomic relations).
-Unlike our task, contexts were not systematically manipulated, and the resulting level of abstraction was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart  \cite<see also>[which found that imposing a realistic Just Noticeable Difference function as the minimum distance on communicative contexts leads to human-like color naming systems]{baronchelli2010modeling}. \ks{not clear what point you were making in this paragraph}
-
-In models using simple update rules, the referential context is sometimes accounted for with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional}.
-If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount \cite<see also>{steels2005coordinating}.
+%, which examined the joint formation of color categories and color naming conventions.
+%As in our experiments, contexts were generated randomly on each trial from a large space and stimuli are embedded in a similarity space (with similarity based on Euclidean distance in continuous space rather than taxonomic relations).
+%Unlike our task, contexts were not systematically manipulated, and the resulting level of generality was not evaluated: the only restriction was to ensure that color chips were a fixed minimum distance apart  \cite<see also>[which found that imposing a realistic Just Noticeable Difference function as the minimum distance on communicative contexts leads to human-like color naming systems]{baronchelli2010modeling}. \ks{not clear what point you were making in this paragraph}
+%
+In other words, context-sensitivity has typically been implicit in existing models. 
+Models using simple update rules have accounted for referential context with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional,steels2005coordinating}.
+If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount.
 This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of allowing the agent to learn from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
-Under an inferential framework, however, this property emerges as a natural consequence of well-established Gricean principles of pragmatic reasoning.
-Reasoning about a partner's intentions, either while updating beliefs about their lexicon or while selecting an action, naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} \cite{gulordava2020one,ohmerreinforcement,FrankGoodmanTenenbaum09_Wurwur}.
+Under our inferential framework, however, this property emerges as a natural consequence of well-established Gricean principles of pragmatic reasoning rather than as a heuristic.
+%Reasoning about a partner's intentions, either while updating beliefs about their lexicon or while selecting an action, naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} \cite{}.
 
 %Our results may help to illuminate the relationship between our concepts and words, which are often treated interchangeably. While our mental taxonomies are adaptive to the natural perceptual structure of the world \cite{MervisRosch81_CategorizationReview} %(Rosch et al, 1976; Mervis \& Rosch ,1981; Murphy \& Smith, 1982), 
 %it is far from inevitable that all levels of these conceptual hierarchies become conventionalized as lexical items. There are many perfectly natural concepts that are not represented by distinct words in the English language: for instance, we do not have words for each tree in our yards, or for ad-hoc concepts %like \emph{things to sell at a garage sale} 
