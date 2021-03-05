@@ -3,29 +3,40 @@ In this section, we propose a unified computational account of \emph{ad hoc} coo
 We begin from first principles: What is the core computational problem that must be solved to achieve successful communication?
 Classically, this problem has been formulated in terms of coding and compression \cite{Shannon48}. 
 An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
-More recently, this literal transmission problem has been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages.
-We take the Rational Speech Act (RSA) framework \cite{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} as representative of this current synthesis, formalizing communication as recursive social inference in a probabilistic framework.
+This literal transmission problem has since been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages \cite{sperber1986relevance}.
+We take the Rational Speech Act framework \cite<RSA;>{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} as representative of this current synthesis, formalizing communication as recursive social inference in a probabilistic model.
 In the next section, we will review this basic framework and then raise two fundamental computational problems facing this framework that motivate our proposal.
 
 \subsection{RSA models of communication with static meaning}
 
-In the RSA formulation of referential communication, a pragmatic speaker denoted by $S_1$ must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$. \ks{You frame it as a reference task, labelling objects - isn't it potentially more general than that, or do you think there's something inherent in the maths that makes it a bad model of any kind of meaning transmission?}
-They attempt to satisfy the Gricean \emph{maxim of quantity} by using a utility function $U$ that balances informativity to an imagined listener against the cost of producing an utterance. 
-A pragmatic listener $L_1$ then inverts their internal model of the speaker to infer which intended referent $o\in\mathcal{C}$ would best explain the speaker's choice of utterance $u$.
-This chain of recursive reasoning grounds out in an imagined \emph{literal listener} $L_0$, who is assumed to identify the intended target directly using a static lexical meaning function $\mathcal{L}(u,o)$, which evaluates the literal meaning\footnote{$\mathcal{L}$ is traditionally a truth-conditional function evaluating whether a given utterance is true or false of any state of the world. However, this formulation is also consistent with continuous semantics \cite{degen2020redundancy} as may be learned by a (grounded) neural network \cite{potts2019case}.} of $u$ on $o$.
-This model can be specified as follows:
+In our referential communication setting\footnote{For concreteness, we restrict our scope to reference in a discrete context of objects, but the same formulation applies to more general spaces of meanings.}, the RSA framework defines a pragmatic speaker, denoted by $S_1$, who must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$:
+They attempt to satisfy the Gricean Maxims \cite{Grice75_LogicConversation} by selecting utterances proportional to a utility function $U(u;o)$ that balances informativity to an imagined listener against the cost of producing an utterance:
 \begin{align}
-L_0(o | u) &\propto  \mathcal{L}(u,o)\hfill\label{eq:RSA}\\
-U(u; o) & = (1-w_C) \cdot \log L_0(o | u) - w_C \cdot c(u) \nonumber \\
-S_1(u | o) &\propto   \exp\{w_S \cdot U(u; o)\}\nonumber  \\
-L_1(o | u) &\propto   \exp\{w_L \cdot \log S_1(u | o)\}\nonumber
+S_1(u | o) & \propto   \exp\{w_S \cdot U(u; o)\}\label{eq:RSAspeaker} \\
+U(u; o) & = (1-w_C) \cdot \underbrace{\log L_0(o | u)}_{\mathclap{\text{informativity}}} -\, w_C \cdot \underbrace{c(u)}_{\mathclap{\text{cost}}} \nonumber 
 \end{align}
-\ks{I think people might need a bit more help understanding what these mean! I know a bit about how these models work and I found this quite compressed - I think the trick will be to provide enough verbal explanation so we don't lose the bulk of the readership at this point.}
-where $c(u)$ is a function giving the cost of producing $u$; $w_C \in [0,1]$ controls the relative weight of the speaker's informativity and parsimony; and $w_S,w_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{Note that normalization constant may be exactly zero for some lexicons, in which case these distribution are not well-defined. To address this issue, we add a noise model at each level of recursion; with probability $\epsilon$, agents choose uniformly from the support, ensuring non-zero probability of every outcome. Unless otherwise specified, we set $\epsilon = 0.01$. See Appendix A for further details motivating this choice.}.
+where $c(u)$ is a function giving the cost of producing $u$, assuming a longer utterances are more costly.
+The speaker has two free parameters: $w_C \in [0,1]$ controls the relative weight of informativity and parsimony in the speaker's production, and $w_S \in[0,\infty]$ controls their softmax optimality (i.e. as $w_S \rightarrow \infty$, the speaker increasingly chooses the utterance with maximal utility.)
+
+The imagined \emph{literal listener} $L_0$ in Eq.~\ref{eq:RSAspeaker} is assumed to identify the target using a lexical meaning function $\mathcal{L}(u,o)$ capturing the literal semantics of the utterance $u$.
+That is, the probability of the literal listener choosing object $o$ is proportional to the meaning of $u$ under a static function $\mathcal{L}$:
+\begin{align}
+L_0(o | u) &\propto  \mathcal{L}(u,o)\hfill\label{eq:RSA}
+\end{align}
+Throughout this paper, we will take $\mathcal{L}$ to be a traditional truth-conditional function evaluating whether a given object is in the extension of the utterance\footnote{Note that the normalization constant may be exactly zero for some possible lexicons -- for instance, if a given utterance is literally false of all objects in context -- in which case these distributions are not well-defined. See Appendix A for full details of how we address this problem.}:
+$$\mathcal{L}(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if $o \in $\den{u}} \\ 0 & \textrm{otherwise} \end{array}\right.$$
+However, this formulation is also consistent with fuzzier, continuous semantics \cite{degen2020redundancy} as may be learned by a (grounded) neural network \cite[see Appendix B for an example]{potts2019case}.
+
+Finally, we may then define a pragmatic listener $L_1$ that inverts an internal model of the speaker to infer which intended referent $o\in\mathcal{C}$ would best explain the speaker's choice of utterance $u$:
+\begin{align}
+L_1(o | u) \propto   \exp\{w_L \cdot \log S_1(u | o)\}
+\end{align}
+where $w_L \in[0,\infty]$ controls the listener's soft-max optimality.
+Intuitively, this listener considers whether a speaker trying to refer to different objects $o$ would be likely to produce utterance $u$, accounting for the alternative utterances the speaker could have produced. 
 
 \subsection{Fundamental problems for static meaning}
 
-This basic framework has accounted for a vast \ks{is it really vast?} range of empirical phenomena in language use \cite{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
+This basic framework and its extensions have accounted for a variety of important phenomena in pragmatic language use \cite<e.g.>{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
 Yet it retains a key assumption from classical models: that the speaker and listener must share the same literal ``protocol'' $\mathcal{L}$ for encoding and decoding messages.
 In this section, we highlight two under-appreciated challenges of communication that complicate this assumption. 
 
@@ -40,16 +51,16 @@ Agents are continually presented with new thoughts, feelings, and entities, whic
 For example, when new technology is developed, the community of developers and early adopters must find ways of referring to the new concepts they are working on (e.g. \emph{e-mailing}, \emph{the Internet}). 
 Or, when researchers design a new experiment with multiple conditions, they must find ways of talking about their own \emph{ad hoc} abstractions, often converging on idiosyncratic names that can be used seamlessly in meetings.
 That is, any literal protocol $\mathcal{L}$ that we may write down at one time would be quickly outdated at a later time \cite<see>[for a demonstration of the related problems posed by non-stationary for large neural language models]{lazaridou2021pitfalls}.
-We must have some ability to extend our systems of meaning \ks{you quite often talk about `meaning' when I think you might mean something more general, i.e. meaning and the way it is encoded in linguistic expressions, which I would call `language' rather than `meaning'} on the fly as needed.
+We must have some ability to extend our language on the fly as needed.
 
 \subsection{A hierarchical model of dynamic meaning}
 
 %The model we present in this section aims to provide an explanation for how agents may  these fundamental problems.
-Rather than assuming a monolithic, universally shared system of meaning, we argue that agents solve the core problems posed by variability and non-stationary by attempting to continually, adaptively \emph{infer} the system of meaning used by their partner in context.
-When all agents are continually learning in this way, we will show that they are not only able to locally coordinate with specific partners but also able to abstract away structure representing shared linguistic conventions \ks{"abstract away structure representing shared linguistic conventions" is super hard to parse!}.
+Rather than assuming a monolithic, universally shared language, we argue that agents solve the core problems posed by variability and non-stationarity by attempting to continually, adaptively \emph{infer} the system of meaning used by their partner in context.
+When all agents are continually learning in this way, we will show that they are not only able to locally coordinate with specific partners but also able to abstract away shared linguistic conventions.
 We introduce our model in three steps, corresponding to three core capacities: uncertainty about meaning, online partner-specific learning, and inductive generalization.
 
-\paragraph{Hierarchical uncertainty for flexibility in lexical meaning} 
+\paragraph{Hierarchical uncertainty about meaning} 
 
 When an agent encounters a communication partner, they must call upon some representation about what they expect different signals will mean to that partner. 
 We therefore replace the static function $\mathcal{L}$ with a \emph{parameterized family} of lexical meaning functions by $\mathcal{L}_{\phi}$, where different values of $\phi$ yield different possible systems of meaning. 
@@ -61,7 +72,7 @@ Second, this representation should also, in principle, be sensitive to the socia
 The first desideratum, representing population variability, motivates a \emph{probabilistic} formulation.
 Instead of holding a single static function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. one $\phi$ for the whole population), we assume each agent maintains \emph{uncertainty} over the exact meaning of words as used by different partners.
 In a Bayesian framework, this uncertainty is specified by a prior probability distribution over possible values of $\phi$ \ks{I found this quite hard to interpret because phi is quite abstract at the moment}.
-The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, and in the context of iterated dyadic interactions \cite{smith_learning_2013}. 
+The introduction of uncertainty over a partner's literal semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, and in the context of iterated dyadic interactions \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}. 
 
 The second desideratum, sensitivity to partner-specific meanings, motivates a \emph{hierarchical} model, where uncertainty is represented by a multi-level prior. 
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis" about the overall distribution of possible partners. 

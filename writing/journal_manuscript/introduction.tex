@@ -12,8 +12,8 @@ Interactions between friends and colleagues are filled with proper names, techni
 Furthermore, words easily take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}.
 
 The tension between these two basic observations has posed a challenging and persistent puzzle for theories of convention.
-Influential computational accounts explaining how social conventions emerge in populations \cite<e.g.>{hurford1989biological,barr_establishing_2004,skyrms2010signals,steels2011modeling,young_evolution_2015} typically do not allow for partner-specific meaning at all.
-These accounts examine groups of interacting agents who update their representation of language after each interaction.
+Many influential computational accounts explaining how social conventions emerge in populations \cite<e.g.>{hurford1989biological,barr_establishing_2004,skyrms2010signals,steels2011modeling,young_evolution_2015} do not allow for partner-specific meaning at all.
+These accounts typically examine groups of interacting agents who update their representation of language after each interaction.
 While the specific update rules range from simple associative mechanisms \cite<e.g.>{steels_self-organizing_1995} or heuristics \cite<e.g>{Young96_EconomicsOfConvention} to more sophisticated deep reinforcement learning algorithms \cite<e.g.>{tieleman2019shaping,graesser2019emergent,mordatch2017emergence}, all of these accounts assume that agents update a single, monolithic representation of language to be used with every partner, and that agents do not (knowingly) interact repeatedly with the same partner.
 
 Conversely, accounts emphasizing rapid alignment \cite{pickering2004toward} or partner-specific common ground \cite{ClarkWilkesGibbs86_ReferringCollaborative} across extended interactions with the same partner typically do not specify mechanisms by which community-wide conventions may arise over longer timescales.
@@ -28,7 +28,7 @@ The asymptote of agreement and understanding is when passing theories coincide.
 %But the passing theory cannot in general correspond to an interpreter’s linguistic competence. 
 Not only does it have its changing list of proper names and gerrymandered vocabulary, but it includes every successful use of any other word or phrase, no matter how far out of the ordinary [...] 
 %Every deviation from ordinary usage, as long as it is agreed on for the moment [...] is in the passing theory as a feature of what the words mean on that occasion. 
-Such meanings, transient though they may be, are literal. \cite[p.~258]{davidson_nice_1986}.}
+Such meanings, transient though they may be, are literal. \cite[p.~261]{davidson_nice_1986}.}
 \end{quote}
 
 This line of argument led \citeA{davidson_nice_1986} to memorably conclude that ``there is no such thing as a language'' (p.~265), and to abandon appeals to convention altogether \cite<see also>[for discussion]{heck_idiolect,lepore2007reality,hacking1986nice,dummett1994}.%\footnote{ In Davidson's terminology, the system of meanings given by from convention is called the agent's \emph{prior} theory, while the ad hoc systems they form with their partner on the fly are called their \emph{passing} theories. We maintain this distinction, but instead call these \emph{global} conventions and \emph{local} or \emph{ad hoc} conventions, respectively, to emphasize their commonality.}.
@@ -39,9 +39,9 @@ We suggest that three core cognitive capacities are needed for an agent to solve
 \begin{description}
 \item[C1:] the ability to maintain \textbf{uncertainty} about what words will mean to different partners,
 \item[C2:] flexible  \textbf{online learning} to coordinate on partner-specific meanings, and
-\item[C3:] inductive \textbf{generalization} to abstract away stable expectations to new partners.
+\item[C3:] inductive \textbf{generalization} to abstract away stable expectations about meaning to new partners.
 \end{description}
-Indeed, one of our central theoretical aims is to ground the problem of convention --- a fundamentally interactive, social phenomenon --- in the same domain-general cognitive mechanisms supporting learning in other domains where abstract, shared properties need to be inferred along with idiosyncratic particulars of instances \cite{berniker2008estimating,GoodmanUllmanTenenbaum11_TheoryOfCausality,tenenbaum_how_2011,kleinschmidt2015robust}.
+One of our central theoretical aims is to ground the problem of convention --- a fundamentally interactive, social phenomenon --- in the same domain-general cognitive mechanisms supporting learning in other domains where abstract, shared properties need to be inferred along with idiosyncratic particulars of instances \cite{berniker2008estimating,GoodmanUllmanTenenbaum11_TheoryOfCausality,tenenbaum_how_2011,kleinschmidt2015robust}.
 
 %\begin{enumerate}
 %\item \textbf{Lexical uncertainty:} When we first encounter a new communication partner in a new context, we call upon some representation about what we think different signals mean to them. This representation of meaning must be sensitive to the overall statistics of the population: more people are familiar with the use of \emph{dog} to refer to the beloved pet than \emph{sclerotic aorta} to refer to the potentially dangerous health condition. It must also be sensitive to the immediate context of the interaction: a cardiologist should have different expectations about a novel colleague than a novel patient.
@@ -59,8 +59,8 @@ Our argument is structured around a series of three key phenomena in the empiric
 We begin by introducing the \emph{repeated reference game} paradigm at the center of this literature and reviewing the empirical evidence supporting each of these phenomena.
 We then introduce our hierarchical Bayesian model in detail and highlight several qualitative properties that emerge from our formulation.
 The remainder of the paper proceeds through each of these phenomena (\textbf{P1}-\textbf{P3}) in turn. 
-For each phenomenon, we use computational simulations to evaluate our model's explanations on existing data, and introduce data from new behavioral experiments to test novel predictions when existing data does not suffice.
-Finally, we close by discussing several broader consequences of the theory.
+For each phenomenon, we use computational simulations to evaluate our model's explanations on existing data, and introduce data from new real-time, multi-player behavioral experiments to test novel predictions when existing data does not suffice.
+Finally, we close by discussing several broader consequences of the theory, including the continuity of language acquisition, the domain-generality of discourse processes, and the integration of social and linguistic representations.
 
 \subsection{Three lessons about convention formation from repeated reference games}
 
@@ -99,24 +99,26 @@ Without partner-specific representations, we would expect speakers to continue u
 
 These effects raise our second puzzle: how do population-level conventions form in the presence of such strong partner-specificity?
 When are agents justified in transferring an \emph{ad hoc} convention formed with one partner to a new, unseen partner? 
-One important empirical clue was provided by \citeA{fay_interactive_2010}, who examined the emergence of conventions in a lab experiment where communities of eight people played a repeated (non-linguistic) graphical communication game (a Pictionary-like game where participants producing drawings to allow their partner to select the correct concept from a list of possibilities); the 8 participants interacted dyadically with each other member of the community in turn, for a series of seven repeated reference games. 
-Strikingly, while participants reverted to their initial messages with the first few partners, consistent with partner-specificity, the initial messages they sent to subsequent partners gradually converged closer to the final \emph{ad hoc} messages they used with previous partners, indicating a slow gradient of generalization mixed with partner-specificity.
-While intriguing, this work was limited by an extremely small sample size ($N = 4$ groups) and technical challenges facing the measurement of conventions in the graphical modality \cite<see>{hawkins2019disentangling}.
-We revisit this effect using a larger data set based on naturalistic linguistic communication.
+One important empirical clue was provided by \citeA{fay_interactive_2010}, who examined the emergence of conventions in a lab experiment where communities of eight people played a repeated  graphical communication game similar to Pictionary, where participants produced drawings to allow their partner to identify a concept from a list of possibilities. 
+The 8 participants in each network interacted dyadically with every other member of the community in, turn, for a series of seven repeated reference games. 
 
-\ks{Might be worth citing/discussing Limor Raviv's 2018/2019 paper in Proceedings of the Royal Society, it's 4- and 8-person communities negotiating an artificial language, slightly better sample size and also some interesting effects of community size on the structure of the conventions that emerge - not sure I believe the latter result but the method certainly bears a mention.}
+Strikingly, participants behaved as observed by \citeA{wilkes-gibbs_coordinating_1992} at the first few partner swaps, consistent with partner-specificity, but the initial messages they sent to subsequent partners gradually converged closer to the \emph{ad hoc} labels conventionalized with previous partners, indicating a slow gradient of generalization within their community.
+While intriguing, this work was limited by an extremely small sample size ($N = 4$ groups) and technical challenges facing the measurement of conventions in the graphical modality \cite<see>{hawkins2019disentangling}.
+More recent work has adopted a similar design for an artificial-language communication task \cite{raviv2019larger} but has collapsed across repeated dyadic interactions to exclusively analyze network-level metrics, making it difficult to assess any effects of partner-specificity.
+Given these limitations of existing data, we evaluate our model's predictions using a large-scale, real-time web experiment directly extending \citeA{wilkes-gibbs_coordinating_1992} to larger networks.
 
 \paragraph{Conventions are influenced by communicative context (\textbf{P3})}
 
 Finally, while a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions for a meaning are equally likely in practice, or even that all meanings are equally likely to become conventionalized in the first place \cite{HawkinsGoldstone16_SocialConventions}.
-Functional accounts of language have frequently observed that lexical systems are well-calibrated to the statistics of the communicative environment \cite{gibson2019efficiency}.
-This Optimal Semantic Expressivity  hypothesis \cite<OSE;>{frankblogpost}  has accounted well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{KempRegier12_KinshipCategories,regier201511,gibson2017color,kemp2018semantic}.
-For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{regier2016languages}. 
-\ks{I think there are potentially two things we might need to separate or be clear about here: 1) languages are well adapted for the communicative needs of their users; 2) differences in communicative needs across populations show up in the language, e.g. in the structure of category systems. I think 1 is on a pretty solid footing; 2 is less so I think, lots of these papers assume that communicative need is actually roughly similar across populations - the possible exception is the Gibson et al colour stuff and the Regier PLOS paper. Do we need both of these, or are we just trying to show that 1 is true by engineering an experimental scenario that looks a bit like 2?}
+Indeed, functional accounts of language have frequently observed that lexical systems are well-calibrated to the needs of users under the statistics of their communicative environment \cite{gibson2019efficiency}.
+This Optimal Semantic Expressivity  hypothesis \cite<OSE;>{frankblogpost} has held remarkably well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{KempRegier12_KinshipCategories,regier201511,gibson2017color,kemp2018semantic}.
+%For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{regier2016languages}. 
 
-Such long-term, diachronic context-sensitivity has not yet been grounded in a cognitive and mechanistic account of the immediate, synchronic processes unfolding in the minds of individual agents in dyadic interaction.
-Lab studies using repeated reference games have provided a more tractable way to examine the distribution of conventions that emerge when communicating with artificial languages \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication,winters2018contextual} and the efficient \emph{ad hoc} labels that dyads converge to when using natural language \cite{hawkins2020characterizing}.
-However, it has remained challenging to directly evaluate cognitive models using these tasks.
-While there is abundant empirical evidence for context-sensitivity in the \emph{outcomes} of convention formation processes, our third puzzle concerns which cognitive mechanisms are necessary or sufficient to give rise to such outcomes.
+While such long-term, diachronic sensitivity to context has been explained by abstract principles of optimality, such as the equilibria concepts of evolutionary game theory \cite{jager2007evolution,jager2007language}, it has not yet been grounded in a cognitive and mechanistic account of the immediate, synchronic processes unfolding in the minds of individual agents while they interact.
+In other words, while there is abundant empirical evidence for context-sensitivity in the \emph{outcomes} of convention formation processes, our third puzzle concerns which cognitive mechanisms may be necessary or sufficient to give rise to such conventions.
 
+Repeated reference games have emerged as a promising method for probing these mechanisms in the lab. 
+We can explicitly control the communicative context and observe the resulting distribution of conventions that emerge when participants communicate with artificial languages \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication,winters2018contextual} or natural language \cite{hawkins2020characterizing}.
+While these outcomes are informative, it has remained challenging to directly evaluate cognitive models against the \emph{full trajectories} of convention formation on a trial-by-trial basis.
+In our final section, we report new empirical data from a dyadic repeated reference task manipulating context, where simulated agents and human participants are shown exactly the same sequence of trials.
 
