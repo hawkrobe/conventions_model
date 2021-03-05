@@ -26,13 +26,19 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 72,
+  numTrials: 96,
   inferOptions: {method: 'MCMC', samples:2000, burn:5000, lag:1, verbose:true}//{method: 'enumerate'}//
 };
 
 var data = shared.readCSV('input/' + argv.gameNum + '.csv').slice(0,params.numTrials);
 var posttest_file = shared.open('./output/meaningTest_' + argv.gameNum + '_' + argv.chainNum + '.csv');
-shared.writeLine('gameNum,speakerAlpha,listenerAlpha,agentID,object,word,val', posttest_file);
+shared.writeLine('chainNum,gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,trialNum,\
+                  condition,agentID,object,word,val', posttest_file);
+
+var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('chainNum,gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,\
+                 condition,contextType,speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
+                 f);
 
 console.log(params);
 
@@ -70,7 +76,7 @@ var lexicalPrior = function() {
 };
 
 var postTest = function(trial, posterior1, posterior2) {
-  var data = [argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,
+  var data = [argv.chainNum,argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,params.guessingEpsilon,
               trial.trialNum, trial.condition];
   map(function(word) {
     shared.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
@@ -81,7 +87,7 @@ var postTest = function(trial, posterior1, posterior2) {
 };
 
 // for each point in data, we want the model's predictions 
-var iterate = function(outputFile, remainingTrials, dataSoFar) {
+var iterate = function(remainingTrials, dataSoFar) {
   console.log(remainingTrials.length, 'remaining');
   var currTrialRaw = first(remainingTrials);
   var currTrial = extend(currTrialRaw, {
@@ -115,7 +121,7 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
     currTrial.intendedName,
     topSpeakerChoice, topListenerChoice,
     topListenerChoice == currTrial.intendedName
-  ].join(','), outputFile);
+  ].join(','), f);
 
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
     return dataSoFar[id].concat(extend(currTrial, {
@@ -126,15 +132,11 @@ var iterate = function(outputFile, remainingTrials, dataSoFar) {
   }, [currTrial.speakerID, currTrial.listenerID]));
 
   if(!_.isEmpty(rest(remainingTrials))) {
-    iterate(outputFile, rest(remainingTrials), newDataSoFar);
+    iterate(rest(remainingTrials), newDataSoFar);
   } 
 };
 
-var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
-shared.writeLine('chainNum,gameNum,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,condition,contextType,speakerID,listenerID,' +
-              'intendedName,topSpeakerChoice,topListenerChoice,correct',
-              f);
-iterate(f, data, {1: [], 2: []});
+iterate(data, {1: [], 2: []});
 shared.close(f);
 shared.close(posttest_file);
 
