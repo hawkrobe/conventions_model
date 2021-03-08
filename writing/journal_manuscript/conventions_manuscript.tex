@@ -52,11 +52,13 @@
 
 \title{From partners to populations: \\[.1em] A hierarchical Bayesian account of coordination and convention}
 \shorttitle{Conventions}
-\author{Various people}
-\affiliation{Various Universities}
+\leftheader{Hawkins et al.}
+\author{Robert D. Hawkins$^{*1}$, Michael Franke$^2$, Michael C. Frank$^3$, \\ Adele E. Goldberg$^1$,  Kenny Smith$^4$, Thomas L. Griffiths$^{1,5}$, Noah D. Goodman$^{3,6}$}
+
+\affiliation{$^1$Department of Psychology, Princeton University, $^2$Institute for Cognitive Science, University of Osnabr\"uck, \\$^3$Department of Psychology, Stanford University, $^4$Centre for Language Evolution, University of Edinburgh, $^5$Department of Computer Science, Princeton University, $^6$Department of Computer Science, Stanford University }
 
 \abstract{Languages are powerful solutions to coordination problems: they provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads. 
-Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc}, partner-specific meaning on the fly. 
+Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc} or partner-specific meanings on the fly. 
 In this paper, we introduce a hierarchical Bayesian theory of convention formation that aims to reconcile the long-standing tension between these two basic observations.
 More specifically, we argue that the central computational problem of communication is not simply transmission, as in classical formulations, but \emph{learning} and \emph{adaptation} over multiple timescales.
 Under our account, rapid learning within dyadic interactions allows for coordination on partner-specific common ground, while social conventions are stable priors that have been abstracted away from interactions with multiple partners.
@@ -66,15 +68,11 @@ We present new empirical data alongside simulations showing how our model provid
 
 \keywords{Keywords TBD}
 
-\authornote{This report is based in part on work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Correspondence should be addressed to Robert D. Hawkins, e-mail: rdhawkins@princeton.edu}
+\authornote{This report is based in part on work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Materials and code for reproducing all model simulations, behavioral experiments, and analyses are open and available online at \href{https://github.com/hawkrobe/conventions_model}{https://github.com/hawkrobe/conventions\_model}.\\
+$^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@princeton.edu}
 
 \begin{document}
 \maketitle
-
-\begin{quote}
-%The speaker wants to be understood [...] %, so he intends to speak in such a way that he will be interpreted in a certain way. 
-
-\end{quote}
 
 \input{Introduction}
 
@@ -226,7 +224,7 @@ While this variant is able to derive the desired phenomena, it can be shown that
 This bias was most apparent in the case of context-sensitivity (Simulation 3).
 Mathematically, the difference between these possibilities is whether the speaker's uncertainty about $\phi_k$ goes inside the renormalization of $L(o|u)$ (as in $S_{alt1}$), outside the renormalization but inside the logarithm (as in $S_{alt2}$), or over the entire utility (as in our chosen formulation).
 
-\subsection{Alternative lexical representations}
+\subsection{Appendix B: Alternative lexical representations}
 
 In this section, we re-consider two specific choices we made about how to represent lexical meanings.
 
