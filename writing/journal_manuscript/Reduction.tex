@@ -4,21 +4,19 @@ For example, one possibility is that speakers coordinate on meaning through prim
 
   \begin{figure*}
 \centering
-    \includegraphics[scale=.9]{sec1-arbitrariness}
+    \includegraphics[scale=.7]{sec1-arbitrariness}
     \vspace{1em}
-  \caption{\emph{Path-dependence of conventions.} The trajectory of each agent's beliefs about $\phi(u_1)$ in Simulation 1.1 are shown following all possible outcomes of the first trial. The top four rows are cases where the listener happened to correctly choose the target. In these cases, agents condition on the same data and rapidly converge on a system of meaning consistent with this feedback, e.g. when $u_1$ was successfully used to refer to the circle (shown in orange), both agents subsequently believe that $u_1$ means \emph{circle}. The bottom four rows show cases where the listener initially chooses the incorrect object. In these cases, the agents condition on different data (reflected in diverging beliefs on the second trial) but later recover from this mis-coordination.}
+  \caption{\emph{Path-dependence of conventions.} The average trajectory of each agent's beliefs about the meaning of $u_1$, $\phi(u_1)$, are shown following all eight possible outcomes of the first trial in Simulation 1.1. For each of the two possible targets, the speaker could choose to produce either of the two utterances, and the listener could respond by choosing either of the two objects. In the cases where the listener chose correctly (marked with a checkmark), agents subsequently conditioned on the same data and rapidly converged on a system of meaning consistent with this feedback. For example, in the first row, when $u_1$ was successfully used to refer to the circle, both agents subsequently believe that $u_1$ means \emph{circle} in their partner's lexicon. In the cases where the listener fails to choose the target, the agents subsequently condition on different data, and they converge on a convention that is determined by later choices.}
   \label{fig:path-dependence}
 \end{figure*}
 
 \begin{figure*}[b]
 \centering
     \includegraphics[scale=1.1]{sec1-convergence.pdf}
-        \includegraphics[scale=1.1]{sec1-efficiency}
-  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} Results from 1000 simulated trajectories in (A) Simulation 1.1 and (B) Simulation 1.2 \ks{Think you need to explain the differenc ebetween these two simulations (briefly!) in the caption}. Error bars are bootstrapped 95\% CIs within each block of two trials.}
+      \includegraphics[scale=1.1]{sec1-efficiency}
+  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} (A) agents converge on accurate communication systems in Simulation 1.1, where only single-word utterances are available, and (B) converge on shorter, more efficient conventions in Simulation 1.2, where multi-word utterances were available. Error bars are bootstrapped 95\% CIs across 1000 trajectories, computing within each block of two trials.}
   \label{fig:sec1model}
 \end{figure*}
-
-
 
 
 While low-level priming may be at play in repeated reference tasks, especially when listeners engage in extensive dialogue or alternate roles, it is not clear why priming would cause descriptions to get shorter as opposed to aligning on the same initial description.
@@ -42,26 +40,33 @@ In this section, we argue that our Bayesian account provides a rational explanat
 Given that this phenomenon arises in purely dyadic settings, it also provides an opportunity to explore more basic properties of the first two capacities formalized in our model (representing \emph{uncertainty} and \emph{partner-specific learning}) before introducing hierarchical generalization in the next section. 
 In brief, we show that increasing efficiency is a natural consequence of the speaker's tradeoff between informativity and parsimony (Eq.~\ref{eq:marginalized}), given their inferences about the listener's language model. 
 For novel, ambiguous objects like tangrams, where speakers do not expect strong referential conventions to be shared, longer initial descriptions are motivated by high initial uncertainty in the speaker's lexical prior $P(\phi_k | \Theta)$. 
-Proposing multiple descriptors is a hedge against the possibility that any particular meaning is not shared by the listener.
+Proposing multiple descriptors is a rational hedge against the possibility that any particular meaning is not shared by the listener.
 As the interaction goes on, the speaker obtains feedback $D_k$ from the listener responses and updates their posterior beliefs $P(\phi_k | D_k)$ accordingly. 
 As uncertainty gradually decreases, they are able to achieve the same expected informativity with shorter, more efficient messages. 
 
 \subsection{Simulation 1.1: Pure coordination}
 
 
-We build up to our explanation of increasing efficiency by first exploring a simpler simulation.
-This first simulation demonstrates the most fundamental desideratum for any model of \emph{ad hoc} coordination: agents are able to coordinate on a communication system in the absence of shared priors. 
-For clarity, we consider the simplest possible reference game with two objects, $\mathcal{O} = \{o_1, o_2\}$, where the speaker must choose between two one-word utterances $\mathcal{U} = \{u_1, u_2\}$ with equal production cost. 
-We initialize agents with uniform priors, $\phi(u_i) \sim \textrm{unif}\{o_1, o_2\}$, for all $u_i \in \mathcal{U}$.
+We build up to our explanation of increasing efficiency by first exploring a traditional signaling game scenario with only one-word utterances.
+This simulation tests the most fundamental competency for any model of \emph{ad hoc} coordination: agents are able to coordinate on a communication system in the absence of shared priors. 
+We consider the simplest possible reference game with two objects, $\mathcal{O} = \{\orangecircle, \bluesquare\}$, where the speaker must choose between two one-word utterances $\mathcal{U} = \{u_1, u_2\}$ with equal production cost. 
 
-The first step proceeds as follows, illustrated in Fig. \ref{fig:path-dependence}.
-Suppose the target object on the first round is $o_1$.
-Due to uniform priors, both utterances are equally likely to apply to either object, and because each utterance is equally (un)informative, the speaker effectively samples an utterance at random $u~\sim~S(u|o_1)$.
-Suppose it is $u_1$.
-They may then observe the listener's selection of an object $o \sim L(o | u_1)$ --- say, $o_1$, a correct response.
-Finally, they may use the observed pair $D = \{u_1, o_1\}$ to update their beliefs about the listener's true lexicon $P(\phi | D)\propto L_1(o_1 | u_1, \phi)P(\phi)$.
-The listener is similarly able to update their beliefs about the speaker's true lexicon $P(\phi | D)\propto S_1(u_1 | o_1, \phi)P(\phi)$. 
-Both agents then proceed to the next trial, where they use this updated posterior distribution to produce or interpret language.
+For illustration, we walk explicitly through the first step of the simulation depicted in Fig.~\ref{fig:path-dependence}.
+Suppose the target object presented to the speaker agent on the initial trial is $\orangecircle$.
+Due to their uniform priors, both utterances are equally likely to apply to either object, and because each utterance is equally (un)informative, the speaker's utility reduces to sampling an utterance at random $u~\sim~S(u\,|\, \orangecircle)$.
+Suppose $u_1$ is sampled.
+The listener hears this utterance and selects an object according to their own utility, which also reduces to sampling an object at random $o \sim L(o | u_1)$ --- say, $ \orangecircle$, a correct response.
+Finally, both agents may use the observed tuple $D = \{ \orangecircle^*, u_1,  \orangecircle\}$, depicted as the top row in Fig.~\ref{fig:path-dependence} to update their beliefs about their partner's true lexicon.
+\begin{align}
+P_S(\phi | D) & \propto L_0( \orangecircle\, |\, u_1, \phi)P(\phi)\nonumber \\
+P_L(\phi | D) & \propto S_1(u_1 \,|\, \orangecircle^*, \phi)P(\phi)\nonumber
+\end{align}
+Both agents then proceed to the next trial, where they use this updated posterior distribution to produce or interpret language in their new role.
+To examine how the dynamics of this process unfold over multiple rounds, we simulated 1000 trajectories.
+The trial sequence contained 30 trials, structured into 15 repetition blocks.
+The two objects appeared in a random order within each block, and agents swapped roles at the beginning of each block.
+We show representative behavior at soft-max optimality parameter values $w_L = w_S = 2$ and memory discounting parameter $\beta = 0.8$, but see Appendix Fig.~\ref{fig:arbitrariness_grid} for an exploration of behavior at other parameter values.
+
 \begin{figure*}
 \centering
     \includegraphics[scale=1.5]{sec1-reduction_example}
@@ -70,39 +75,35 @@ Both agents then proceed to the next trial, where they use this updated posterio
   \label{fig:sec1efficiency}
 \end{figure*}
 
-To examine how the dynamics of this process unfold over multiple rounds, we simulated 1000 trajectories, each of which was 30 trials in length, organized into 15 blocks.
-Agents swapped speaker and listener roles on each trial, and we randomized the target sequence within each block \ks{I found this wording a bit confusing; there are two meanings, so basically this is each block they see them both in random order?}.
-This simulation was conducted at soft-max optimality parameter values $w_L = w_S = 16$ and memory discounting parameter $\beta = 0.8$, but see Appendix Fig.~\ref{fig:arbitrariness_grid} for an exploration of behavior at other values.
-Agents were initialized with the same priors in every trajectory, such that trajectories only diverged when different actions happen to be sampled.
-For example, if the speaker samples $u_2$ instead of $u_1$ on the first trial, or if the listener makes an error by choosing $o_2$, then they will subsequently condition on these observations instead, leading to different downstream beliefs and behavior (see Fig. \ref{fig:path-dependence} for the average trajectories resulting from all possible combinations of speaker and listener choices on the first trial).
 
-We highlight several key results from these simulations.
+We highlight several key results from this simulation.
 First, most fundamentally, the communicative success of the dyad rises over the course of interaction; the listener is able to more accurately select the true target object (see Fig.~\ref{fig:sec1model}A). 
 Second, the initial symmetry between the meanings is broken by initial choices, leading to \emph{arbitrary} but \emph{stable} mappings in future rounds.
-This can be seen by examining the path-dependence of beliefs, following all possible outcomes of the initial trial (see Fig.~\ref{fig:path-dependence}). 
-Third, we see the clear influence of mutual exclusivity via Gricean pragmatic reasoning (see \emph{Bias against ambiguity} above): agents also make inferences about \emph{unheard} utterances. 
-Observing $D = \{(u_2, o_1)\}$ also provides evidence that $u_1$ is \emph{not} a good fit for $o_1$ (e.g.~see the third row of Fig.~\ref{fig:path-dependence}).
-%Fourth, conventions may form based on \emph{failed references} as well as successful ones: if the speaker intends $o_1$ and says $u_1$, but then the listener incorrectly picks $o_2$, the speaker will take this as evidence that $u_1$ actually means $o_2$ in their partner's lexicon and become increasingly likely to use it that way on subsequent rounds.
+Because agents were initialized with the same priors in every trajectory, trajectories only diverged when different actions happen to be sampled.
+This can be seen by examining the path-dependence of subsequent beliefs based on the outcome of the initial trial in Fig.~\ref{fig:path-dependence}.
+Third, we observe the influence of mutual exclusivity via Gricean pragmatic reasoning: agents also make inferences about \emph{unheard} utterances. 
+Observing $D = \{(u_2, \orangecircle)\}$ also provides evidence that $u_1$ likely does not mean $\orangecircle$ (e.g.~the third row of Fig.~\ref{fig:path-dependence}, where hearing $u_2$ refer to $\orangecircle$ immediately led to the inference the $u_1$ likely refers to $\bluesquare$).
 
-\subsection{Simulation 1.2: Efficiency}
+\subsection{Simulation 1.2: Increasing efficiency}
 
-Next, we show how our inferential model explains speakers' gains in efficiency over multiple interactions. 
+Next, we show how our model explains speakers' gains in efficiency over multiple interactions. 
 For efficiency to change at all, speakers must be able to produce utterances that vary in length. 
-For this simulation, we therefore extend the grammar\ks{model?} to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances with disjunctive semantics.
-Specifically, we consider a scenario with the same two objects as in Simulation 1.1, but giving the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two. 
-Critically, the meaning of longer utterances are derived compositionally from these primitives using the maximum $t$-conorm\footnote{We focus on disjunction as one of the simplest operations to construct longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation.}:
+For this simulation, we therefore extend the model to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances.
+Human speakers essentially form long description by proposing a collection of simpler descriptions (e.g. ``kind of an X or maybe a Y with Z on top''). 
+This behavior suggests that multi-word utterances $u_iu_j$ ought to be interpreted according to a `max' operation, allowing the literal listener to use any component part that fits the referent under the given lexicon\footnote{We focus on the `max' operation as one of the simplest and most natural ways of constructing longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation. We discuss the possibility of a conjunctive operation in Appendix B, which is capable of producing the desired increases in efficiency but requires additional assumptions about strategically ``failing to refer'' that we find difficult to endorse.}:
 $$\mathcal{L}_\phi(u_iu_j, o) = \max\{\mathcal{L}_\phi(u_i, o) , \mathcal{L}_\phi(u_j, o)\}$$
-\ks{This bit of maths confused the bejesus out of me until I eventually realised (I think?) that $\mathcal{L}_\phi(u_i, o)$ is binary, i.e. it's either 1 or 0 for any particular lexicon. I was looking at these plus the probabilities in fig 5 and wondering what on earth stringing a couple of signals together was going to add. A brief e.g. might help.}
 
-While we established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, human participants in repeated reference games typically bring some prior expectations about language into the interaction.
-For example, a participant who hears `ice skater' on the first round of a task with tangram stimuli may be more likely to select some objects more than others while still having substantial uncertainty about the intended target.
+Now, we consider a scenario with the same two objects as in Simulation 1.1, but give the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two. 
+We established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, but human participants in repeated reference games typically bring some prior expectations about language into the interaction.
+For example, a participant who hears `ice skater' on the first round of the task in \citeA{ClarkWilkesGibbs86_ReferringCollaborative} may be more likely to select some objects more than others while still having substantial uncertainty about the intended target (e.g. over three of the twelve tangram that have some resemblance to an ice skater).
 This observation is key to understanding why speakers may initially use longer utterances in repeated reference games with ambiguous stimuli. 
 Under a completely uniform prior, where all words are expected to be equally meaningless to one's partner, longer utterances have no additional value. 
 Under a completely concentrated prior, where there already exists a strong convention for a short label, that label would suffice and a longer utterances is redundant.
-We thus initialize both agents with weak lexical beliefs
-$$P(\phi(u_1) = o_1) = P(\phi(u_2) = o_1) = 0.55$$ 
-$$P(\phi(u_3) = o_1) = P(\phi(u_4) = o_1) = 0.45$$
-and show how our model predicts an initial preferences for long utterances but increasing preferences for shorter utterances given communicative success.
+We thus initialize both agents with very weak biases (represented in compressed matrix form in Fig.~\ref{fig:sec1efficiency}):
+\begin{align}
+P(\phi(u_1) = o_1) & = P(\phi(u_2) = o_1)  = 0.55\nonumber\\
+    P(\phi(u_3) = o_1) & = P(\phi(u_4) = o_1)  = 0.45\nonumber
+\end{align}
 
 %\begin{figure}[b]
 %\centering
@@ -115,15 +116,13 @@ and show how our model predicts an initial preferences for long utterances but i
 \centering
     \includegraphics[scale=1.2]{sec1-reduction_schematic}
     \vspace{1em}
-  \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, it updates its beliefs and becomes more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
+  \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, they update their beliefs and become more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
   \label{fig:sec1internals}
 \end{figure*}
 
-As in Simulation 1.1, we simulated 1000 trajectories of dyadic interaction between agents.
-Target objects were randomly sampled on each trial, agents swapped roles, and the agents' lexical posteriors $P(\phi | D)$ were computed after each trial using exact enumeration. 
-Utterance cost is defined to be the number of `words' in an utterance, so $c(u_1) =1$ and $c(u_1u_2)=2$.
-Results are shown in Fig.~\ref{fig:sec1model}B.
-As in repeated reference games between human participants (e.g. Fig.~\ref{fig:clark92}), our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block).
+As in Simulation 1.1, we simulated 1000 distinct trajectories of dyadic interaction between agents.
+Utterance cost was defined to be the number of `words' in an utterance, so $c(u_1) =1$ and $c(u_1u_2)=2$.
+Our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block), qualitatively matching the curves measured in the empirical literature (e.g. Fig.~\ref{fig:clark92}).
 
 To illustrate in detail how our model derives this phenomenon as a consequence of rational inference, we walk step-by-step through a single trial (Fig. \ref{fig:sec1efficiency}).
 Consider a speaker who wants to refer to object $o_1$. 
@@ -145,7 +144,7 @@ As the posterior probability that individual primitive utterances $u_1$ and $u_2
 As a consequence, production cost increasingly dominates the utility (center-right). 
 After several trials of observing a successful listener response given the disjunction, the utility of the shorter utterances reaches parity with the disjunction.
 Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention. \ks{Doesn't this suffer from the same criticism you level at Beule and Steels, namely any word could be dropped?}
-Thus, increasing efficiency is derived as a rational consequence of inference about the listener's lexical.
+Thus, increasing efficiency is derived as a rational consequence of uncertainty and partner-specific inference about the listener's lexicon.
 For these simulations, we used $w_S = w_L = 7, w_c = 11, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
 %\paragraph{Model comparison}
 %
