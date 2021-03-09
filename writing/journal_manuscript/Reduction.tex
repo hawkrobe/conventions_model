@@ -143,7 +143,7 @@ We assume for illustrative purposes that $o_1$ continues to be the target on eac
 As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the disjunction and the shorter components gradually decreases (center left).
 As a consequence, production cost increasingly dominates the utility (center-right). 
 After several trials of observing a successful listener response given the disjunction, the utility of the shorter utterances reaches parity with the disjunction.
-Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention. \ks{Doesn't this suffer from the same criticism you level at Beule and Steels, namely any word could be dropped?}
+Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
 Thus, increasing efficiency is derived as a rational consequence of uncertainty and partner-specific inference about the listener's lexicon.
 For these simulations, we used $w_S = w_L = 7, w_c = 11, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
 %\paragraph{Model comparison}
@@ -168,14 +168,23 @@ Our explanation recalls classic observations about \emph{hedges}, expressions li
 While our model does not explicitly produce hedges, it is possible to understand this behavior as an explicit or implicit marker of the lexical uncertainty theorized by our account.
 
 We have already discussed why this phenomenon poses a challenge for the simple model-free reinforcement learning models in the literature --- namely, that successful listener feedback only reinforces long utterances with no mechanism for shortening them.
-This observation is not intended to rule out the entire family of reinforcement learning approaches: it is plausible that more sophisticated \emph{model-based} reinforcement learning algorithms are flexible enough to account for the phenomenon.
+This observation is not intended to rule out the entire family of reinforcement learning approaches, however. 
+It is plausible that more sophisticated \emph{model-based} reinforcement learning algorithms are flexible enough to account for the phenomenon.
 For instance, hierarchical architectures that appropriately incorporate compositionality or incrementality into the speaker's production model may be able to reinforce component parts of longer utterances in the shared history \cite<e.g>{hawkins2019continual}.
-However, such an approach would bring these models much closer to the features of our proposal than to the model-free agents in the existing literature.
+Still, such an approach would bring these models much closer to the features of our proposal than to the model-free agents in the existing literature.
 We return to this question in our discussion of the scalability of our model in the General Discussion.
 
-Finally, our explanation of reduction in this section is consistent with recent analyses of exactly \emph{what} gets reduced, using a large corpus of repeated reference games \cite{hawkins2020characterizing}.
+Finally, the theory of reduction explored in this section is consistent with recent analyses of exactly \emph{what} gets reduced in a large corpus of repeated reference games \cite{hawkins2020characterizing}.
 These analyses found that entire modifying clauses are more likely to be dropped at once than expected by random corruption, and function words like determiners are mostly dropped as parts of larger noun phases or prepositional phrases rather than omitted on their own.
-In other words, speakers apparently begin by combining multiple descriptive labels and collapse to one of these labels, rather than randomly dropping words because the listener can be expected to recover the intended longer utterance, as predicted by a ``noisy channel'' model.
-This claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
-While our simulation only considered two-word descriptions with homogenous uncertainty over the components, it is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction. \ks{So this is dealing with the Beule and Steels thing now, but it reads as relatively weak here}
+In other words, speakers apparently begin by combining multiple descriptive labels and collapse to one of these labels, rather than noisily dropping words and assuming the listener can recover the intended longer utterance, as predicted by a noisy channel model.
+This theoretical claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
+
+While our account explains these observations as a result of structure and heterogeneity in the lexical prior, it remains an open question of how to instantiate appropriately realistic priors in our computational model. 
+Our simulation only considered two-word descriptions with homogenous uncertainty over the components, and is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: for example, the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction. 
+Future work is needed to elicit these priors and evaluate predictions about more fine-grained patterns.
+
+
+
+
+
 
