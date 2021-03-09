@@ -220,34 +220,41 @@ For consistency with previous Bayesian models of word learning \cite<e.g.>{XuTen
 When targets of reference are conceptually distinct, as typically assumed in signaling games, the target space of utterance meanings reduces to the discrete space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$.
 
 For this special case, the parameter space contains exactly $|\mathcal{O}| \times |\mathcal{U}|$ possible values for $\phi$, corresponding to all possible mappings between utterances and individual objects. 
-Each possible lexicon can therefore be written as a binary matrix where the rows correspond to utterances, columns correspond to objects, and each row is constrained to sum to 1. 
-The function $\mathcal{L}_{\phi}(u,o)$ simply looks up the specified element in the specified matrix.
+Each possible lexicon can therefore be written as a binary matrix where the rows correspond to utterances, and each row contains one object.
+The truth-conditional function $\mathcal{L}_{\phi}(u,o)$ then simply checks whether the element in row $u$ matches object $o$.
 For example, there are four possible lexicons for two utterances and two objects:
+
 $$\phi \in \left\{\begin{bmatrix}
-1 & 0 \\
-0 & 1 \\
+\bluesquare \\
+\orangecircle \\
 \end{bmatrix},
 \begin{bmatrix}
-0 & 1 \\
-1 & 0 \\
+\orangecircle \\
+\bluesquare \\
 \end{bmatrix},
 \begin{bmatrix}
-1 & 0 \\
-1 & 0 \\
+\orangecircle\\
+\orangecircle \\
 \end{bmatrix},
 \begin{bmatrix}
-0 & 1  \\
-0 & 1 \\
+\bluesquare  \\
+\bluesquare \\
 \end{bmatrix}\right\}$$
 
 Second, having defined the support of $\phi$, we can then define a simplicity prior $P(\phi) \propto \exp\{-|\phi|\}$ following \citeA{FrankGoodmanTenenbaum09_Wurwur}, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary. 
 Again, for traditional signaling games, this reduces to a uniform prior because all possible lexicons are the same size: $\phi(u_i) \sim \textrm{Unif}(\mathcal{O})$.
 Indeed, we can compactly write distributions over $\phi$ in terms of the same utterance-object matrix, where row $i$ represents the marginal distribution over possible meanings of utterance $u_i$.
 For example, the uninformative prior for two utterances and two objects can be written:
-$$P(\phi) = \begin{bmatrix}
+$$P(\phi) =  \begin{array}{ccc}
+& & \bluesquare \,\,\,\,\,\,\orangecircle \\
+\begin{bmatrix}
+\textrm{Unif}\{\bluesquare,\orangecircle\} \\
+\textrm{Unif}\{\bluesquare,\orangecircle\} \\
+\end{bmatrix} & = & \begin{bmatrix}
 .5 & .5  \\
 .5 & .5 \\
-\end{bmatrix}$$
+\end{bmatrix}
+\end{array}$$
 For \textbf{P3}, however, we consider spaces of referents with more complex conceptual structure and a larger space of possible meanings, where a single word may apply to multiple conceptually related referents or, conversely, may have a `null' meaning, referring to no objects at all.
 In this more general case, a simplicity prior generically favors smaller word meanings as well as a smaller effective vocabulary size, since the null meaning has the smallest extension. 
 
