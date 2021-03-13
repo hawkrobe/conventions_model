@@ -15,7 +15,7 @@ They attempt to satisfy the Gricean Maxims \cite{Grice75_LogicConversation} by s
 S_1(u | o) & \propto   \exp\{w_S \cdot U(u; o)\}\label{eq:RSAspeaker} \\
 U(u; o) & = (1-w_C) \cdot \underbrace{\log L_0(o | u)}_{\mathclap{\text{informativity}}} -\, w_C \cdot \underbrace{c(u)}_{\mathclap{\text{cost}}} \nonumber 
 \end{align}
-where $c(u)$ is a function giving the cost of producing $u$, assuming a longer utterances are more costly.
+where $c(u)$ is a function giving the cost of producing $u$, assuming a longer utterances is more costly.
 The speaker has two free parameters: $w_C \in [0,1]$ controls the relative weight of informativity and parsimony in the speaker's production, and $w_S \in[0,\infty]$ controls their softmax optimality (i.e. as $w_S \rightarrow \infty$, the speaker increasingly chooses the utterance with maximal utility.)
 
 The imagined \emph{literal listener} $L_0$ in Eq.~\ref{eq:RSAspeaker} is assumed to identify the target using a lexical meaning function $\mathcal{L}(u,o)$ capturing the literal semantics of the utterance $u$.
@@ -99,7 +99,7 @@ We focus for simplicity on this basic two-layer hierarchy, but the model can be 
 We return to these possible extensions in the General Discussion.
 
 To integrate this lexical uncertainty into our speaker and listener models, we assume they each act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$ \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}.
-In other words, they sample actions by marginalizing over their own posterior $P_S(\phi_k | D_k)$ or $P_L(\phi_k | D_k)$ of different meanings their partner $k$ may be using.
+In other words, they sample actions by marginalizing over their own posterior $P_S(\phi_k | D_k)$ or $P_L(\phi_k | D_k)$ of different meanings their partner $k$ may be using.\ndg{need to say what $D_k$ is.}
 \begin{align}
 L(o|u) &\propto   \exp\left\{w_L \textstyle{\int} P_L(\phi_k | D_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\nonumber\\
 S(u|o) &\propto  \exp\left\{w_S \textstyle{\int} P_S(\phi_k | D_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\label{eq:marginalized}
@@ -135,10 +135,10 @@ We will show that when agents learn about their partner in this way, and adjust 
 \paragraph{Inductive generalization}
 
 The posterior in Eq.~\ref{eq:joint_inference} also provides an inductive pathway for partner-specific data to inform beliefs about community-wide conventions.
-Agents update their beliefs about $\Theta$ by marginalizing over data accumulated from different partners:
+Agents update their beliefs about $\Theta$, using data accumulated from different partners, by marginalizing over beliefs about specific partners:
 \begin{equation}
 \begin{split}
-    P(\Theta | D)  = & \int_{\phi} P(\phi, \Theta | D_k) d\phi \\
+    P(\Theta | D)  = & \int_{\phi} P(\phi, \Theta | D) d\phi \\
 %                     \propto & P(\Theta) \int_{\phi} P(D_k | \phi_k) P(\phi_k | \Theta) d\phi
 \end{split}
 \end{equation}
@@ -149,6 +149,7 @@ Note that this population-level posterior over $\Theta$ not only represents what
 The updated $\Theta$ should be used to guide the prior expectations an agent brings into a subsequent interactions with a stranger.
 This transfer is sometimes referred to as ``sharing of strength'' or ``partial pooling'' because pooled data is smoothly integrated with domain-specific knowledge.
 This property has been key to explaining how the human mind solves a range of other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
+\ndg{here or in GD should mention that blessing of abstraction means it is possible for beliefs about language "in general" to outpace beliefs about partner idiosyncrasies. i think this may be important for reconciling our proposal with language acquisition work?}
 
 \subsection{Further challenges}
 
@@ -165,7 +166,7 @@ So, what data $D_k$ should each agent use to update their beliefs at a particula
 
 In principle, we expect that $D_k$ reflects all relevant sources of information that may expose an agent's understanding or misunderstanding, including verbal and non-verbal backchannels (\emph{mmhmm}, nodding), clarification questions, and actions taken in the world.
 In the more minimal setting of a reference game, we use the full feedback provided by the task, where the speaker's intended target and the listener's response are revealed at the end of each trial. 
-Formally, this information can be written as a set of tuples $D_k = \{o^*, u', o'\}_{t=1}^T$, where $o^*$ denotes the speaker's intended target, $u'$ denotes the utterance they produced, and $o'$ denotes the listener's response on each previous trial $t$.
+Formally, this information can be written as a set of tuples $D_k = \{o^*, u', o'\}_{t=1}^T$, where $o^*$ denotes the speaker's intended target, $u'$ denotes the utterance they produced, and $o'$ denotes the listener's response, on each previous trial $t$.
 
 Now, to specify the likelihoods in Eq.~\ref{eq:joint_inference} for our referential setting, we assume each agent should infer their partner's lexicon $\phi_k$ by conditioning on their \emph{partner's} previous choices.
 The listener on a given trial should use the probability that a speaker would produce $u$ to refer to the target $o^*$ under different $\phi_k$, i.e. $P_L(\{o^*, u', o'\}_t\, | \, \phi_k) = S_1(u'_t \,|\, o^*_t, \phi_k)$, and the speaker should likewise use the probability that their partner would produce response $o'$ after hearing utterance $u$, $P_S(\{o^*, u', o'\}_t \,|\, \phi_k) = L_0(o'_t \,|\, u'_t)$,
@@ -174,6 +175,8 @@ In the case of an error, where the agent in the listener role hears the utteranc
 Meanwhile, the agent in the speaker role will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance.
 In other words, each agent will subsequently condition on slightly different data leading to slightly different beliefs that must be resolved through further interaction.
 
+\ndg{when each player updates independently using bayes rule, treating their partner's lexicon as fixed, they might update "at cross purposes". i think we believe that this process will converge in the limit of enough trials.... do we have a proof of that? if we do, great! if not, we should indicate this as a reasonable open question.}
+
 \paragraph{Memory and forgetting}
 
 Second, we must address the limitations imposed by memory and forgetting; it is unrealistic to expect that memories of every element of every past interaction in $D$ is equally available.
@@ -181,6 +184,8 @@ Second, we must address the limitations imposed by memory and forgetting; it is 
 Furthermore, this may be to the agent's advantage. 
 As described in the previous section, early errors are incorporated into the data, leading to mis-coordination much later in an interaction when each agent conditions on different data.
 Without a mechanism to discount these earlier data points, agents may be prevented from ever reaching consensus \cite{spike_minimal_2017}.
+
+\ndg{I think it is worth pointing out (and perhaps changing description to embrace) that the hierarchical model could be extended one level down to treat different time points with the same partner as having different lexicons. a reasonably strong assumption of statistical sharing between neighboring timepoints would yield the simple forgetting model below.... but this is a more principled way to capture the idea that the lexicon evolves over an extended interaction?}
 
 Forgetting is typically incorporated into Bayesian models with a decay term in the likelihood function \cite{anderson2000adaptive,angela2009sequential,fudenberg2014recency,kalm2018visual}.
 $$P(D_k | \phi_k) = \prod_{\tau=0}^T \beta^{\tau} P(\{o^*,u',o'\}_{T-\tau}\, |\, \phi_k)$$
@@ -269,3 +274,4 @@ We would prefer to use enumeration to obtain posteriors over lexical meanings (s
 For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from the posterior, and approximate the expectations in Eq.~\ref{eq:marginalized} by summing over these samples. 
 Because we are emphasizing a set of phenomena where our model makes qualitatively different predictions than previous models, our goal in this paper is to illustrate and evaluate these \emph{qualitative} predictions rather than provide exact quantitative fits to empirical data.
 As such, we proceed by examining predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that make qualitatively informative predictions, and leave direct parameter-fitting for future work. 
+\ndg{maybe: "leave the computationally expensive task of parameter fitting to future studies"? to gesture at the reason it isn't easy to fit params...}
