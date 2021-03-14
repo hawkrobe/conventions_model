@@ -12,7 +12,7 @@ var params = {
   discountFactor: argv.discountFactor,
   guessingEpsilon: argv.guessingEpsilon,
   costWeight: 0,
-  numTrials: 40,
+  numTrials: 30,
   context : objects,
   partnerID: 1,
   utterances: utterances,
@@ -20,24 +20,32 @@ var params = {
   inferOptions: {method: 'enumerate'}
 };
 
-var pragStr = ('discount:' + params.discountFactor);
-var outputFile = csv.open('./output/arbitrariness_trajectory_' + pragStr + '_' + argv.gameNum + '.csv');
+var outputFile = csv.open('./output/arbitrariness_trajectory_' + argv.gameNum + '.csv');
 var header = 'gameNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guessingEpsilon,\
-              trialNum,speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct';
+              trialNum,speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct,\
+              agent1_circle,agent1_square,agent2_circle,agent2_square';
 csv.writeLine(header, outputFile);
 
 var lexicalPrior = function() {
-  return {'1' : _.zipObject(utterances, map(function(utt) {
+  var lexicon = _.zipObject(utterances, map(function(utt) {
     return sample(Categorical({vs: meanings}));
-  }, utterances))};
+  }, utterances));
+  return {1 : lexicon};
 };
 
-var writeLine = function(iterationNum, currTrial, topListenerChoice, topSpeakerChoice) {
+var writeLine = function(iterationNum, currTrial, topListenerChoice, topSpeakerChoice,
+                         speakerPosterior, listenerPosterior) {
+  var speakerPosterior_u1 = marginalize(speakerPosterior, function(x) {return x[1]['word1'];});
+  var listenerPosterior_u1 = marginalize(listenerPosterior, function(x) {return x[1]['word1'];});
+  var agent1 = currTrial.speakerID == 1 ? speakerPosterior_u1 : listenerPosterior_u1;
+  var agent2 = currTrial.speakerID == 1 ? listenerPosterior_u1 : speakerPosterior_u1;
   csv.writeLine([
     iterationNum, params.speakerAlpha, params.listenerAlpha, params.costWeight, params.discountFactor, params.guessingEpsilon,
     currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.intendedName,
     topSpeakerChoice, topListenerChoice,
-    topListenerChoice == currTrial.intendedName
+    topListenerChoice == currTrial.intendedName,
+    agent1.score('circle'), agent1.score('square'),
+    agent2.score('circle'), agent2.score('square')
   ].join(','), outputFile);
 };
 
@@ -45,28 +53,29 @@ var writeLine = function(iterationNum, currTrial, topListenerChoice, topSpeakerC
 // for each point in data, we want the model's predictions 
 var iterate = function(iterationNum, dataSoFar) {
   var trialNum = dataSoFar[1].length;
+  var repNum = Math.floor(trialNum / 2);
   var currTrial = {
-    intendedName: uniformDraw(objects),
+    intendedName: ((trialNum % 2) == 0 ? uniformDraw(objects) :
+                   remove(last(dataSoFar[1]).intendedName, objects)[0]),
     trialNum: trialNum,
     partnerID: 1,
     context: objects,
-    speakerID: (trialNum % 2) == 0 ? 1 : 2,
-    listenerID: (trialNum % 2) == 0 ? 2 : 1
+    speakerID: (repNum % 2) == 0 ? 1 : 2,
+    listenerID: (repNum % 2) == 0 ? 2 : 1
   };
 
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
   var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
 
-  // get marginal prediction of next data point over lexicon posterior
   var speakerOutput = S(currTrial.intendedName, speakerPosterior, params);
   var topSpeakerChoice =  sample(speakerOutput);
-
   
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
   var topListenerChoice =  sample(listenerOutput);
-  
-  writeLine(params, currTrial, topListenerChoice, topSpeakerChoice);
+
+  writeLine(iterationNum, currTrial, topListenerChoice, topSpeakerChoice, speakerPosterior, listenerPosterior);
   if(currTrial.trialNum < params.numTrials) {
+
     var ids = [currTrial.speakerID, currTrial.listenerID];
     iterate(iterationNum, _.zipObject(ids, map(function(id) {
       return dataSoFar[id].concat(extend(currTrial, {
@@ -81,5 +90,5 @@ var iterate = function(iterationNum, dataSoFar) {
 map(function(i) {
   console.log('iteration', i);
   iterate(i, {1: [], 2: []});
-}, _.range(100));
+}, _.range(500));
 csv.close(outputFile);
