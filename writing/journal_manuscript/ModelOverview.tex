@@ -12,11 +12,11 @@ In the next section, we will review this basic framework and then raise two fund
 In our referential communication setting\footnote{For concreteness, we restrict our scope to reference in a discrete context of objects, but the same formulation applies to more general spaces of meanings.}, the RSA framework defines a pragmatic speaker, denoted by $S_1$, who must choose an utterance $u$ that will allow their partner to choose a particular target object $o$ from the current communicative context $\mathcal{C}$:
 They attempt to satisfy the Gricean Maxims \cite{Grice75_LogicConversation} by selecting utterances proportional to a utility function $U(u;o)$ that balances informativity to an imagined listener against the cost of producing an utterance:
 \begin{align}
-S_1(u | o) & \propto   \exp\{w_S \cdot U(u; o)\}\label{eq:RSAspeaker} \\
+S_1(u | o) & \propto   \exp\{\alpha_S \cdot U(u; o)\}\label{eq:RSAspeaker} \\
 U(u; o) & = (1-w_C) \cdot \underbrace{\log L_0(o | u)}_{\mathclap{\text{informativity}}} -\, w_C \cdot \underbrace{c(u)}_{\mathclap{\text{cost}}} \nonumber 
 \end{align}
 where $c(u)$ is a function giving the cost of producing $u$, assuming a longer utterances are more costly.
-The speaker has two free parameters: $w_C \in [0,1]$ controls the relative weight of informativity and parsimony in the speaker's production, and $w_S \in[0,\infty]$ controls their softmax optimality (i.e. as $w_S \rightarrow \infty$, the speaker increasingly chooses the utterance with maximal utility.)
+The speaker has two free parameters: $w_C \in [0,1]$ controls the relative weight of informativity and parsimony in the speaker's production, and $\alpha_S \in[0,\infty]$ controls their softmax optimality (i.e. as $\alpha_S \rightarrow \infty$, the speaker increasingly chooses the utterance with maximal utility.)
 
 The imagined \emph{literal listener} $L_0$ in Eq.~\ref{eq:RSAspeaker} is assumed to identify the target using a lexical meaning function $\mathcal{L}(u,o)$ capturing the literal semantics of the utterance $u$.
 That is, the probability of the literal listener choosing object $o$ is proportional to the meaning of $u$ under a static lexical meaning function $\mathcal{L}$:
@@ -71,7 +71,7 @@ To expose the dependence on a fixed system of meaning, Eq.~\ref{eq:RSAspeaker} c
 \begin{align}
 L_0(o | u, \phi) &\propto  \mathcal{L}_\phi(u,o)\hfill\label{eq:RSA} \\
 U(u; o, \phi) & = (1-w_C) \cdot \log L_0(o | u, \phi) -\, w_C \cdot c(u) \nonumber  \\
-S_1(u | o,\phi) & \propto   \exp\{w_S \cdot U(u; o, \phi)\} \nonumber 
+S_1(u | o,\phi) & \propto   \exp\{\alpha_S \cdot U(u; o, \phi)\} \nonumber 
 %L_1(o | u,\phi) & \propto   \exp\{w_L \cdot \log S_1(u | o, \phi) \nonumber \}
 \end{align}
 While we will remain agnostic for now to the exact functional form of $\mathcal{L}_\phi$ and the exact parameter space of $\phi$ (see \emph{Inference details} section below), there are two key computational desiderata we emphasize.
@@ -101,10 +101,10 @@ We return to these possible extensions in the General Discussion.
 To integrate this lexical uncertainty into our speaker and listener models, we assume they each act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$ \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}.
 In other words, they sample actions by marginalizing over their own posterior $P_S(\phi_k | D_k)$ or $P_L(\phi_k | D_k)$ of different meanings their partner $k$ may be using.
 \begin{align}
-L(o|u) &\propto   \exp\left\{w_L \textstyle{\int} P_L(\phi_k | D_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\nonumber\\
-S(u|o) &\propto  \exp\left\{w_S \textstyle{\int} P_S(\phi_k | D_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\label{eq:marginalized}
+L(o|u) &\propto   \exp\left\{\alpha_L \textstyle{\int} P_L(\phi_k | D_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\nonumber\\
+S(u|o) &\propto  \exp\left\{\alpha_S \textstyle{\int} P_S(\phi_k | D_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\label{eq:marginalized}
 \end{align}
-where $w_S, w_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{We denote $L$ and $S$ without a subscript because they are the final speaker and listener models we use throughout the paper -- the subscripted definitions are internal constructs used to define these models -- but in the terminology of the RSA framework they represent $L_1$- and $S_1$-level pragmatic agents. We found that higher levels of recursion were not necessary to derive the phenomena of interest, but Eq.\ref{eq:marginalized} $L_n$ and $S_n$-level lexical uncertainty models may be generalized by replacing $S_1$ in the listener equation, and $L_0$ in the speaker's utility equation, with standard RSA definitions of $n-1$-level agents \cite<e.g.>{zaslavsky2020rate}.}.
+where $\alpha_S, \alpha_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{We denote $L$ and $S$ without a subscript because they are the final speaker and listener models we use throughout the paper -- the subscripted definitions are internal constructs used to define these models -- but in the terminology of the RSA framework they represent $L_1$- and $S_1$-level pragmatic agents. We found that higher levels of recursion were not necessary to derive the phenomena of interest, but Eq.\ref{eq:marginalized} $L_n$ and $S_n$-level lexical uncertainty models may be generalized by replacing $S_1$ in the listener equation, and $L_0$ in the speaker's utility equation, with standard RSA definitions of $n-1$-level agents \cite<e.g.>{zaslavsky2020rate}.}.
 
 \paragraph{Partner-specific learning}
 
@@ -169,7 +169,7 @@ Formally, this information can be written as a set of tuples $D_k = \{o^*, u', o
 
 Now, to specify the likelihoods in Eq.~\ref{eq:joint_inference} for our referential setting, we assume each agent should infer their partner's lexicon $\phi_k$ by conditioning on their \emph{partner's} previous choices.
 The listener on a given trial should use the probability that a speaker would produce $u$ to refer to the target $o^*$ under different $\phi_k$, i.e. $P_L(\{o^*, u', o'\}_t\, | \, \phi_k) = S_1(u'_t \,|\, o^*_t, \phi_k)$, and the speaker should likewise use the probability that their partner would produce response $o'$ after hearing utterance $u$, $P_S(\{o^*, u', o'\}_t \,|\, \phi_k) = L_0(o'_t \,|\, u'_t)$,
-This symmetry, where each agent is attempting to learn from the other's behavior, creates a clear coordination problem\footnote{In some settings, agents in one role may be expected to take on more of the burden of adaptation, leading to an asymmetric division of labor \cite<e.g.>{MorenoBaggio14_AsymmetrySignaling}. This may be especially relevant in the presence of asymmetries in power, status, or capability. In principle, this could be reflected in differing values of parameters $w_S$ and $w_L$, but we leave consideration of such asymmetries for future work.}.
+This symmetry, where each agent is attempting to learn from the other's behavior, creates a clear coordination problem\footnote{In some settings, agents in one role may be expected to take on more of the burden of adaptation, leading to an asymmetric division of labor \cite<e.g.>{MorenoBaggio14_AsymmetrySignaling}. This may be especially relevant in the presence of asymmetries in power, status, or capability. In principle, this could be reflected in differing values of parameters $\alpha_S$ and $\alpha_L$, but we leave consideration of such asymmetries for future work.}.
 In the case of an error, where the agent in the listener role hears the utterance $u'$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the intended target and subsequently condition on the fact that the speaker chose $u'$ to convey that target.
 Meanwhile, the agent in the speaker role will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance.
 In other words, each agent will subsequently condition on slightly different data leading to slightly different beliefs that must be resolved through further interaction.
@@ -268,4 +268,4 @@ To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), 
 We would prefer to use enumeration to obtain posteriors over lexical meanings (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, enumeration becomes intractable.
 For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from the posterior, and approximate the expectations in Eq.~\ref{eq:marginalized} by summing over these samples. 
 Because we are emphasizing a set of phenomena where our model makes qualitatively different predictions than previous models, our goal in this paper is to illustrate and evaluate these \emph{qualitative} predictions rather than provide exact quantitative fits to empirical data.
-As such, we proceed by examining predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that make qualitatively informative predictions, and leave direct parameter-fitting for future work. 
+As such, we proceed by examining predictions for a regime of parameter values ($\alpha_S, \alpha_L, w_C,\beta$) that make qualitatively informative predictions, and leave parameter-fitting for future work. 
