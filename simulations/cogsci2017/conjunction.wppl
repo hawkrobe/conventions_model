@@ -27,46 +27,47 @@ console.log(params);
 
 var trajectoryFile = csv.open('./output/conjunction_trajectory_' + argv.gameNum + '.csv');
 var posttestFile = csv.open('./output/conjunction_meaningTest_' + argv.gameNum + '.csv');
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,\
-              speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct', trajectoryFile);
-csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,\
-              word1_cost,word1_inform,word2_cost,word2_inform,word1word2_cost,word1word2_inform,word1_production,\
-              word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestFile);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,'
+              +'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct,conjunctionScore', trajectoryFile);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,' +
+              'word1_inform,word2_inform,word1word2_inform,word1_cost,word2_cost,word1word2_cost,word1_production,' +
+              'word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestFile);
 
 
 var lexicalPrior = function() {
   var lexicon = _.zipObject(unconstrainedUtterances, map(function(utt) {
     var bias = 0.05;
     var preferredMeaning = (utt == 'word1' || utt == 'word2' ? 'bluecircle' : 'redsquare');
-    var ps = map(function(meaning) {return meaning == preferredMeaning ? 1/2 + bias : 1/2 - bias;}, meanings);
+    var ps = map(function(meaning) {return meaning == preferredMeaning ? .55 : .45;}, meanings);
     return sample(Categorical({vs: meanings, ps: ps}));
   }, unconstrainedUtterances));
   return {1: lexicon};
 };
 
-var postTest = function(iterationNum, trial, posterior1, posterior2) {
-  var word1Meaning = marginalize(posterior1, function(x) {return x['word1']});
-  var word2Meaning = marginalize(posterior1, function(x) {return x['word2']});
-  var word3Meaning = marginalize(posterior1, function(x) {return x['word3']});
-  var word4Meaning = marginalize(posterior1, function(x) {return x['word4']});
+var writePostTest = function(iterationNum, trial, posterior1, posterior2) {
+  var word1Meaning = marginalize(posterior1, function(x) {return x[1]['word1']});
+  var word2Meaning = marginalize(posterior1, function(x) {return x[1]['word2']});
+  var word3Meaning = marginalize(posterior1, function(x) {return x[1]['word3']});
+  var word4Meaning = marginalize(posterior1, function(x) {return x[1]['word4']});
+
   csv.writeLine([
     iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
     trial.trialNum, trial.speakerID,
-    params.costWeight * getUttCost('word1'),
-    params.speakerAlpha * expectation(posterior1, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon});
+    (1-params.costWeight)*expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
       return L0('word1', config).score('bluecircle');
     }),
-    params.costWeight * getUttCost('word2'),
-    params.speakerAlpha * expectation(posterior1, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon});
-      return L1('word2', config).score('bluecircle');
+    (1-params.costWeight) * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
+      return L0('word2', config).score('bluecircle');
     }),
-    params.costWeight * getUttCost('word1_word2'),      
-    params.speakerAlpha * expectation(posterior1, function(lexicon) {
-      var config = extend(params, {lexicon: lexicon});
-      return L1('word1_word2', config).score('bluecircle');
+    (1-params.costWeight) * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
+      return L0('word1_word2', config).score('bluecircle');
     }),
+    params.costWeight * shared.getUttCost('word1'),
+    params.costWeight * shared.getUttCost('word2'),
+    params.costWeight * shared.getUttCost('word1_word2'),      
     S('bluecircle', posterior1,params).score('word1'),
     S('bluecircle', posterior1,params).score('word2'),
     S('bluecircle', posterior1,params).score('word1_word2'),        
@@ -77,17 +78,27 @@ var postTest = function(iterationNum, trial, posterior1, posterior2) {
   ].join(','), posttestFile);
 };
 
+var writeTrajectory = function(iterationNum, currTrial, speakerOutput, topSpeakerChoice, topListenerChoice) {
+  csv.writeLine([
+    iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
+    params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
+    currTrial.intendedName, topSpeakerChoice, topListenerChoice,
+    topListenerChoice == currTrial.intendedName, Math.exp(speakerOutput.score('word1_word2')) + Math.exp(speakerOutput.score('word3_word4'))
+  ].join(','), trajectoryFile);
+};
+
 // for each point in data, we want the model's predictions 
 var iterate = function(iterationNum, dataSoFar) {
   var trialNum = dataSoFar[1].length;
+  var repNum =  Math.floor(trialNum / 2);
   var currTrial = {
-    intendedName: uniformDraw(objects),
+    intendedName: ((trialNum % 2) == 0 ? uniformDraw(objects) :
+                   remove(last(dataSoFar[1]).intendedName, objects)[0]),
     context : objects,
     trialNum: trialNum,
-    repNum: Math.floor(trialNum / 2),
     partnerID: 1,
-    speakerID: (trialNum % 2) == 0 ? 1 : 2,
-    listenerID: (trialNum % 2) == 0 ? 2 : 1
+    speakerID: (repNum % 2) == 0 ? 1 : 2,
+    listenerID: (repNum % 2) == 0 ? 2 : 1
   };
 
   var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
@@ -99,12 +110,8 @@ var iterate = function(iterationNum, dataSoFar) {
   var listenerOutput = L(topSpeakerChoice, listenerPosterior, params);
   var topListenerChoice = sample(listenerOutput);
 
-  csv.writeLine([iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
-                 params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
-                 currTrial.intendedName, topSpeakerChoice, topListenerChoice,
-                 topListenerChoice == currTrial.intendedName
-                ].join(','), trajectoryFile);
-
+  writePostTest(iterationNum, currTrial, speakerPosterior, listenerPosterior);
+  writeTrajectory(iterationNum, currTrial, speakerOutput, topSpeakerChoice, topListenerChoice);
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
     return dataSoFar[id].concat(extend(currTrial, {
       role : id == currTrial.speakerID ? 'speaker' : 'listener',
@@ -121,6 +128,6 @@ var iterate = function(iterationNum, dataSoFar) {
 map(function(i) {
   console.log('iteration', i)
   iterate(i, {1: [], 2: []});
-}, _.range(50));
+}, _.range(100));
 csv.close(trajectoryFile);
 csv.close(posttestFile);
