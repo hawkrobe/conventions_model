@@ -9,7 +9,7 @@ The same words may be interpreted differently by different listeners.
 Interactions between friends and colleagues are filled with proper names, technical jargon, slang, shorthand, and inside jokes, many of which are unintelligible to outside observers.
 Furthermore, words take on new \emph{ad hoc} senses over the course of a conversation \cite{clark_using_1996}.
 
-The tension between these two basic observations has posed a challenging and persistent puzzle for theories of convention.
+The tension between these two basic observations  --- stability and flexibility --- has posed a challenging and persistent puzzle for theories of convention.
 Many influential computational accounts explaining how social conventions emerge in populations  do not allow for partner-specific meaning at all \cite<e.g.>{hurford1989biological,barr_establishing_2004,skyrms2010signals,steels2011modeling,young_evolution_2015}.
 These accounts typically examine groups of interacting agents who update their representation of language after each interaction.
 While the specific update rules range from simple associative mechanisms \cite<e.g.>{steels_self-organizing_1995} or heuristics \cite<e.g>{Young96_EconomicsOfConvention} to more sophisticated deep reinforcement learning algorithms \cite<e.g.>{tieleman2019shaping,graesser2019emergent,mordatch2017emergence}, all of these accounts assume that agents update a single, monolithic representation of language to be used with every partner, and that agents do not (knowingly) interact repeatedly with the same partner.
@@ -50,7 +50,7 @@ One of our central theoretical aims is to ground the problem of convention --- a
 Our argument is structured around a series of three key phenomena in the empirical literature that have proved evasive for previous theoretical accounts of convention and coordination: 
 \begin{description}
 \item[P1:] the convergence to increasingly \textbf{efficient} referring expressions over repeated interactions with a single partner,
-\item[P2:] the influence of \textbf{partner-specificity} as conventions gradually generalize to new partners, and
+\item[P2:] the influence of \textbf{partner-specificity} as conventions gradually generalize to new partners, and \ndg{this one feels a little hard to grasp... maybe something like the transition of partner-specific conventions to ones that generalize to new partners?}
 \item[P3:] the influence of \textbf{communicative context} on which terms eventually become conventionalized 
 \end{description}
 
@@ -58,7 +58,7 @@ We begin by introducing the \emph{repeated reference game} paradigm at the cente
 We then introduce our hierarchical Bayesian model in detail and highlight several qualitative properties that emerge from our formulation.
 The remainder of the paper proceeds through each of these phenomena (\textbf{P1}-\textbf{P3}) in turn. 
 For each phenomenon, we use computational simulations to evaluate our model's explanations on existing data, and introduce data from new real-time, multi-player behavioral experiments to test novel predictions when existing data does not suffice.
-Finally, we close by discussing several broader consequences of the theory, including the continuity of language acquisition, the domain-generality of discourse processes, and the integration of social and linguistic representations.
+Finally, we close by discussing several broader consequences of the theory, including the continuity of language acquisition \ndg{continuity of language acquisition with later adaptation?}, the domain-generality of discourse processes, and the integration of social and linguistic representations.
 
 \subsection{Three lessons about convention formation from repeated reference games}
 
@@ -73,7 +73,7 @@ And unlike agent-based simulations of convention formation on large networks \ci
 This design allows us to observe how the speaker's referring expressions for the same objects change as a function of interaction with that particular partner.
 We highlight three findings of particular theoretical significance in this literature.
 
-\paragraph{\textbf{P1}:~Conventions rapidly increase in efficiency}
+\paragraph{\textbf{P1}:~Conventions rapidly increase in efficiency} \ndg{these P1-P3 are different than the earlier P1-P3, right? maybe use different enum if labels are needed.. oh, actually after reading more, i think they are intended to be the same items... in which case it would be helpful to make the bolded phrases appear in the above enum.}
 
 The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964, ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
 The first time participants refer to a figure, they tend to use a lengthy, detailed description (e.g. ``the upside-down martini glass in a wire stand'') but with a small number of repetitions --- between 3 and 6, depending on the pair of participants --- the description may be cut down to the limit of just one or two words (``martini''). 
