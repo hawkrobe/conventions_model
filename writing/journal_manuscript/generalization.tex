@@ -36,28 +36,32 @@ In this section, we test this novel prediction in a networked communication game
 
 We first compare the generalization behavior produced by each model by simulating the outcomes of interacting with multiple partners on a small network. 
 We used a round-robin scheme to schedule four agents into a series of repeated reference games with their three neighbors, playing 8 successive trials with one partner before advancing to the next, for a total of 24 trials.
-These reference games used a set of two objects $\{o_1, o_2\}$ and four utterances $\{u_1, \dots, u_4\}$ as in Simulation 1.2; agents were randomized to roles when assigned to a new partner and swap roles after each repetition block.
+These reference games used a set of two objects $\{o_1, o_2\}$ and four utterances $\{u_1, u_2, u_3, u_4\}$ as in Simulation 1.2; agents were randomized to roles when assigned to a new partner and swap roles after each repetition block.
 %The resulting data $D_k$ from an interaction with partner $k$ thus consisted of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$, as well as information about the context of objects.
 
 Unlike our previous simulations with a single partner, where hierarchical generalization was irrelevant, we must now specify the hyper-prior P($\Theta$) governing the overall distribution of \emph{partners} (Eq.~\ref{eq:joint_inference}).
-Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over objects to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the prior probability of partner-specific meaning $\phi_k(u) = o_i$ is not uniform, but parameterized by probabilities $\theta_k$ drawn from a population-level Dirichlet distribution:
+Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over objects to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the prior probability of partner-specific meaning of $u$, $\phi_k^u~=~o_i$, is not uniform, but parameterized by probabilities $\theta_k$ drawn from a population-level Dirichlet distribution:
 \begin{equation*}
 \begin{array}{rcl}
-\phi_k(u)  &\sim&  \textrm{Categorical}(\theta_k) \\
-\theta_k  & \sim & \textrm{Dirichlet}(\Theta)\\
+\phi_k^{u}  &\sim&  \textrm{Categorical}(\theta_k^{u}) \\
+\theta_k^{u}  & \sim & \textrm{Dirichlet}(\Theta^{u})\\
 \end{array}
 \end{equation*}
 
 The shared Dirichlet distribution is defined by a \emph{concentration} parameter $\Theta$ which is factored into the product of two terms, $\Theta = \lambda \cdot \boldsymbol{\alpha}$.
 The vector $\boldsymbol{\alpha}$ represents the relative probabilities of meanings and the scalar $\lambda$ represents the concentration's magnitude: when $\lambda$ is small, the Dirichlet tends to sample more binary distributions (e.g. $p_i$ near 0 or 1) and when $\lambda$ is larger, the Dirichlet tends toward weaker, uniform distributions (e.g. $p_i$ near $1/|\mathcal{O}|)$.
 With these components, $\Theta$ therefore encodes both the central tendency and the variability of the population. 
-Because agents have uncertainty about these population-level properties and are attempting to learn them from interactions with individual partners, we assume fixed hyper-prior $P(\Theta) = P(\boldsymbol{\alpha})P(\lambda)$ where the hyper-prior for $ \boldsymbol{\alpha} $ may be slightly biased from uniform for different utterances, as in Simulation 1.2 above:
+Because agents have uncertainty about these population-level properties and are attempting to learn them from interactions with individual partners, we assume fixed hyper-prior $P(\Theta^u) = P(\boldsymbol{\alpha}^u)P(\lambda)$ where the hyper-prior for $ \boldsymbol{\alpha}^u$ is again slightly biased from uniform for different utterances, as in Simulation 1.2 above:
 
 
 \begin{equation*}
 \begin{array}{rcl}
- \boldsymbol{\alpha} & \sim & \textrm{Dirichlet}(\boldsymbol{1}_{\pm\delta})\\
-\lambda & \sim & \textrm{Exponential}(1).
+ \boldsymbol{\alpha}^u & \sim & \left\{
+\begin{array}{rcl}
+  \textrm{Dirichlet}(2,3)& \textrm{if} & u \in \{u_1, u_2\}\\
+  \textrm{Dirichlet}(3,2) & \textrm{if} &u \in \{u_3, u_3\}\\
+\end{array}\right. \\
+\lambda & \sim & \textrm{Exponential}(.5).
 \end{array}
 \end{equation*}
 
@@ -75,7 +79,7 @@ We simulated 48 networks, setting $w_S = 11,~w_C = .2$ (see Fig.~\ref{fig:partne
 \paragraph{Network convergence}
 
 Because all agents are simultaneously making inferences about the others, the network as a whole faces a coordination problem.
-For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $\orangecircle$ while agent 3 and 4 coordinate on using $u_2$. 
+For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
 Once they swap partners, they must negotiate this potential mismatch in usage. 
 How does the network as a whole manage to coordinate?
 
@@ -153,10 +157,10 @@ They were instructed to use a chatbox to communicate the identity of this object
 The two participants could engage freely in dialogue through the chatbox but the listener must ultimately make a selection from the array. 
 Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
 The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. 'the one on the left').
-The display also contained an avatar representing their current partner to emphasize that they were speaking to the same partner for an extended period. \ks{Are the distinct avatars as shown in Fig 8C? It looks relatively subtle there, just different shades?}
+The display also contained an avatar for the current partner  representing different partners with different colors as shown in Fig.~\ref{fig:task1_display} to emphasize that they were speaking to the same partner for an extended period.
+On the waiting screen between partners, participants were shown the avatars of their previous partner and upcoming partner and told that they were about to interact with a new partner.
 
 \subsection{Results}
-
 
 We evaluated participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
 
@@ -166,14 +170,14 @@ We first examined changes in the proportion of correct listener selections.
 In particular, our partial pooling model predicts (1) gains in accuracy within each partner and (2) drops in accuracy at partner boundaries, but (3) overall improvement in initial interactions with successive partners.
 To test the first prediction, we constructed a logistic mixed-effects regression predicting trial-level listener responses. 
 We included a fixed effect of repetition block within partner (1, 2, 3, 4), along with random intercepts and slopes for each participant and each tangram. 
-We found that accuracy improved over successive repetitions with every partner, $b=0.69,z=3.87, p<0.001$.
+We found that accuracy improved over successive repetitions with each partner, $b=0.69,z=3.87, p<0.001$.
 
 To test changes at partner boundaries, we constructed another regression model.
 We coded the repetition blocks immediately before and after each partner swap, and included this as a categorical fixed effect.
 Because partner roles were randomized for each game, the same participant often did not serve as listener in both blocks, so in addition to tangram-level intercepts, we included random slopes and intercepts at the \emph{network} level (instead of the participant level).
-We found that across the two partner swaps, accuracy dropped significantly, $b = -1.56, z = -2, p < 0.05$\ks{give exact p, even if it's pretty much bang on .05}, reflecting partner-specificity of meaning \ks{"reflecting partner-specificity of meaning" - somehow this wording confused me, is it clearer to say that it reflects the fact that the population has not completely converged on a shared system of meaning / meaning-form mapping?}.
-Finally, to test whether performance improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number on the trials immediately after the partner swap ($t=\{1,5,9\}$).
-As predicted, we found a significant improvement in performance, $b = 0.57, z = 2.72, p < 0.01$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig. \ref{fig:results}A, bottom row).
+We found that at the two partner swaps, accuracy dropped significantly, $b = -1.56, z = -2, p = 0.045$, reflecting the fact that the population has not completely converged on a shared system of meaning.
+Finally, to test whether performance improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number on the trials immediately after the partner swap (i.e. $t=\{1,5,9\}$).
+As predicted, we found a significant improvement in performance, $b = 0.57, z = 2.72, p = 0.007$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig.~\ref{fig:results}A, bottom row).
 
 %\begin{figure*}
 %\includegraphics[scale=1.1]{./figures/sec3-empirical-results.pdf}
@@ -185,8 +189,8 @@ As predicted, we found a significant improvement in performance, $b = 0.57, z = 
 \paragraph{Speaker utterance length}
 
 Next, as a measure of coding efficiency, we calculated the raw length (in words) of the utterance produced on each trial.
+Because the distribution of utterance lengths is heavy-tailed, we log-transformed these values.
 We then tested analogues of the same three predictions we tested in the previous section using the same mixed-effects models, but using a linear regression on the continuous measure of efficiency instead of accuracy (see Fig. \ref{fig:results}B, bottom row).
-We log-transformed utterance lengths for stability \ks{stability in what sense?}.
 We found that speakers reduced utterance length with every partner, $b = -0.19, t(34) = -9.88, p < 0.001$, increased length across partner-boundaries, $b = 0.43, t(22) = 4.4, p < 0.001$, and decreased the length of their \emph{initial descriptions} with each new partner on their network,, $b = -0.2, t(516.5) = -6.07, p < 0.001$ (see Fig. \ref{fig:results}B, bottom row).
 
 \paragraph{Network convergence }
@@ -203,15 +207,15 @@ Although different pairs in a network may initially use different labels, these 
 
 \subsection{Discussion}
 
-Our partial pooling model claims\ks{assumes?} that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
+Our partial pooling model suggests that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
 In this section, we evaluated the extent to which our partial pooling model captured human generalization behavior in a natural-language communication experiment on small networks.
 Unlike complete-pooling accounts, our model allows for partner-specific common ground to override community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
-Unlike no-pooling accounts, it allows\ks{results in?} networks to converge on more efficient and accurate expectations about novel partners.
+Unlike no-pooling accounts, it results in networks that converge on more efficient and accurate expectations about novel partners.
 
-While it is not easily classified into either the complete-pooling or no-pooling classes, the priming mechanisms proposed by \emph{interactive alignment} accounts also cannot straightforwardly account for patterns of partner-specificity.
+While it is not easily classified into either the complete-pooling or no-pooling classes, it is also not straightforward for the priming mechanisms proposed by \emph{interactive alignment} accounts to explain these patterns of partner-specificity without being augmented with additional social information.
 If a particular semantic representation has been activated due to precedent in the preceding dialogue, then the identity of the speaker should not in principle alter its continued influence \cite{brennan2009partner}.
-More sophisticated hierarchical memory retrieval accounts that represent different partners as different \emph{contexts} \cite<e.g>{polyn2009context} may be consistent with partner-specificity, but evoking such an account presupposes that social information like partner identity is already a salient and relevant feature of the agent's context representation and thus no longer relies purely on ``egocentric'' priming and activation mechanisms. \ks{I know you guys are not big fans of priming, but is it fairer to say that they need to be augmented with social info to capture this kind of result, rather than saying they "cannot" at the start here? I think there's a bunch of converging evidence that that's the case.}
-Indeed, a process-level account assuming socially-aware context reinstatement for episodic memories, and slower consolidation of shared features into population-level expectations, may be one possible candidate for realizing our computational-level model (see General Discussion for more on process-level evidence).
+More sophisticated hierarchical memory retrieval accounts that represent different partners as different \emph{contexts} \cite<e.g>{polyn2009context} may be consistent with partner-specificity, but evoking such an account presupposes that social information like partner identity is already a salient and relevant feature of the communicative environment and thus no longer relies purely on ``egocentric'' priming and activation mechanisms.
+Indeed, a process-level account assuming socially-aware context reinstatement for partner-specific episodic memories, and slower consolidation of shared features into population-level expectations, may be one possible candidate for realizing our computational-level model (see General Discussion for more on process-level evidence).
 
 %A frequent concern in prior work using repeated reference games is that improvements in communication over time are due to generic effects of task familiarity and repetition rather than interactive adaptation to a partner's language use \cite{HupetChantraine92_CollaborationOrRepitition}.
 %As they get more practice with the task, speakers may simply get better overall at describing images and listeners may learn how to better identify target images. 
