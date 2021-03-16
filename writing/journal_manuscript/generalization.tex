@@ -12,21 +12,19 @@ On each trial, participants were paired with a random neighbor but were not info
 While complete-pooling may be appropriate for some everyday social interactions, such as coordinating with anonymous drivers on the highway, it is less tenable for everyday communicative settings.
 Knowledge about a partner's identity is both available and relevant for conversation \cite{eckert_three_2012, davidson_nice_1986}.
 Partner-specificity thus poses clear problems for complete-pooling theories but can be easily explained by another simple model, where agents maintain separate expectations about meaning for each partner.
-We call this a \emph{no-pooling} model \cite<see>[where ]{SmithEtAl17_LanguageLearning}.
+We call this a \emph{no-pooling} model \cite<note that this no-pooling model was compared with a complete-pooling model in>{SmithEtAl17_LanguageLearning}.
 The problem with no-pooling is that agents are forced to start from scratch with each partner.
 Community-level expectations never get off the ground.
 
 Our hierarchical \emph{partial-pooling} account offers a compromise between these extremes.
-Unlike complete-pooling and no-pooling models, we propose that beliefs about meaning \ks{again, specific to meaning or could this also be about how meanings map to word forms or about any aspect of language?} have hierarchical structure.
+Unlike complete-pooling and no-pooling models, we propose that beliefs about language have hierarchical structure.
 That is, the meanings used by different partners are expected to be drawn from a shared community-wide distribution but are also allowed to differ from one another in systematic, partner-specific ways.
 This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience.
 
 The key predictions distinguishing our model thus concern the pattern of generalization across partners.
-Experience with a single partner ought to be relatively uninformative about further partners, hence our partial-pooling account behaves much like a no-pooling model in predicting strong partner-specificity.
-After interacting with enough partners in a tight-knit community, however, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community, gradually transitioning to the behavior of a complete-pooling model.
+Experience with a single partner ought to be relatively uninformative about further partners, hence our partial-pooling account behaves much like a no-pooling model in predicting strong partner-specificity and discounting outliers \cite{dautriche2021}.
+After interacting with multiple partners in a tight-knit community, however, speakers should become increasingly confident that labels are not simply idiosyncratic features of a particular partner's lexicon but are shared across the entire community, gradually transitioning to the behavior of a complete-pooling model.
 In this section, we test this novel prediction in a networked communication game and explicitly compare our model to pure complete-pooling and no-pooling variants.
-
-\ks{There is actually a literature on how children deal with outlier language models that might be relevant here and could also strengthen your argument that we need a model that's capable of exhibiting this kind of behaviour. You can get some refs on this stuff about learning from reliable/unreliable speakers from here: https://psyarxiv.com/ruwdk}
 
 \subsection{Model predictions}
 
@@ -37,20 +35,40 @@ In this section, we test this novel prediction in a networked communication game
 \end{figure*}
 
 We first compare the generalization behavior produced by each model by simulating the outcomes of interacting with multiple partners on a small network. 
-We used a round-robin scheme to schedule four agents into a series of repeated reference games with their three neighbors, playing 4 successive trials with one partner before advancing to the next, for a total of 12 trials.
-These reference games used a set of two objects $\{o_1, o_2\}$ and four utterances $\{u_1, \dots, u_4\}$ as in Simulation 1.2, and agents swapped speaker and listener roles on each trial.
+We used a round-robin scheme to schedule four agents into a series of repeated reference games with their three neighbors, playing 8 successive trials with one partner before advancing to the next, for a total of 24 trials.
+These reference games used a set of two objects $\{o_1, o_2\}$ and four utterances $\{u_1, u_2, u_3, u_4\}$ as in Simulation 1.2; agents were randomized to roles when assigned to a new partner and swap roles after each repetition block.
 %The resulting data $D_k$ from an interaction with partner $k$ thus consisted of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$, as well as information about the context of objects.
 
-Unlike our previous simulations with a single partner, where hierarchical generalization was irrelevant, we must now specify the hyper-prior P($\Theta$) governing the overall distribution of partners (Eq.~\ref{eq:joint_inference}).
-We use independent Gaussian distributions for each matrix entry $\Theta_{ij} \in \Theta$.
-We then center the partner-specific prior $\phi_{ij} \in \phi$ at the corresponding value $\Theta_{ij}$:
-$$\begin{array}{rcl}
-P(\Theta_{ij}) & \sim & \mathcal{N}(0, 1)\\
-P(\phi_{ij} | \Theta_{ij}) & \sim & \mathcal{N}(\Theta_{ij}, 1)
-\end{array}$$
-\ks{I just wrote "huh?" next to this in my annotated copy! :-)}
-These priors represent assumptions about how far partner-specific learning can drift from the community-wide value.
-We simulated 48 networks, setting $w_S = 11,~w_C = 7$ (see Fig.~\ref{fig:partnerspecificity_grid} in the Appendix for an exploration of other parameters).
+Unlike our previous simulations with a single partner, where hierarchical generalization was irrelevant, we must now specify the hyper-prior P($\Theta$) governing the overall distribution of \emph{partners} (Eq.~\ref{eq:joint_inference}).
+Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over objects to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the prior probability of partner-specific meaning of $u$, $\phi_k^u~=~o_i$, is not uniform, but parameterized by probabilities $\theta_k$ drawn from a population-level Dirichlet distribution:
+\begin{equation*}
+\begin{array}{rcl}
+\phi_k^{u}  &\sim&  \textrm{Categorical}(\theta_k^{u}) \\
+\theta_k^{u}  & \sim & \textrm{Dirichlet}(\Theta^{u})\\
+\end{array}
+\end{equation*}
+
+The shared Dirichlet distribution is defined by a \emph{concentration} parameter $\Theta$ which is factored into the product of two terms, $\Theta = \lambda \cdot \boldsymbol{\alpha}$.
+The vector $\boldsymbol{\alpha}$ represents the relative probabilities of meanings and the scalar $\lambda$ represents the concentration's magnitude: when $\lambda$ is small, the Dirichlet tends to sample more binary distributions (e.g. $p_i$ near 0 or 1) and when $\lambda$ is larger, the Dirichlet tends toward weaker, uniform distributions (e.g. $p_i$ near $1/|\mathcal{O}|)$.
+With these components, $\Theta$ therefore encodes both the central tendency and the variability of the population. 
+Because agents have uncertainty about these population-level properties and are attempting to learn them from interactions with individual partners, we assume fixed hyper-prior $P(\Theta^u) = P(\boldsymbol{\alpha}^u)P(\lambda)$ where the hyper-prior for $ \boldsymbol{\alpha}^u$ is again slightly biased from uniform for different utterances, as in Simulation 1.2 above:
+
+
+\begin{equation*}
+\begin{array}{rcl}
+ \boldsymbol{\alpha}^u & \sim & \left\{
+\begin{array}{rcl}
+  \textrm{Dirichlet}(2,3)& \textrm{if} & u \in \{u_1, u_2\}\\
+  \textrm{Dirichlet}(3,2) & \textrm{if} &u \in \{u_3, u_3\}\\
+\end{array}\right. \\
+\lambda & \sim & \textrm{Exponential}(.5).
+\end{array}
+\end{equation*}
+
+It is then clear how no-pooling and complete-pooling models lesion this shared structure in different ways. 
+The no-pooling model simply lesions the Dirichlet prior entirely and learns a separate categorical distribution $\theta_k$ for each partner.
+The complete-pooling model, on the other hand, samples lexicons directly from a categorical parameterized by the shared $\Theta$ without allowing variability in $\theta_k$ for each partner.
+We simulated 48 networks, setting $w_S = 11,~w_C = .2$ (see Fig.~\ref{fig:partnerspecificity_grid} in the Appendix for an exploration of other parameters).
 
 %For all simulations, we used variational inference as implemented in WebPPL \cite{GoodmanStuhlmuller14_DIPPL}
 %Variational methods transform probabilistic inference problems into optimization problems by approximating the true posterior with a parameterized family.
@@ -58,18 +76,31 @@ We simulated 48 networks, setting $w_S = 11,~w_C = 7$ (see Fig.~\ref{fig:partner
 %We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>{murphy2012machine}.
 %On each trial, we run 50,000 gradient steps on previous observations to obtain a posterior (Eq.\ 1) and compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the variational guide (Eq. 4)\footnote{These details were chosen to ensure high-quality estimates of the model's behavior; see Discussion for other possible algorithms.}.
 
-\paragraph{Listener accuracy across partners}
+\paragraph{Network convergence}
 
-\ks{Slightly tricky to interpret this without knowing that the community eventually converges under the pooling models - e.g. later you say ``After observing multiple partners use utterances similarly" but you haven't actually said this yet. Could consider doing convergence first, but I can see why that also works nicely last.}
+Because all agents are simultaneously making inferences about the others, the network as a whole faces a coordination problem.
+For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
+Once they swap partners, they must negotiate this potential mismatch in usage. 
+How does the network as a whole manage to coordinate?
 
-We first consider the partner-specificity of a \emph{listener}'s expectations about which object is being referred to.
-The probability the listener assigns to the target on each trial is shown for the different models in Fig. \ref{fig:results}A.
-Under the partial-pooling model (top row), the listener agent begins at chance due to its uninformative prior, but after observing several trials of evidence from the same partner, it rapidly infers the meaning its partner is using and learns to choose the true target with higher accuracy.
-When a second partner is introduced, the agent's expectations revert nearly to their original state, unlike a complete-pooling model (second row).
-This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
-In the absence of data from other partners, its observations are more parsimoniously explained at the partner-specific level.
-After observing multiple partners use utterances similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
-This is evident in much stronger initial expectations when introduced to the fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner), unlike a no-pooling model (third row).
+We measured alignment by examining the utterances produced by speakers: if two agents produced the same utterance, we assign a 1, otherwise we assign a 0.
+We compared alignment between currently interacting agents (i.e. \emph{within} a dyad) to those who were not interacting (i.e. \emph{across} dyads).
+Alignment across dyads was initially near chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
+Under a no-pooling model (Fig. \ref{fig:results}C, third row), subsequent blocks remain at chance, as conventions need to be re-negotiated from scratch.
+Under a complete-pooling model (Fig. \ref{fig:results}C, second row), agents persist with mis-calibrated expectations learned from previous partners rather than adapting to their new partner, and \emph{within-dyad} alignment deteriorates.
+By contrast, under our partial-pooling model, alignment across dyads increases without affecting alignment within dyads, suggesting that hierarchical inference leads to emergent consensus (Fig. \ref{fig:results}C, top row).
+
+
+%\paragraph{Listener accuracy across partners}
+%
+%We first consider the partner-specificity of a \emph{listener}'s expectations about which object is being referred to.
+%The probability the listener assigns to the target on each trial is shown for the different models in Fig. \ref{fig:results}A.
+%Under the partial-pooling model (top row), the listener agent begins at chance due to its uninformative prior, but after observing several trials of evidence from the same partner, it rapidly infers the meaning its partner is using and learns to choose the true target with higher accuracy.
+%When a second partner is introduced, the agent's expectations revert nearly to their original state, unlike a complete-pooling model (second row).
+%This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
+%In the absence of data from other partners, its observations are more parsimoniously explained at the partner-specific level.
+%After observing multiple partners use utterances similarly, however, we find that this knowledge has gradually been incorporated into community-level expectations. 
+%This is evident in much stronger initial expectations when introduced to the fourth partner ($\sim$ 75\% accuracy vs. 50\% with the first partner), unlike a no-pooling model (third row).
 
 \paragraph{Speaker utterance length across partners}
 
@@ -89,20 +120,6 @@ Here we show that a partial pooling account predicts a more complex pattern of g
 First, as in Simulation 1.2, we found that descriptions become more efficient over interaction with a single partner: the model becomes more confident that shorter utterances will be meaningful, so the marginal informativity provided by the longer utterance is not worth the additional cost.
 Second, we find that the speaker model reverts back to a longer description at the first partner swap: evidence from one partner is relatively uninformative about the community.
 Third, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig. \ref{fig:results}B, top row).
-
-\paragraph{Network convergence}
-
-Finally, because all agents are simultaneously making inferences about the others, the network as a whole faces a coordination problem.
-For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
-Once they swap partners, they must negotiate this potential mismatch in usage. 
-How does the network as a whole manage to coordinate?
-
-We measured alignment by examining the utterances produced by speakers: if two agents produced the same utterance, we assign a 1, otherwise we assign a 0.
-We compared alignment between currently interacting agents (i.e. \emph{within} a dyad) to those who were not interacting (i.e. \emph{across} dyads).
-Alignment across dyads was initially near chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
-Under a no-pooling model (Fig. \ref{fig:results}C, third row), subsequent blocks remain at chance, as conventions need to be re-negotiated from scratch.
-Under a complete-pooling model (Fig. \ref{fig:results}C, second row), agents persist with mis-calibrated expectations learned from previous partners rather than adapting to their new partner, and \emph{within-dyad} alignment deteriorates.
-By contrast, under our partial-pooling model, alignment across dyads increases without affecting alignment within dyads, suggesting that hierarchical inference leads to emergent consensus (Fig. \ref{fig:results}C, top row).
 
 \subsection{Behavioral experiment}
 
@@ -140,10 +157,10 @@ They were instructed to use a chatbox to communicate the identity of this object
 The two participants could engage freely in dialogue through the chatbox but the listener must ultimately make a selection from the array. 
 Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
 The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. 'the one on the left').
-The display also contained an avatar representing their current partner to emphasize that they were speaking to the same partner for an extended period. \ks{Are the distinct avatars as shown in Fig 8C? It looks relatively subtle there, just different shades?}
+The display also contained an avatar for the current partner  representing different partners with different colors as shown in Fig.~\ref{fig:task1_display} to emphasize that they were speaking to the same partner for an extended period.
+On the waiting screen between partners, participants were shown the avatars of their previous partner and upcoming partner and told that they were about to interact with a new partner.
 
 \subsection{Results}
-
 
 We evaluated participants' generalization behavior on the same three metrics we used in our simulations: accuracy, utterance length, and network convergence.
 
@@ -153,14 +170,14 @@ We first examined changes in the proportion of correct listener selections.
 In particular, our partial pooling model predicts (1) gains in accuracy within each partner and (2) drops in accuracy at partner boundaries, but (3) overall improvement in initial interactions with successive partners.
 To test the first prediction, we constructed a logistic mixed-effects regression predicting trial-level listener responses. 
 We included a fixed effect of repetition block within partner (1, 2, 3, 4), along with random intercepts and slopes for each participant and each tangram. 
-We found that accuracy improved over successive repetitions with every partner, $b=0.69,z=3.87, p<0.001$.
+We found that accuracy improved over successive repetitions with each partner, $b=0.69,z=3.87, p<0.001$.
 
 To test changes at partner boundaries, we constructed another regression model.
 We coded the repetition blocks immediately before and after each partner swap, and included this as a categorical fixed effect.
 Because partner roles were randomized for each game, the same participant often did not serve as listener in both blocks, so in addition to tangram-level intercepts, we included random slopes and intercepts at the \emph{network} level (instead of the participant level).
-We found that across the two partner swaps, accuracy dropped significantly, $b = -1.56, z = -2, p < 0.05$\ks{give exact p, even if it's pretty much bang on .05}, reflecting partner-specificity of meaning \ks{"reflecting partner-specificity of meaning" - somehow this wording confused me, is it clearer to say that it reflects the fact that the population has not completely converged on a shared system of meaning / meaning-form mapping?}.
-Finally, to test whether performance improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number on the trials immediately after the partner swap ($t=\{1,5,9\}$).
-As predicted, we found a significant improvement in performance, $b = 0.57, z = 2.72, p < 0.01$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig. \ref{fig:results}A, bottom row).
+We found that at the two partner swaps, accuracy dropped significantly, $b = -1.56, z = -2, p = 0.045$, reflecting the fact that the population has not completely converged on a shared system of meaning.
+Finally, to test whether performance improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number on the trials immediately after the partner swap (i.e. $t=\{1,5,9\}$).
+As predicted, we found a significant improvement in performance, $b = 0.57, z = 2.72, p = 0.007$, suggesting that listeners are bringing increasingly well-calibrated expectations into interactions with novel neighbors (see Fig.~\ref{fig:results}A, bottom row).
 
 %\begin{figure*}
 %\includegraphics[scale=1.1]{./figures/sec3-empirical-results.pdf}
@@ -172,8 +189,8 @@ As predicted, we found a significant improvement in performance, $b = 0.57, z = 
 \paragraph{Speaker utterance length}
 
 Next, as a measure of coding efficiency, we calculated the raw length (in words) of the utterance produced on each trial.
+Because the distribution of utterance lengths is heavy-tailed, we log-transformed these values.
 We then tested analogues of the same three predictions we tested in the previous section using the same mixed-effects models, but using a linear regression on the continuous measure of efficiency instead of accuracy (see Fig. \ref{fig:results}B, bottom row).
-We log-transformed utterance lengths for stability \ks{stability in what sense?}.
 We found that speakers reduced utterance length with every partner, $b = -0.19, t(34) = -9.88, p < 0.001$, increased length across partner-boundaries, $b = 0.43, t(22) = 4.4, p < 0.001$, and decreased the length of their \emph{initial descriptions} with each new partner on their network,, $b = -0.2, t(516.5) = -6.07, p < 0.001$ (see Fig. \ref{fig:results}B, bottom row).
 
 \paragraph{Network convergence }
@@ -190,15 +207,15 @@ Although different pairs in a network may initially use different labels, these 
 
 \subsection{Discussion}
 
-Our partial pooling model claims\ks{assumes?} that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
+Our partial pooling model suggests that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
 In this section, we evaluated the extent to which our partial pooling model captured human generalization behavior in a natural-language communication experiment on small networks.
 Unlike complete-pooling accounts, our model allows for partner-specific common ground to override community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
-Unlike no-pooling accounts, it allows\ks{results in?} networks to converge on more efficient and accurate expectations about novel partners.
+Unlike no-pooling accounts, it results in networks that converge on more efficient and accurate expectations about novel partners.
 
-While it is not easily classified into either the complete-pooling or no-pooling classes, the priming mechanisms proposed by \emph{interactive alignment} accounts also cannot straightforwardly account for patterns of partner-specificity.
+While it is not easily classified into either the complete-pooling or no-pooling classes, it is also not straightforward for the priming mechanisms proposed by \emph{interactive alignment} accounts to explain these patterns of partner-specificity without being augmented with additional social information.
 If a particular semantic representation has been activated due to precedent in the preceding dialogue, then the identity of the speaker should not in principle alter its continued influence \cite{brennan2009partner}.
-More sophisticated hierarchical memory retrieval accounts that represent different partners as different \emph{contexts} \cite<e.g>{polyn2009context} may be consistent with partner-specificity, but evoking such an account presupposes that social information like partner identity is already a salient and relevant feature of the agent's context representation and thus no longer relies purely on ``egocentric'' priming and activation mechanisms. \ks{I know you guys are not big fans of priming, but is it fairer to say that they need to be augmented with social info to capture this kind of result, rather than saying they "cannot" at the start here? I think there's a bunch of converging evidence that that's the case.}
-Indeed, a process-level account assuming socially-aware context reinstatement for episodic memories, and slower consolidation of shared features into population-level expectations, may be one possible candidate for realizing our computational-level model (see General Discussion for more on process-level evidence).
+More sophisticated hierarchical memory retrieval accounts that represent different partners as different \emph{contexts} \cite<e.g>{polyn2009context} may be consistent with partner-specificity, but evoking such an account presupposes that social information like partner identity is already a salient and relevant feature of the communicative environment and thus no longer relies purely on ``egocentric'' priming and activation mechanisms.
+Indeed, a process-level account assuming socially-aware context reinstatement for partner-specific episodic memories, and slower consolidation of shared features into population-level expectations, may be one possible candidate for realizing our computational-level model (see General Discussion for more on process-level evidence).
 
 %A frequent concern in prior work using repeated reference games is that improvements in communication over time are due to generic effects of task familiarity and repetition rather than interactive adaptation to a partner's language use \cite{HupetChantraine92_CollaborationOrRepitition}.
 %As they get more practice with the task, speakers may simply get better overall at describing images and listeners may learn how to better identify target images. 
