@@ -21,22 +21,28 @@ var getUttCost = function(utt) {
 // => log(p) = log [ L(obj, utt) / \sum_{i} L(obj_i, utt) ]
 // if given object isn't in extension, some small probability of guessing it anyway
 var getL0Score = function(target, utt, params) {
+  
   var noiseProb = 1 / params.context.length;
   var targetMeaning = getLexiconElement(utt, target, params);
 
-  // Equivalent of assuming null object in context,
-  // only way of picking literally false object comes from guessing
-  if(targetMeaning == 0) {
+  if(!_.some(params.objects, function(x){return getLexiconElement(utt, x, params);})){
+    // in case of contradiction (i.e. false in all possible worlds)
+    // the utterance 'fails to refer' and speaker doesn't update beliefs at all
+    return Math.log(noiseProb);
+  } else if(targetMeaning == 0) {
+    // if utterance isn't contradiction but is literally false of target
+    // then the only way of picking that object comes from small probability of noise
     return Math.log(noiseProb * params.guessingEpsilon);
-  } 
-  
-  var otherMeanings = 0;
-  for(var i=0; i<params.context.length; i++){
-    otherMeanings += getLexiconElement(utt, params.context[i], params);
+  } else {
+    // otherwise, listener chooses responds proportionally to meaning
+    var otherMeanings = 0;
+    for(var i=0; i<params.context.length; i++){
+      otherMeanings += getLexiconElement(utt, params.context[i], params);
+    }
+    var choiceProb = targetMeaning / otherMeanings;
+    return Math.log(noiseProb * params.guessingEpsilon +
+                    choiceProb * (1-params.guessingEpsilon));
   }
-  var choiceProb = targetMeaning / otherMeanings;
-  return Math.log(noiseProb * params.guessingEpsilon +
-                  choiceProb * (1-params.guessingEpsilon));
 };
 
 // P(utt | obj) \propto e^{alpha * log P(obj | utt)}
@@ -61,29 +67,29 @@ var getS1Score = function(utt, targetObj, params) {
 
 // P(utt | obj) \propto e^{alpha * log P(obj | utt)}
 // => log P(utt | obj) = alpha * log P(obj | utt) - log(sum_i e^{alpha * log P(obj | utt)})
-// var getL1Score = function(obj, utt, params) {
-//   var utility = function(obj) {
-//     return params.listenerAlpha * getS1Score(utt, obj, params);
-//   };
+var getL1Score = function(obj, utt, params) {
+  var utility = function(obj) {
+    return params.listenerAlpha * getS1Score(utt, obj, params);
+  };
 
-//   var targetMeaning = getLexiconElement(utt, obj, params);
-//   var noiseProb = 1 / params.context.length;
+  var targetMeaning = getLexiconElement(utt, obj, params);
+  var noiseProb = 1 / params.context.length;
 
-//   // Implicitly add null object in context, so only possibility of picking object where utt
-//   // is false comes from guessing
-//   if(targetMeaning == 0) {
-//     return Math.log(noiseProb * params.guessingEpsilon);
-//   } 
+  // Implicitly add null object in context, so only possibility of picking object where utt
+  // is false comes from guessing
+  if(targetMeaning == 0) {
+    return Math.log(noiseProb * params.guessingEpsilon);
+  } 
 
-//   var truth = utility(obj);
-//   var sum = utility(params.context[0]);
-//   for(var i=1; i< params.context.length; i++){
-//     sum = numeric.logaddexp(sum, utility(params.context[i]));
-//   }
-//   var choiceProb = Math.exp(normalize(truth, sum));
-//   return Math.log(noiseProb * params.guessingEpsilon +
-//                   choiceProb * (1-params.guessingEpsilon));
-// }
+  var truth = utility(obj);
+  var sum = utility(params.context[0]);
+  for(var i=1; i< params.context.length; i++){
+    sum = numeric.logaddexp(sum, utility(params.context[i]));
+  }
+  var choiceProb = Math.exp(normalize(truth, sum));
+  return Math.log(noiseProb * params.guessingEpsilon +
+                  choiceProb * (1-params.guessingEpsilon));
+}
 
 var supportWriter = function(s, p, handle) {
  var sLst = _.toPairs(s);
@@ -159,6 +165,7 @@ module.exports = {
   close: closeFile,
   writeLine: writeLine,
   getL0Score,
+  getL1Score,
   getS1Score,
   getUttCost,
   getLexiconElement
