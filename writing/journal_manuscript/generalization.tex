@@ -30,7 +30,7 @@ In this section, we test this novel prediction in a networked communication game
 
 \begin{figure*}
 \includegraphics[scale=1.05]{./figures/sec3-model_results.pdf}
-\caption{Simulation results and empirical data for (A) listener accuracy, (B) speaker reduction, and (C) network convergence across three partners. Vertical lines mark boundaries where new partners were introduced.}
+\caption{Simulation results and empirical data for (A) listener accuracy, (B) speaker reduction, and (C) network convergence across three partners. Vertical lines mark boundaries where new partners were introduced. \ndg{add bootstrap CIs for Cbottom? or are they so small we can't see them?}}
 \label{fig:results}
 \end{figure*}
 
@@ -83,7 +83,8 @@ For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to
 Once they swap partners, they must negotiate this potential mismatch in usage. 
 How does the network as a whole manage to coordinate?
 
-We measured alignment by examining the utterances produced by speakers: if two agents produced the same utterance, we assign a 1, otherwise we assign a 0.
+We measured alignment by examining the utterances produced by speakers: if two agents produced the same utterance \ndg{to refer to a given target?}, we assign a 1, otherwise we assign a 0.
+\ndg{need to say we look at alignment at the end of period with given partner (time 4,8,12)? also that it's average across objects?}
 We compared alignment between currently interacting agents (i.e. \emph{within} a dyad) to those who were not interacting (i.e. \emph{across} dyads).
 Alignment across dyads was initially near chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
 Under a no-pooling model (Fig. \ref{fig:results}C, third row), subsequent blocks remain at chance, as conventions need to be re-negotiated from scratch.
@@ -121,6 +122,7 @@ First, as in Simulation 1.2, we found that descriptions become more efficient ov
 Second, we find that the speaker model reverts back to a longer description at the first partner swap: evidence from one partner is relatively uninformative about the community.
 Third, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig. \ref{fig:results}B, top row).
 
+
 \subsection{Behavioral experiment}
 
 \begin{figure*}
@@ -141,7 +143,7 @@ We recruited 92 participants from Amazon Mechanical Turk to play a series of int
 
 \paragraph{Stimuli and procedure}
 
-Each participant was randomly assigned to one of 23 fully-connected networks with three other participants as their 'neighbors' (Fig. \ref{fig:task1_display}A). 
+Each participant was randomly assigned to one of 23 fully-connected networks with three other participants as their `neighbors' (Fig. \ref{fig:task1_display}A). 
 Each network was then randomly assigned one of three distinct "contexts" containing abstract tangram stimuli taken from \cite{ClarkWilkesGibbs86_ReferringCollaborative}.
 The experiment was structured into a series of three repeated reference games with different partners, using these same four stimuli as referents.
 Partner pairings were determined by a round-robin schedule (Fig. \ref{fig:task1_display}B).
@@ -156,7 +158,7 @@ First, one of the four tangrams in the context was highlighted as the \emph{targ
 They were instructed to use a chatbox to communicate the identity of this object to their partner, the listener (see Fig. \ref{fig:task1_display}C).
 The two participants could engage freely in dialogue through the chatbox but the listener must ultimately make a selection from the array. 
 Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
-The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. 'the one on the left').
+The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. `the one on the left').
 The display also contained an avatar for the current partner  representing different partners with different colors as shown in Fig.~\ref{fig:task1_display} to emphasize that they were speaking to the same partner for an extended period.
 On the waiting screen between partners, participants were shown the avatars of their previous partner and upcoming partner and told that they were about to interact with a new partner.
 
@@ -205,9 +207,12 @@ We included random intercepts at the tangram level and maximal random effects at
 As predicted, we found a significant interaction ($b = -0.85, z = -5.69, p < 0.001$; see Fig. \ref{fig:results}C, bottom row).
 Although different pairs in a network may initially use different labels, these labels begin to align over subsequent interactions. 
 
+\ndg{i expect some reviewers will complain about the alignment measure we used here -- eg is non-empty intersection strong enough test? especially given that it's weaker than the exact match we required in the model.... we could leave this as something to deal with in revision, or we could add alternative measures. hausdorf distance between sets of content words, in glove space?}
+
+
 \subsection{Discussion}
 
-Our partial pooling model suggests that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
+Our partial pooling model, which follows from general principles of hierarchical Bayesian inference, suggests that conventions represent the shared structure that agents "abstract away" from partner-specific learning.
 In this section, we evaluated the extent to which our partial pooling model captured human generalization behavior in a natural-language communication experiment on small networks.
 Unlike complete-pooling accounts, our model allows for partner-specific common ground to override community-wide expectations given sufficient experience with a partner, or in the absence of strong conventions.
 Unlike no-pooling accounts, it results in networks that converge on more efficient and accurate expectations about novel partners.
