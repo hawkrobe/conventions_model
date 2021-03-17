@@ -63,7 +63,7 @@ Rather than assuming a monolithic, universally shared language, we argue that ag
 When all agents are continually learning in this way, we will show that they are not only able to locally coordinate on \emph{ad hoc} meanings with specific partners but also able to abstract away linguistic conventions that are expected to be shared across an entire community.
 We introduce our model in three steps, corresponding to three core capacities: hierarchical uncertainty about meaning, online partner-specific learning, and inductive generalization.
 
-\paragraph{Hierarchical uncertainty about meaning} 
+\paragraph{C1:~Hierarchical uncertainty about meaning} 
 
 When an agent encounters a communication partner, they must call upon some representation about what they expect different signals will mean to that partner. 
 We therefore replace the static function $\mathcal{L}$ with a \emph{parameterized family} of lexical meaning functions by $\mathcal{L}_{\phi}$, where different values of $\phi$ yield different possible systems of meaning. 
@@ -106,7 +106,7 @@ S(u|o) &\propto  \exp\left\{\alpha_S \textstyle{\int} P_S(\phi_k | D_k)  U(u; o,
 \end{align}
 where $\alpha_S, \alpha_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{We denote $L$ and $S$ without a subscript because they are the final speaker and listener models we use throughout the paper -- the subscripted definitions are internal constructs used to define these models -- but in the terminology of the RSA framework they represent $L_1$- and $S_1$-level pragmatic agents. We found that higher levels of recursion were not necessary to derive the phenomena of interest, but Eq.\ref{eq:marginalized} $L_n$ and $S_n$-level lexical uncertainty models may be generalized by replacing $S_1$ in the listener equation, and $L_0$ in the speaker's utility equation, with standard RSA definitions of $n-1$-level agents \cite<e.g.>{zaslavsky2020rate}.}.
 
-\paragraph{Partner-specific learning}
+\paragraph{C2: Partner-specific online learning}
 
 
 This formulation derives how agents ought to act given a certain set of partner-specific beliefs about $\phi_k$.
@@ -132,7 +132,7 @@ P(\phi_k | D_k) =  \int_{\Theta}P(\phi_k, \Theta | D_k)  d\Theta
 This posterior can be viewed as the ``idiolect'' that has been fine-tuned to account for partner-specific common ground from previous interactions.
 We will show that when agents learn about their partner in this way, and adjust their own production or comprehension accordingly (i.e.~Eq.~\ref{eq:marginalized}), they are able to coordinate on stable \emph{ad hoc} conventions.
 
-\paragraph{Inductive generalization}
+\paragraph{C3: Inductive generalization to new partners}
 
 The posterior in Eq.~\ref{eq:joint_inference} also provides an inductive pathway for partner-specific data to inform beliefs about community-wide conventions.
 Agents update their beliefs about $\Theta$, using data accumulated from different partners, by marginalizing over beliefs about specific partners:
