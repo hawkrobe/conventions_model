@@ -1,0 +1,161 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
+
+var unconstrainedUtterances = ['word1', 'word2', 'word3', 'word4'];
+var derivedUtterances = ['word1_word2', 'word3_word4']; // 'word1_word3','word1_word4',
+//                         'word2_word3','word2_word4',
+var utterances = unconstrainedUtterances.concat(derivedUtterances);
+var objects = ['bluecircle', 'redsquare'];
+var meanings = ['bluecircle', 'redsquare'];
+var numMeanings = meanings.length;
+
+var params = {
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  discountFactor: argv.discountFactor,
+  costWeight: argv.costWeight,  
+  guessingEpsilon: argv.guessingEpsilon,
+  semantics: 'soft',
+  numTrials: 30,
+  partnerID: 1,
+  context: objects,
+  utterances: utterances,
+  objects: objects,
+  inferOptions: {method: 'enumerate'}
+};
+
+console.log(params);
+
+var trajectoryFile = csv.open('./output/conjunction_trajectory_' + argv.gameNum + '.csv');
+var posttestFile = csv.open('./output/conjunction_meaningTest_' + argv.gameNum + '.csv');
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,'
+              +'speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct,conjunctionScore', trajectoryFile);
+csv.writeLine('gameNum,speakerAlpha,listenerAlpha,discountFactor,costWeight,guessingEpsilon,trialNum,agentID,' +
+              'word1_inform,word2_inform,word1word2_inform,word1_cost,word2_cost,word1word2_cost,word1_production,' +
+              'word2_production,word1word2_production,word1_belief,word2_belief,word3_belief,word4_belief', posttestFile);
+
+
+var lexicalPrior = function(obs) {
+  var lexicon = _.zipObject(unconstrainedUtterances, map(function(utt) {
+    var blueProb = beta(obs[utt]['bluecircle'], obs[utt]['redsquare']);
+    return {'bluecircle' : blueProb, 'redsquare' : 1 - blueProb};
+  }, unconstrainedUtterances));
+  return {1: lexicon};
+};
+
+var writePostTest = function(iterationNum, trial, posterior1, posterior2) {
+  var word1Meaning = marginalize(posterior1, function(x) {return x[1]['word1']});
+  var word2Meaning = marginalize(posterior1, function(x) {return x[1]['word2']});
+  var word3Meaning = marginalize(posterior1, function(x) {return x[1]['word3']});
+  var word4Meaning = marginalize(posterior1, function(x) {return x[1]['word4']});
+
+  csv.writeLine([
+    iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight, params.guessingEpsilon,
+    trial.trialNum, trial.speakerID,
+    (1-params.costWeight)*expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
+      return L0('word1', config).score('bluecircle');
+    }),
+    (1-params.costWeight) * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
+      return L0('word2', config).score('bluecircle');
+    }),
+    (1-params.costWeight) * expectation(posterior1, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[1]});
+      return L0('word1_word2', config).score('bluecircle');
+    }),
+    params.costWeight * shared.getUttCost('word1'),
+    params.costWeight * shared.getUttCost('word2'),
+    params.costWeight * shared.getUttCost('word1_word2'),      
+    S('bluecircle', posterior1,params).score('word1'),
+    S('bluecircle', posterior1,params).score('word2'),
+    S('bluecircle', posterior1,params).score('word1_word2'),        
+    word1Meaning.score('bluecircle'),
+    word2Meaning.score('bluecircle'),
+    word3Meaning.score('bluecircle'),
+    word4Meaning.score('bluecircle')
+  ].join(','), posttestFile);
+};
+
+var writeTrajectory = function(iterationNum, currTrial, speakerOutput, topSpeakerChoice, topListenerChoice) {
+  csv.writeLine([
+    iterationNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.costWeight,
+    params.guessingEpsilon, currTrial.trialNum, currTrial.speakerID, currTrial.listenerID,
+    currTrial.intendedName, topSpeakerChoice, topListenerChoice,
+    topListenerChoice == currTrial.intendedName, Math.exp(speakerOutput.score('word1_word2')) + Math.exp(speakerOutput.score('word3_word4'))
+  ].join(','), trajectoryFile);
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(iterationNum, dataSoFar) {
+  globalStore.trialNum += 1;
+  var repNum =  Math.floor(globalStore.trialNum / 2);
+  var currTrial = {
+    intendedName: uniformDraw(objects) ,
+    context : objects,
+    trialNum: globalStore.trialNum,
+    partnerID: 1,
+    speakerID: (repNum % 2) == 0 ? 1 : 2,
+    listenerID: (repNum % 2) == 0 ? 2 : 1
+  };
+
+  var speakerPosterior = Infer({method: 'forward', samples: 20000}, function() {
+    return lexicalPrior(dataSoFar[currTrial.speakerID]);
+  });
+//  console.log(speakerPosterior)
+  var listenerPosterior = Infer({method: 'forward', samples: 20000}, function() {
+    return lexicalPrior(dataSoFar[currTrial.listenerID]);
+  });
+
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOutput = S_soft(currTrial.intendedName, speakerPosterior, params);
+  var topSpeakerChoice =  sample(speakerOutput);
+  var listenerOutput = L_soft(topSpeakerChoice, listenerPosterior, params);
+  var topListenerChoice = sample(listenerOutput);
+  console.log(speakerOutput);
+  console.log(listenerOutput);
+  console.log(topSpeakerChoice, topListenerChoice, topListenerChoice == currTrial.intendedName)
+  console.log(dataSoFar)
+  //console.log(speakerPosterior);
+  //writePostTest(iterationNum, currTrial, speakerPosterior, listenerPosterior);
+  //writeTrajectory(iterationNum, currTrial, speakerOutput, topSpeakerChoice, topListenerChoice);
+  var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
+    return _.zipObject(['word1', 'word2', 'word3', 'word4'], map(function(word) {
+      return _.zipObject(['bluecircle', 'redsquare'], map(function(obj) {      
+        var point = id == currTrial.speakerID ? topListenerChoice : currTrial.intendedName;
+        if(obj == point && _.includes(topSpeakerChoice.split('_'), word)) {
+          console.log('adding a point for ', id, word, obj)
+        }
+        return (obj == point && _.includes(topSpeakerChoice.split('_'), word)) ? dataSoFar[id][word][obj] + 1 : dataSoFar[id][word][obj];
+      }, ['bluecircle', 'redsquare']));
+    }, ['word1', 'word2', 'word3', 'word4']));
+  }, [currTrial.speakerID, currTrial.listenerID]));
+
+  console.log(newDataSoFar);
+  console.log(currTrial)
+  console.log(params.numTrials)
+  if(currTrial.trialNum < params.numTrials) {
+    iterate(iterationNum, newDataSoFar);
+  } 
+};
+
+// var lexicon = lexicalPrior();
+// console.log(lexicon);
+// console.log(L0('word1_word2', extend(params, {lexicon: lexicon[1]})))
+
+map(function(i) {
+  globalStore.trialNum = 0;
+  console.log('iteration', i)
+  iterate(i, {
+    1: {word1 : {'bluecircle' : 1.5, 'redsquare' : 1},
+        word2: {'bluecircle' : 1.5, 'redsquare' : 1},
+        word3: {'bluecircle' : 1, 'redsquare' : 1.5},
+        word4: {'bluecircle' : 1, 'redsquare' : 1.5}},
+    2: {word1 : {'bluecircle' : 1.5, 'redsquare' : 1},
+        word2 : {'bluecircle' : 1.5, 'redsquare' : 1},
+        word3 : {'bluecircle' : 1, 'redsquare' : 1.5},
+        word4 : {'bluecircle' : 1, 'redsquare' : 1.5}}
+  });
+}, _.range(1));
+csv.close(trajectoryFile);
+csv.close(posttestFile);
