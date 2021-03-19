@@ -6,10 +6,13 @@ var normalize = function(truth, sum) {
 };
 
 var getLexiconElement = function(utt, target, params) {
-  return _.max(_.map(utt.split('_'), function(word) {
-    var uttLex = params.lexicon[word];
-    return _.includes(target.split('_'), uttLex) ? 1 : 0;
-  }));
+  var componentValues = _.map(utt.split('_'), function(word) {
+    var lexVal = params.lexicon[word];
+    return (params.semantics == 'soft' ? lexVal[target] :
+            (_.includes(target.split('_'), lexVal) ? 1 : 0));
+  });
+  // we use conjunction semantics to evaluate truth conditions
+  return _.reduce(componentValues, _.multiply);
 };
 
 var getUttCost = function(utt) {
@@ -24,7 +27,6 @@ var getL0Score = function(target, utt, params) {
   
   var noiseProb = 1 / params.context.length;
   var targetMeaning = getLexiconElement(utt, target, params);
-
   if(!_.some(params.objects, function(x){return getLexiconElement(utt, x, params);})){
     // in case of contradiction (i.e. false in all possible worlds)
     // the utterance 'fails to refer' and speaker doesn't update beliefs at all

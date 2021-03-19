@@ -1,32 +1,97 @@
-// var L0 = cache(function(utt, params) {
-//   var nullObj = params.lexicon[utt];
-//   return Mixture({
-//     dists: [
-//       Categorical({vs: params.context}),
-//       Infer({method: "enumerate"}, function() {
-//         console.log(params)
-//         var obj = uniformDraw(params.context).concat(nullObj);
-//         factor(Math.log(shared.getLexiconElement(utt, obj, params)));
-//         return obj;
-//       })],
-//     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
-//   });
-// }, 10000);
+var foreach = function(lst, fn) {
+  var foreach_ = function(i) {
+    if (i < lst.length) {
+      fn(lst[i]);
+      foreach_(i + 1);
+    }
+  };
+  foreach_(0);
+};
 
-// var S1 = cache(function(obj, params) {
-//   return Mixture({
-//     dists: [
-//       Categorical({vs: params.utterances}),
-//       Infer({method: "enumerate"}, function() {
-//         var utt = uniformDraw(params.utterances);
-//         var utility = ((1-params.costWeight) * L0(utt, params).score(obj)
-//                        - params.costWeight * shared.getUttCost(utt));
-//         factor(params.speakerAlpha * utility);
-//         return utt;
-//       })],
-//     ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
-//   })
-// }, 10000)
+var L0 = cache(function(utt, params) {
+  // handle contradictions
+  if(!any(function(x){return shared.getLexiconElement(utt, x, params);}, params.objects)){
+    return Categorical({vs: params.context});
+  }
+  return Mixture({
+    dists: [
+      Categorical({vs: params.context}),
+      Infer({method: "enumerate"}, function() {
+        var obj = uniformDraw(params.context.concat('bluecircle_redsquare'));
+        factor(Math.log(shared.getLexiconElement(utt, obj, params)));
+        return obj;
+      })],
+    ps: [params.guessingEpsilon, 1 - params.guessingEpsilon]
+  });
+}, 10000);
+
+var updatePosterior_soft = function(data, lexicalPrior, params) {
+  return Infer(params.inferOptions, function() {
+    var lexicon = lexicalPrior();
+    mapData({data: data}, function(trial) {
+      var beta = Math.pow(params.discountFactor,  data.length - trial.trialNum);
+      var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
+      var trialParams = extend(params, {context: trial.context, lexicon: lexicon[trial.partnerID]});
+      if(trial.role == 'speaker') {
+        factor(beta * shared.getL1Score(object, trial.wordID, trialParams));
+      } else {
+        factor(beta * shared.getS1Score(trial.wordID, object, trialParams));
+      }
+    });
+    return lexicon;
+  });
+};
+
+var S_soft = function(object, posterior, params) {
+  return Infer({method: "enumerate"}, function() {
+    var utt = uniformDraw(params.utterances);
+    var inf = expectation(posterior, function(lexicon) {
+      var config = extend(params, {lexicon: lexicon[params.partnerID]});
+      return shared.getL1Score(object, utt, config);
+    });
+    var utility = ((1-params.costWeight) * inf
+                   - params.costWeight * shared.getUttCost(utt));
+
+    factor(params.speakerAlpha * utility);
+    return utt;
+  });
+};
+
+var L_soft = function(utt, posterior, params) {
+  return Infer({method: "enumerate"}, function() {
+    var object = uniformDraw(params.context);
+    var utility = expectation(posterior, function(lexicon) {
+      return shared.getS1Score(utt, object, extend(params, {lexicon: lexicon[params.partnerID]}));
+    });
+    factor(params.listenerAlpha * utility);
+    return object;
+  });
+};
+
+var getL0Score_cached = cache(function(object, word, trialParams) {
+  return shared.getL0Score(object, word, trialParams);
+}, 10000)
+
+var getS1Score_cached = cache(function(word, object, trialParams) {
+  return shared.getS1Score(word, object, trialParams);
+}, 10000)
+
+var updatePosterior = function(data, lexicalPrior, params) {
+  return Infer(params.inferOptions, function() {
+    var lexicon = lexicalPrior();
+    mapData({data: data}, function(trial) {
+      var beta = Math.pow(params.discountFactor,  data.length - trial.trialNum);
+      var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
+      var trialParams = extend(params, {context: trial.context, lexicon: lexicon[trial.partnerID]});
+      if(trial.role == 'speaker') {
+        factor(beta * getL0Score_cached(object, trial.wordID, trialParams));
+      } else {
+        factor(beta * getS1Score_cached(trial.wordID, object, trialParams));
+      }
+    });
+    return lexicon;
+  });
+};
 
 var S = function(object, posterior, params) {
   return Infer({method: "enumerate"}, function() {
@@ -50,22 +115,5 @@ var L = function(utt, posterior, params) {
     });
     factor(params.listenerAlpha * utility);
     return object;
-  });
-};
-
-var updatePosterior = function(data, lexicalPrior, params) {
-  return Infer(params.inferOptions, function() {
-    var lexicon = lexicalPrior();
-    mapData({data: data}, function(trial) {
-      var beta = Math.pow(params.discountFactor,  data.length - trial.trialNum);
-      var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
-      var trialParams = extend(params, {context: trial.context, lexicon: lexicon[trial.partnerID]});
-      if(trial.role == 'speaker') {
-        factor(beta * shared.getL0Score(object, trial.wordID, trialParams));
-      } else {
-        factor(beta * shared.getS1Score(trial.wordID, object, trialParams));
-      }
-    });
-    return lexicon;
   });
 };

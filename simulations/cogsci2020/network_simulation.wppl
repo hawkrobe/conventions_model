@@ -27,7 +27,7 @@ console.log(params);
 var f = csv.open('./output/' + argv.model + argv.chainNum + '.csv');
 csv.writeLine('iterationNum,model,chainNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guessingEpsilon,'+
               'trialNum,speakerID,listenerID,partnerID,intendedName,speakerChoice,listenerChoice,'+
-              'longUttScore,longUttScore_unseenPartner,correctProb,word1PopBeliefs,word2PopBeliefs,word3PopBeliefs,word4PopBeliefs', f);
+              'longUttScore,longUttScore_unseenPartner,correctProb', f);
 
 var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput, listenerOutput, speakerPosterior) {
   var hypotheticalNewPartner = S(currTrial.intendedName, speakerPosterior, extend(params, {partnerID: 4}));
@@ -52,18 +52,16 @@ var sampleProbs = function(utt) {
 var lexicalPrior = function() {
   var partnerMeaning = map(function(utt) {
     if(params.model == 'no_pooling') {
-      var ps = utt == 'word1' || utt == 'word2' ? [.45,.55] : [.55, .45];
+      var bias = sampleProbs(utt);
       return {
-        popBeliefs: ps[0],
         partnerBeliefs: [
-          categorical({vs: meanings, ps: ps}),categorical({vs: meanings, ps: ps}),
-          categorical({vs: meanings, ps: ps}),categorical({vs: meanings, ps: ps})
+          categorical({vs: meanings, ps: dirichlet(bias)}), categorical({vs: meanings, ps: dirichlet(bias)}),
+          categorical({vs: meanings, ps: dirichlet(bias)}), categorical({vs: meanings, ps: dirichlet(bias)})
         ]
       };
     } else if (params.model == 'complete_pooling') {
       var sharedMeaning = categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))});
       return {
-        popBeliefs: sharedMeaning,
         partnerBeliefs: [sharedMeaning, sharedMeaning, sharedMeaning, sharedMeaning]
       };
     } else {
