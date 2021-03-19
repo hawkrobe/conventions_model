@@ -99,19 +99,18 @@ We focus for simplicity on this basic two-layer hierarchy, but the model can be 
 We return to these possible extensions in the General Discussion.
 
 To integrate this lexical uncertainty into our speaker and listener models, we assume they each act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$ \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}.
-In other words, they sample actions by marginalizing over their own posterior $P_S(\phi_k | D_k)$ or $P_L(\phi_k | D_k)$ of different meanings their partner $k$ may be using.\ndg{need to say what $D_k$ is.}
+In other words, they sample actions by marginalizing over their own beliefs $P_S(\phi_k)$ or $P_L(\phi_k)$ about different meanings their partner $k$ may be using.
 \begin{align}
-L(o|u) &\propto   \exp\left\{\alpha_L \textstyle{\int} P_L(\phi_k | D_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\nonumber\\
-S(u|o) &\propto  \exp\left\{\alpha_S \textstyle{\int} P_S(\phi_k | D_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\label{eq:marginalized}
+L(o|u) &\propto   \exp\left\{\alpha_L \textstyle{\int} P_L(\phi_k)  \log S_1(u|o, \phi_k)\,\,d\phi_k\right\}\nonumber\\
+S(u|o) &\propto  \exp\left\{\alpha_S \textstyle{\int} P_S(\phi_k)  U(u; o, \phi_k) \,\,d\phi_k\right\}\label{eq:marginalized}
 \end{align}
-where $\alpha_S, \alpha_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{We denote $L$ and $S$ without a subscript because they are the final speaker and listener models we use throughout the paper -- the subscripted definitions are internal constructs used to define these models -- but in the terminology of the RSA framework they represent $L_1$- and $S_1$-level pragmatic agents. We found that higher levels of recursion were not necessary to derive the phenomena of interest, but Eq.\ref{eq:marginalized} $L_n$ and $S_n$-level lexical uncertainty models may be generalized by replacing $S_1$ in the listener equation, and $L_0$ in the speaker's utility equation, with standard RSA definitions of $n-1$-level agents \cite<e.g.>{zaslavsky2020rate}.}.
+where $\alpha_S, \alpha_L \in[0,\infty]$ control the speaker's and listener's soft-max optimality, respectively\footnote{We denote $L$ and $S$ without a subscript because they are the only speaker and listener models we use in simulations throughout the paper -- the subscripted definitions are internal constructs used to define these models -- but in the terminology of the RSA framework they represent $L_1$- and $S_1$-level pragmatic agents with lexical uncertainty. We found that higher levels of recursion were not strictly necessary to derive the phenomena of interest, but $L_n$ and $S_n$-level lexical uncertainty models may be generalized by replacing $S_1$ in the listener equation, and $L_0$ in the speaker's utility definition, with standard RSA definitions of $n-1$-level agents \cite<e.g.>{zaslavsky2020rate}.}.
 
 \paragraph{C2: Partner-specific online learning}
 
-
-This formulation derives how agents ought to act given a certain set of partner-specific beliefs about $\phi_k$.
-But where do these beliefs come from?
-Although an agent may begin with significant uncertainty about the system of meaning their partner is using in the current context, an extended interaction provides useful information for reducing that uncertainty and therefore improving the success of communication.
+The formulation in Eq.~\ref{eq:marginalized} derives how agents ought to act under uncertainty about the lexicon being used by their partner, $P(\phi_k)$.
+But how do beliefs about their partner change over time?
+Although an agent may begin with significant uncertainty about the system of meaning their partner is using in the current context, further interactions provide useful information for reducing that uncertainty and therefore improving the success of communication.
 In other words, \emph{ad hoc} convention formation may be re-cast as an inference problem.
 Given observations $D_k$ from interactions with partner $k$, an agent can update their beliefs about their partner's latent system of meaning following Bayes rule:
 \begin{equation}
@@ -144,14 +143,15 @@ Agents update their beliefs about $\Theta$, using data accumulated from differen
 \end{equation}
 where $D = \bigcup_{k=1}^N D_k$, $\phi = \phi_1 \times \dots \times \phi_N$, and $N$ is the number of partners previous encountered. 
 Intuitively, when multiple partners are inferred to use similar systems of meaning, beliefs about $\Theta$ shift to represent this abstracted knowledge: it becomes more likely that a novel partner in one's community will share it as well.
-Note that this population-level posterior over $\Theta$ not only represents what the agent has learned about the central tendency of the group's conventions, but also the \emph{spread}, capturing the notion that some word meanings may be more variable than others.
+Note that this population-level posterior over $\Theta$ not only represents what the agent has learned about the central tendency of the group's conventions, but also the \emph{spread} or variability, capturing the notion that some word meanings may be more widespread than others.
 
-The updated $\Theta$ should be used to guide the prior expectations an agent brings into a subsequent interactions with a stranger.
+The updated $\Theta$ should be used to guide the prior expectations an agent brings into a subsequent interactions with strangers.
 This transfer is sometimes referred to as ``sharing of strength'' or ``partial pooling'' because pooled data is smoothly integrated with domain-specific knowledge.
-This property has been key to explaining how the human mind solves a range of other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempGoodmanTenenbaum10_LearningToLearn,GoodmanUllmanTenenbaum11_TheoryOfCausality},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
-\ndg{here or in GD should mention that blessing of abstraction means it is possible for beliefs about language "in general" to outpace beliefs about partner idiosyncrasies. i think this may be important for reconciling our proposal with language acquisition work?}
+This property has been key to explaining how the human mind solves a range of other difficult inductive problems in the domains of concept learning \cite{KempPerforsTenenbaum07_HBM, tenenbaum_how_2011}, causal learning \cite{KempPerforsTenenbaum07_HBM,KempGoodmanTenenbaum10_LearningToLearn},  motor control \cite{berniker2008estimating}, and speech perception \cite{kleinschmidt2015robust}.
+A key consequence of such transfer hierarchical models is the ``blessing of abstraction,'' \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality} where it is possible under certain conditions for beliefs about the community's conventions \emph{in general} to outpace beliefs about the idiosyncracies of individual partners \cite{gershman2017blessing}.
+We return to this property in the context of language acquisition in the General Discussion.
 
-\subsection{Further challenges}
+\subsection{Further challenges for convention formation}
 
 The formulation in the previous section presents the core of our theory.
 Here, we highlight several additional features of our model, which address more specific challenges raised by prior work on communication and which we will encounter in the simulations reported in the remainder of the paper. 
@@ -173,25 +173,24 @@ The listener on a given trial should use the probability that a speaker would pr
 This symmetry, where each agent is attempting to learn from the other's behavior, creates a clear coordination problem\footnote{In some settings, agents in one role may be expected to take on more of the burden of adaptation, leading to an asymmetric division of labor \cite<e.g.>{MorenoBaggio14_AsymmetrySignaling}. This may be especially relevant in the presence of asymmetries in power, status, or capability. In principle, this could be reflected in differing values of parameters $\alpha_S$ and $\alpha_L$, but we leave consideration of such asymmetries for future work.}.
 In the case of an error, where the agent in the listener role hears the utterance $u'$ and chooses an object $o'$ other than the intended target $o^*$, they will receive feedback about the intended target and subsequently condition on the fact that the speaker chose $u'$ to convey that target.
 Meanwhile, the agent in the speaker role will subsequently condition on the likelihood that the listener chose the object $o'$ upon hearing their utterance.
-In other words, each agent will subsequently condition on slightly different data leading to slightly different beliefs that must be resolved through further interaction.
-
-\ndg{when each player updates independently using bayes rule, treating their partner's lexicon as fixed, they might update "at cross purposes". i think we believe that this process will converge in the limit of enough trials.... do we have a proof of that? if we do, great! if not, we should indicate this as a reasonable open question.}
+In other words, each agent will subsequently condition on slightly different data leading to conflicting beliefs.
+Whether or not agents are able to resolve early misunderstandings through further interaction and eventually reach consensus depends on a number of factors.
 
 \paragraph{Memory and forgetting}
 
-Second, we must address the limitations imposed by memory and forgetting; it is unrealistic to expect that memories of every element of every past interaction in $D$ is equally available.
-%Some \emph{forgetting} or \emph{discounting} mechanism appears necessary for convention formation. 
-Furthermore, this may be to the agent's advantage. 
-As described in the previous section, early errors are incorporated into the data, leading to mis-coordination much later in an interaction when each agent conditions on different data.
-Without a mechanism to discount these earlier data points, agents may be prevented from ever reaching consensus \cite{spike_minimal_2017}.
-
-\ndg{I think it is worth pointing out (and perhaps changing description to embrace) that the hierarchical model could be extended one level down to treat different time points with the same partner as having different lexicons. a reasonably strong assumption of statistical sharing between neighboring timepoints would yield the simple forgetting model below.... but this is a more principled way to capture the idea that the lexicon evolves over an extended interaction?}
+One important factor is imposed by the basis cognitive mechanisms of memory and forgetting.
+It is unrealistic to expect that memories of every example of every past interaction in the set of observations $D$ is equally accessible to the agent.
+Furthermore, this may be to the agent's advantage.
+Without any mechanism for forgetting, early errors may prevent coordination much later in an interaction, as each agent's lexical beliefs must explain all previous observations equally.
+Without the ability to discount earlier data points, agents may be prevented from ever reaching consensus with their partner \cite{spike_minimal_2017}.
 
 Forgetting is typically incorporated into Bayesian models with a decay term in the likelihood function \cite{anderson2000adaptive,angela2009sequential,fudenberg2014recency,kalm2018visual}.
 $$P(D_k | \phi_k) = \prod_{\tau=0}^T \beta^{\tau} P(\{o^*,u',o'\}_{T-\tau}\, |\, \phi_k)$$
 where $\tau=0$ indexes the most recent trial $T$ and decay increases further back through time.
-This decay is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted as the expectation over a process where observations have some probability of dropping out of memory at each time step.
+This decay term is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted as the expectation over a process where observations have some probability of dropping out of memory at each time step.
+Indeed, this likelihood can be derived by simply extending our hierarchical model down an additional layer \emph{within} each partner to allow for the possibility that they are using slightly different lexicons at different points in time; assuming a degree of auto-correlation between neighboring time points yields this form of discounting.
 Alternatively, at the algorithmic level, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}.
+While this simple decay model is sufficient for our simulations, we discuss several extensions in the General Discussion that better capture the complexity of memory processes.
 
 \paragraph{Bias against ambiguity}
 
@@ -208,13 +207,17 @@ For example, upon hearing their partner use a particular utterance $u$ to refer 
 Second, agents do not only make passive inferences from observation, they participate in the interaction by \emph{using language} themselves.
 A Gricean agent's own production and comprehension is also guided by cooperative principles (Eq.~\ref{eq:marginalized}).
 
-Many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting two technical choices in our formulation.
+Many minor variations on the basic RSA model have been explored in previous work, and it is worth highlighting three technical choices in our formulation.
 First, both agents are ``action-oriented,'' in the sense that they behave proportional to the utility of different actions, according to a soft-max normalization $\sigma(U(z)) = e^{U(z)}/\sum e^{U(z)}$.
 This contrasts with some RSA applications, where the listener is instead assumed to be ``belief-oriented,'' simply inferring the speaker's intended meaning without producing any action of their own \cite{qing2015variations}.
-Second, our instantiation of lexical uncertainty allows an agent to maintain their own lexical posterior and marginalize over possible partner lexicons regardless of whether they are in the speaker or listener role.
-This definition differs subtly from the model used by \citeA{bergen_pragmatic_2016}, which placed the integral over lexical uncertainty at a single level of recursion (specifically, within a pragmatic listener agent), defining higher-level speakers in terms of this uncertain listener.
-This is a natural choice when the primary focus is to derive one-shot implicatures from a listener model, but in a repeated interaction setting, where the same agent may play both speaker and listener roles, locating uncertainty at a single site necessarily leads to an asymmetry between the speaker and listener roles. 
-Instead, we argue that it is more natural for the uncertainty to always be placed at the highest level, where one agent is reasoning about their \emph{partner}, regardless of what role they are currently playing.
+Second, our instantiation of lexical uncertainty differs subtly from the one used by \citeA{bergen_pragmatic_2016}, which placed the integral over lexical uncertainty at a \emph{single} level of recursion (specifically, within a pragmatic listener agent).
+Instead, we argue that it is more natural in an interactive, multi-agent setting for each agent to maintain uncertainty at the highest level, such that each agent is reasoning about their \emph{partner}'s lexicon regardless of what role they are currently playing.
+
+Lastly, we must define how the $L_0$ agent behaves when an utterance is false of all objects in context under their lexicon (i.e. when the normalization constant is exactly 0). 
+Previous proposals have assumed that the $L_0$ should choose uniformly in this case.
+However, this assumption has the unintuitive consequence that $S_1$'s utility of using an utterance known to be false of the target may be the same as an utterance known to be true.
+To address this concern, we always add a low-prior-probability `null object' to the $L_0$'s context, for which all utterances evaluate to true.
+This alternative can be interpreted as a `failure to refer' and effectively prevents $L_0$ from assigning belief to a referent for which the utterance is literally false (this case is distinct from the case of a \emph{contradiction}, which arises when defining the meaning of multi-word utterances in Section \textbf{P1} below.)
 See Appendix A for further details and discussion of our RSA implementation.
 
 \paragraph{Inference details}
@@ -223,12 +226,10 @@ While our simulations in the remainder of the paper each address different scena
 First, we must be concrete about the space of possible lexicons that parameterizes the lexical meaning function, $\mathcal{L}_{\phi}$.
 For consistency with previous Bayesian models of word learning \cite<e.g.>{XuTenenbaum07_WordLearningBayesian} we take the space of possible meanings for an utterance to be the set of nodes in a concept taxonomy.
 When targets of reference are conceptually distinct, as typically assumed in signaling games, the target space of utterance meanings reduces to the discrete space of individual objects, i.e.~$\den{u}_{\phi} = \phi(u) \in \mathcal{O}$ for all $u\in\mathcal{U}$.
-
 For this special case, the parameter space contains exactly $|\mathcal{O}| \times |\mathcal{U}|$ possible values for $\phi$, corresponding to all possible mappings between utterances and individual objects. 
 Each possible lexicon can therefore be written as a binary matrix where the rows correspond to utterances, and each row contains one object.
 The truth-conditional function $\mathcal{L}_{\phi}(u,o)$ then simply checks whether the element in row $u$ matches object $o$.
 For example, there are four possible lexicons for two utterances and two objects:
-
 $$\phi \in \left\{\begin{bmatrix}
 \bluesquare \\
 \orangecircle \\
@@ -246,9 +247,9 @@ $$\phi \in \left\{\begin{bmatrix}
 \bluesquare \\
 \end{bmatrix}\right\}$$
 
-Second, having defined the support of $\phi$, we can then define a simplicity prior $P(\phi) \propto \exp\{-|\phi|\}$ following \citeA{FrankGoodmanTenenbaum09_Wurwur}, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary. 
+Second, having defined the support of the parameter $\phi$, we can then define a simplicity prior $P(\phi) \propto \exp\{-|\phi|\}$ following \citeA{FrankGoodmanTenenbaum09_Wurwur}, where $|\phi|$ is the total size of each word's extension, summed across words in the vocabulary. 
 Again, for traditional signaling games, this reduces to a uniform prior because all possible lexicons are the same size: $\phi(u_i) \sim \textrm{Unif}(\mathcal{O})$.
-Indeed, we can compactly write distributions over $\phi$ in terms of the same utterance-object matrix, where row $i$ represents the marginal distribution over possible meanings of utterance $u_i$.
+We can compactly write distributions over $\phi$ in terms of the same utterance-object matrix, where row $i$ represents the marginal distribution over possible meanings of utterance $u_i$.
 For example, the uninformative prior for two utterances and two objects can be written:
 $$P(\phi) =  \begin{array}{ccc}
 & & \bluesquare \,\,\,\,\,\,\orangecircle \\
@@ -260,18 +261,18 @@ $$P(\phi) =  \begin{array}{ccc}
 .5 & .5 \\
 \end{bmatrix}
 \end{array}$$
-For \textbf{P3}, however, we consider spaces of referents with more complex conceptual structure and a larger space of possible meanings, where a single word may apply to multiple conceptually related referents or, conversely, may have a `null' meaning, referring to no objects at all.
-\ndg{clarify this null meaning thing, and indicate that it's there in all simulations?}
+This prior becomes more important for \textbf{P3}, however, where we consider spaces of referents with more complex conceptual structure and a larger space of possible meanings. 
+A single word may apply to multiple conceptually related referents or, conversely, may have an empty meaning, where it is effectively removed from the agent's vocabulary.
 In this more general case, a simplicity prior generically favors smaller word meanings as well as a smaller effective vocabulary size, since the null meaning has the smallest extension. 
 
-Finally, while the probabilistic model we have formulated in this section is theoretically motivated and mathematically well-defined, it has been challenging to actually derive predictions from it.
-Historically, interactive models have been difficult to study with closed-form analytical techniques and computationally expensive to study through simulation, likely contributing to the prevalence of simplified heuristics in prior work. 
+Finally, while the probabilistic model we have formulated in this section is theoretically well-motivated and mathematically well-defined, it has previously been challenging to actually derive predictions from it.
+Historically, interactive models have been challenging to study with closed-form analytical techniques and computationally expensive to study through simulation, likely contributing to the prevalence of simplified heuristics in prior work. 
 Our work has been facilitated by recent advances in probabilistic inference techniques that have helped to overcome these obstacles. 
 We have implemented our simulations in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL}.
 All of our simulations iterate the following trial-level loop: (1) sample an utterance from the speaker agent's distribution, given the target object, (2) sample an object from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations, and (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
 
 To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), we always use exhaustive enumeration for exact inference.
-We would prefer to use enumeration to obtain posteriors over lexical meanings (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, enumeration becomes intractable.
-For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from the posterior, and approximate the expectations in Eq.~\ref{eq:marginalized} by summing over these samples. 
+We would prefer to use enumeration to obtain posteriors over lexical meanings as well (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, enumeration becomes intractable.
+For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from each agent's posteriors, and approximate the expectations in Eq.~\ref{eq:marginalized} by summing over these samples. 
 Because we are emphasizing a set of phenomena where our model makes qualitatively different predictions than previous models, our goal in this paper is to illustrate and evaluate these \emph{qualitative} predictions rather than provide exact quantitative fits to empirical data.
-As such, we proceed by examining predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that make qualitatively informative predictions, and leave the more computationally expensive task of parameter fitting to future studies?
+As such, we proceed by examining predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that help distinguish our predictions from other accounts, and leave the more computationally expensive task of empirical parameter estimation to future studies.
