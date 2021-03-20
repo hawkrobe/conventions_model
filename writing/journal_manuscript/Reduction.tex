@@ -5,7 +5,7 @@ While this phenomenon has been extensively documented, to the point of serving a
 \centering
     \includegraphics[scale=.8]{sec1-arbitrariness}
     \vspace{1em}
-    \caption{\emph{Path-dependence of conventions.} The average trajectory of each agent's beliefs about the meaning of $u_1$, $\phi(u_1)$, are shown following all eight possible outcomes of the first trial in Simulation 1.1. For each of the two possible targets, the speaker could choose to produce either of the two utterances, and the listener could respond by choosing either of the two objects. In the cases where the listener chose correctly (marked with a checkmark), agents subsequently conditioned on the same data and rapidly converged on a system of meaning consistent with this feedback. For example, in the first row, when $u_1$ was successfully used to refer to the circle, both agents subsequently believe that $u_1$ means \emph{circle} in their partner's lexicon. In the cases where the listener fails to choose the target, the agents subsequently condition on different data, and they converge on a convention that is determined by later choices (lines represent the trajectories of individual agents.)}
+    \caption{\emph{Path-dependence of conventions.} The average trajectory of each agent's beliefs about the meaning of $u_1$, $\phi(u_1)$, is shown in blue and orange following all eight possible outcomes of the first trial in Simulation 1.1. For each of the two possible targets, the speaker could choose to produce either of the two utterances, and the listener could respond by choosing either of the two objects. In the cases where the listener chose correctly (marked with a checkmark), agents subsequently conditioned on the same data and rapidly converged on a system of meaning consistent with this feedback. For example, in the first row, when $u_1$ was successfully used to refer to the circle, both agents subsequently believe that $u_1$ means \emph{circle} in their partner's lexicon. In the cases where the listener fails to choose the target, the agents subsequently condition on different data, and they converge on a convention that is determined by later choices (lines represent the trajectories of individual agents.)}
   \label{fig:path-dependence}
 \end{figure*}
 
@@ -34,8 +34,7 @@ In this section, we argue that our Bayesian account provides a rational explanat
 Given that this phenomenon arises in purely dyadic settings, it also provides an opportunity to explore more basic properties of the first two capacities formalized in our model (representing \emph{uncertainty} and \emph{partner-specific learning}) before introducing hierarchical generalization in the next section. 
 In brief, we show that increasing efficiency is a natural consequence of the speaker's tradeoff between informativity and parsimony (Eq.~\ref{eq:marginalized}), given their inferences about the listener's language model. 
 For novel, ambiguous objects like tangrams, where speakers do not expect strong referential conventions to be shared, longer initial descriptions are motivated by high initial uncertainty in the speaker's lexical prior $P(\phi_k | \Theta)$. 
-Proposing multiple descriptors is a rational hedge against the possibility that any particular meaning is not shared by the listener.
-\ndg{our model doesn't exactly do this "rational hedge" thing -- see comments below -- should we stick with that description?}
+Proposing multiple descriptors is a rational hedge against the possibility that a particular utterance will be misinterpreted and give the listener a false belief.
 As the interaction goes on, the speaker obtains feedback $D_k$ from the listener responses and updates their posterior beliefs $P(\phi_k | D_k)$ accordingly. 
 As uncertainty gradually decreases, they are able to achieve the same expected informativity with shorter, more efficient messages. 
 
@@ -87,23 +86,18 @@ For example, observing $D = \{(\orangecircle^*, u_2, \orangecircle)\}$ provides 
 Next, we show how our model explains speakers' gains in efficiency over multiple interactions. 
 For efficiency to change at all, speakers must be able to produce utterances that vary in length. 
 For this simulation, we therefore extend the model to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances.
-Human speakers essentially form long description by proposing a collection of simpler descriptions (e.g. ``kind of an X or maybe a Y with Z on top''). 
-This behavior suggests that multi-word utterances $u_iu_j$ ought to be interpreted according to a `max' operation, allowing the literal listener to use any component part that fits the referent under the given lexicon\footnote{We focus on the `max' operation as one of the simplest and most natural ways of constructing longer, non-atomic utterances from primitives. See also \citeA{SteinertThrelkeld16_CompositionalSignaling} who consider the operation of negation. We discuss the possibility of a conjunctive operation in Appendix B, which is capable of producing the desired increases in efficiency but requires additional assumptions about strategically ``failing to refer'' that we find implausible.}:
-$$\mathcal{L}_\phi(u_iu_j, o) = \max\{\mathcal{L}_\phi(u_i, o) , \mathcal{L}_\phi(u_j, o)\}$$
-\ndg{pre-discussion comment: earlier we defined $\mathcal{L}$ to be Boolean valued, so it's not clear what $\max$ means. i believe we mean "logical OR"? maybe just call it OR? Also... people will be confused by this because it is not how binomial constructions actually work in language. I think we are driven to it because we don't have any "neutral" options where i can just say i'm not sure what u1 means so it doesn't contribute to the full utterance meaning. this could come from a soft semantics (ie then we have 0.5 available and product should be ok), or from composing at the level of distributions...}
-\ndg{updated thoughts post-discussion: i *really* don't like the logical-or semantics (aka MAX rule, but we are working with boolean denotations, so it's just OR) because it leads to some very unintended consequences if we make the world of the simulation just a bit more complex. eg if there were color and shape properties, we really want [[red square]] = [[red]] AND [[square]] (and not [[red]] OR [[square]]). so we would need some unusual semantic rules anyhow -- "OR if the predicates refer to the same feature, AND if different". at which point i think it's nicer to just be explicit that we want this kind of "modal conjunction" whose meaning is AND except if it's false for all possible referents, when it's true (or equivalently neutral if we had a third value).
-btw i should flag that i'm happy enough with this "modal and" approach for the paper, but i actually think it derives the initial preference for two words for the wrong reason. essentially, in this approach (and the OR one) the S1 chooses "u1u2" because this leads the L0 to not update her beliefs when u1 contradicts u2, and this is preferable to risking L0 having the wrong belief (because log is asymmetric, so log(0) is a really bad utility). i think we all share the intuition that why the speaker should actually produce two words is to hedge her bets on one word not being understood as she expects -- "u1u2" should be more likely to convey the correct meaning, not just be a noop. we could get the hedging (aka rational redundancy) effect if either we had soft semantics with product or max composition, or if there was some chance that each word is true of both objects. (robert, did we talk through that latter option -- putting some probability mass on the lexicon [[0,1],[1,1]] etc? there may be some reasons it doesn't work?) but i think robert convinced me that following down this route is too complicated in terms of inference (distributions on continuous semantics) and model description (non-truth functional semantics or uncertainty in more places), and not really needed for the purposes of this paper.
-}
+Intuitively, human speakers form longer initial description by combining a collection of simpler descriptions (e.g. ``kind of an X, or maybe a Y with Z on top''). 
+This raises a problem about how the meaning of a multi-word utterance $\mathcal{L}_\phi(u_1u_2)$ is derived from its components $\mathcal{L}_\phi(u_1)$ and $\mathcal{L}_\phi(u_2)$.
+To capture the basic desideratum that an object should be more likely to be chosen by $L_0$ when more components of the longer utterance apply to it, we adopt a standard conjunctive semantics\footnote{One subtle consequence of a conjunctive Boolean semantics is the possibility of contradictions. For example, under a possible lexicon where $\phi(u_1)=\bluesquare$ and $\phi(u_2)=\orangecircle$, the multi-word utterance $u_1u_2$ is not only false of a particular referent in the current context, it is false of all possible referents; it \emph{fails to refer}, reflecting a so-called truth-gap \cite{Strawson50_OnReferring,van1966singular}. We assume such an utterance is uninterpretable and simply does not change the literal listener $L_0$'s beliefs. While this assumption is sufficient for our simulations, we regard this additional complexity as a limitation of classical Boolean semantics and show in Appendix C that switching to a more realistic continuous semantics with lexical values in $[0,1]$ \cite{degen2020redundancy} better captures the notion of redundancy that motivates speakers to initially produce longer utterances.}:
+$$\mathcal{L}_\phi(u_iu_j, o) = \mathcal{L}_\phi(u_i, o) \times \mathcal{L}_\phi(u_j, o)$$
 
-Now, we consider a scenario with the same two objects as in Simulation 1.1, but give the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two, and allow two-word utterances, $u_1u_2$ etc. 
+Now, we consider a scenario with the same two objects as in Simulation 1.1, but give the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two, and allow two-word utterances such as $u_1u_2$.
 We established in the previous section that successful \emph{ad hoc} conventions can emerge even in a state of pure uncertainty, but human participants in repeated reference games typically bring some prior expectations about language into the interaction.
 For example, a participant who hears `ice skater' on the first round of the task in \citeA{ClarkWilkesGibbs86_ReferringCollaborative} may be more likely to select some objects more than others while still having substantial uncertainty about the intended target (e.g. over three of the twelve tangram that have some resemblance to an ice skater).
-This observation is key to understanding why speakers may initially use longer utterances in repeated reference games with ambiguous stimuli. 
-Under a completely uniform prior, where all words are expected to be equally meaningless to one's partner, longer utterances have no additional value. 
-
-\ndg{could you confirm that last sentence is true of our current model? because the model is using "u1u2" to be a noop, in order to avoid L0 having a false belief, it may actually choose "u1u2" more even if the meanings are uniform??}
-Under a completely concentrated prior, where there already exists a strong convention for a short label, that label would suffice and a longer utterance is redundant.
-We thus initialize both agents with very weak biases (represented in compressed matrix form in Fig.~\ref{fig:sec1efficiency}):
+%This observation is key to understanding why speakers may initially use longer utterances in repeated reference games with ambiguous stimuli. 
+%Under a uniform prior, where all words are expected to be equally meaningless to one's partner, longer utterances would have no additional value. 
+%Under a concentrated prior, where there already exists a strong convention for a short label, that label would suffice and a longer utterance would be completely redundant.
+We thus initialize both agents with weak biases $\delta$ (represented in compressed matrix form in Fig.~\ref{fig:sec1efficiency}):
 \begin{align}
 \phi(u_1), \phi(u_2) \sim \textrm{Categorical}(0.5 + \delta) \nonumber\\
 \phi(u_3), \phi(u_4) \sim \textrm{Categorical}(0.5 - \delta) \nonumber
@@ -117,16 +111,10 @@ We thus initialize both agents with very weak biases (represented in compressed 
   \label{fig:sec1efficiency}
 \end{figure}
 
-%\begin{figure}[b]
-%\centering
-%  \caption{\emph{Agent converge on more efficient utterances over repeated interactions.} Error bars are bootstrapped 95\% CIs across 1000 simulated trajectories.}
-%  \label{fig:sec1efficiency}
-%\end{figure}
-
 
 \begin{figure*}[t]
 \centering
-    \includegraphics[scale=1.2]{sec1-reduction_schematic}
+    \includegraphics[scale=1]{sec1-reduction_schematic}
     \vspace{1em}
   \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, they update their beliefs and become more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
   \label{fig:sec1internals}
@@ -134,31 +122,31 @@ We thus initialize both agents with very weak biases (represented in compressed 
 
 As in Simulation 1.1, we simulated 1000 distinct trajectories of dyadic interaction between agents.
 Utterance cost was defined to be the number of `words' in an utterance, so $c(u_1) =1$ and $c(u_1u_2)=2$.
-Our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block), qualitatively matching the curves measured in the empirical literature (Fig.~\ref{fig:sec1model}B).
+As shown in Fig.~\ref{fig:sec1model}B, our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block), qualitatively matching the curves measured in the empirical literature.
 
-To illustrate in detail how our model derives this phenomenon, we walk step-by-step through a single trial (Fig. \ref{fig:sec1efficiency}).
-Consider a speaker who wants to refer to object $o_1$. 
+To illustrate in detail how our model derives this behavior, we walk step-by-step through a single trial (Fig. \ref{fig:sec1efficiency}).
+Consider a speaker who wants to refer to object $\bluesquare$. 
 They expect their partner to be slightly more likely to interpret their language using a lexicon in which $u_{1}$ and $u_{2}$ apply to this object, due to their weak initial biases. 
-However, there is still a reasonable chance ($p=0.45$) that either $u_1$ or $u_2$ alone will be interpreted to mean $o_2$ by their partner, which would lead to an incorrect response. 
-Thus, it is more informative to produce the longer utterance $u_{1}u_{2}$ to hedge against this possibility, despite its higher production cost. 
+However, there is still a reasonable chance ($p=0.45$) that either $u_1$ or $u_2$ alone will be interpreted to mean $\orangecircle$, giving their partner false beliefs. 
 
-\ndg{ok, we need to be careful / add more explanation here. the real reason the speaker chooses the two word utterance isn't exactly to make sure one of the words conveys the correct meaning, it's to make sure that the listener doesn't get a false belief --- this is bad because of the shape of log -- and the two word utterance yields no belief update when the words contradict each other.}
-To see why this is the case, consider the expected informativity of the utterance under different possible listener lexicons.
-The possibility with highest probability is that both $u_1$ and $u_2$ will mean $o_1$ in the listener's lexicon ($p = 0.55^2 \approx 0.3$), in which case the listener will correctly identify the target with high probability.
-The possibility that both $u_1$ and $u_2$ will mean $o_2$ in the listener's lexicon is only $p=0.45^2 \approx 0.2$, leading the listener to erroneously select $o_2$ with high probability. 
-In the mixed cases, where just one of $u_1$ or $u_2$ means $o_2$ in the listener's lexicon ($p = 2 \cdot 0.45 * 0.55 \approx 0.5$), the listener will choose between the objects at chance, which yields an intermediate informativity.
-When expected informativity is calculated across these outcomes, it is more valuable to produce the longer disjunction than the shorter component utterances.
-Finally, upon observing the listener's response to the disjunction (say, $o_1$), the speaker becomes more confident that the component utterances $u_1$ and $u_2$ mean $o_1$ in their updated posterior over the listener's lexicon.
+To see why our speaker model initially prefers the longer utterance $u_{1}u_{2}$ to hedge against this possibility, despite its higher production cost, consider the expected informativity of $u_1u_2$ under different possible lexicons.
+The possibility with highest probability is that both $\phi(u_1) = \phi(u_2) = \bluesquare$ in the listener's lexicon ($p = 0.55^2 \approx 0.3$), in which case the listener will correctly identify $\bluesquare$ with high probability.
+The possibility that both $\phi(u_1)=\phi(u_2) = \orangecircle$ in the listener's lexicon is only $p=0.45^2 \approx 0.2$, in which case the listener will erroneously select $\orangecircle$.
+In the mixed cases, where $\phi(u_1) = \orangecircle, \phi(u_2) = \bluesquare$ or $\phi(u_1) = \bluesquare, \phi(u_2) = \orangecircle$ in the listener's lexicon ($p = 2 \cdot 0.45 * 0.55 \approx 0.5$), the utterance would be a interpreted as a contradiction and the listener would not change their prior beliefs.
+Because the speaker's informativity is defined using the log probability of the listener's belief, the utility of giving the listener a false belief (i.e. $\log(\epsilon)$) is significantly worse than simply being uninformative (i.e. $\log(0.5)$), and the longer utterance minimizes this harm.
+
+Following the production of a conjunction, the speaker observes the listener's response (say, $\bluesquare$).
+This allows both agents to become more confident that the component utterances $u_1$ and $u_2$ mean $\bluesquare$ in their updated posterior over the listener's lexicon.
 This credit assignment to individual lexical items is a consequence of the compositional meaning of longer utterances in our simple grammar.
-\ndg{would be good to unpack that last point with another sentence or two. eg "the speaker knows a listener for whom either $u_1$ or $u_2$ means $o_1$ would have been likely to make the observed choice, and so the probability of those mappings increases."}
-As shown in Fig.~\ref{fig:sec1model}B, our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block), qualitatively matching the curves measured in the empirical literature (e.g. Fig.~\ref{fig:clark92}).
+The listener knows a speaker for whom either $u_1$ or $u_2$ individually means $\bluesquare$ would have been more likely to say $u_1u_2$ than a speaker for whom either component meant $\orangecircle$; and similarly for the speaker reasoning about possible listeners.
+Consequently, the probability of both mappings increases.
 
 Fig.~\ref{fig:sec1internals} shows the trajectories of internal components of the speaker utility as the interaction continues.
-We assume for illustrative purposes that $o_1$ continues to be the target on each trial and the same agent continues to be the speaker.
-As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $o_1$ increases (far left), the marginal gap in informativity between the disjunction and the shorter components gradually decreases (center left).
+We assume for illustrative purposes in this example that $\bluesquare$ continues to be the target on each trial and the same agent continues to be the speaker.
+As the posterior probability that individual primitive utterances $u_1$ and $u_2$ independently mean $\bluesquare$ increases (far left), the marginal gap in informativity between the conjunction and the shorter components gradually decreases (center left).
 As a consequence, production cost increasingly dominates the utility (center-right). 
-After several trials of observing a successful listener response given the disjunction, the utility of the shorter utterances reaches parity with the disjunction (yielding a situation now similar to Simulation 1.1).
-Once the speaker samples a shorter utterance (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
+After several trials of observing a successful listener response given the conjunction, the \emph{informativity} of the two shorter utterances reaches parity with the conjunction but the cost makes the shorter utterances more attractive (yielding a situation now similar to the outset of Simulation 1.1).
+Once the speaker samples one of the shorter utterances (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
 Thus, increasing efficiency is derived as a rational consequence of uncertainty and partner-specific inference about the listener's lexicon.
 For these simulations, we used $\alpha_S = \alpha_L = 8, w_c = 0.24, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
 %\paragraph{Model comparison}
@@ -181,23 +169,24 @@ Speakers initially hedge their descriptions under uncertainty about the lexical 
 Our explanation recalls classic observations about \emph{hedges}, expressions like \emph{sort of} or \emph{like}, and morphemes like \emph{-ish}, that explicitly mark provisionality, such as \emph{a car, sort of silvery purple colored} \cite{Fraser10_Hedging,MedlockBriscoe07_HedgeClassification}.
 \citeA{BrennanClark96_ConceptualPactsConversation} counted hedges across repetitions of a repeated reference game, finding a greater occurrence of hedges on early trials than later trials and a greater occurrence under more ambiguous contexts.
 While our model does not explicitly produce hedges, it is possible to understand this behavior as an explicit or implicit marker of the lexical uncertainty in our account.
-\ndg{i guess we don't need to go into it, but i think caching out this idea about hedges requires L0 to be aware of some of the uncertainty --- it works out nicely in a soft semantics version, but not so much in our current formulation.}
+If hedges are explicit and intentional, this would require the speaker to reason about a listener that is to some degree aware of uncertainty or graded meanings.
+This is not the case with a classical truth-functional lexical representation, but is formalized naturally under soft semantics (see Appendix C).
 
-We have already discussed why this phenomenon poses a challenge for the simple model-free reinforcement learning models in the literature --- namely, that successful listener feedback only reinforces long utterances with no mechanism for shortening them.
+We have already discussed why this phenomenon poses a challenge for the simple model-free reinforcement learning models in the literature --- namely, that successful listener feedback would only reinforce long utterances with no mechanism for shortening them.
 This observation is not intended to rule out the entire family of reinforcement learning approaches, however. 
 It is plausible that more sophisticated \emph{model-based} reinforcement learning algorithms are flexible enough to account for the phenomenon.
 For instance, hierarchical architectures that appropriately incorporate compositionality or incrementality into the speaker's production model may be able to reinforce component parts of longer utterances in the shared history \cite<e.g.>{hawkins2019continual}.
-Still, such an approach would bring these models much closer to the features of our proposal than to the model-free agents in the existing literature.
-We return to this question in our discussion of the scalability of our model in the General Discussion.
+Still, such an approach would have more in common with our proposal than to the model-free heuristics in the existing literature.
+We return to this question with respect to scalability in the General Discussion.
 
 Finally, the theory of reduction explored in this section is consistent with recent analyses of exactly \emph{what} gets reduced in a large corpus of repeated reference games \cite{hawkins2020characterizing}.
 These analyses found that entire modifying clauses are more likely to be dropped at once than expected by random corruption, and function words like determiners are mostly dropped as parts of larger noun phases or prepositional phrases rather than omitted on their own.
-In other words, speakers apparently begin by combining multiple descriptive labels and collapse to one of these labels, rather than noisily dropping words and assuming the listener can recover the intended longer utterance, as predicted by a noisy channel model.
+In other words, speakers apparently begin by combining multiple descriptive `units' and collapse to one of these `units', rather than dropping words at random and assuming the listener can recover the intended longer utterance, as predicted by a noisy channel model.
 This theoretical claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
 
 While our account explains these observations as a result of structure and heterogeneity in the lexical prior, it remains an open question of how to instantiate appropriately realistic priors in our computational model. 
 Our simulation only considered two-word descriptions with homogenous uncertainty over the components, and is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: for example, the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction. 
-Future work is needed to elicit these priors and evaluate predictions about more fine-grained patterns.
+Future work is needed to elicit these priors and evaluate predictions about more fine-grained patterns of reduction.
 
 
 
