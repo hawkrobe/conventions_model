@@ -44,9 +44,8 @@ var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput
 
 var sampleProbs = function(utt) {
   // note that the expectated value of a dirichlet w/ this prior is [.4, .6]
-  var bias = utt == 'word1' || utt == 'word2' ? [1.1, 0.9] : [0.9, 1.1];
-  var hyperConcentration = dirichlet(Vector(bias));
-  return T.mul(hyperConcentration, 10);
+  var bias = (utt == 'word1' || utt == 'word2') ? [2, 3] : [3, 2];
+  return T.mul(dirichlet(Vector(bias)), 1);
 };
 
 var lexicalPrior = function() {
@@ -66,13 +65,13 @@ var lexicalPrior = function() {
         partnerBeliefs: [sharedMeaning, sharedMeaning, sharedMeaning, sharedMeaning]
       };
     } else {
-      var sharedConcentration = sampleProbs(utt);
+      var sharedConcentration = dirichlet(sampleProbs(utt));
       return {
         partnerBeliefs: [
-          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
-          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
-          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
-          categorical({vs: meanings, ps: dirichlet(sharedConcentration)})]
+          categorical({vs: meanings, ps: sharedConcentration}),
+          categorical({vs: meanings, ps: sharedConcentration}),
+          categorical({vs: meanings, ps: sharedConcentration}),
+          categorical({vs: meanings, ps: sharedConcentration})]
       };
     }
   }, unconstrainedUtterances);
@@ -127,6 +126,7 @@ var iterate = function(iterationNum, remainingTrials, dataSoFar) {
   console.log(currTrial)
   console.log(speakerOutput)
   console.log(listenerOutput)
+  console.log(nextUtt, nextChoice);
   writeLine(currTrial, nextUtt, nextChoice, speakerOutput, listenerOutput, speakerPosterior);
   var newDataSoFar = _.zipObject(_.range(1, 5), map(function(id) {
     var trialPacket = extend(currTrial, {
@@ -155,13 +155,13 @@ var trials = [
   {trialNum: 8, participants: [1,2], partnerID: 1, intendedName: 'redsquare'},
 
   {trialNum: 1, participants: [4,3], partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 2, participants: [4,3], partnerID: 1, intendedName: 'redsquare'},
-  {trialNum: 3, participants: [3,4], partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 4, participants: [3,4], partnerID: 1, intendedName: 'redsquare'},
-  {trialNum: 5, participants: [4,3], partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 6, participants: [4,3], partnerID: 1, intendedName: 'redsquare'},
-  {trialNum: 7, participants: [3,4], partnerID: 1, intendedName: 'bluecircle'},
-  {trialNum: 8, participants: [3,4], partnerID: 1, intendedName: 'redsquare'},
+   {trialNum: 2, participants: [4,3], partnerID: 1, intendedName: 'redsquare'},
+   {trialNum: 3, participants: [3,4], partnerID: 1, intendedName: 'bluecircle'},
+   {trialNum: 4, participants: [3,4], partnerID: 1, intendedName: 'redsquare'},
+   {trialNum: 5, participants: [4,3], partnerID: 1, intendedName: 'bluecircle'},
+   {trialNum: 6, participants: [4,3], partnerID: 1, intendedName: 'redsquare'},
+   {trialNum: 7, participants: [3,4], partnerID: 1, intendedName: 'bluecircle'},
+   {trialNum: 8, participants: [3,4], partnerID: 1, intendedName: 'redsquare'},
 
   // second partner
   {trialNum: 9, participants: [3,1], partnerID: 2, intendedName: 'bluecircle'},
@@ -207,7 +207,7 @@ var trials = [
   // {trialNum: 25, speakerID: 4, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
 ];
 
-foreach(_.range(4), function(i) {
+foreach(_.range(5), function(i) {
   console.log('iteration', i)
   iterate(i, trials, {1: [], 2: [], 3: [], 4: []});
 });
