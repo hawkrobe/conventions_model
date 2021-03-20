@@ -67,7 +67,7 @@
  \definecolor{Green}{RGB}{10,200,100}
   \definecolor{Red}{RGB}{200,100,50}
 \newcommand{\ks}[1]{\textcolor{Red}{[ks: #1]}}  
-\newcommand{\rdh}[1]{\textcolor{Blue}{[rdh: #1]}}  
+\newcommand{\rdh}[1]{\textcolor{Red}{[rdh: #1]}}  
 \newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
 
 
@@ -107,7 +107,7 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 
 \input{Reduction}
 
-\section{Phenomenon \#2: \\ Conventions gradually generalize to new partners in a social network}
+\section{Phenomenon \#2: \\ Conventions gradually generalize \\to new partners in a social network}
 
 \input{Generalization}
 
@@ -123,7 +123,7 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 \small
 
 \bibliography{ref}
-\bibliographystyle{apacite}
+\bibliographystyle{apacite-no-initials}
 
 \renewcommand{\thefigure}{A\arabic{figure}}
 \renewcommand{\thetable}{A\arabic{table}}
@@ -317,9 +317,17 @@ When degenerate lexicons are handled by introducing a null object, however, thes
 
  \begin{figure*}
 \centering
-    \includegraphics[scale=.8]{reduction_grid_search.pdf}
-  \caption{Speaker efficiency across partners (simulation 3.2) for a range of parameter values. Rows represent speaker optimality $w_S$, columns represent cost weight $w_c$.}
+    \includegraphics[scale=.8]{grid_all_models.pdf}
+  \caption{Speaker efficiency across partners (simulation 2) across a larger parameter regime for complete-pooling, no-pooling, and partial-pooling models. Rows represent agent optimality $\alpha_S = \alpha_L$, columns represent cost weight $w_c$, and colors represent memory discount parameter $\beta$.}
   \label{fig:partnerspecificity_grid}
 \end{figure*}
+
+
+\begin{figure*}
+\includegraphics[scale=1.2]{./figures/param_grid_qualitative_cleaned.pdf}
+\caption{Qualitative predictions of our three models for \textbf{P2}. Across a wide range of parameter values, only the hierarchical model consistently produces both qualitative phenomena of interest: reversion to the prior at partner boundaries (i.e. a ``jump'') and gradual generalization across partners (i.e. a ``drop''). Approximately $N=10$ simulations used to compute $t$-statistic in each cell. Cells marked with black boxes are significantly different from a null effect of 0 change, $p<0.005$.}
+\label{fig:generalization_modelcomparison}
+\end{figure*}
+
 \end{document}  
 
