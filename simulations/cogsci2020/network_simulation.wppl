@@ -44,7 +44,7 @@ var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput
 
 var sampleProbs = function(utt) {
   // note that the expectated value of a dirichlet w/ this prior is [.4, .6]
-  var bias = utt == 'word1' || utt == 'word2' ? [1.05, 0.95] : [0.95, 1.05];
+  var bias = utt == 'word1' || utt == 'word2' ? [1.1, 0.9] : [0.9, 1.1];
   var hyperConcentration = dirichlet(Vector(bias));
   return T.mul(hyperConcentration, 10);
 };
@@ -207,7 +207,7 @@ var trials = [
   // {trialNum: 25, speakerID: 4, listenerID: 5, partnerID: 4, intendedName: 'bluecircle'},  
 ];
 
-foreach(_.range(100), function(i) {
+foreach(_.range(4), function(i) {
   console.log('iteration', i)
   iterate(i, trials, {1: [], 2: [], 3: [], 4: []});
 });
