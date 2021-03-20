@@ -52,11 +52,12 @@ var sampleProbs = function(utt) {
 var lexicalPrior = function() {
   var partnerMeaning = map(function(utt) {
     if(params.model == 'no_pooling') {
-      var bias = sampleProbs(utt);
       return {
         partnerBeliefs: [
-          categorical({vs: meanings, ps: dirichlet(bias)}), categorical({vs: meanings, ps: dirichlet(bias)}),
-          categorical({vs: meanings, ps: dirichlet(bias)}), categorical({vs: meanings, ps: dirichlet(bias)})
+          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
+          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
+          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
+          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))})
         ]
       };
     } else if (params.model == 'complete_pooling') {
@@ -65,12 +66,13 @@ var lexicalPrior = function() {
         partnerBeliefs: [sharedMeaning, sharedMeaning, sharedMeaning, sharedMeaning]
       };
     } else {
-      var concentration = sampleProbs(utt);
-      var popPs = dirichlet(concentration);
+      var sharedConcentration = sampleProbs(utt);
       return {
         partnerBeliefs: [
-          categorical({vs: meanings, ps: popPs}), categorical({vs: meanings, ps: popPs}),
-          categorical({vs: meanings, ps: popPs}), categorical({vs: meanings, ps: popPs})]
+          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
+          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
+          categorical({vs: meanings, ps: dirichlet(sharedConcentration)}),
+          categorical({vs: meanings, ps: dirichlet(sharedConcentration)})]
       };
     }
   }, unconstrainedUtterances);
