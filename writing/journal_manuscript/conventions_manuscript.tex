@@ -199,7 +199,7 @@ Consequently, $S_1$ may in some cases prefer utterances that are literally false
 
 Instead of injecting $\epsilon$ into the lexical meaning, we ensure that the normalization constant is well-defined by adapting another method suggested by \citeA{bergen_pragmatic_2016}.
 First, we add a `null' object to every context so that, even when a particular utterance is false of every real object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen.
-Intuitively, this null object can be interpreted as recognizing a failure to refer to anything.
+Intuitively, this null object can be interpreted as recognizing that the referring expression has a referent but it is not in context.
 Second, we add an explicit noise model at every level of recursion.
 That is, we assume every agent has a probability $\epsilon$ of choosing a random element of their support, ensuring a fixed non-zero floor on the likelihood of each element that is constant across levels of recursion.
 Formally this corresponds to a mixture distribution, e.g. 
@@ -280,18 +280,16 @@ In this case, rather than discrete categorical priors over meanings, we may plac
 We have previously achieved similar results using this alternative lexical representations in earlier iteration of this manuscript \cite{hawkins_convention-formation_2017,hawkins2020generalizing}, although deriving predictions required variational inference techniques rather than Markov Chain Monte Carlo. 
 Such optimization-based inference techniques may also provide the most promising path for extending our adaptive model to larger language models, including neural networks that operate over continuous spaces of image pixels and natural language embeddings \cite{hawkins2019continual}.
 
-Second, we used a `max' operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
-However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a conjunctive `min' operation:
+Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
+However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
 \begin{align}
-\mathcal{L}(u_1+u_2, o) & = \min\{\mathcal{L}(u_1, o), \mathcal{L}(u_2, o)\} \nonumber
+\mathcal{L}(u_1,u_2, o) & = \max\{\mathcal{L}(u_1, o), \mathcal{L}(u_2, o)\} \nonumber
 \end{align}
-While we are able to derive the same reduction phenomenon using this alternative operation \cite<see>{hawkins_convention-formation_2017,hawkins2020generalizing}, the behavior emerges for more questionable reasons.
-Upon inspection of the internal mechanics, this result depends on how degenerate lexicons are handled (see Appendix A).
-
+We are able to derive the same reduction phenomenon using this alternative operation, 
 Specifically, the alternative `min' operation only allows for reduction when degenerate lexicons are handled by having the listener choose randomly between the objects when an utterance evaluates to false for all of them.
-Speakers initially prefer the longer utterance $u_1+u_2$ because it has a higher probability of failing to refer to anything and leading to random guessing for lexicons where either $u_1$ or $u_2$ or both are false of the target.
-In other words, the reduction phenomenon emerges for the conjunctive semantics only as a consequence of strategically designing utterances that fail to refer to the target, which we find an unlikely explanation for human speaker behavior.
-When degenerate lexicons are handled by introducing a null object, however, these same lexicons lead to poor accuracy (since the listener will choose the null object instead of the target when the utterance is false), reflecting the riskiness of producing a conjunction that fails to refer to the target. 
+%Speakers initially prefer the longer utterance $u_1+u_2$ because it has a higher probability of failing to refer to anything and leading to random guessing for lexicons where either $u_1$ or $u_2$ or both are false of the target.
+%In other words, the reduction phenomenon emerges for the conjunctive semantics only as a consequence of strategically designing utterances that fail to refer to the target, which we find an unlikely explanation for human speaker behavior.
+%When degenerate lexicons are handled by introducing a null object, however, these same lexicons lead to poor accuracy (since the listener will choose the null object instead of the target when the utterance is false), reflecting the riskiness of producing a conjunction that fails to refer to the target. 
 
 
  \begin{figure*}
@@ -308,17 +306,11 @@ When degenerate lexicons are handled by introducing a null object, however, thes
   \label{fig:conjunction_grid}
 \end{figure*}
 
- \begin{figure*}
-\centering
-    \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
-  \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
-  \label{fig:full_accuracy_grid}
-\end{figure*}
 
  \begin{figure*}
 \centering
     \includegraphics[scale=.8]{grid_all_models.pdf}
-  \caption{Speaker efficiency across partners (simulation 2) across a larger parameter regime for complete-pooling, no-pooling, and partial-pooling models. Rows represent agent optimality $\alpha_S = \alpha_L$, columns represent cost weight $w_c$, and colors represent memory discount parameter $\beta$.}
+  \caption{Speaker efficiency simulations for \textbf{P2} across a larger parameter regime. We examine the behavior of complete-pooling, no-pooling, and partial-pooling models, where rows represent agent optimality $\alpha_S = \alpha_L$, columns represent cost weight $w_c$, and colors represent memory discount parameter $\beta$.}
   \label{fig:partnerspecificity_grid}
 \end{figure*}
 
@@ -327,6 +319,14 @@ When degenerate lexicons are handled by introducing a null object, however, thes
 \includegraphics[scale=1.2]{./figures/param_grid_qualitative_cleaned.pdf}
 \caption{Qualitative predictions of our three models for \textbf{P2}. Across a wide range of parameter values, only the hierarchical model consistently produces both qualitative phenomena of interest: reversion to the prior at partner boundaries (i.e. a ``jump'') and gradual generalization across partners (i.e. a ``drop''). Approximately $N=10$ simulations used to compute $t$-statistic in each cell. Cells marked with black boxes are significantly different from a null effect of 0 change, $p<0.005$.}
 \label{fig:generalization_modelcomparison}
+\end{figure*}
+
+
+ \begin{figure*}
+\centering
+    \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
+  \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
+  \label{fig:full_accuracy_grid}
 \end{figure*}
 
 \end{document}  
