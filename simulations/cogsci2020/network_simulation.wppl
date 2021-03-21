@@ -44,8 +44,9 @@ var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput
 
 var sampleProbs = function(utt) {
   // note that the expectated value of a dirichlet w/ this prior is [.4, .6]
-  var bias = (utt == 'word1' || utt == 'word2') ? [2, 3] : [3, 2];
-  return T.mul(dirichlet(Vector(bias)), 1);
+  var bias = (utt == 'word1' || utt == 'word2') ? [1,1.5] : [1.5, 1];
+  var scalar = 1;
+  return T.mul(dirichlet(Vector(bias)), scalar);
 };
 
 var lexicalPrior = function() {
@@ -53,19 +54,20 @@ var lexicalPrior = function() {
     if(params.model == 'no_pooling') {
       return {
         partnerBeliefs: [
-          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
-          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
-          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))}),
-          categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))})
+          categorical({vs: meanings, ps: sampleProbs(utt)}),
+          categorical({vs: meanings, ps: sampleProbs(utt)}),
+          categorical({vs: meanings, ps: sampleProbs(utt)}),
+          categorical({vs: meanings, ps: sampleProbs(utt)})
         ]
       };
     } else if (params.model == 'complete_pooling') {
-      var sharedMeaning = categorical({vs: meanings, ps: dirichlet(sampleProbs(utt))});
+      var sharedMeaning = categorical({vs: meanings, ps: sampleProbs(utt)});
       return {
         partnerBeliefs: [sharedMeaning, sharedMeaning, sharedMeaning, sharedMeaning]
       };
     } else {
-      var sharedConcentration = dirichlet(sampleProbs(utt));
+      var sharedConcentration = sampleProbs(utt);
+//      console.log(sharedConcentration);
       return {
         partnerBeliefs: [
           categorical({vs: meanings, ps: sharedConcentration}),
