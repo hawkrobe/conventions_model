@@ -20,7 +20,7 @@ var params = {
   context: objects,
   utterances: utterances,
   objects: objects,
-  inferOptions: {method: 'MCMC', samples:2000, burn:10000, lag:30, verbose:true} 
+  inferOptions: {method: 'MCMC', samples:2000, burn:5000, lag:25, verbose:true} 
 };
 
 console.log(params);
@@ -44,9 +44,8 @@ var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput
 
 var sampleProbs = function(utt) {
   // note that the expectated value of a dirichlet w/ this prior is [.4, .6]
-  var bias = (utt == 'word1' || utt == 'word2') ? [1,1.5] : [1.5, 1];
-  var scalar = 1;
-  return T.mul(dirichlet(Vector(bias)), scalar);
+  var bias = (utt == 'word1' || utt == 'word2') ? [1.5,1] : [1,1.5];
+  return dirichletDrift({alpha: Vector(bias), concentration: 10});
 };
 
 var lexicalPrior = function() {
