@@ -40,31 +40,32 @@ These reference games used a set of two objects $\{o_1, o_2\}$ and four utteranc
 %The resulting data $D_k$ from an interaction with partner $k$ thus consisted of utterance-object pairs $\{(u, o)_t\}$ for each trial $t$, as well as information about the context of objects.
 
 Unlike our previous simulations with a single partner, where hierarchical generalization was irrelevant, we must now specify the hyper-prior P($\Theta$) governing the overall distribution of \emph{partners} (Eq.~\ref{eq:joint_inference}).
-Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over objects to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the categorical prior over the partner-specific meaning of $u$, $P(\phi_k(u_i)~=~o_j)$, is not uniform, but given by a hyper-parameter $\Theta$  that is shared across the entire population.
-Because $\Theta$ is a vector of probabilities that must sum to 1, we assume it is drawn from a Dirichlet hyper-prior:
+Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over objects to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the categorical prior over the partner-specific meaning of $u$, $P(\phi_k(u_i)~=~o_j)$, is not uniform, but given by a parameter $\Theta$  that is shared across the entire population.
+Because $\Theta$ is a vector of probabilities that must sum to 1, we assume it is drawn from a Dirichlet prior:
 \begin{equation*}
 \begin{array}{rcl}
 \phi_k(u)  &\sim&  \textrm{Categorical}(\Theta) \\
 \Theta & \sim & \textrm{Dirichlet}(\boldsymbol{\alpha})
 \end{array}
 \end{equation*}
-where $\boldsymbol{\alpha}$ is a concentration parameter encoding beliefs, or ``over-hypotheses'' about both the central tendency and the variability of lexicons in the population. 
+where $\boldsymbol{\alpha}$ is the Dirichlet concentration parameter encoding the agent's beliefs, or ``over-hypotheses'' about both the central tendency and the variability of lexicons in the population. 
 The relative values of the entries of $\boldsymbol{\alpha}$ correspond to inductive biases regarding the central tendency of lexicons while the absolute magnitude of $\boldsymbol{\alpha}$ roughly corresponds to prior beliefs about the spread, where larger magnitudes correspond to more concentrated probability distributions.
-We set $\boldsymbol{\alpha} = [1,1.5]$ for $u\in \{u_1,u_2\}$ and  $\boldsymbol{\alpha} = [1.5, 1]$ for $u\in\{u_3,u_4\}$ to encode weak initial preferences, as in Simulation 1.2.
+We assume the agent also has uncertainty about these population-level properties and place a hyper-prior on $\alpha$ \cite<see>{cowans2004information}:
+%We set $\boldsymbol{\alpha} = [1,1.5]$ for $u\in \{u_1,u_2\}$ and  $\boldsymbol{\alpha} = [1.5, 1]$ for $u\in\{u_3,u_4\}$ to encode weak initial preferences, as in Simulation 1.2.
 
 
-%\begin{equation*}
-%\begin{array}{rcl}
-% \boldsymbol{\alpha}^u & =& \left\{
-%\begin{array}{rcl}
-%  \textrm{Dirichlet}(2,3)& \textrm{if} & u \in \{u_1, u_2\}\\
-%  \textrm{Dirichlet}(3,2) & \textrm{if} &u \in \{u_3, u_3\}\\
-%\end{array}\right. \\
-%\end{array}
-%\end{equation*}
+\begin{equation*}
+\begin{array}{rcl}
+ \boldsymbol{\alpha} & \sim& \left\{
+\begin{array}{rcl}
+  \textrm{Dirichlet}(2,3)& \textrm{if} & u \in \{u_1, u_2\}\\
+  \textrm{Dirichlet}(3,2) & \textrm{if} &u \in \{u_3, u_3\}\\
+\end{array}\right. \\
+\end{array}
+\end{equation*}
 
 We may then define the no-pooling and complete-pooling models by lesioning this shared structure in different ways. 
-The no-pooling model assumes an independent $\Theta_k$ for each partner, rather than sharing the same $\Theta$.
+The no-pooling model assumes an independent $\Theta_k, \alpha_k$ for every partner, rather than sharing a single population-level parameter.
 Conversely, the complete-pooling model assumes a single, shared $\phi$ rather than allowing different values $\phi_k$ for different partners.
 We simulated 48 networks for each model, setting $\alpha_S = \alpha_L = 4,~w_C = .24$ (see Fig.~\ref{fig:partnerspecificity_grid} in the Appendix for an exploration of other parameters).
 
@@ -188,9 +189,23 @@ We evaluated participants' generalization behavior on the same three metrics we 
 %\label{fig:results}
 %\end{figure*}
 
+\paragraph{Network convergence}
+
+First, we examine the \emph{content} of conventions and evaluate the extent to which alignment increased across the network over the three partner swaps. 
+Specifically, we extend the same measure of alignment used in our simulations to natural language data by examining whether the intersection of words produced by different speakers was non-empty.
+We excluded a list of common stop words (e.g. 'the', 'both') to focus on the core conceptual content.
+While this pure overlap measure provides a relatively weak notion of similarity, a more continuous measure based on the \emph{size} of the intersection or the string edit distance yielded similar results.
+%We expect that more permissive notions of similarity, such as those based on semantic embeddings like GloVe or Word2Vec would 
+
+As in our simulation, the main comparison of interest was between currently interacting participants and participants who are not interacting: we predicted that within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will increase. 
+We thus constructed a mixed-effects logistic regression including fixed effects of pair type (within vs. across), partner number, and their interaction.
+We included random intercepts at the tangram level and maximal random effects at the network level (i.e. intercept, both main effects, and the interaction).
+As predicted, we found a significant interaction ($b = -0.85, z = -5.69, p < 0.001$; see Fig. \ref{fig:results}C, bottom row).
+Although different pairs in a network may initially use different labels, these labels begin to align over subsequent interactions. 
 
 \paragraph{Speaker utterance length}
 
+Now we are in a position to evaluate the central prediction of our model.
 Our partial pooling model predicts (1) gains in efficiency within interactions with each partner and (2) reversions to longer utterances at partner boundaries, but (3) gradual shortening of  the initial utterance chosen with successive partners.
 As a measure of efficiency, we calculated the raw length (in words) of the utterance produced on each trial.
 Because the distribution of utterance lengths is heavy-tailed, we log-transformed these values.
@@ -205,20 +220,8 @@ As predicted, we found that utterance length increased significantly at the two 
 
 Finally, to test whether efficiency improves for the \emph{very first} interaction with each new partner, before observing any partner-specific information, we examined the simple effect of partner number at the trials immediately after the partner swap (i.e. $t=\{1,5,9\}$).
 We found that participants gradually decreased the length of their initial descriptions with each new partner in their network,, $b = -0.2, t(516.5) = -6.07, p < 0.001$ (see Fig. \ref{fig:results}B, bottom row), suggesting that speakers are bringing increasingly well-calibrated expectations into interactions with novel neighbors.
+The partial-pooling model is the only model predicting all three of these effects.
 
-\paragraph{Network convergence}
-
-Next, we examine the actual \emph{content} of conventions and test whether the coarse signatures of generalization measured in the previous section correspond to increased alignment across the network. 
-Specifically, we extend the same measure of alignment used in our simulations to natural language data by examining whether the intersection of words produced by different speakers was non-empty.
-We excluded a list of common stop words (e.g. 'the', 'both') to focus on the core conceptual content.
-While this pure overlap measure provides a relatively weak notion of similarity, a more continuous measure based on the \emph{size} of the intersection or the string edit distance yielded similar results.
-%We expect that more permissive notions of similarity, such as those based on semantic embeddings like GloVe or Word2Vec would 
-
-As in our simulation, the main comparison of interest was between currently interacting participants and participants who are not interacting: we predicted that within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will increase. 
-We thus constructed a mixed-effects logistic regression including fixed effects of pair type (within vs. across), partner number, and their interaction.
-We included random intercepts at the tangram level and maximal random effects at the network level (i.e. intercept, both main effects, and the interaction).
-As predicted, we found a significant interaction ($b = -0.85, z = -5.69, p < 0.001$; see Fig. \ref{fig:results}C, bottom row).
-Although different pairs in a network may initially use different labels, these labels begin to align over subsequent interactions. 
 
 \subsection{Discussion}
 
