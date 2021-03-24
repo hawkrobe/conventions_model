@@ -1,78 +1,84 @@
 %!TEX root = ../dissertation.tex
-In this paper, we considered the computational challenge faced by agents trying to communicate in a variable and non-stationary landscape of meaning.
-We advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the semantics \ks{again, is this only about meaning or about mappings?} used by each partner, in turn.
+In this paper, we considered the computational challenges posed by communication in a variable and non-stationary landscape of meaning.
+We advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the form-meaning mapping used by each partner, in turn.
 We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: representing initial uncertainty about what a partner thinks words mean \textbf{(C1)}, partner-specific adaptation based on observations of language use in context \textbf{(C2)}, and hierarchical structure for graded generalization to new partners \textbf{(C3)}.
 This unified model resolves several puzzles that have posed challenges from prior models of coordination and convention formation: why referring expressions shorten over repeated interactions with the same partner \textbf{(P1)}, how partner-specific common ground may coexist with the emergence of conventions at the population level \textbf{(P2)}, and how context shapes which conventions emerge \textbf{(P3)}.
-We conclude by discussing several broader questions raised by the theoretical perspective we have advanced, and corresponding pathways for future work.
 
-\paragraph{Implications for language acquisition}
+We conclude by raising five broader questions that follow from the theoretical perspective we have advanced, each suggesting pathways for future work: (1) are the mechanisms underlying \emph{ad hoc} convention formation in adults the same as those underlying language acquisition in children? (2) to what extent do these mechanisms depend on the communication modality? (3) what kinds of feedback are used to coordinate on conventions? (4) what kinds of social structure are reflected in the hierarchical prior, and (5) which representations are involved in adaptation at a process-level?
 
-Through one theoretical lens, our model provides an argument for the continuity of probabilistic models of language acquisition across development \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
-In other words, we have aimed to generalize Bayesian models of word learning, traditionally used in developmental science, to explain the continual \emph{ad hoc} learning required by mature language users. 
-Conversely, this suggests that the lexical learning mechanisms adults use to coordinate on conventions \emph{within} dyadic interactions may be the same as those supporting language acquisition more broadly.
-Our hierarchical partial pooling model suggests a new emphasis on the role of partner-specificity and generalization in development.
-Most laboratory tasks investigating cross-situational word learning in children use only use a single speaker, and even sophisticated models of cross-situational word learning \cite<e.g.>{FrankGoodmanTenenbaum09_Wurwur} collapse over \emph{who} is talking. \ks{again, I think that stuff on learning from reliable vs unreliable speakers (Dautriche paper I mentioned earlier) will be really useful for you here}
+\subsection{Continuity of language learning across development}
 
-Yet, as we have argued, there is substantial variability in systems of meaning across different speakers and contexts; calibrating one's lexical priors to reflect this variability is an important aspect of learning a language.
-If the majority of child-directed speech only comes from a single primary caregiver \ks{hmm, that sounds unlikely! or at least likely to vary radically across cultures - I think the mum-alone-at-home-with-the-kids model is not going to be universal. it would be necessary to find a citation for this, or lay it out more neutrally as one of several possibilities}, then the child may face a difficult generalization problem once they begin interacting with others. 
-When first hearing a new word from a novel speaker, or a familiar word used in an unfamiliar way, children face the same inductive problem we have studied: it is unclear whether the new observation is a quirk of that particular speaker \emph{or} indicative of a globally shared convention. 
-There may therefore be substantial path-dependence in acquisition, as children develop their lexical prior and become better attuned to the overall variability in the population \cite<see>[Chap. 6]{Clark09_FirstLanguageAcquisition}. 
+There is a close mathematical relationship between our model of convention formation and recent probabilistic models of word learning in developmental science \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
+This similarity suggests an intriguing conjecture that the continual-learning mechanisms adults use to rapidly coordinate on partner-specific conventions may be the same as those supporting lexical acquisition in children.
+In other words, people may never stop learning language; they may simply develop stronger and better-calibrated beliefs about their community's conventions, which apply to a broader swath of communicative scenarios.
+In this section, we discuss three possible implications of viewing language development in terms of social coordination and convention.
 
-\ks{Around this point I realised that Lev-Ari 2017 might be relevant - I am very sceptical of her empirical result, although she has a couple of papers showing similar things, but it's definitely relevant to the stuff about generalising across speakers: https://journals.plos.org/plosone/article/authors?id=10.1371/journal.pone.0183593}
+First, common paradigms for cross-situational learning typically assume a fixed speaker and focus on variability across referential contexts \cite{siskind1996computational,regier2005emergence,smith2014unrealized,yurovsky2015integrative}. 
+Yet, as we have argued, variability in how words are used by different \emph{partners} may pose an equally challenging problem.
+While there has been limited work on the social axis of generalization, it is increasingly apparent that children are able to track \emph{who} produced the words they are learning and use this information to determine whether word meanings should generalize not just to other contexts but also to other speakers.
+For example, young children may limit the generalizability of observations from speakers who use language in idiosyncratic ways, such as a speaker who call a ball a ``dog'' \cite{koenig2010sensitivity,luchkina2018eighteen}, and even retrospectively update beliefs about earlier words after observing such idiosyncracies \cite{dautriche2021}.
 
-Hierarchical Bayesian models have several other properties of theoretical interest for convention formation and language acquisition.
-First, they offer a blessing of abstraction \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality}, where community-level conventions may be learned even with relatively sparse input from each partner, as long as there is not substantial variance in the population. 
-Second, they are more robust to partner-specific deviations from conventions (e.g. interactions with other children or non-native speakers) than complete-pooling models relying on a fixed set of memory slots or a single mental inventory. 
-This robustness is due to their ability to explain away outliers without community-level expectations being affected. 
+This discounting behavior may be understood as an instance of the same inductive problem that convention formation poses for adults in \textbf{P2}.
+Unlike complete-pooling models, which predict that all observations should be taken as equally informative about the community's conventions, our hierarchical model predicts that children should be able to explain away ``outliers'' without their community-level expectations being disrupted.
+Indeed, a novel prediction generated by our account is that children should be able to accommodate idiosyncratic language \emph{within} extended interaction with the same speaker (e.g. continue to pretend the ball is called ``dog,'' given partner-specific common ground) while also limiting generalization of that convention \emph{across} other speakers.
 
-Our work also suggests a new explanation for why young children struggle to coordinate on \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
-When an experimenter feeds them messages produced by adult speakers in other games, they are able to maintain high accuracy even as the utterance reduce down to one- or two-word label. 
-When Kindergarteners play with one another, however, they continue to make errors even after 15 repetitions.
-Children as old as fifth grade only improved with assistance from the experimenter and never approached the perfect levels of adult performance. 
-Instead of beginning with the long indefinite descriptions full of hedges and modifiers that adults provide, it was observed that children began with short, idiosyncratic descriptions like \emph{Mother's dress}. \ks{Vera Kempe also has an experimental paper on this kind of thing with kids or kids + caregivers: https://academic.oup.com/jole/article/4/1/44/5321155}
+Second, we have emphasized the importance of representing lexical \emph{uncertainty}, capturing expected variability in the population beyond the point estimates assumed by traditional lexical representations. 
+But how do children calibrate their lexical uncertainty?
+One possibility assigns a key role to the number of distinct speakers in a child's environment.
+Exposure to fewer partners may result in weaker \cite<e.g.>{lev2017talking} or mis-calibrated priors.
+If an idiosyncratic construction is over-represented in the child's environment, they may later be surprised to find that it was specific to their household's lexicon and not shared by the broader community  \cite<see>[Chap. 6]{Clark09_FirstLanguageAcquisition}. 
+Conversely, however, hierarchical inference predicts a blessing of abstraction \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality}: under certain conditions, community-level conventions may be inferred even with relatively short sparse observations from each partner.
+To resolve these questions, future work will need to develop new methods for eliciting children's expectations about partner-specificity and variability of meanings.
 
-While these failures were widely attributed to limits on theory of mind use, this explanation has been complicated by findings that children cannot even interpret their own utterances after a delay \cite{asher1976children}, suggesting that the source of the problem is \emph{not} rigid adherence to one's own preferred label but instead a more broadly impoverished lexical prior for the novel object.
-Recent work by \citeA{LeungEtAl20_Pacts} explored this hypothesis by observing parent-child interactions in a repeated reference task. 
-The data suggested that, unlike pairs of children, parent-child pairs were able to successful coordinate on \emph{ad hoc} conventions.
-Parents helped to interactively scaffold these conventions: younger children were more likely to adopt the labels used by their parents.
-In other words, children may begin with more substantial lexical uncertainty over what labels may be appropriate than their parents, and consequently take their parents' usage as an authoritative cue to the underlying lexicon. \ks{somehow I found this a bit of an unconvincing explanation of what's going on in those experiments - isn't it just that the kids can't model the other person's uncertainty?}
+Third, our work suggests a new explanation for why young children may struggle to coordinate on \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
+%When an experimenter feeds them messages produced by adult speakers in other games, they are able to maintain high accuracy even as the utterance reduce down to one- or two-word label. 
+%When Kindergarteners play with one another, however, they continue to make errors even after 15 repetitions.
+Children as old as fifth grade only improve with assistance from the experimenter \cite{matthews2007toddlers}: instead of beginning with the long indefinite descriptions that adults provide, it was observed that children began with shorter descriptions like \emph{Mother's dress} \cite<see also>{kempe2019adults}.
+While these failures were initially attributed to limits on theory of mind use, this explanation has been complicated by findings that children cannot even interpret their own utterances after a delay \cite{asher1976children}. 
+In other words, errors are not well-explained by egocentric adherence to a strongly preferred label, or downstream failures to acknowledge that this preferred label may not be understood by their partner; there appears to be no such preferred label.
 
-While these preliminary data are intriguing, more work is needed to explore the role of inter-partner variability and partner-specificity in language learning. 
-For example, is the child's lexical prior better viewed as a representation of others' beliefs about the lexicon, or as an (asocial) epistemic state? 
+Our model raises the possibility that the problem may instead stem from production with an impoverished lexical prior: there are no existing conventions for such a novel object in their vocabulary \cite{goldberg2019explain}, leaving their preferences dispersed widely over ``good-enough'' constructions.
+Indeed, when children are paired with their caregivers rather than peers, they are able to successfully form conventions \citeA{LeungEtAl20_Pacts}.
+Parents helped to interactively scaffold these conventions, both by proactively seeking clarification in the listener role \cite<e.g.>{anderson1994interactive} and by providing more descriptive labels in the speaker role, which children adopted themselves on later trials.
+These results highlight one way in which our model of convention formation may coincide with models of language acquisition in development: in both cases, listeners are trying to infer the meanings of words in the speaker's lexicon. 
+
+While we have highlighted three particular developmental phenomena where our approach may generate novel predictions, there are many finer-grained questions raised by our computational approach.
+For example, is the child's lexical expectations in communication best explained as a (resource-limited) representation of \emph{others'} lexicons, or as an egocentric (asocial) epistemic state? 
 To what extent is the ability to retrieve or use this lexical prior constrained by theory of mind development? 
-Are childrens' lexical priors impoverished simply because they have not obtained enough variability in their linguistic input, or is there a more fundamental representational constraint that prevents children from accounting for partner-specific differences? 
 Even infants are sensitive to coarse social distinctions based on foreign vs. native language \cite{KinzlerDupouxSpelke07_LanguageGroups}, or accent \cite{KinzlerEtAl09_AccentRace}, but when do fully partner-specific representations develop?
 
-\paragraph{Similarities and differences across communication modalities}
+\subsection{The role of communication modality}
 
 %\begin{quote}
 %The oral modality is not well suited to conveying messages mimetically (i.e., iconically), even though that function is also important to human languages. This function is, however, very well served by the manual modality. \cite[p.155]{}
 %\end{quote}
 
-While we have focused primarily on verbal and textual communication channels, research on the dynamics of adaptation in other communication modalities, including graphical \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling} and gestural \cite{FayListerEllisonGoldinMeadow13_GestureBeatsVocalization,bohn2019young} \ks{also https://doi.org/10.1016/j.cognition.2019.05.001, plus that Kempe paper I mentioned above also has a weird binary beep paradigm that I do not like} modalities, is important for our account in several ways.
+While we have focused primarily on verbal and textual communication channels, there has beens significant progress understanding the dynamics of adaptation in other communication modalities, including graphical \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling} gestural \cite{FayListerEllisonGoldinMeadow13_GestureBeatsVocalization,motamedi2019evolving,bohn2019young} and other \emph{de novo} modalities \cite{Galantucci05_EmergenceOfCommunication,RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality,VerhoefRobertsDingemanse15_Iconicity,VerhoefEtAl16_TemporalLanguage,kempe2019adults}.
+These modalities are important for our account in several ways.
+
 First, it is a core claim of our hierarchical model that the basic cognitive mechanisms underlying adaptation and convention formation are domain-general.
-In other words, there is nothing inherently special in our account about spoken or written language as far as our ability to coordinate . 
-Any system that we use to communicate should display similar \emph{ad hoc} learning dynamics because in every case, agents are trying to infer the system of meaning being used by their partner.
+In other words, there should be nothing inherently special about spoken or written language: any system that humans use to communicate should display similar \emph{ad hoc} learning dynamics because in every case people are simply trying to infer the system of meaning being used by their partner.
 Directly comparing behavior in repeated reference games across different modalities is therefore necessary to determine which adaptation effects, if any, are robust and attributable to modality-general mechanisms.
 
-Second, at the same time, our hierarchical learning model claims a critical role for the priors we build up across interactions with many individuals.
+Second, at the same time, our hierarchical learning model predicts a critical role for the priors we build up across interactions with many individuals.
 We therefore predict that different communication modalities should display certain systematic differences due to the representational structure of the communication channel.
-For example, in the verbal modality, the tangram shapes from \citeA{ClarkWilkesGibbs86_ReferringCollaborative} are highly innominate -- most people do not have much experience naming or describing them with words, so the global prior is weak and local adaptation plays a greater role.
-In the graphical modality, where communication takes place by drawing on a shared sketchpad, agents\ks{again the use of agents to talk about an experiment with human participants is a bit weird to me!} can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common} -- drawing a quick sketch of the tangram's outline may suffice for understanding.
-Other stimuli have precisely the opposite property: to distinguish between natural images of dogs, agents may have developed strong global conventions in the linguistic modality (e.g. `husky', `poodle', `pug', etc) but drawing the necessary fine distinctions in the graphical modality may be initially very costly for novices, requiring the formation of local conventions. 
+For example, in the verbal modality, the tangram shapes from \citeA{ClarkWilkesGibbs86_ReferringCollaborative} are highly ``innominate'' -- most people do not have much experience naming or describing them with words, so the global prior is weak and local adaptation plays a greater role.
+In the graphical modality, where communication takes place by drawing on a shared sketchpad, people can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common} -- drawing a quick sketch of the tangram's outline may suffice for understanding.
+
+Other stimuli have precisely the opposite property: to distinguish between natural images of dogs, people may have strong existing conventions in the linguistic modality (e.g. `husky', `poodle', `pug') but drawing the necessary fine distinctions in the graphical modality may be initially very costly for novices \cite{fan2020pragmatic}, requiring the formation of local conventions to achieve understanding. 
 Gesture also has its own distinctive prior, which also allows communicators to use time and the space around them to convey mimetic or depictive meanings that may be difficult to encode verbally or graphically \cite{goldin-meadow_role_1999,clark2016depicting,mcneill1992hand}. 
+Our model ought to be able to account for production and comprehension across these modalities by eliciting modality-specific priors on meaning.
 
 %If we adhered solely to the verbal modality, we would be limited to a fairly narrow range of stimuli (e.g. abstract shapes/tangrams) where behavior in the lab isn't totally dominated by strong prior conventions people bring into the interaction. 
 %For example, similar phenomena Pictionary games where participants use a whiteboard to draw messages instead of an auditory or text-based channel \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling}.
 
-Another modality-based manipulation is to attempt to destroy or scramble any meaningful priors that people might carry into the social interaction.
-For example, \citeA{Galantucci05_EmergenceOfCommunication} introduced a novel `seismograph' interface for communication -- a stylus that could be moved side-to-side or lifted up or down to make contact with the sketch pad while the vertical dimension drifted downward at a constant rate.
-The resulting messages consequently look nothing like the usual kinds of symbols people create: the relationship between motor actions and perceptual output is broken such that executing a familiar movement for a symbol or numeral instead produces an odd, wavy scribble.
-Despite the relative lack of priors on signal meanings in this medium, people were nevertheless able to converge on successful signaling systems in repeated reference games \cite<see also>{RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality}.
-Other novel modalities used in iterated reference games include a `whistle' language where movements along a vertical touch bar slider correspond to changes in pitch \cite{VerhoefRobertsDingemanse15_Iconicity} and a visual analog where movements along the slider were presented visually \cite{VerhoefEtAl16_TemporalLanguage}.
-Our model ought to be able to account for production and comprehension across these modalities simply by exchanging its encoder and decoder components to use an appropriate prior.
+%Another modality-based manipulation is to attempt to destroy or scramble any meaningful priors that people might carry into the social interaction.
+%For example, \citeA{Galantucci05_EmergenceOfCommunication} introduced a novel `seismograph' interface for communication -- a stylus that could be moved side-to-side or lifted up or down to make contact with the sketch pad while the vertical dimension drifted downward at a constant rate.
+%The resulting messages consequently look nothing like the usual kinds of symbols people create: the relationship between motor actions and perceptual output is broken such that executing a familiar movement for a symbol or numeral instead produces an odd, wavy scribble.
+%Despite the relative lack of priors on signal meanings in this medium, people were nevertheless able to converge on successful signaling systems in repeated reference games \cite<see also>{RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality}.
+%Other novel modalities used in iterated reference games include a `whistle' language where movements along a vertical touch bar slider correspond to changes in pitch \cite{VerhoefRobertsDingemanse15_Iconicity} and a visual analog where movements along the slider were presented visually \cite{VerhoefEtAl16_TemporalLanguage}.
 
-\paragraph{The role of feedback and backchannels}
+\subsection{The role of feedback and backchannels}
 
 If adaptation is learning, then an important corollary of our model is that the extent to which partners adapt should depend critically on the quality of the data $D_i$ on which they are conditioning: $P(\mathcal{L}_i | \Theta, D_i)$.
 Our simulations used the simplest source of feedback: the utterance and response in a reference game.
@@ -88,8 +94,8 @@ This real-time feedback manipulation was crossed with a behavioral feedback mani
 
 Under our account, if the speaker is unsure how their longer descriptions are being interpreted -- unsure whether or not they can get away with shorter, more ambiguous expressions -- they may not have enough evidence about meanings to justify shorter utterances. 
 Indeed, \citeA{KraussWeinheimer66_Tangrams} found that even when told that their partner was getting 100\% correct, entirely blocking the verbal feedback channel significantly limited the reduction effect. 
-Speakers converged to utterances that were about twice as long -- twice as inefficient -- in the limit \ks{not clear what "in the limit" is doing here}. 
-Telling speakers that their partner was performing poorly also inhibited reduction as a main effect, though to a lesser extent. 
+Speakers converged to utterances that were about twice as long as those found when verbal feedback was allowed.
+Telling speakers that their partner was performing poorly also inhibited reduction as a main effect. 
 In the extreme case of trying to communicate to a listener who can't respond and appears to not understand, speaker utterance length actually increased with repetition after an early dip. 
 \citeA{HupetChantraine92_CollaborationOrRepitition} found that in the \emph{complete} absence of feedback --- when the speaker is instructed to repeatedly refer to a set of objects for a listener who is not present and will do their half of the task offline --- there is also no reduction in message length. 
 
@@ -100,26 +106,7 @@ On the listener's part, too, the ability to actively \emph{give} feedback appear
 \citeA{SchoberClark89_Overhearers} showed that even listeners who \emph{overheard} the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances.
 Our model provides an initial framework to begin understanding how these subtle manipulations of feedback channels license differing inferences about a partner's underlying system of meaning \ks{I wasn;t sure why this last sentence followed - can you explain a bit more?}.
 
-\paragraph{What is being adapted?}
-
-While our model has been formulated in terms of coordination on \emph{lexical} meaning, this is only one of many levels at which conventions may form. 
-In more complex circumstances, there is often initial uncertainty not just about which of a small set of targets a particular message refers to, but how to represent the relevant targets of reference in the first place. 
-Learning to communicate effectively may require discovering a lower-dimensional representation in which the targets of reference vary.
-For instance, when using sketches to communicate about the identity of complex pieces of music \cite{HealeySwobodaUmataKing07_GraphicalLanguageGames}, a particular set of strokes could correspond to any number of properties (pitch, tempo, melody, rhythm, intensity) at any temporal granularity. 
-This is made particularly clear in a classic maze game \cite{GarrodAnderson87_SayingWhatYouMean}: in order to give effective spatial directions, speakers apparently had well-tuned lexical priors but had to coordinate on what space of \emph{referents} to use (e.g. paths, coordinates, lines, landmarks). 
-
-By appealing to classic spreading-activation connectionist models \cite<e.g.>{roelofs1992spreading}, interactive alignment accounts \cite{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate to strengthen higher semantic levels of representation \cite{pickering1998representation}.
-Thus, unconsciously coupling word choices \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} in dialogue could potentially contribute to the coordination of higher-level semantic representations. \ks{not sure what the point of this paragraph was}
-
-Other theories have assumed representations of lexical meanings are relatively fixed and the only learning taking place is how one's partner construes a multi-stable percept. 
-For examine, this seems to be what \citeA{BrennanClark96_ConceptualPactsConversation} had in mind when they coined the term \emph{conceptual pact}, and \citeA{stolk2016conceptual} have influentially argued that partners in communication construct shared conceptual spaces. 
-Given present data it is not clear how these two sources of uncertainty could be teased apart \ks{I am not sure what the two sources of uncertainty are!}, though certain kinds of conventions (e.g. proper names or acronyms) seem to rely more on binding new linguistic tokens to meanings than on constructing new conceptualizations.
-Thus, we expect both levels of coordination are likely to play an important role. 
-Our probabilistic model could be extended to handle additional levels of coordination by placing uncertainty over a hyper-parameter corresponding to the intended feature dimension that must be jointly inferred with the correspondence along that dimension. 
-
-%\rdh{TODO: paragraph citing Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model?}
-
-\paragraph{Additional layers of social structure}
+\subsection{The role of social knowledge}
 
 Real-world communities are much more complex than the simple networks we considered: each speaker takes part in a number of overlapping subcommunities. 
 For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children \cite{auer_code-switching_2013}.
@@ -140,6 +127,27 @@ Lexica cluster within social groups, so inverting this relationship can yield ra
 This explanation is also consistent with broader linguistic phenomena outside the realm of repeated reference games. 
 For example, \citeA{PottsLevy15_Or} showed that lexical uncertainty is critical for capturing constructions like \emph{oenophile or wine lover}, where a disjunction of synonymous terms is taken to convey a definition -- information about the speaker's lexicon -- rather than a disjoint set. 
 While the reasons that speakers produce such constructions are complex, we would expect that speakers will be more likely to produce the definitional \emph{or} when the component word is expected to be rarer or more obscure for a particular partner: when there is additional uncertainty over its likely meaning in the listener's lexicon.
+
+
+\subsection{Process-level mechanisms for adaptation}
+
+While our model has been formulated in terms of coordination on \emph{lexical} meaning, this is only one of many levels at which conventions may form. 
+In more complex circumstances, there is often initial uncertainty not just about which of a small set of targets a particular message refers to, but how to represent the relevant targets of reference in the first place. 
+Learning to communicate effectively may require discovering a lower-dimensional representation in which the targets of reference vary.
+For instance, when using sketches to communicate about the identity of complex pieces of music \cite{HealeySwobodaUmataKing07_GraphicalLanguageGames}, a particular set of strokes could correspond to any number of properties (pitch, tempo, melody, rhythm, intensity) at any temporal granularity. 
+This is made particularly clear in a classic maze game \cite{GarrodAnderson87_SayingWhatYouMean}: in order to give effective spatial directions, speakers apparently had well-tuned lexical priors but had to coordinate on what space of \emph{referents} to use (e.g. paths, coordinates, lines, landmarks). 
+
+By appealing to classic spreading-activation connectionist models \cite<e.g.>{roelofs1992spreading}, interactive alignment accounts \cite{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate to strengthen higher semantic levels of representation \cite{pickering1998representation}.
+Thus, unconsciously coupling word choices \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} in dialogue could potentially contribute to the coordination of higher-level semantic representations. \ks{not sure what the point of this paragraph was}
+
+Other theories have assumed representations of lexical meanings are relatively fixed and the only learning taking place is how one's partner construes a multi-stable percept. 
+For examine, this seems to be what \citeA{BrennanClark96_ConceptualPactsConversation} had in mind when they coined the term \emph{conceptual pact}, and \citeA{stolk2016conceptual} have influentially argued that partners in communication construct shared conceptual spaces. 
+Given present data it is not clear how these two sources of uncertainty could be teased apart \ks{I am not sure what the two sources of uncertainty are!}, though certain kinds of conventions (e.g. proper names or acronyms) seem to rely more on binding new linguistic tokens to meanings than on constructing new conceptualizations.
+Thus, we expect both levels of coordination are likely to play an important role. 
+Our probabilistic model could be extended to handle additional levels of coordination by placing uncertainty over a hyper-parameter corresponding to the intended feature dimension that must be jointly inferred with the correspondence along that dimension. 
+
+%\rdh{TODO: paragraph citing Hawkins, Kwon, Sadigh, Goodman to argue that gradient-based meta-learning with neural network representation is an alternative architecture that is more computationally tractable at scale than a fully probabilistic model?}
+
 
 \paragraph{Conclusion}
 
