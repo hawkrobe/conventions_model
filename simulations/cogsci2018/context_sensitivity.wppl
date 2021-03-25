@@ -75,16 +75,26 @@ var lexicalPrior = function() {
   return {1 : lexicon};
 };
 
-var postTest = function(trial, posterior1, posterior2) {
+var writeMeanings = function(trial, posterior1, posterior2) {
   var data = [argv.chainNum,argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor,params.guessingEpsilon,
               trial.trialNum, trial.condition];
   map(function(word) {
-    shared.writeMarginals(marginalize(posterior1, function(x) {return x[word];}),
+    shared.writeMarginals(marginalize(posterior1, function(x) {return x[1][word];}),
                        posttest_file, data.concat([trial.speakerID, word]));
-    shared.writeMarginals(marginalize(posterior2, function(x) {return x[word];}),
+    shared.writeMarginals(marginalize(posterior2, function(x) {return x[1][word];}),
                        posttest_file, data.concat([trial.listenerID, word]));
   }, utterances);
 };
+
+var writeTrajectory= function(trial, topSpeakerChoice, topListenerChoice) {
+  shared.writeLine([
+    argv.chainNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+    trial.trialNum, trial.condition, trial.contextType,
+    trial.speakerID, trial.listenerID, trial.intendedName,
+    topSpeakerChoice, topListenerChoice,
+    topListenerChoice == trial.intendedName
+  ].join(','), f);
+}
 
 // for each point in data, we want the model's predictions 
 var iterate = function(remainingTrials, dataSoFar) {
@@ -109,20 +119,8 @@ var iterate = function(remainingTrials, dataSoFar) {
   var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
 
-  // display('context is ' + currTrial.context);
-  // display('top speaker choice is ' + topSpeakerChoice);
-  // display('top listener choice is ' + topListenerChoice);
-  // display('intended: ' + currTrial.intendedName);
-  // display('correct? ' + (topListenerChoice == currTrial.intendedName));
-  shared.writeLine([
-    argv.chainNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
-    currTrial.trialNum, currTrial.condition, currTrial.contextType,
-    currTrial.speakerID, currTrial.listenerID,
-    currTrial.intendedName,
-    topSpeakerChoice, topListenerChoice,
-    topListenerChoice == currTrial.intendedName
-  ].join(','), f);
-
+  writeMeanings(currTrial, speakerPosterior, listenerPosterior);
+  writeTrajectory(currTrial, topSpeakerChoice, topListenerChoice);
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
     return dataSoFar[id].concat(extend(currTrial, {
       role : id == currTrial.speakerID ? 'speaker' : 'listener',
