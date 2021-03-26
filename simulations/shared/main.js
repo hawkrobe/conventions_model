@@ -27,7 +27,7 @@ var getL0Score = function(target, utt, params) {
   
   var noiseProb = 1 / params.context.length;
   var targetMeaning = getLexiconElement(utt, target, params);
-  if(!_.some(params.objects, function(x){return getLexiconElement(utt, x, params);})){
+  if(!_.some(params.objects.concat('null'), function(x){return getLexiconElement(utt, x, params);})){
     // in case of contradiction (i.e. false in all possible worlds)
     // the utterance 'fails to refer' and speaker doesn't update beliefs at all
     return Math.log(noiseProb);
