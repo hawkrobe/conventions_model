@@ -68,25 +68,24 @@ var L_soft = function(utt, posterior, params) {
   });
 };
 
-var getL0Score_cached = cache(function(object, word, trialParams) {
-  return shared.getL0Score(object, word, trialParams);
-}, 10000)
-
-var getS1Score_cached = cache(function(word, object, trialParams) {
-  return shared.getS1Score(word, object, trialParams);
-}, 10000)
-
 var updatePosterior = function(data, lexicalPrior, params) {
   return Infer(params.inferOptions, function() {
     var lexicon = lexicalPrior();
-    mapData({data: data}, function(trial) {
+    mapData({data: data.slice(-24)}, function(trial) {
       var beta = Math.pow(params.discountFactor,  data.length - trial.trialNum);
       var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
       var trialParams = extend(params, {context: trial.context, lexicon: lexicon[trial.partnerID]});
       if(trial.role == 'speaker') {
-        factor(beta * getL0Score_cached(object, trial.wordID, trialParams));
+        // console.log(lexicon);
+        // console.log(object, trial.wordID)
+        // console.log('L1', shared.getL1Score(object, trial.wordID, trialParams));
+        // console.log('L0', shared.getL0Score(object, trial.wordID, trialParams));
+        var score = (params.pragmatics == 'L1' ?
+                     shared.getL1Score(object, trial.wordID, trialParams) :
+                     shared.getL0Score(object, trial.wordID, trialParams));
+        factor(beta * score);
       } else {
-        factor(beta * getS1Score_cached(trial.wordID, object, trialParams));
+        factor(beta * shared.getS1Score(trial.wordID, object, trialParams));
       }
     });
     return lexicon;
@@ -97,7 +96,9 @@ var S = function(object, posterior, params) {
   return Infer({method: "enumerate"}, function() {
     var utt = uniformDraw(params.utterances);
     var inf = expectation(posterior, function(lexicon) {
-      return shared.getL0Score(object, utt, extend(params, {lexicon: lexicon[params.partnerID]}));
+      return (params.pragmatics == 'L1' ?
+              shared.getL1Score(object, utt, extend(params, {lexicon: lexicon[params.partnerID]})) :
+              shared.getL0Score(object, utt, extend(params, {lexicon: lexicon[params.partnerID]})));
     });
     var utility = ((1-params.costWeight) * inf
                    - params.costWeight * shared.getUttCost(utt));
@@ -113,6 +114,8 @@ var L = function(utt, posterior, params) {
     var utility = expectation(posterior, function(lexicon) {
       return shared.getS1Score(utt, object, extend(params, {lexicon: lexicon[params.partnerID]}));
     });
+    console.log(object);
+    console.log(utility);
     factor(params.listenerAlpha * utility);
     return object;
   });
