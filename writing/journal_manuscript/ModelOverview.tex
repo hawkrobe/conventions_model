@@ -81,7 +81,7 @@ Second, this representation should also, in principle, be sensitive to the socia
 
 \begin{figure}[t!]
 \centering
-\includegraphics[scale=0.35]{./figures/task1_model.pdf}
+\includegraphics[scale=0.4]{./figures/task1_model.pdf}
 \vspace{.5em}
 \caption{\emph{Schematic of hierarchical Bayesian model.} At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
 \label{fig:model_schematic}
@@ -190,8 +190,7 @@ $$P(D_k | \phi_k) = \prod_{\tau=0}^T \beta^{\tau} P(\{o^*,u',o'\}_{T-\tau}\, |\,
 where $\tau=0$ indexes the most recent trial $T$ and decay increases further back through time.
 This decay term is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be interpreted as the expectation over a process where observations have some probability of dropping out of memory at each time step.
 Indeed, this likelihood can be derived by simply extending our hierarchical model down an additional layer \emph{within} each partner to allow for the possibility that they are using slightly different lexicons at different points in time; assuming a degree of auto-correlation between neighboring time points yields this form of discounting.
-Alternatively, at the algorithmic level, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}.
-While this simple decay model is sufficient for our simulations, we discuss several extensions in the General Discussion that better capture the complexity of memory processes.
+Alternatively, at the algorithmic level, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}\footnote{While this simple decay model is sufficient for our simulations, it is missing important mechanistic distinctions between working memory and long-term memory; for example, explaining convention formation over longer timescales may require an explicit model of consolidation.}
 
 \paragraph{Bias against ambiguity}
 

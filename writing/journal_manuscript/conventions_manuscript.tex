@@ -280,13 +280,13 @@ In this case, rather than discrete categorical priors over meanings, we may plac
 We have previously achieved similar results using this alternative lexical representations in earlier iteration of this manuscript \cite{hawkins_convention-formation_2017,hawkins2020generalizing}, although deriving predictions required variational inference techniques rather than Markov Chain Monte Carlo. 
 Such optimization-based inference techniques may also provide the most promising path for extending our adaptive model to larger language models, including neural networks that operate over continuous spaces of image pixels and natural language embeddings \cite{hawkins2019continual}.
 
-Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
-However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
-\begin{align}
-\mathcal{L}(u_1,u_2, o) & = \max\{\mathcal{L}(u_1, o), \mathcal{L}(u_2, o)\} \nonumber
-\end{align}
-We are able to derive the same reduction phenomenon using this alternative operation, 
-Specifically, the alternative `min' operation only allows for reduction when degenerate lexicons are handled by having the listener choose randomly between the objects when an utterance evaluates to false for all of them.
+%Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
+%However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
+%\begin{align}
+%\mathcal{L}(u_1,u_2, o) & = \max\{\mathcal{L}(u_1, o), \mathcal{L}(u_2, o)\} \nonumber
+%\end{align}
+%We are able to derive the same reduction phenomenon using this alternative operation, 
+%Specifically, the alternative `min' operation only allows for reduction when degenerate lexicons are handled by having the listener choose randomly between the objects when an utterance evaluates to false for all of them.
 %Speakers initially prefer the longer utterance $u_1+u_2$ because it has a higher probability of failing to refer to anything and leading to random guessing for lexicons where either $u_1$ or $u_2$ or both are false of the target.
 %In other words, the reduction phenomenon emerges for the conjunctive semantics only as a consequence of strategically designing utterances that fail to refer to the target, which we find an unlikely explanation for human speaker behavior.
 %When degenerate lexicons are handled by introducing a null object, however, these same lexicons lead to poor accuracy (since the listener will choose the null object instead of the target when the utterance is false), reflecting the riskiness of producing a conjunction that fails to refer to the target. 
