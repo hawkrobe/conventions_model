@@ -80,7 +80,8 @@ An agent should know that there is tighter consensus about the meaning of \emph{
 Second, this representation should also, in principle, be sensitive to the social identity of the partner: a cardiologist should have different expectations about a long-time colleague than a new patient.
 
 \begin{figure}[t!]
-\includegraphics[scale=0.4]{./figures/task1_model.pdf}
+\centering
+\includegraphics[scale=0.35]{./figures/task1_model.pdf}
 \vspace{.5em}
 \caption{\emph{Schematic of hierarchical Bayesian model.} At the highest level, denoted by $\Theta$, is a representation of aspects of meanings expected to be shared across all partners. These \emph{global} conventions serve as a prior for the systems of meanings used by specific partners, $\phi_k$. These partner-specific representations give rise in turn to predictions about their language use $P(D_k|\phi_k)$, where $D_k$ represents observations in a communicative interaction with partner $k$. By inverting this model, agents can adapt to \emph{local} partner-specific conventions and update their beliefs about global conventions.}
 \label{fig:model_schematic}
@@ -269,7 +270,7 @@ Finally, while the probabilistic model we have formulated in this section is the
 Historically, interactive models have been challenging to study with closed-form analytical techniques and computationally expensive to study through simulation, likely contributing to the prevalence of simplified heuristics in prior work. 
 Our work has been facilitated by recent advances in probabilistic inference techniques that have helped to overcome these obstacles. 
 We have implemented our simulations in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL}.
-All of our simulations iterate the following trial-level loop: (1) sample an utterance from the speaker agent's distribution, given the target object, (2) sample an object from the listener's object distribution, given the utterance sampled in the previous step, (3) append the results to the list of observations, and (4) update both agents' posterior distributions, conditioning on these observations before continuing to the next trial.
+All of our simulations iterate the following trial-level loop: (1) sample an utterance from the speaker's distribution, given the target object, (2) sample an object from the listener's object distribution, given the utterance produced by the speaker, (3) append the results to the list of observations, and (4) update both agents' posteriors, conditioning on these observations before continuing to the next trial.
 
 To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), we always use exhaustive enumeration for exact inference.
 We would prefer to use enumeration to obtain posteriors over lexical meanings as well (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, enumeration becomes intractable.
