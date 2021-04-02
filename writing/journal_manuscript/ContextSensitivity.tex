@@ -7,7 +7,7 @@
 \begin{figure*}[t]
 \begin{center}
 {\includegraphics[scale=1.8]{./figures/Sec2-design.pdf}}
-{\caption{{\emph{Domain for context-sensitivity.} (A) Targets are related to one another in a conceptual taxonomy. (B) Speakers select between 16 labels, where the label ``niwa'' has been selected. (C) Examples of \emph{fine} and \emph{coarse} contexts. In the \emph{fine} context, the target (marked in black) must be disambiguated from a distractor (marked in grey) at the same subordinate-level branch of the taxonomy.  In the \emph{coarse} context, the closest distractor belongs to a different branch of the center-level of the taxonomy (i.e. a spotted circle) such that disambiguation at the sub-ordinate level is not required. \label{fig:context_design}}}}
+{\caption{{\emph{Domain for context-sensitivity.} (A) Targets are related to one another in a conceptual taxonomy. (B) Speakers choose between labels, where the label ``niwa'' has been selected. (C) Examples of \emph{fine} and \emph{coarse} contexts. In the \emph{fine} context, the target (marked in black) must be disambiguated from a distractor (marked in grey) at the same subordinate-level branch of the taxonomy.  In the \emph{coarse} context, the closest distractor belongs to a different branch of the center-level of the taxonomy (i.e. a spotted circle) such that disambiguation at the sub-ordinate level is not required. \label{fig:context_design}}}}
 \vspace{-2ex}
 \end{center}
 \end{figure*}
@@ -41,9 +41,11 @@ In both the empirical data and our model simulations, we find that conventions c
 To evaluate the impact of context on convention formation, we require a different task than we used in the previous sections.
 Those tasks, like most reference games in the literature on convention formation, used a discrete set of unrelated objects in a fixed context, $\{o_1, \dots, o_k\}$. 
 In real referential contexts, however, targets are embedded in larger conceptual taxonomies, where some objects are more similar than others \cite{bruner1956study,collins1969retrieval,XuTenenbaum07_WordLearningBayesian}.
-Here, we therefore consider a space of eight objects embedded in a three-level stimulus hierarchy with shape at the top-most level, color/texture at the intermediate levels, and frequency/intensity at the finest levels (see Fig.~\ref{fig:context_design}A). 
-We then populate the space of possible utterance meanings $P(\phi)$ with 8 meanings at the sub-ordinate level (one for each individual object, e.g. $\phi(u) =$ ``light blue square''), 4 meanings at the center-level (e.g. $\phi(u) =$ ``blue square''), and 2 meanings at the super-ordinate level (e.g. $\phi(u) =$ ``square'').
-We populate the utterance space with 16 single-word labels (Fig.~\ref{fig:context_design}B) and also allow for a ``null'' meaning with an empty extension to account for the possibility that some utterances are not needed, allowing the agent to effectively remove utterances from their vocabulary.
+Here, we therefore consider a space of objects embedded in a three-level stimulus hierarchy with shape at the top-most level, color/texture at the intermediate levels, and frequency/intensity at the finest levels (see Fig.~\ref{fig:context_design}A). 
+While we will use the full stimulus set in our empirical study, it is sufficient for our simulations to consider just one of the branches (i.e. just the squares).
+
+We populate the space of possible utterance meanings $P(\phi)$ with 4 meanings at the sub-ordinate level (one for each individual object, e.g. $\phi(u) =$ ``light blue square''), 2 meanings at the center-level (e.g. $\phi(u) =$ ``blue square''), and 1 meanings at the super-ordinate level (e.g. $\phi(u) =$ ``square'').
+We then populate the utterance space with 8 single-word labels (Fig.~\ref{fig:context_design}B) and also allow for a ``null'' meaning with an empty extension to account for the possibility that some utterances are not needed, allowing the agent to effectively remove utterances from their vocabulary.
 
 Additionally, in real environments, speakers do not have the advantage of a fixed context; the relevant distinctions change from moment to moment as different subsets of objects are in context at different times. 
 This property poses a challenge for models of convention formation because the relevant distinctions cannot be determined from a single context, they must be abstracted over time.
@@ -53,12 +55,12 @@ Distractors could differ from the target at various levels of the hierarchy, cre
 Critically, we manipulated the prevalence of different kinds of contexts, controlling how often participants are required to make certain distinctions to succeed at the task. 
 In the \emph{fine} condition, every context contained a subordinate distractor, requiring fine low-level distinctions to be drawn.
 In the \emph{coarse} condition, contexts never contained subordinate distractors, only distractors that differed at the central level of the hierarchy (e.g. a blue square when the target is a red square).
-For comparison, we also include a \emph{mixed} condition, where half of the targets appeared in \emph{fine} contexts with subordinate distractors and the other half appeared in \emph{coarse} contexts without subordinate distractors.
+For comparison, we also include a \emph{mixed} condition, where half of the targets appeared in \emph{fine} contexts with subordinate distractors and the other half appeared in \emph{coarse} contexts without them.
 
 We constructed the trial sequence identically for the three conditions. 
-There are 12 blocks, where all 8 objects appeared as the target once per block (in a randomized order ensuring that no target appeared more than once in a row).
-The other three distractors are randomly sampled on each trial according to the constraints of the condition.
-As before, the agents swap roles on each trial, and we run 75 distinct trajectories with parameter settings of $\alpha_L=5, \alpha_S=10$ and memory discounting parameter of $\beta = 0.8$.% (see Model comparison below for a more thorough evaluation of these parameters).
+On each trial, we sampled one of the four objects to be the target, ensuring that no target appeared more than once in a row.
+Then we sampled a distractor according to the constraints of the condition.
+As before, the agents swap roles on each trial, and we run 50 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S=8$ and memory discounting parameter of $\beta = 0.6$.% (see Model comparison below for a more thorough evaluation of these parameters).
 
 
 \begin{figure}[t]
@@ -73,19 +75,18 @@ As before, the agents swap roles on each trial, and we run 75 distinct trajector
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.9]{evolution.pdf}
-\caption{\emph{Dynamics of lexical beliefs over time in Simulation 2.1.} Regions represent the average proportion of words at each level of generality in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of more general terms; in the fine condition, however, agents become more confident of subordinate terms.}
+\caption{\emph{Dynamics of lexical beliefs over time in model simulations.} Regions represent the average proportion of words at each level of generality in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of more general terms; in the fine and mixed conditions, however, agents become more confident of subordinate terms.}
 \label{fig:evolution}
 \end{center}
 \end{figure}
 
 \paragraph{Partners successfully learn to communicate}
 
-
 First, we compare the model's learning curves across context conditions (Fig.~\ref{fig:sec2Results}A). 
 We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
 In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across all conditions, $b=0.72, z = 16.9, p<0.001$.
 However, accuracy also differed across conditions: adding a main effect of condition significantly improves model fit, $\chi^2(2) = 9.6, p = 0.008$. 
-Accuracy is significantly higher in the coarse condition than the fine condition $b=-0.71, z=9.3, p <0.001$ and marginally higher than the mixed condition, 
+Accuracy is significantly higher in the coarse condition than the fine condition $b=-0.71, z=9.3, p <0.001$ and marginally higher than the mixed condition.
 
 \paragraph{Lexical conventions are shaped by context}
 
@@ -100,8 +101,6 @@ We have access not only to the signalling behavior of our simulated agents, but 
 %So we can not only query these beliefs at the very \emph{end} of the game, as we did in our empirical post-test \ks{order messed up here, you haven't introduced the experiment yet}, we can also directly examine the evolution of these beliefs from the beginning of the interaction.
 At each time point in each game, we take the single meaning with highest probability for each word.
 In Fig. \ref{fig:evolution}, we show the proportion of words with meanings at each level of generality, collapsing across all games in each condition.
-
-
 
 
 Qualitatively, we observe that agents begin by assuming null meanings (i.e. with an effectively empty vocabulary) but quickly begin assigning meanings to words based on their partner's usage.
@@ -196,30 +195,29 @@ We therefore conservatively take a participant's final lexicon to be the \emph{i
 \paragraph{Contextual pressures shape the lexicon}
 
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). 
-Conversely, when no such distinctions were required, we expected participants to adaptively lexicalize less specific terms.
+Conversely, when no such distinctions were required, we expected participants to adaptively conventionalize more general terms that could be reused across different contexts.
 One coarse signature of this prediction lies in the \emph{compression} of the resulting lexicon: less specific conventions should allow participants to achieve the same communicate accuracy with a smaller vocabulary.
 
 To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words for which they marked at least one object in the post-test in an internally consistent way). 
 We then conducted a mixed-effects models predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
 We found that participants in the \emph{coarse} condition reported significantly smaller, simpler lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.\ \ref{fig:sec2postTest}). 
-%At the same time, smaller vocabularies did not lead to poorer coverage over objects: the median number of objects where participants agreed on the same word was 7 out of 8 in the \emph{coarse} condition, compared to 6 in the \emph{mixed} condition and 5.5 in the \emph{fine} condition. 
-%Differences across conditions do not reach significance ($p = 0.4, p = 0.09$, respectively), but may reflect the relative sub-populations of participants who did not fully converge. 
-\ndg{we should also report the average extension size of words (that refer to at least one object) in the lexicon? i think this is a complementary measure of how fine-grained the lexicon is....}
 
-How did these lexica emerge over the course of interaction? 
+What allowed participants in the \emph{coarse} condition get away with fewer words in their lexicon while maintaining high accuracy?
+We hypothesized that each word had a larger extension size. 
+To test this hypothesis, we counted the numbers of `specific' terms (e.g.~words that refer to only one object) and more `general' terms (e.g.~words that refer to two objects) in the post-test. 
+We found that the likelihood of lexicalizing more general terms differed systematically across conditions.
+Participants in the \emph{coarse} condition reported significantly more general terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
+Using the raw extension size of each word as the dependent variable instead of counts yielded similar results.
+Indeed, the modal system in the fine condition was exactly eight specific terms with no more general terms, and the modal system in the coarse condition was exactly four general terms (red, blue, striped, spotted) with no specific terms.
+However, many individual participants reported a mixture of terms at different levels of generality (see Appendix Fig.~\ref{fig:mixtureOfTerms}). 
+
+Finally, how did these lexica emerge over the course of interaction? 
 We use the same measure of unique words produced in each repetition block that we used in our simulations (Fig.~\ref{fig:sec2Results}D). 
 We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
 As in the post-test reports, we found an overall main effect of condition, with participants in the coarse condition using significantly fewer words across all repetition blocks: $m = 4.9$ in coarse, compared to $m=5.8, t(124)=6.1, p <0.001$ in mixed and $m=6.8, t(124) =11.4, p < 0.001$ in fine.
 Critically, however, we also found a significant interaction between block and condition. 
 The effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.12, t = 4.5, p < 0.001$, see Fig.~\ref{fig:sec2Results}D.
 This interaction, where participants initially attempt to reuse the same terms across targets in the fine condition, is consistent with a gradual differentiation based on communicative need.
-
-Finally, if participants in the \emph{coarse} condition could get away with fewer words in their lexicon, what are the meanings of the words they do have? 
-We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and more `general' terms (e.g.~words that refer to two objects) in the post-test. 
-We found that the likelihood of lexicalizing more general terms differed systematically across conditions.
-Participants in the \emph{coarse} condition reported significantly more general terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
-The modal system in the fine condition was exactly eight specific terms with no more general terms, and the modal system in the coarse condition was exactly four general terms (red, blue, striped, spotted) with no specific terms.
-However, many individual participants reported a mixture of terms at different levels of generality. 
 
 %\paragraph{Model comparison}
 
