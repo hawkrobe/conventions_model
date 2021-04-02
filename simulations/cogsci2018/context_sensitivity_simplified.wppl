@@ -1,0 +1,147 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
+var numUtterances = 8;
+var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
+var objects = ['square_red_lightred', 'square_red_darkred',
+               'square_blue_lightblue', 'square_blue_darkblue'];
+var meanings = ['null', 'square', 'red', 'blue', 'lightred', 'lightblue', 'darkred', 'darkblue'];
+
+var numMeanings = meanings.length;
+
+var params = {
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  guessingEpsilon: argv.guessingEpsilon,
+  discountFactor: argv.discountFactor,
+  pragmatics: 'L0',
+  costWeight: 0,
+  utterances: utterances,
+  objects: objects,
+  numTrials: 24,
+  inferOptions: {method: 'MCMC', samples:2500, burn:5000, lag:2, verbose:true}//{method: 'enumerate'}//
+};
+
+var posttest_file = shared.open('./output/meaningTest_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('chainNum,iterationNum,condition,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,trialNum,\
+                  contextType,agentID,object,word,val', posttest_file);
+
+var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+shared.writeLine('chainNum,iterationNum,condition,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,\
+                 contextType,speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
+                 f);
+
+console.log(params);
+
+var extensionLookup = {
+  'square' : ['darkred', 'darkblue', 'lightred', 'lightblue'],
+  'red'    : ['darkred', 'lightred'],
+  'blue'   : ['darkblue', 'darkred'],
+  'darkred':['darkred'],
+  'lightred':['lightred'],
+  'darkblue':['darkblue'],
+  'lightblue':['lightblue'],
+  'null':[]
+};
+
+var extensionSize = function(lexicon) {
+  var combinedExtensions = reduce(function(value, rest) {
+    return rest.concat(extensionLookup[value]);
+  }, [], _.values(lexicon));
+  return combinedExtensions.length;
+};
+
+var lexicalPrior = function() {
+  var lexicon = _.zipObject(utterances, map(function(utt) {
+    return sample(Categorical({vs: meanings}));
+  }, utterances));
+  factor(-1 * extensionSize(lexicon));
+  return {1 : lexicon};
+};
+
+var writeMeanings = function(trial, posterior1, posterior2) {
+  var data = [
+    argv.chainNum, trial.iterationNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha,
+    params.discountFactor,params.guessingEpsilon, trial.trialNum, trial.contextType
+  ];
+  map(function(word) {
+    shared.writeMarginals(marginalize(posterior1, function(x) {return x[1][word];}),
+                       posttest_file, data.concat([trial.speakerID, word]));
+    shared.writeMarginals(marginalize(posterior2, function(x) {return x[1][word];}),
+                       posttest_file, data.concat([trial.listenerID, word]));
+  }, utterances);
+};
+
+var writeTrajectory= function(trial, topSpeakerChoice, topListenerChoice) {
+  shared.writeLine([
+    argv.chainNum, trial.iterationNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+    trial.trialNum, trial.contextType, trial.speakerID, trial.listenerID, trial.intendedName,
+    topSpeakerChoice, topListenerChoice, topListenerChoice == trial.intendedName
+  ].join(','), f);
+}
+
+var getDistractor = function(intendedName, contextType) {
+  var otherObjs = remove(intendedName, objects);
+  return (contextType == 'sub' ? find(function(obj) {
+    return obj.split('_')[1] == intendedName.split('_')[1];
+  }, otherObjs) : uniformDraw(filter(function(obj){
+    return obj.split("_")[1] != intendedName.split("_")[1];
+  }, otherObjs)));
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(i, dataSoFar) {
+  var trialNum = dataSoFar[1].length;
+//  var pointInBlock = trialNum % 4;
+  var prevTargets = _.map(dataSoFar[1].slice(-1), 'intendedName');
+  var possibleTargets = trialNum == 0 ? objects :  filter(function(x) {return !_.includes(prevTargets, x);}, objects);
+  var intendedName = uniformDraw(possibleTargets);
+  var contextType = (argv.gameNum == 'subOnly' ? 'sub' :
+                     argv.gameNum == 'basicOnly' ? 'basic' :
+                     uniformDraw(['sub', 'basic']));
+  var currTrial = {
+    intendedName,
+    contextType,
+    trialNum,
+    iterationNum: i,
+    context : [intendedName, getDistractor(intendedName, contextType)],
+    partnerID: 1,
+    speakerID: (trialNum % 2) == 0 ? 1 : 2,
+    listenerID: (trialNum % 2) == 0 ? 2 : 1
+  };
+  var config = extend(params, {context: currTrial.context, partnerID: currTrial.partnerID});
+  
+  // update posteriors
+  var speakerPosterior = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, config);
+  var listenerPosterior = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, config);
+  
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOutput = S(currTrial.intendedName, speakerPosterior, config);
+  var topSpeakerChoice =  sample(speakerOutput);
+  var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
+  var topListenerChoice =  sample(listenerOutput);
+  display(speakerOutput)
+  display(listenerOutput)
+  console.log(currTrial.speakerID, 'is speaker; ', currTrial.listenerID, 'is listener');
+  console.log(currTrial.intendedName, topSpeakerChoice, topListenerChoice, topListenerChoice == currTrial.intendedName);
+
+  writeMeanings(currTrial, speakerPosterior, listenerPosterior);
+  writeTrajectory(currTrial, topSpeakerChoice, topListenerChoice);
+  var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
+    return dataSoFar[id].concat(extend(currTrial, {
+      role : id == currTrial.speakerID ? 'speaker' : 'listener',
+      wordID : topSpeakerChoice,
+      clickedName : topListenerChoice
+    }));
+  }, [currTrial.speakerID, currTrial.listenerID]));
+
+  if(currTrial.trialNum < params.numTrials) {
+    iterate(i, newDataSoFar);
+  } 
+};
+
+map(function(i) {
+  iterate(i, {1: [], 2: []});
+}, _.range(40));
+shared.close(f);
+shared.close(posttest_file);
+
