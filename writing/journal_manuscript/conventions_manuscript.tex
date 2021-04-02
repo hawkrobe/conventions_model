@@ -119,7 +119,7 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 
 \input{Conclusion}
 
-\section{\bf Acknowledgments}
+%\section{\bf Acknowledgments}
 \small
 
 \bibliography{ref}
@@ -198,7 +198,7 @@ After renormalization in $L_0$, an utterance $u$ that fails to refer to any obje
 Consequently, $S_1$ may in some cases prefer utterances that are literally false of the target just as much as utterances which are true.
 
 Instead of injecting $\epsilon$ into the lexical meaning, we ensure that the normalization constant is well-defined by adapting another method suggested by \citeA{bergen_pragmatic_2016}.
-First, we add a `null' object to every context so that, even when a particular utterance is false of every real object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen.
+First, we add a `null' object to every context so that, even if a particular utterance is false of every real object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen.
 Intuitively, this null object can be interpreted as recognizing that the referring expression has a referent but it is not in context.
 Second, we add an explicit noise model at every level of recursion.
 That is, we assume every agent has a probability $\epsilon$ of choosing a random element of their support, ensuring a fixed non-zero floor on the likelihood of each element that is constant across levels of recursion.
@@ -327,6 +327,14 @@ Specifically, the alternative `min' operation only allows for reduction when deg
     \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
   \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
   \label{fig:full_accuracy_grid}
+\end{figure*}
+
+
+ \begin{figure*}
+\centering
+    \includegraphics[scale=.9]{mixtureOfTerms.pdf}
+  \caption{Empirical mixtures of terms reported by participants in \textbf{P3}. While the modal lexicon in the coarse condition contained 0 specific terms and 4 more general terms (32\% of participants) and the modal lexicon in the mixture and fine conditions contained 8 specific terms and 0 more general terms (42\% and 38\% of participants, respectively), many participants reported a mixture of abstract and specific terms.}
+  \label{fig:mixtureOfTerms}
 \end{figure*}
 
 \end{document}  
