@@ -1,0 +1,256 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Imports
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(tidyboot)
+
+clicks <- read_csv('../data/experiment3/clicks.csv')
+messages <- read_csv('../data/experiment3/messages.csv')
+```
+
+```{r}
+completeNetworks <- clicks %>% 
+  distinct() %>% 
+  group_by(networkid) %>% 
+  tally() %>% 
+  filter(n == 96) %>% 
+  pull(networkid)
+
+length(completeNetworks)
+
+relevantMessages <- messages %>% 
+  filter(role == "speaker") %>%
+  filter(networkid %in% completeNetworks) %>%
+  mutate(uttLength = str_count(content, " ") +1,
+         repnum = floor(trialnum / 4)) %>%
+  rowwise() %>%
+  mutate(repnum = repnum + 1) %>%
+  group_by(participantid, partnernum) %>%
+  mutate(ordinalrep = ifelse(repnum == min(repnum), 'first', 'second')) %>%
+  group_by(participantid, networkid, roomid, target, 
+           partnernum, repnum, ordinalrep) %>%
+  summarize(m = sum(uttLength)) 
+```
+
+```{r}
+relevantMessages %>%
+  mutate(partnerlabel = paste0(c('partner #', partnernum + 1), collapse = "")) %>%
+  group_by(partnerlabel, repnum) %>% 
+  tidyboot::tidyboot_mean(column = m) %>%
+  ggplot(aes(x = repnum, y = empirical_stat)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2) +
+    facet_wrap(~ partnerlabel) +
+    theme_few() +
+    ylim(0,NA) +
+    ylab("mean # words") +
+    xlab("repetition with partner")
+
+ggsave("reduction_across_partners.pdf", width = 5, height = 3, units = 'in')
+
+
+relevantMessages %>%
+  group_by(partnernum, ordinalrep) %>% 
+  tidyboot::tidyboot_mean(column = m) %>%
+  ggplot(aes(x = ordinalrep, y = empirical_stat)) +
+    geom_bar(stat = 'identity') +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), alpha = .2) +
+    facet_wrap(~ partnerlabel) +
+    theme_few() +
+    ylim(0,NA) +
+    ylab("mean # words") +
+    xlab("repetition with partner")
+```
+
+```{r}
+library(lme4)
+library(brms)
+library(lmerTest)
+summary(lmer(m ~  poly(partnernum, 1) + ordinalrep + (1 + poly(partnernum) | participantid) + ( 1 + poly(partnernum) | target), data = relevantMessages))
+
+library(optimx)
+mod.out <- summary(lmer(m ~ poly(partnernum, 1) + 
+               (1 +  poly(partnernum, 1) | participantid) + 
+               (1 +  poly(partnernum, 1) | target), 
+             data = relevantMessages %>% filter(ordinalrep == "first")))
+
+coef(mod.out)[, 3]
+```
+
+```{r}
+summary(lmer(m ~ 1 + (1  | participantid) , data = relevantMessages %>% 
+         ungroup() %>%
+         select(-repnum, -roomid) %>%
+         unite("key", partnernum, ordinalrep) %>%
+         group_by(participantid) %>%
+         spread(key, m) %>% 
+         mutate(firstjump = `1_first` - `0_second`, secondjump = `2_first` - `1_second`) %>% 
+         gather(jump, m, firstjump, secondjump)))
+```
+
+```{r}
+acc.toplot <- clicks %>% 
+  filter(networkid %in% completeNetworks) %>%
+  mutate(correct = object_id == 'target') %>%
+  group_by(trialnum, partnernum) %>%
+  tidyboot::tidyboot_mean(correct)
+  
+ggplot(acc.toplot, aes(x = trialnum, y = empirical_stat)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = ci_lower, ymax = ci_upper), alpha = 0.1) +
+    facet_wrap(~ partnernum)
+```
+
+```{r}
+
+disconnects <- read_csv('../data/pilot/info.csv') %>%
+  rbind(read_csv('../data/pilot1/info.csv')) %>% 
+  filter(contents == 'disconnect') %>% pull(details) %>% map_dfr(jsonlite::fromJSON) %>% pull(wID) %>% unique()
+
+disconnects
+```
+
+### Convergence
+
+```{r}
+partnerLookup <- messages %>%
+  group_by(networkid) %>%
+  do(., mutate(., speakerID = group_indices(., participantid))) %>%
+  group_by(networkid, roomid, partnernum, speakerID) %>%
+  tally() %>%
+  group_by(networkid, roomid) %>%
+  mutate(partnerID = ifelse(speakerID == first(speakerID), 
+                            last(speakerID), first(speakerID))) %>%
+  ungroup() %>%
+  mutate(speaker1 = as.factor(speakerID)) %>%
+  select(-n, -roomid) 
+
+stopwords_regex = paste(c('ive', tm::stopwords('SMART')), collapse = '\\b|\\b')
+stopwords_regex = paste0('\\b', stopwords_regex, '\\b')
+
+matches <- messages %>% 
+  filter(role == "speaker") %>%
+  filter(networkid %in% completeNetworks) %>%
+  group_by(participantid, partnernum) %>%
+  mutate(ordinalrep = ifelse(repid == min(repid), 'first', 'second'),
+         content = tolower(content),
+         content = stringr::str_replace_all(content, stopwords_regex, ""),
+         content = str_squish(gsub("[[:punct:]]", "", content))) %>%
+  group_by(networkid) %>%
+  do(., mutate(., speakerID = as.integer(group_indices(., participantid)))) %>%
+  group_by(ordinalrep, networkid, partnernum, stimsetid, repid, target, participantid, speakerID, trialnum) %>%
+  summarize(content = paste0(content, collapse = ' ')) %>%
+  group_by(networkid, repid, target, partnernum, speakerID) %>%
+  tidybayes::gather_pairs(speakerID, content, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  left_join(partnerLookup) %>%
+  rowwise() %>%
+  mutate(partnerType = ifelse(speaker2 == partnerID, 'within', 'across'),
+         matchRate = length(intersect(strsplit(utt1, " ")[[1]], strsplit(utt2, " ")[[1]])),
+         utt1Length = length(strsplit(utt1, " ")[[1]]),
+         utt2Length = length(strsplit(utt2, " ")[[1]])) %>%
+  arrange(networkid, partnernum)
+
+matches.summary <- matches %>% 
+  group_by(partnernum, partnerType) %>%
+  tidyboot_mean(matchRate> 0)
+
+matches.summary %>%
+  ungroup() %>%
+  mutate(partnernum = paste0('partner ', partnernum + 1)) %>%
+  #mutate(ordinalrep = ifelse(ordinalrep == 'first', 'first half', 'second half')) %>%
+  mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
+  ggplot(aes(x = partnernum, y = empirical_stat, color = comparison, group = comparison)) +
+    geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    ggthemes::theme_few() +
+    #facet_wrap(~ partnernum) +
+    ylab("alignment (% word matches)") +
+    xlab("") +
+    ylim(0, 1) +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1.5)
+
+ggsave('./convergence.pdf', width = 7, height = 3, unit = 'in')
+library(lme4)
+library(broom)
+glmer(match ~ ordinalrep * partnernum * partnerType + (1 | target) + (1 + partnernum * partnerType | networkid), 
+      family = 'binomial',
+      data = matches %>% mutate(match = matchRate > 0)) %>%
+  tidy()
+```
+
+# Analyze model output
+
+Network simulations 
+
+```{r}
+path <- '../simulations/cogsci2020/output/networkOutput_compiled.csv'
+modelNetworks <- read_csv(path) %>%
+  group_by(chainNum, partnerID) %>%
+  mutate(repNum = floor(((trialNum - 1) %% 8) / 2),
+       correct = speakerChoice == intendedName) 
+```
+
+```{r}
+# first look at accuracy...
+modelNetworks %>%
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(correct)) %>%
+  arrange(model, partnerID, repNum)
+```
+
+```{r}
+# then look at reduction...
+modelNetworks %>%
+  group_by(model, repNum, partnerID) %>%
+  summarize(s = mean(longUttScore)) %>%
+  arrange(model, partnerID, repNum)
+```
+
+```{r}
+# convergence metric...
+modelconvergence.toPlot <- modelNetworks %>%
+  group_by(model, chainNum, speakerID, partnerID) %>%
+  mutate(ordinalRep = ifelse(repNum == first(repNum), 'first', 'second')) %>%
+  select(ordinalRep, speakerID,  partnerID, speakerChoice, chainNum) %>%
+  group_by(model, chainNum, ordinalRep, partnerID) %>%
+  tidybayes::gather_pairs(speakerID, speakerChoice, row = 'speaker1', col = 'speaker2', x = 'utt1', y = 'utt2') %>%
+  mutate(partnerType = case_when(
+    partnerID == 1 ~ ifelse((speaker1 == 2 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 3),
+                            'within', 'between'),
+    partnerID == 2 ~ ifelse((speaker1 == 3 && speaker2 == 1) ||
+                            (speaker1 == 4 && speaker2 == 2),
+                            'within', 'between'),
+    partnerID == 3 ~ ifelse((speaker1 ==4 && speaker2 == 1) ||
+                            (speaker1 == 3 && speaker2 == 2),
+                            'within', 'between')),
+    match = utt1 == utt2) %>%
+  filter(utt1 %in% c('word1', 'word2') && 
+         utt2 %in% c('word1', 'word2')) %>%
+  group_by(model, partnerID, partnerType) %>%
+  tidyboot_mean(match) 
+
+modelconvergence.toPlot %>%
+  ungroup() %>%
+  mutate(partnerID = paste0('partner ', partnerID)) %>%
+  mutate(comparison = ifelse(partnerType == 'within', 'within dyad', 'across dyads')) %>%
+  ggplot(aes(x = partnerID, y = empirical_stat, color = comparison, group = comparison)) +
+    geom_line() +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0) +
+    ggtitle('model prediction') +
+    theme_few() +
+    ylab("alignment (% word matches)") +
+    xlab("") +
+    ylim(0, 1) +
+    scale_color_colorblind() +
+    theme(aspect.ratio = 1.5)
+
+ggsave('./convergence_model.pdf', width = 8, height = 4, unit = 'in')
+```
