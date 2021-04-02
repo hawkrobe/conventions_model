@@ -158,13 +158,16 @@ Make Fig. 8
 
 ```{r}
 d %>%
-  group_by(condition, trialNum) %>%
-  summarize(trialLevelPctCorrect = mean(acc)) %>%
-  ggplot(aes(x = trialNum, y = 100 * trialLevelPctCorrect, color = condition)) +
-    geom_point(alpha = 0.2, stroke = 0, size = 2) +
+  mutate(sextet = floor((trialNum - 1) / 16)) %>%
+  group_by(condition, sextet) %>%
+  tidyboot_mean(acc) %>%
+  ggplot(aes(x = sextet, y = 100 * empirical_stat, color = condition)) +
+    #geom_point(alpha = 0.2, stroke = 0, size = 2) +
+    geom_line()+
     theme_few() +
+    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = 25, lty = 'dashed') +
-    geom_smooth(method = 'loess') +
+    #geom_smooth(method = 'loess') +
     scale_color_manual(values = condition_pal) +
     theme(aspect.ratio = 1) +
     labs(x = 'trial #', y = '% correct') +
@@ -251,6 +254,17 @@ postTest %>%
   group_by(gameid, finalRole, condition) %>%
   summarize(vocabSize = n()) %>%
   lmer(vocabSize ~ condition + (1 | gameid), data = .) %>%
+  summary()
+```
+
+Compare average extension size in post-test
+
+```{r}
+postTest %>%
+  group_by(gameid, finalRole, wordID, condition) %>%
+  summarize(extensionSize = sum(meaning)) %>%
+  filter(extensionSize > 0) %>%
+  lmer(extensionSize ~ condition + (1 | gameid), data = .) %>%
   summary()
 ```
 
@@ -525,28 +539,23 @@ pctDF <- postTest %>%
   group_by(gameid, finalRole, wordID, condition) %>%
   filter(meaning == 1) %>%
   summarize(specific = sum(meaning) == 1,
-            abstract = sum(meaning) > 1) %>%
+            abstract = sum(meaning) > 1)
 
 pctDF %>%
   group_by(gameid, finalRole, condition) %>%
   summarize(numSpecific = sum(specific),
             numAbstract = sum(abstract)) %>%
-  mutate(condition = ifelse(condition == 'intermediateOnly', 'coarse', 'fine')) %>%
-  mutate(condition = factor(condition, levels = c('coarse', 'fine'))) %>%
-  ggplot(aes(x = numSpecific, y = numAbstract)) +#, color = numSub > 0 & numBasic > 0)) +
-    geom_hex(binwidth = c(2,1))  +
+  ggplot(aes(x = numSpecific+.5, y = numAbstract+.5)) +#, color = numSub > 0 & numBasic > 0)) +
+    geom_bin2d(binwidth = c(1,1))  +
     facet_grid(~ condition) +
     theme_few() +
     xlab("# words referring to single object") +
     ylab("# words referring \n to multiple objects") +
-    theme(aspect.ratio=1, legend.position = 'top') +
-    ylim(NA, 6) +
-    scale_x_continuous(breaks=c(0,2, 4, 6, 8, 10), limits = c(NA,11)) +
-    scale_fill_gradient(low = "grey90", high = "black")  +
-    #ylim(0,6)
-    guides(fill=FALSE)
-  
-ggsave("../writing/cogsci18/figures/fullLexiconReport.pdf", width = 6, height =3)
+    theme(aspect.ratio=.5, legend.position = 'top') +
+    scale_y_continuous(breaks=c(.5, 1.5, 2.5, 3.5, 4.5, 5.5), labels = 0:5, limits = c(NA, 5.5)) +
+    scale_x_continuous(breaks=c(0.5,2.5, 4.5, 6.5, 8.5, 10.5), labels = c(0,2,4,6,8,10), limits = c(NA,10.5)) +
+    scale_fill_gradient(low = "grey90", high = "black") 
+ggsave("../writing/journal_manuscript/figures/mixtureOfTerms.pdf", width = 8, height =3.5)
 ```
 
 Test proportion of specific vs. abstract distribution within lexicon.

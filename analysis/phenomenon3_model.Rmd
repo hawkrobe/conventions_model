@@ -6,9 +6,12 @@ output: html_notebook
 ```{r}
 library(tidyverse)
 library(ggthemes)
+library(tidyboot)
 library(here)
 library(lme4)
 library(lmerTest)
+pal = colorblind_pal()(3)
+condition_pal = c(pal[1], pal[3], pal[2])
 ```
 
 ## Make plot from table in Clark paper
@@ -36,60 +39,78 @@ ggsave('../writing/journal_manuscript/figures/clark92.pdf', height = 8, width = 
 ## Examine trajectory of model simulations
 
 ```{r}
-trajectories <- read_csv(here('simulations/cogsci2018/output/extended_trajectories.csv')) %>%
-  mutate(quarter = floor((time - 1) / 24)) %>%
-  mutate(repNum = floor((time - 1) / 16)) %>%
-  mutate(condition = case_when(condition == 'subOnly' ~ 'fine', 
-                               condition == 'mixedLower' ~ 'mixed', 
-                               TRUE ~ 'coarse')) %>%
-  filter(speakerAlpha == 10, listenerAlpha == 10) %>%
-  filter(chainNum >= 400000)
+trajectories <- read_csv(here('simulations/cogsci2018/output/simplified_trajectories.csv')) %>%
+# trajectories <- read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_testing_new.csv')) %>%
+#   bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_testing_new.csv'))) %>%
+#   bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_testing_new.csv'))) %>%
+  filter(time < 24) %>%
+  mutate(quarter = floor((time) / 24)) %>%
+  mutate(repNum = floor((time) / 4) + 1)
+# #   #filter(chainNum <= 600000)
 
 trajectories %>%
-  group_by(discountFactor, condition, time) %>%
-  summarize(empirical_stat = mean(correct)) %>% 
-  ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
-    geom_point(alpha=0.2) +
-  #geom_line() +
-    geom_hline(yintercept = 25, lty = 'dashed') +
-    geom_smooth(method = 'loess', se=F) +
-  facet_wrap(~discountFactor) +
+  group_by(discountFactor, speakerAlpha, condition, time) %>%
+  tidyboot_mean(correct, nboot= 100) %>% 
+  ggplot(aes(x = time+1, y = empirical_stat * 100, color = condition)) +
+    geom_point(alpha = 0.2, stroke = 0, size = 2) +
+    #geom_line() +
+    #geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
+    geom_hline(yintercept = c(50,100), lty = 'dashed') +
+    geom_smooth(se=T) +
+    #facet_grid(discountFactor ~ pragmatics) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
-    scale_color_colorblind() +
-    ylim(0,100) +
+    scale_color_manual(values = condition_pal) +
+    scale_x_continuous(breaks = c(1,6,11,16,21)) +
+    #ylim(25,105) +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', useDingbats = FALSE)
+ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', 
+       width = 4, height = 4, 
+       useDingbats = FALSE)
 ```
 
 ```{r}
-trajectories %>%
-  glmer(correct ~ repNum * condition + (1 + repNum | gameNum),
+mod1 <- trajectories %>%
+  glmer(correct ~ time + (1 + time | gameNum),
         family = 'binomial',
-        data = .) %>%
-  summary()
+        data = .) 
+
+mod2 <- trajectories %>%
+  glmer(correct ~ time + condition + (1 + time | gameNum),
+        family = 'binomial',
+        #contrasts = list(condition = contr.treatment(3, base = 3)),
+        data = .) 
+
+mod3 <- trajectories %>%
+  glmer(correct ~ time * condition + (1 + time | gameNum),
+        family = 'binomial',
+        #contrasts = list(condition = contr.treatment(3, base = 3)),
+        data = .) 
+
+summary(mod3)
+anova(mod1, mod2,mod3)
 ```
 
 ```{r}
 trajectories %>%
-  mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, discountFactor, chainNum, condition,  repNum) %>%
+  mutate(sextet = floor((time) / 6)) %>%
+  #mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(iterationNum, discountFactor, chainNum, condition,  sextet) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, repNum, discountFactor) %>%
+  group_by(condition, sextet, discountFactor) %>%
   tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  ggplot(aes(x = repNum, y = empirical_stat, color = condition)) +
+  ggplot(aes(x = sextet, y = empirical_stat, color = condition)) +
     geom_line() +
-    ylim(3.5, 8.5) +
-    geom_hline(yintercept = c(4, 8)) +
+    geom_hline(yintercept = c(2, 4), linetype = 'dashed') +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    facet_grid(~ paste0('discount:', discountFactor) ) +
     theme_few() +
-    scale_color_colorblind() +
+    scale_color_manual(values = condition_pal) +
     labs(y = "number unique words used") +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf')
+ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf',
+       width = 4, height = 4, useDingbats = F)
 ```
 
 ```{r}
@@ -117,7 +138,7 @@ Compare parameters
 ```{r}
 trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(condition, coord, discountFactor, time) %>%
+  group_by(condition,  discountFactor, time) %>%
   tidyboot::tidyboot_mean(correct, nboot=100) %>%
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha=0.2) +
@@ -154,48 +175,39 @@ trajectories %>%
 Read in files:
 
 ```{r}
-meanings <- dir(path = "../simulations/cogsci2018/output/", pattern = "meaningTest", full.names = T) %>% # 
-  map(~ read_csv(.x, 
-                 skip = 1, 
-                 col_names = c('i','gameNum','speakerAlpha','listenerAlpha',
-                               'time','agentID','word','meaning','prob')) %>% 
-        mutate(filename = .x)) %>%
-  reduce(rbind) 
+meanings <- read_csv(here('./simulations/cogsci2018/output/meaningTests.csv')) %>%
+  mutate(iterationNum = row_number() / 
 ```
 
 Plot proportion of levels across words
 
 ```{r}
-final.meanings <- meanings %>%
-  left_join(trajectories %>% group_by(gameNum) %>% summarize(condition = first(condition))) %>%
-  filter(agentID %in% c(1,2)) %>%
-  separate(filename, into = c('garbage', 'discount', 'coord'), sep = '_') %>%
-  separate(discount, into = c('garbage', 'discountFactor'), sep = ':') %>%
-  separate(coord, into = c('garbage', 'coord'), sep = ':') %>%
+meanings.toplot <- meanings %>%
   mutate(level = case_when(
-    meaning == 'null' ~ 'null',
-    meaning %in% c('circle', 'square') ~ 'super',
-    meaning %in% c('blue', 'red', 'striped', 'spotted') ~ 'basic',
+    object == 'null' ~ 'null',
+    object %in% c('circle', 'square') ~ 'super',
+    object %in% c('blue', 'red', 'striped', 'spotted') ~ 'basic',
     TRUE ~ 'sub'
-  ))
-
-final.meanings %>%
-  filter(discountFactor == 0.8, coord == 'diff') %>%
-  group_by(gameNum, agentID, time, word) %>%
-  filter(prob == max(prob)) %>%
-  group_by(time, level, condition) %>%
+  ))%>%
+  group_by(gameNum, agentID, trialNum, word) %>%
+  filter(val == max(val)) %>%
+  group_by(trialNum, level, condition) %>%
   tally() %>%
-  group_by(condition, time) %>%
+  group_by(condition, trialNum) %>%
   mutate(prob = n / sum(n))  %>%
   ungroup() %>%
-  mutate(level = fct_relevel(level, 'null', 'sub', 'basic')) %>%
-  ggplot(aes(x = time, y = prob, fill = level)) +
+  mutate(level = fct_relevel(level, 'null', 'sub', 'basic'))
+
+meanings.toplot %>% 
+  ggplot(aes(x = trialNum, y = prob, fill = level)) +
     geom_area(state='identity', alpha = 0.8) +
     facet_wrap(~ condition) +
+    scale_fill_brewer(palette = 'Green1') +
     labs(x = 'trial #', y = 'proportion of words at level') +
-    theme_few()
+    theme_few() +
+    theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/evolution.pdf', height = 4, width = 4)
+ggsave('../writing/journal_manuscript/figures/evolution.pdf', height = 2, width = 4)
 ```
 
 Statistical test of rates on final round:
