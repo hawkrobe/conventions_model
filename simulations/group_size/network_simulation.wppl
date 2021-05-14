@@ -1,0 +1,127 @@
+// run using, e.g.:
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv
+
+var utterances = ['word1', 'word2'];
+var objects = ['bluecircle', 'redsquare'];
+var meanings = ['bluecircle', 'redsquare'];
+var numMeanings = meanings.length;
+var params = {
+  speakerAlpha : argv.speakerAlpha,
+  listenerAlpha: argv.listenerAlpha,
+  discountFactor: argv.discountFactor,
+  model: argv.model,
+  chainNum: argv.chainNum,
+  networkSize: 4,
+  numTrials: 20,
+  guessingEpsilon: 0.001,
+  costWeight: 0,
+  pragmatics: 'L0',
+  utterances: utterances,
+  context: objects,
+  objects: objects,
+  inferOptions: {method: 'MCMC', samples:2000, burn:5000, lag:0, verbose:true} 
+};
+var possiblePartners = shared.k_combinations(_.range(params.networkSize), 2);
+
+console.log(params);
+var f = csv.open('./output/' + argv.model + argv.chainNum + '.csv');
+csv.writeLine('iterationNum,model,chainNum,speakerAlpha,listenerAlpha,costWeight,discountFactor,guessingEpsilon,'+
+              'trialNum,speakerID,listenerID,partnerID,intendedName,speakerChoice,listenerChoice,'+
+              'expectation_unseenPartner,correctProb', f);
+
+var writeLine = function(currTrial, listenerChoice, speakerChoice, speakerOutput, listenerOutput, speakerPosterior) {
+  //var hypotheticalNewPartner = S(currTrial.intendedName, speakerPosterior, extend(params, {partnerID: 4}));
+  csv.writeLine([
+    currTrial.iterationNum, params.model, params.chainNum, params.speakerAlpha, params.listenerAlpha,
+    params.costWeight, params.discountFactor, params.guessingEpsilon,
+    currTrial.trialNum, currTrial.speakerID, currTrial.listenerID, currTrial.partnerID,
+    currTrial.intendedName, speakerChoice, listenerChoice,
+    Math.exp(speakerOutput.score('word1')),
+    //Math.exp(hypotheticalNewPartner.score('word1')),
+    listenerOutput.score(currTrial.intendedName),
+  ].join(','), f);
+};
+
+var sampleProbs = function(utt) {
+  // note that the expectated value of a dirichlet w/ this prior is [.4, .6]
+  var bias = (utt == 'word1' || utt == 'word2') ? [2,3] : [3,2];
+  return dirichlet(dirichlet(Vector(bias)));
+};
+
+var lexicalPrior = function() {
+  var partnerMeaning = map(function(utt) {
+    if(params.model == 'no_pooling') {
+      return repeat(params.networkSize, function() {
+        return categorical({vs: meanings, ps: sampleProbs(utt)});
+      });
+    } else if (params.model == 'complete_pooling') {
+      var sharedMeaning = categorical({vs: meanings, ps: sampleProbs(utt)});
+      return repeat(params.networkSize, function() {
+        return sharedMeaning;
+      });
+    } else {
+      var sharedConcentration = sampleProbs(utt);
+      return repeat(params.networkSize, function() {
+        categorical({vs: meanings, ps: sharedConcentration});
+      });
+    }
+  }, utterances);
+  return map(function(agentID) {
+    return _.zipObject(params.utterances, map(function(utt) {
+      return partnerMeaning[utt][agentID];
+    }, _.range(params.utterances.length)));
+  }, _.range(params.networkSize));
+};
+
+// for each point in data, we want the model's predictions 
+var iterate = function(iterationNum, dataSoFar) {
+  var trialNum = dataSoFar[1].length;
+  globalStore.time += 1;
+  // sample pair of participants
+  var participants = uniformDraw(possiblePartners);
+  var speakerID = (trialNum % 2) == 0 ? participants[1] : participants[0];
+  var listenerID = (trialNum % 2) == 0 ? participants[0] : participants[1];
+
+  // decide who is speaker / listener
+  var currTrial = {
+    trialNum, participants, speakerID, listenerID,
+    intendedName: uniformDraw(objects),
+    context: objects,
+    time: globalStore.time
+  };
+
+  // run inference on previous data
+  var speakerP = updatePosterior(dataSoFar[currTrial.speakerID], lexicalPrior, params);
+  var listenerP = updatePosterior(dataSoFar[currTrial.listenerID], lexicalPrior, params);
+
+  // get marginal prediction of next data point over lexicon posterior
+  var speakerOut = S(currTrial.intendedName, speakerP,
+                     extend(params, {partnerID: currTrial.listenerID}));
+  var nextUtt = sample(speakerOut);
+  var listenerOut = L(nextUtt, listenerP, extend(params, {partnerID: currTrial.speakerID}));
+  var nextChoice = sample(listenerOut);
+
+  writeLine(currTrial, nextUtt, nextChoice, speakerOut, listenerOut, speakerP);
+  var newDataSoFar = map(function(agentID) {
+    var trialPacket = extend(currTrial, {
+      role: agentID == currTrial.speakerID ? "speaker" : "listener",
+      wordID: nextUtt,
+      partnerID: (agentID == currTrial.speakerID ? currTrial.listenerID :
+                  agentID == currTrial.listenerID ? currTrial.speakerID : ''),
+      clickedName: nextChoice
+    });
+    return (agentID == currTrial.speakerID || agentID == currTrial.listenerID ?
+            dataSoFar[agentID].concat(trialPacket) : dataSoFar[agentID]);
+  }, _.range(params.networkSize));
+  console.log(newDataSoFar);
+  if(globalStore.time < params.numTrials) {
+    iterate(iterationNum, newDataSoFar);
+  }
+};
+
+foreach(_.range(5), function(i) {
+  console.log('iteration', i)
+  globalStore.time = 0;
+  iterate(i, repeat(params.networkSize, function() {return []}));
+});
+csv.close(f);
