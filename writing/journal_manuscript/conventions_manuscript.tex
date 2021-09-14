@@ -1,4 +1,4 @@
-\documentclass[11pt, floatsintext]{apa6}
+\documentclass[10pt, jou, floatsintext]{apa7}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[outdir=./]{epstopdf}
@@ -10,7 +10,7 @@
 \usepackage{enumerate}
 \usepackage{textcomp}
 \usepackage{lingmacros}
-\usepackage[draft]{hyperref}
+%\usepackage[draft]{hyperref}
 \usepackage{apacite}
 \usepackage{listings}
 \usepackage{multirow}
@@ -58,7 +58,7 @@
 %\pagenumbering{gobble}
 %\usepackage{apacite}
 
-\linespread{1}
+%\linespread{1}
 
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -76,9 +76,14 @@
 \title{From partners to populations: \\[.1em] A hierarchical Bayesian account of coordination and convention}
 \shorttitle{Conventions}
 \leftheader{Hawkins et al.}
-\author{Robert D. Hawkins$^{*1}$, Michael Franke$^2$, Michael C. Frank$^3$, \\ Adele E. Goldberg$^1$,  Kenny Smith$^4$, Thomas L. Griffiths$^{1,5}$, Noah D. Goodman$^{3,6}$}
+\authorsnames[{*1}, {2}, {3}, {4}, {1,5}, {3,6}]{Robert D. Hawkins, Michael Franke, Michael C. Frank, \\Kenny Smith, Thomas L. Griffiths, Noah D. Goodman}
 
-\affiliation{$^1$Department of Psychology, Princeton University, $^2$Institute for Cognitive Science, University of Osnabr\"uck, \\$^3$Department of Psychology, Stanford University, $^4$Centre for Language Evolution, University of Edinburgh, $^5$Department of Computer Science, Princeton University, $^6$Department of Computer Science, Stanford University }
+\authorsaffiliations{{Department of Psychology, Princeton University}, 
+{Institute for Cognitive Science, University of Osnabr\"uck},
+{Department of Psychology, Stanford University},
+{Centre for Language Evolution, University of Edinburgh},
+{Department of Computer Science, Princeton University},
+{Department of Computer Science, Stanford University }}
 
 \abstract{Languages are powerful solutions to coordination problems: they provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads. 
 Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc} or partner-specific meanings on the fly. 
@@ -89,9 +94,9 @@ We present new empirical data alongside simulations showing how our model provid
 %Finally, we discuss several broader consequences of our framework, grounding community-level social conventions in basic individual-level learning mechanisms,  suggests new perspectives on continual language learning beyond development. 
 }
 
-\keywords{Keywords TBD}
+\keywords{communication; learning; inference; generalization; coordination; conventions}
 
-\authornote{This report is based in part on work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Materials and code for reproducing all model simulations, behavioral experiments, and analyses are open and available online at \href{https://github.com/hawkrobe/conventions_model}{https://github.com/hawkrobe/conventions\_model}.\\
+\authornote{This report is based in part on non-archival work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Materials and code for reproducing all model simulations, behavioral experiments, and analyses are open and available online at \href{https://github.com/hawkrobe/conventions_model}{https://github.com/hawkrobe/conventions\_model}.\\
 $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@princeton.edu}
 
 \begin{document}
@@ -99,15 +104,15 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 
 \input{Introduction}
 
-\section{Convention formation as\\ Hierarchical Bayesian inference}
+\section{Convention formation as Hierarchical Bayesian inference}
 
 \input{ModelOverview}
 
-\section{Phenomenon \#1: \\ \emph{Ad hoc} conventions become more efficient}
+\section{Phenomenon \#1:  \emph{Ad hoc} conventions become more efficient}
 
 \input{Reduction}
 
-\section{Phenomenon \#2: \\ Conventions gradually generalize \\to new partners in a social network}
+\section{Phenomenon \#2:  Conventions gradually generalize to new partners in community}
 
 \input{Generalization}
 
@@ -295,14 +300,14 @@ Such optimization-based inference techniques may also provide the most promising
  \begin{figure*}
 \centering
     \includegraphics[scale=1.2]{arbitrariness_grid.pdf}
-  \caption{Coordination success (simulation 1.1) across a range of parameter values. Columns represent memory discount parameter $\beta$, and rows represent agent soft-max temperatures, where we set $\alpha_S=\alpha_L$. Communicative success is achieved under a wide range of settings, but convergence is limited in some regimes. For example, at high values of $\beta$, with no ability to discount prior evidence, accuracy rises quickly but asymptotes below perfect coordination; at low $\alpha$, inferences are slightly weaker and agent actions are noisier, slowing convergence; finally, at low values of $\beta$, when prior evidence is forgotten too quickly, convergence interacts with $\alpha$: the latest evidence may overwhelm all prior evidence, preventing the accumulation of shared history. The agent noise model is set to $\epsilon = 0.01$ in all simulations.}
+  \caption{Coordination success (simulation 1.1) across a range of parameter values. Columns represent memory discount parameter $\beta$, and rows represent the agents' soft-max optimality parameters, where we set $\alpha_S=\alpha_L$. Communicative success is achieved under a wide range of settings, but convergence is limited in some regimes. For example, at high values of $\beta$, with no ability to discount prior evidence, accuracy rises quickly but asymptotes below perfect coordination; at low $\alpha$, inferences are slightly weaker and agent actions are noisier, slowing convergence; finally, at low values of $\beta$, when prior evidence is forgotten too quickly, convergence interacts with $\alpha$: the latest evidence may overwhelm all prior evidence, preventing the accumulation of shared history. The agent noise model is set to $\epsilon = 0.01$ in all simulations.}
   \label{fig:arbitrariness_grid}
 \end{figure*}
 
  \begin{figure*}
 \centering
     \includegraphics[scale=1.2]{conjuction_grid.pdf}
-  \caption{Speaker efficiency (simulation 1.2) across a range of parameter values representing different weights on informativity and cost. Rows represent agent optimality $w_S = w_L$, columns represent costs $w_C$, and different memory discount factors $\beta$ shown in different colors. Agents converge on more efficient ad hoc conventions for a wide regime of parameters. When utterance production cost $w_C$ is more heavily weighted relative to informativity, the speaker is less likely to produce longer utterances, even at the beginning of the interaction; when optimality $w_S, w_L$ is higher, and the speaker maximizes utility, we observe faster reduction and more categorical behavior. Note that as $\alpha\rightarrow\infty$, utterances only become shorter at $w_C=0$ in the absence of forgetting. In this case, the shorter utterances approach the exact same utility as the longer utterance, and the speaker reaches equilibrium simply sampling among them at random (i.e. choosing the longer utterance with 1/3 probability and each of the shorter utterances with 1/3 probability).}
+  \caption{Speaker efficiency (simulation 1.2) across a range of parameter values representing different weights on informativity and cost. Rows represent agent soft-max optimality $\alpha_S = \alpha_L$, columns represent costs $w_C$, and different memory discount factors $\beta$ shown in different colors. Agents converge on more efficient ad hoc conventions for a wide regime of parameters. When utterance production cost $w_C$ is more heavily weighted relative to informativity, the speaker is less likely to produce longer utterances, even at the beginning of the interaction; when optimality $\alpha_S, \alpha_L$ is higher, and the speaker maximizes utility, we observe faster reduction and more categorical behavior. Note that as $\alpha\rightarrow\infty$, utterances only become shorter at $w_C=0$ in the absence of forgetting. In this case, the shorter utterances approach the exact same utility as the longer utterance, and the speaker reaches equilibrium simply sampling among them at random (i.e. choosing the longer utterance with 1/3 probability and each of the shorter utterances with 1/3 probability).}
   \label{fig:conjunction_grid}
 \end{figure*}
 
@@ -310,7 +315,7 @@ Such optimization-based inference techniques may also provide the most promising
  \begin{figure*}
 \centering
     \includegraphics[scale=.8]{grid_all_models.pdf}
-  \caption{Speaker efficiency simulations for \textbf{P2} across a larger parameter regime. We examine the behavior of complete-pooling, no-pooling, and partial-pooling models, where rows represent agent optimality $\alpha_S = \alpha_L$, columns represent cost weight $w_c$, and colors represent memory discount parameter $\beta$.}
+  \caption{Speaker efficiency simulations for \textbf{P2} across a larger parameter regime. We examine the behavior of complete-pooling, no-pooling, and partial-pooling models, where rows represent agent soft-max optimality $\alpha_S = \alpha_L$, columns represent cost weight $w_c$, and colors represent memory discount parameter $\beta$.}
   \label{fig:partnerspecificity_grid}
 \end{figure*}
 
@@ -321,13 +326,13 @@ Such optimization-based inference techniques may also provide the most promising
 \label{fig:generalization_modelcomparison}
 \end{figure*}
 
-
- \begin{figure*}
-\centering
-    \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
-  \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
-  \label{fig:full_accuracy_grid}
-\end{figure*}
+%
+% \begin{figure*}
+%\centering
+%    \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
+%  \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
+%  \label{fig:full_accuracy_grid}
+%\end{figure*}
 
 
  \begin{figure*}
