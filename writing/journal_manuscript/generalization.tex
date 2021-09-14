@@ -26,7 +26,9 @@ After interacting with multiple partners in a tight-knit community, however, spe
 In this section, we test this novel prediction in a networked communication game and explicitly compare our model to pure complete-pooling and no-pooling variants.
 
 \subsection{Model predictions}
-\begin{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[scale=.8]{./figures/sec3-design.pdf}
 \vspace{.1em}
 \caption{In our simulations and behavioral experiment, participants were  (A) placed in fully-connected networks of 4, and (B) paired in a round-robin schedule of repeated reference games with each neighbor.}
@@ -44,31 +46,30 @@ Because $\Theta$ is a vector of probabilities that must sum to 1, we assume it i
 \begin{equation*}
 \begin{array}{rcl}
 \phi_k(u)  &\sim&  \textrm{Categorical}(\Theta) \\
-\Theta & \sim & \textrm{Dirichlet}(\boldsymbol{\alpha})
+\Theta & \sim & \textrm{Dirichlet}(\lambda \cdot \boldsymbol{\alpha})
 \end{array}
 \end{equation*}
-where $\boldsymbol{\alpha}$ is the concentration parameter encoding the agent's beliefs, or ``over-hypotheses'' about both the central tendency and the variability of lexicons in the population. 
-The relative values of the entries of $\boldsymbol{\alpha}$ correspond to inductive biases regarding the central tendency of lexicons while the absolute magnitude of $\boldsymbol{\alpha}$ roughly corresponds to prior beliefs about the spread, where larger magnitudes correspond to more concentrated probability distributions.
-We assume the agent also has uncertainty about these population-level properties with a hyper-prior on $\alpha$ \cite<see>{cowans2004information} roughly corresponding to the weak initial preferences we used in our previous simulations:
+where $\lambda \cdot \boldsymbol{\alpha}$ gives the concentration parameter encoding the agent's beliefs, or ``over-hypotheses'' about both the central tendency and the variability of lexicons in the population. 
+The relative values of the entries of $\boldsymbol{\alpha}$ correspond to inductive biases regarding the central tendency of lexicons while the absolute magnitude of  the scaling factor $\lambda$ roughly corresponds to prior beliefs about the spread, where larger magnitudes correspond to more concentrated probability distributions.
+We set $\lambda = 2$ and assume the agent has uncertainty about the population-level central tendency by placing a hyper-prior on $\alpha$ \cite<see>{cowans2004information} roughly corresponding to the weak initial preferences we used in our previous simulations:
 %We set $\boldsymbol{\alpha} = [1,1.5]$ for $u\in \{u_1,u_2\}$ and  $\boldsymbol{\alpha} = [1.5, 1]$ for $u\in\{u_3,u_4\}$ to encode weak initial preferences, as in Simulation 1.2.
-
-\begin{figure*}
+\begin{figure*}[t]
 \centering
-\includegraphics[scale=.9]{./figures/sec3-model-results.pdf}
+\includegraphics[scale=.8]{./figures/sec3-model-results.pdf}
 \vspace{1em}
-\caption{Simulation results and empirical data for (A) speaker reduction, and (B) network convergence across three partners. Vertical lines mark boundaries where new partners were introduced, and thin grey line represents the utterance the model would produce for a novel partner at each point in time.}
+\caption{Simulation results and empirical data for (A) speaker reduction, and (B) network convergence across three partners. Vertical lines mark boundaries where new partners were introduced, and the thin grey line represents beliefs about a novel partner at each point in time.}
 \label{fig:results}
 \end{figure*}
-
 \begin{equation*}
 \begin{array}{rcl}
  \boldsymbol{\alpha} & \sim& \left\{
 \begin{array}{rcl}
-  \textrm{Dirichlet}(2,3)& \textrm{if} & u \in \{u_1, u_2\}\\
-  \textrm{Dirichlet}(3,2) & \textrm{if} &u \in \{u_3, u_4\}\\
+  \textrm{Dirichlet}(1.0,1.5)& \textrm{if} & u \in \{u_1, u_2\}\\
+  \textrm{Dirichlet}(1.5,1.0) & \textrm{if} &u \in \{u_3, u_4\}\\
 \end{array}\right. \\
 \end{array}
 \end{equation*}
+
 
 We may then define the no-pooling and complete-pooling models by lesioning this shared structure in different ways. 
 The no-pooling model assumes an independent $(\Theta_k, \alpha_k)$ for every partner, rather than sharing a single population-level parameter.
@@ -81,19 +82,6 @@ We simulated 48 networks for each model, setting $\alpha_S = \alpha_L = 4,~w_C =
 %We then optimize the parameters of these posterior Gaussians by minimizing the evidence lower bound (ELBO) objective \cite<see>{murphy2012machine}.
 %On each trial, we run 50,000 gradient steps on previous observations to obtain a posterior (Eq.\ 1) and compute the agent's marginal prediction for the next observation by taking the expectation over 50,000 samples from the variational guide (Eq. 4)\footnote{These details were chosen to ensure high-quality estimates of the model's behavior; see Discussion for other possible algorithms.}.
 
-\paragraph{Network convergence}
-
-Because all agents are simultaneously making inferences about the others, the network as a whole faces a coordination problem.
-For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
-Once they swap partners, they must negotiate this potential mismatch in usage. 
-How does the network as a whole manage to coordinate?
-
-We measured alignment by examining the intersection of utterances produced by speakers: if two agents produced overlapping utterances to refer to a given target (i.e.~a non-empty intersection), we assign a 1, otherwise we assign a 0.
-At the beginning and end of each interaction, we calculated alignment between currently interacting agents (i.e. \emph{within} a dyad) and those who were not interacting (i.e. \emph{across} dyads), averaging across target objects.
-Alignment across dyads was initially near chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
-Under a no-pooling model (Fig. \ref{fig:results}C, third row), subsequent blocks remain near chance, as conventions need to be re-negotiated from scratch.
-Under a complete-pooling model (Fig. \ref{fig:results}C, second row), agents persist with mis-calibrated expectations learned from previous partners rather than adapting to their new partner, and \emph{within-dyad} alignment deteriorates.
-By contrast, under our partial-pooling model, alignment across dyads increases without affecting alignment within dyads, suggesting that hierarchical inference leads to emergent consensus (Fig. \ref{fig:results}C, top row).
 
 
 %\paragraph{Listener accuracy across partners}
@@ -107,10 +95,10 @@ By contrast, under our partial-pooling model, alignment across dyads increases w
 %
 \paragraph{Speaker utterance length across partners}
 
-Next, we examined our model's predictions about how a \emph{speaker}'s referring expressions will change with successive listeners.
+We begin by examining our model's predictions about how a speaker's referring expressions change with successive listeners.
 While it has been frequently observed that messages reduce in length across repetitions with a single partner \cite{krauss_changes_1964} and sharply revert back to longer utterances when a new partner is introduced \cite{wilkes-gibbs_coordinating_1992}, the key prediction distinguishing our model concerns behavior across subsequent partner boundaries.
-Complete-pooling accounts predict no reversion in number of words when a new partner is introduced  (Fig. \ref{fig:results}B, second row).
-No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor  (Fig. \ref{fig:results}B, third row). 
+Complete-pooling accounts predict no reversion in number of words when a new partner is introduced  (Fig.~\ref{fig:results}A, first column).
+No-pooling accounts predict that roughly the same initial description length will re-occur with every subsequent interlocutor  (Fig.~\ref{fig:results}A, second column). 
 % First, as in the complete-pooling and no-pooling models, we found that descriptions become more efficient over interaction with a single partner: the model becomes more confident that shorter utterances will be meaningful, so the marginal informativity provided by the longer utterance is not worth the additional cost.
 %As in Simulation 1.2, we allowed a set of four primitive utterances, $\{u_1, u_2, u_3, u_4\}$, to be combined into conjunctions, e.g. $\{u_1u_2, u_3u_4, \dots\}$, which are assumed to have twice the utterance cost.
 %The meanings of these conjunctions were determined compositionally from the values of the primitive utterances using a standard product T-norm for conjunction. 
@@ -123,8 +111,7 @@ Here we show that a partial pooling account predicts a more complex pattern of g
 First, unlike the complete-pooling model, we find that the partial-pooling speaker model reverts or jumps back to a longer description at the first partner swap.
 This reversion is due to ambiguity about whether the behavior of the first partner was idiosyncratic or attributable to community-level conventions.
 In the absence of data from other partners, a partner-specific explanation is more parsimonious.
-Second, unlike a no-pooling model, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig. \ref{fig:results}B, top row).
-
+Second, unlike a no-pooling model, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig.~\ref{fig:results}A, third column).
 
 It is possible, however, that these two predictions only distinguish our partial-pooling models at a few parameter values; the no-pooling and complete-pooling could produce these qualitative effects elsewhere in parameter space.
 To conduct a more systematic model comparison, then, we simulated 10 networks in each cell of a large grid manipulating the the optimality parameters $\alpha_S,\alpha_L$, the cost parameter $w_C$, and the memory discounting parameter $\beta$. 
@@ -132,6 +119,20 @@ We computed a ``reversion'' statistic (the magnitude of the change in $P(u_1u_2)
 We found that only the partial-pooling model consistently makes both predictions across a broad regime. 
 The complete-pooling model fails to predict reversion nearly everywhere while the no-pooling model fails to predict generalization nearly everywhere.
 Detailed results are shown in Fig.~\ref{fig:generalization_modelcomparison} in the Appendix.
+
+\paragraph{Network convergence}
+
+Because all agents are simultaneously making inferences about the others, the network as a whole faces a coordination problem.
+For example, in the first block, agents 1 and 2 may coordinate on using $u_1$ to refer to $o_1$ while agent 3 and 4 coordinate on using $u_2$. 
+Once they swap partners, they must negotiate this potential mismatch in usage. 
+How does the network as a whole manage to coordinate?
+
+We measured alignment by examining the intersection of utterances produced by speakers: if two agents produced overlapping utterances to refer to a given target (i.e.~a non-empty intersection), we assign a 1, otherwise we assign a 0.
+At the beginning and end of each interaction, we calculated alignment between currently interacting agents (i.e. \emph{within} a dyad) and those who were not interacting (i.e. \emph{across} dyads), averaging across target objects.
+Alignment across dyads was initially near chance, reflecting the arbitrariness of whether speakers reduce to $u_1$ or $u_2$. 
+Under a complete-pooling model (Fig.~\ref{fig:results}B, first column), agents sometimes persist with mis-calibrated expectations learned from previous partners rather than adapting to their new partner, and \emph{within-dyad} alignment deteriorates.
+Under a no-pooling model (Fig.~\ref{fig:results}B, second column), convergence on subsequent blocks remains near chance, as conventions need to be re-negotiated from scratch.
+By contrast, under our partial-pooling model, alignment across dyads increases without affecting alignment within dyads, suggesting that hierarchical inference leads to emergent consensus (Fig.~\ref{fig:results}B, third column).
 
 \subsection{Behavioral experiment}
 
