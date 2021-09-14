@@ -6,9 +6,8 @@
 %% Set up problem
 \begin{figure*}[t]
 \begin{center}
-{\includegraphics[scale=1.8]{./figures/Sec2-design.pdf}}
+{\includegraphics[scale=1.6]{./figures/Sec2-design.pdf}}
 {\caption{{\emph{Domain for context-sensitivity.} (A) Targets are related to one another in a conceptual taxonomy. (B) Speakers choose between labels, where the label ``niwa'' has been selected. (C) Examples of \emph{fine} and \emph{coarse} contexts. In the \emph{fine} context, the target (marked in black) must be disambiguated from a distractor (marked in grey) at the same subordinate-level branch of the taxonomy.  In the \emph{coarse} context, the closest distractor belongs to a different branch of the center-level of the taxonomy (i.e. a spotted circle) such that disambiguation at the sub-ordinate level is not required. \label{fig:context_design}}}}
-\vspace{-2ex}
 \end{center}
 \end{figure*}
 
@@ -19,7 +18,7 @@ However, our broader theoretical aim is to suggest that \emph{diachronic} patter
 
 Briefly, when there is already a strong existing convention that is expected to be shared across the community, our model predicts that speakers will use it. 
 New \emph{ad hoc} conventions arise precisely to fill \emph{gaps} in existing population-level conventions, to handle new situations where existing conventions are not sufficient to accurately and efficiently make the distinctions that are required in the current context. 
-A corollary of this prediction\footnote{This follows by induction from the hierarchical generalization mechanisms evaluated for $\textbf{P2}$, which provide the pathway by which \emph{ad hoc} conventions become adopted by a larger community over longer time scales. Many \emph{ad hoc} conventions never generalize to the full language community simply because the contexts where they are needed are rare and must continued to be re-negotiated with subsequent partners on an \emph{ad hoc} bases.} is that \emph{ad hoc} conventions may only shift to expectations at the population level (and ultimately to population-level convergence) when those distinctions are consistently relevant across interactions with different partners.
+A corollary of this prediction\footnote{This follows by induction from the hierarchical generalization mechanisms evaluated for $\textbf{P2}$, which provide the pathway by which \emph{ad hoc} conventions become adopted by a larger community over longer time scales. Many \emph{ad hoc} conventions never generalize to the full language community simply because the contexts where they are needed are rare. They must be re-negotiated with subsequent partners on an \emph{ad hoc} basis.} is that \emph{ad hoc} conventions may only shift to expectations at the population level (and ultimately to population-level convergence) when those distinctions are consistently relevant across interactions with different partners.
 %Conversely, if the gap a convention was introduced to fill is rare or usually irrelevant, it may drop out of the lexicon; it is easier to re-negotiate \emph{ad hoc} conventions in each setting
 For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have conventionalized labels exclusively referring to each individual tree in our yards -- we are rarely required to refer to individual trees.
 Meanwhile, we \emph{do} often have shared conventions (i.e. proper nouns) for individual people and places that a community regularly encounters and needs to distinguish among.
@@ -30,8 +29,7 @@ As a first step toward explaining these diachronic patterns in \emph{which} conv
 Specifically, our model predicts that people will form conventions at the highest level of abstraction that is able to satisfy their communicative needs.
 That is, when the local environment imposes a communicative need to refer to particular \emph{ad hoc} concepts (e.g. describing a particular tree that needs to be cut down), communicative partners are able to coordinate on efficient lexical conventions for successfully doing so (e.g. ``the mossy one'').
 %When a particular partner uses a label to refer to an object in a context, we can infer that they do not believe it applies to the distractors as well; otherwise, they would have known it would be confusing and chosen a different label.
-
-First, we show that context-sensitivity naturally emerges from our model, as a downstream consequence of recursive pragmatic reasoning.
+We begin by showing that context-sensitivity naturally emerges from our model, as a downstream consequence of recursive pragmatic reasoning.
 We then empirically evaluate this account by manipulating which distinctions are relevant in an artificial-language repeated reference game building on \citeA{WintersKirbySmith14_LanguagesAdapt,winters2018contextual}, allowing us to observe the emergence of \emph{ad hoc} conventions from scratch.
 In both the empirical data and our model simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success and that pragmatic reasoning is needed for these effects to arise. 
 
@@ -43,7 +41,6 @@ Those tasks, like most reference games in the literature on convention formation
 In real referential contexts, however, targets are embedded in larger conceptual taxonomies, where some objects are more similar than others \cite{bruner1956study,collins1969retrieval,XuTenenbaum07_WordLearningBayesian}.
 Here, we therefore consider a space of objects embedded in a three-level stimulus hierarchy with shape at the top-most level, color/texture at the intermediate levels, and frequency/intensity at the finest levels (see Fig.~\ref{fig:context_design}A). 
 While we will use the full stimulus set in our empirical study, it is sufficient for our simulations to consider just one of the branches (i.e. just the squares).
-
 We populate the space of possible utterance meanings $P(\phi)$ with 4 meanings at the sub-ordinate level (one for each individual object, e.g. $\phi(u) =$ ``light blue square''), 2 meanings at the center-level (e.g. $\phi(u) =$ ``blue square''), and 1 meanings at the super-ordinate level (e.g. $\phi(u) =$ ``square'').
 We then populate the utterance space with 8 single-word labels (Fig.~\ref{fig:context_design}B) and also allow for a ``null'' meaning with an empty extension to account for the possibility that some utterances are not needed, allowing the agent to effectively remove utterances from their vocabulary.
 
@@ -51,22 +48,20 @@ Additionally, in real environments, speakers do not have the advantage of a fixe
 This property poses a challenge for models of convention formation because the relevant distinctions cannot be determined from a single context, they must be abstracted over time.
 We therefore only displayed four of the eight objects in the context on a given trial.
 Distractors could differ from the target at various levels of the hierarchy, creating different types of contexts defined by the finest distinction that had to be drawn (e.g. Fig.~\ref{fig:context_design}C).  
-
 Critically, we manipulated the prevalence of different kinds of contexts, controlling how often participants are required to make certain distinctions to succeed at the task. 
 In the \emph{fine} condition, every context contained a subordinate distractor, requiring fine low-level distinctions to be drawn.
 In the \emph{coarse} condition, contexts never contained subordinate distractors, only distractors that differed at the central level of the hierarchy (e.g. a blue square when the target is a red square).
-For comparison, we also include a \emph{mixed} condition, where half of the targets appeared in \emph{fine} contexts with subordinate distractors and the other half appeared in \emph{coarse} contexts without them.
+For comparison, we also include a \emph{mixed} condition, where targets sometimes appear in \emph{fine} contexts with subordinate distractors and other times appear in \emph{coarse} contexts without them; the context type is randomized between these two possibilities on each trial.
 
 We constructed the trial sequence identically for the three conditions. 
-On each trial, we sampled one of the four objects to be the target, ensuring that no target appeared more than once in a row.
-Then we sampled a distractor according to the constraints of the condition.
+On each trial, we randomly sampled one of the four objects to be the target, ensuring that no target appeared more than once in a row.
+Then we sampled a distractor according to the constraints of the context type.
 As before, the agents swap roles on each trial, and we run 50 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S=8$ and memory discounting parameter of $\beta = 0.6$.% (see Model comparison below for a more thorough evaluation of these parameters).
 
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.87]{sec2-results.pdf}
-\vspace{1ex}
 \caption{\emph{Comparison of simulation results to empirical data}. (A) Agents in our simulation learn to coordinate on a successful communication system, but converge faster in the coarse condition than the fine condition.  (B) The number of unique words used by agents in each repetition block increased in the fine condition but stayed roughly constant in the coarse condition. (C-D) The same metrics computed on our empirical data, qualitatively matching the patterns observed in the simulations. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits.}
 \label{fig:sec2Results}
 \end{center}
@@ -80,7 +75,7 @@ As before, the agents swap roles on each trial, and we run 50 distinct trajector
 \end{center}
 \end{figure}
 
-\paragraph{Partners successfully learn to communicate}
+\subsubsection{Partners successfully learn to communicate}
 
 First, we compare the model's learning curves across context conditions (Fig.~\ref{fig:sec2Results}A). 
 We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
@@ -88,7 +83,7 @@ In a mixed-effects logic regression, we find that communicative accuracy steadil
 However, accuracy also differed across conditions: adding a main effect of condition significantly improves model fit, $\chi^2(2) = 9.6, p = 0.008$. 
 Accuracy is significantly higher in the coarse condition than the fine condition $b=-0.71, z=9.3, p <0.001$ and marginally higher than the mixed condition.
 
-\paragraph{Lexical conventions are shaped by context}
+\subsubsection{Lexical conventions are shaped by context}
 
 As an initial marker of context sensitivity, we examine the effective vocabulary sizes used by speakers in each condition.
 We operationalized this measure by counting the total number of unique words produced within each repetition block.
@@ -159,7 +154,7 @@ Pairs were randomly assigned to one of three different conditions, yielding $n=3
 
 \subsection{Behavioral results}
 
-\paragraph{Partners successfully learn to communicate}
+\subsubsection{Partners successfully learn to communicate}
 
 Although participants in all conditions began with no common basis for label meanings, performing near chance on the first trial (proportion correct $= 0.19$, 95\%~CI~$=~[0.13, 0.27]$), most pairs were nonetheless able to coordinate on a successful communication system over repeated interaction (see Fig.\ \ref{fig:sec2Results}C). 
 A mixed-effects logistic regression on listener responses with trial number as a fixed effect, and including by-pair random slopes and intercepts, showed a significant improvement in accuracy overall, $z = 14.4, p < 0.001$. 
@@ -184,19 +179,18 @@ The additional difficulty participants' experienced in the \emph{fine} condition
 %For the subsequent analyses focusing on the content of the lexicon, we exclude games with accuracy below the pre-registered criterion of 75\% on the final quarter of trials to ensure we are examining only the content of lexica that converged.
 %\rdh{double-check this. add better motivation if I do this.}
 
-\paragraph{Validating post-test responses}
+\subsubsection{Validating post-test responses}
 
 Before examining post-test responses, we validate their internal consistency.
 For each participant, we counted the number of mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa'). 
 In general, participants were highly consistent: out of 128 cells in the lexicon matrix (16 words $\times$ 8 objects), the median number of mismatches was 2 (98\% agreement), though the distribution has a long tail (mean $= 7.3$). 
 We therefore conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses for the subsequent analyses.
 
-\paragraph{Contextual pressures shape the lexicon}
+\subsubsection{Contextual pressures shape the lexicon}
 
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). 
 Conversely, when no such distinctions were required, we expected participants to adaptively conventionalize more general terms that could be reused across different contexts.
 One coarse signature of this prediction lies in the \emph{compression} of the resulting lexicon: less specific conventions should allow participants to achieve the same communicate accuracy with a smaller vocabulary.
-
 To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words for which they marked at least one object in the post-test in an internally consistent way). 
 We then conducted a mixed-effects regression predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
 We found that participants in the \emph{coarse} condition reported significantly smaller, simpler lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.~\ref{fig:sec2postTest}). 
