@@ -2,9 +2,8 @@ We begin by considering the phenomenon of increasing efficiency in repeated refe
 While this phenomenon has been extensively documented, to the point of serving as a proxy for measuring common ground, it has continued to pose a challenge for models of communication.
 
   \begin{figure*}
-\centering
-    \includegraphics[scale=.75]{sec1-arbitrariness}
-    \vspace{1em}
+	\centering
+    \includegraphics[scale=.6]{sec1-arbitrariness}
     \caption{\emph{Path-dependence of conventions.} The average trajectory of each agent's beliefs about the meaning of $u_1$, $\phi(u_1)$, is shown in blue and orange following all eight possible outcomes of the first trial in Simulation 1.1. For each of the two possible targets, the speaker could choose to produce either of the two utterances, and the listener could respond by choosing either of the two objects. In the cases where the listener chose correctly (marked with a checkmark), agents subsequently conditioned on the same data and rapidly converged on a system of meaning consistent with this feedback. For example, in the first row, when $u_1$ was successfully used to refer to the circle, both agents subsequently believe that $u_1$ means \emph{circle} in their partner's lexicon. In the cases where the listener fails to choose the target, the agents subsequently condition on different data, and they converge on a convention that is determined by later choices (lines represent the trajectories of individual agents.)}
   \label{fig:path-dependence}
 \end{figure*}
@@ -39,6 +38,13 @@ As the interaction goes on, the speaker obtains feedback $D_k$ from the listener
 As uncertainty gradually decreases, they are able to achieve the same expected informativity with shorter, more efficient messages. 
 
 
+\begin{figure}[t]
+\centering
+    \includegraphics[scale=.8]{sec1-convergence.pdf}\includegraphics[scale=.8]{sec1-efficiency}
+  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} (A) agents converge on accurate communication systems in Simulation 1.1, where only single-word utterances are available, and (B) converge on shorter, more efficient conventions in Simulation 1.2, where multi-word utterances were available. Error bars are bootstrapped 95\% CIs across 1000 trajectories, computed within each repetition block of two trials.}
+  \label{fig:sec1model}
+\end{figure}
+
 \subsection{Simulation 1.1: Pure coordination}
 
 
@@ -65,13 +71,6 @@ The two objects appeared in a random order within each block, and agents swapped
 We show representative behavior at soft-max optimality parameter values $\alpha_L = \alpha_S = 8$ and memory discounting parameter $\beta = 0.8$, but find similar behavior in a wide regime of parameter values (see Appendix Fig.~\ref{fig:arbitrariness_grid}).
 
 
-\begin{figure}[t]
-\centering
-    \includegraphics[scale=.8]{sec1-convergence.pdf}\includegraphics[scale=.8]{sec1-efficiency}
-  \caption{\emph{Pairs of agents learn to successfully coordinate on efficient ad hoc conventions over repeated interactions.} (A) agents converge on accurate communication systems in Simulation 1.1, where only single-word utterances are available, and (B) converge on shorter, more efficient conventions in Simulation 1.2, where multi-word utterances were available. Error bars are bootstrapped 95\% CIs across 1000 trajectories, computed within each repetition block of two trials.}
-  \label{fig:sec1model}
-\end{figure}
-
 
 We highlight several key results from this simulation.
 First, and most fundamentally, the communicative success of the dyad rises over the course of interaction: the listener is able to more accurately select the intended target object (see Fig.~\ref{fig:sec1model}A). 
@@ -88,7 +87,7 @@ For efficiency to change at all, speakers must be able to produce utterances tha
 For this simulation, we therefore extend the model to allow for multi-word utterances by allowing speakers to combine together multiple primitive utterances.
 Intuitively, human speakers form longer initial description by combining a collection of simpler descriptions (e.g. ``kind of an X, or maybe a Y with Z on top''). 
 This raises a problem about how the meaning of a multi-word utterance $\mathcal{L}_\phi(u_1u_2)$ is derived from its components $\mathcal{L}_\phi(u_1)$ and $\mathcal{L}_\phi(u_2)$.
-To capture the basic desideratum that an object should be more likely to be chosen by $L_0$ when more components of the longer utterance apply to it, we adopt a standard conjunctive semantics\footnote{One subtle consequence of a conjunctive Boolean semantics is the possibility of contradictions. For example, under a possible lexicon where $\phi(u_1)=\bluesquare$ and $\phi(u_2)=\orangecircle$, the multi-word utterance $u_1u_2$ is not only false of a particular referent in the current context, it is false of all possible referents; it \emph{fails to refer}, reflecting a so-called truth-gap \cite{Strawson50_OnReferring,van1966singular}. We assume such an utterance is uninterpretable and simply does not change the literal listener $L_0$'s beliefs. While this assumption is sufficient for our simulations, we regard this additional complexity as a limitation of classical Boolean semantics and show in Appendix C that switching to a more realistic continuous semantics with lexical values in $[0,1]$ \cite{degen2020redundancy} may better capture the notion of redundancy that motivates speakers to initially produce longer utterances.}:
+To capture the basic desideratum that an object should be more likely to be chosen by $L_0$ when more components of the longer utterance apply to it, we adopt a standard conjunctive semantics\footnote{One subtle consequence of a conjunctive Boolean semantics is the possibility of contradictions. For example, under a possible lexicon where $\phi(u_1)=\bluesquare$ and $\phi(u_2)=\orangecircle$, the multi-word utterance $u_1u_2$ is not only false of a particular referent in the current context, it is false of all possible referents; it \emph{fails to refer}, reflecting a so-called truth-gap \cite{Strawson50_OnReferring,van1966singular}. We assume such an utterance is uninterpretable and simply does not change the literal listener $L_0$'s beliefs. While this assumption is sufficient for our simulations, we regard this additional complexity as a limitation of classical Boolean semantics and show in Appendix B that switching to a more realistic continuous semantics with lexical values in the interval $[0,1]$ \cite{degen2020redundancy} may better capture the notion of redundancy that motivates speakers to initially produce longer utterances.}:
 $$\mathcal{L}_\phi(u_iu_j, o) = \mathcal{L}_\phi(u_i, o) \times \mathcal{L}_\phi(u_j, o)$$
 
 Now, we consider a scenario with the same two objects as in Simulation 1.1, but give the speaker four primitive utterances $\{u_1, u_2, u_3, u_4\}$ instead of only two, and allow two-word utterances such as $u_1u_2$.
@@ -103,10 +102,9 @@ We thus initialize both agents with weak biases $\delta$ (represented in compre
 \phi(u_3), \phi(u_4) \sim \textrm{Categorical}(0.5 - \delta) \nonumber
 \end{align}
 
-\begin{figure}
+\begin{figure}[t]
 \centering
-    \includegraphics[scale=.87]{sec1-reduction_example}
-    \vspace{1em}
+    \includegraphics[scale=.9]{sec1-reduction_example}
   \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
   \label{fig:sec1efficiency}
 \end{figure}
@@ -114,8 +112,7 @@ We thus initialize both agents with weak biases $\delta$ (represented in compre
 
 \begin{figure*}[t]
 \centering
-    \includegraphics[scale=.95]{sec1-reduction_schematic}
-    \vspace{1em}
+    \includegraphics[scale=1]{sec1-reduction_schematic}
   \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, they update their beliefs and become more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
   \label{fig:sec1internals}
 \end{figure*}
@@ -170,7 +167,7 @@ Our explanation recalls classic observations about \emph{hedges}, expressions li
 \citeA{BrennanClark96_ConceptualPactsConversation} counted hedges across repetitions of a repeated reference game, finding a greater occurrence of hedges on early trials than later trials and a greater occurrence under more ambiguous contexts.
 While our model does not explicitly produce hedges, it is possible to understand this behavior as an explicit or implicit marker of the lexical uncertainty in our account.
 If hedges are explicit and intentional, this would require the speaker to reason about a listener that is to some degree aware of uncertainty or graded meanings.
-This is not the case with a classical truth-functional lexical representation, but is formalized naturally under soft semantics (see Appendix C).
+This is not the case with a classical truth-functional lexical representation, but is formalized naturally under soft semantics (see Appendix B).
 
 We have already discussed why this phenomenon poses a challenge for the simple model-free reinforcement learning models in the literature --- namely, that successful listener feedback would only reinforce long utterances with no mechanism for shortening them.
 This observation is not intended to rule out the entire family of reinforcement learning approaches, however. 
