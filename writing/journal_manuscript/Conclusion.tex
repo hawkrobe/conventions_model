@@ -1,6 +1,6 @@
 %!TEX root = ../dissertation.tex
-In this paper, we considered the computational challenges posed by communication in a variable and non-stationary landscape of meaning.
-We advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the form-meaning mapping used by each partner, in turn.
+Communication in a variable and non-stationary landscape of meaning creates unique computational challenges.
+To address these challenges, we advanced a hierarchical Bayesian approach  in which agents continually adapt their beliefs about the form-meaning mapping used by each partner, in turn.
 We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: representing initial uncertainty about what a partner thinks words mean \textbf{(C1)}, partner-specific adaptation based on observations of language use in context \textbf{(C2)}, and hierarchical structure for graded generalization to new partners \textbf{(C3)}.
 This unified model resolves several puzzles that have posed challenges from prior models of coordination and convention formation: why referring expressions shorten over repeated interactions with the same partner \textbf{(P1)}, how partner-specific common ground may coexist with the emergence of conventions at the population level \textbf{(P2)}, and how context shapes which conventions emerge \textbf{(P3)}.
 
@@ -38,7 +38,7 @@ While these failures were initially attributed to limits on theory of mind use, 
 In other words, errors are not well-explained by egocentric adherence to a strongly preferred label, or downstream failures to acknowledge that this preferred label may not be understood by their partner; there appears to be no such preferred label.
 
 Our model raises the possibility that the problem may instead stem from production with an impoverished lexical prior: there are no existing conventions for such a novel object in their vocabulary \cite{goldberg2019explain}, leaving their preferences dispersed widely over ``good-enough'' constructions.
-Indeed, when children are paired with their caregivers rather than peers, they are able to successfully form conventions \citeA{LeungEtAl20_Pacts}.
+Indeed, when children are paired with their caregivers rather than peers, they are able to successfully form conventions \cite{LeungEtAl20_Pacts}.
 Parents helped to interactively scaffold these conventions, both by proactively seeking clarification in the listener role \cite<e.g.>{anderson1994interactive} and by providing more descriptive labels in the speaker role, which children adopted themselves on later trials.
 These results highlight one way in which our model of convention formation may coincide with models of language acquisition in development: in both cases, listeners are trying to infer the meanings of words in the speaker's lexicon \cite{bohn2019pervasive}. 
 
@@ -133,7 +133,7 @@ While the reasons that speakers produce such constructions are complex, we would
 Finally, while we have provided a computational-level account of coordination and convention formation in terms of hierarchical inference, there remain many possible process-level mechanisms that may perform this computation.
 In this section, we discuss two interlocking process-level questions: (1) exactly which representations are being adapted? (2) how does our model scale to larger spaces of utterances and referents? %and (3) what memory systems are required for tracking and generalizing partner-specific meanings?
 
-\textbf{\textit{Which representations are adapted?}}
+\subsubsection{Which representations are adapted?}
 While our model formulation focused on adaptation at the level of the lexicon (i.e. inferences about $\phi$, representing different possible lexical meanings), this is only one of many internal representations that may need to be adapted to achieve successful coordination. 
 Three other possible representational bases have been explored in the literature. 
 
@@ -149,11 +149,11 @@ Third, it is possible that expectations about other lower-level features of a pa
 For example, interactive alignment accounts \cite{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate up to strengthen higher levels of representation \cite{roelofs1992spreading,pickering1998representation}.
 Thus, learning about a partner's word frequency \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} could be functionally useful for communication if they covary with, or are informative about, higher-level representations. 
 
-\paragraph{Scalability to larger utterance and referent spaces}
+\subsubsection{Scalability to larger utterance and referent spaces}
 
 While a fully Bayesian formulation elegantly captures the inference problem at the core of our theory, the posterior update step in Eq.~\ref{eq:joint_inference} grows increasingly intractable as the space of utterances and referents grows. 
 This computational limitation is especially evident when considering how to quantitatively fit models to the natural-language data produced in unconstrained reference games, or applications in modern machine learning where we would like to build artificial agents that can adapt to human partners.
-Generalizing our framework to arbitrary natural language (e.g. referring expressions using the full vocabulary of an adult language user) and arbitrary visual input (e.g. sensory impressions of novel objects such as tangrams) not only requires a different representational space for language and visual input, it may require different inference algorithms. 
+Generalizing our framework to the arbitrary natural language (e.g. referring expressions using the full vocabulary of an adult language user) and arbitrary visual input (e.g. sensory impressions of novel objects such as tangrams) that are the basis for natural communication not only requires a different representational space for language and visual input, it may require different inference algorithms. 
 
 The first computational obstacle is the lexical representation.
 A discrete $m\times n$ matrix containing entries for each utterance-referent pair, as typically used in convention formation simulations, has two primary limitations as a proxy for human representations: (1) it  grows quadratically as additional utterances and referents are added while becoming increasingly sparse (i.e. most words only apply to a relatively small set of referents) and (2) it does not straightforwardly represent similarity relationships between utterances and referents (i.e. a new referent must be added as a distinct new column, even if it is visually similar to a known referent).
@@ -177,13 +177,15 @@ The fine-tuning approach, initializing with a state-of-the-art neural language m
 
 \paragraph{Conclusion}
 
-In summary, we have argued that language is not a rigid body of knowledge that we acquire at an early age and deploy mechanically for the rest of our lives. 
-Nor is language change entirely explained by slow, inter-generational drift.
-Language is a means for communication -- a shared interface between minds -- and must therefore adapt over the rapid timescales required by communication.
-As new \emph{ad hoc} concepts arise, new \emph{ad hoc} conventions must be formed.
+We have argued that successful communication depends on continual learning across multiple timescales. 
+We must coordinate on \emph{ad hoc} meaning through common ground with individual partners but also abstract these experiences away to represent stable, generalizable \emph{conventions} and norms.
+Like other socially-grounded knowledge, language is not a rigid dictionary that we acquire at an early age and deploy mechanically for the rest of our lives. 
+Nor does language only change over the slow time-scales inter-generational drift.
+Language is a means for communication -- a shared interface between minds -- and must therefore adapt over the rapid contextual timescales required by communication.
+As new \emph{ad hoc} concepts arise, new \emph{ad hoc} conventions must be formed to solve the new coordination problems they pose.
 In other words, we are constantly learning language. 
-Not just one language, but a family of related languages, across every repeated interaction with every partner. 
+Not just one language, but a family of related languages, across interactions with each partner. 
 
 \begin{quote}
-Let us conclude not that ‘there is no such thing as a language’ that we bring to interaction with others. Say rather that there is no such thing as the one total language that we bring. We bring numerous only loosely connected languages from the loosely connected communities that we inhabit. \cite{hacking1986nice}
+\emph{Let us conclude not that ‘there is no such thing as a language’ that we bring to interaction with others. Say rather that there is no such thing as the one total language that we bring. We bring numerous only loosely connected languages from the loosely connected communities that we inhabit.} \cite{hacking1986nice}
 \end{quote}
