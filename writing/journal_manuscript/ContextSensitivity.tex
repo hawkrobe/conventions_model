@@ -14,25 +14,35 @@
 In the previous two sections, we examined a mechanism for rapid, partner-specific learning that allows agents to form stable but arbitrary \emph{ad hoc} conventions with partners and gradually generalize them to their entire community. 
 The final phenomenon we consider is the way that \emph{ad hoc} conventions are shaped by the communicative context in which they form.
 This phenomenon is most immediately motivated by recent behavioral results finding that more informative words in the local context are significantly more likely to become conventionalized \cite{hawkins2020characterizing}.
+
+\todo[]{By 'communicative context' do you mean the linguistic context: e.g., referring expressions are more likely to remain than modifiers which is, I'd say, about the function of constructions; Or do you mean the non-linguistic context: e.g., when we need to distinguish narrow categories, we use more narrow terms? Or do you just mean that conventions are not predictable: i.e., a different group could converge on a different solution?}
+
+
+%related: more important or more (likely to be) frequent?   %PREDICTABLE words tend to get reduced
+
+\todo[]{need to say more (or less) about Optimal Semantic Expressivity (blogpost?); if the idea is that languages are as expressive and as efficient as possible, it's an old functionalist idea, but it's not entirely clear what you're alluding to here}
 However, our broader theoretical aim is to suggest that \emph{diachronic} patterns in the long-term evolution of a community's lexical conventions, as highlighted by the Optimal Semantic Expressivity (OSE) hypothesis \cite{frankblogpost}, may be explained as a result of the \emph{synchronic} processes at play when individual dyads coordinate on  \emph{ad hoc} meanings.
+
+\todo[]{incorporate footnote 1 into text somewhere or allude to footnote 1 again around here?  We focus here on reduction in referring expressions found in cases such as \textit{automobile > car; television > TV; the Jan 6th insurrection > Jan 6th}. We recognize that languages do not march inexorably toward efficiency. In particular, emphasis and politeness considerations regularly lead to lengthening of expressions. While saying someone \textit{died} may be efficient, longer formulations are more polite \textit{passed away}, \textit{deceased}. Negation in spoken French provides a standard example of initial lengthening for the purpose of emphasis: \textit{ne > ne pas}. If longer expressions no longer serve their original purpose, over time, they tend to be reduced   {ne pas > pas}.   }
 
 Briefly, when there is already a strong existing convention that is expected to be shared across the community, our model predicts that speakers will use it. 
 New \emph{ad hoc} conventions arise precisely to fill \emph{gaps} in existing population-level conventions, to handle new situations where existing conventions are not sufficient to accurately and efficiently make the distinctions that are required in the current context. 
 A corollary of this prediction\footnote{This follows by induction from the hierarchical generalization mechanisms evaluated for $\textbf{P2}$, which provide the pathway by which \emph{ad hoc} conventions become adopted by a larger community over longer time scales. Many \emph{ad hoc} conventions never generalize to the full language community simply because the contexts where they are needed are rare. They must be re-negotiated with subsequent partners on an \emph{ad hoc} basis.} is that \emph{ad hoc} conventions may only shift to expectations at the population level (and ultimately to population-level convergence) when those distinctions are consistently relevant across interactions with different partners.
 %Conversely, if the gap a convention was introduced to fill is rare or usually irrelevant, it may drop out of the lexicon; it is easier to re-negotiate \emph{ad hoc} conventions in each setting
-For example, while most English speakers have the basic-level word ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have conventionalized labels exclusively referring to each individual tree in our yards -- we are rarely required to refer to individual trees.
+For example, while most English speakers have the general term  ``tree'' in their lexicon, along with a handful of subordinate-level words like ``maple'' or ``fir,'' we typically do not have conventionalized labels exclusively referring to each individual tree in our yards -- we are rarely required to refer to individual trees.
 Meanwhile, we \emph{do} often have shared conventions (i.e. proper nouns) for individual people and places that a community regularly encounters and needs to distinguish among.
 Indeed, this logic may explain why a handful of particularly notable trees do have conventionalized names, such as the Fortingall Yew, the Cedars of God, and General Sherman, the giant sequoia.
+%adele{just changed "basic level" to "general" above cause some people may quibble about whether tree should be considered basic level:  the distinctions just aren't very important any more so we go with \textit{tree}; same with \textit{bird}; but taxonomists  treat bird, tree on the same level as animal, which is superordinate. }
 
-%What determines the extension of different conventions?
+
 As a first step toward explaining these diachronic patterns in \emph{which} conventions form, we aim to establish in this section that our model allows a single dyad's \emph{ad hoc} conventions to be shaped by communicative context over short timescales.
 Specifically, our model predicts that people will form conventions at the highest level of abstraction that is able to satisfy their communicative needs.
-That is, when the local environment imposes a communicative need to refer to particular \emph{ad hoc} concepts (e.g. describing a particular tree that needs to be cut down), communicative partners are able to coordinate on efficient lexical conventions for successfully doing so (e.g. ``the mossy one'').
-%When a particular partner uses a label to refer to an object in a context, we can infer that they do not believe it applies to the distractors as well; otherwise, they would have known it would be confusing and chosen a different label.
-We begin by showing that context-sensitivity naturally emerges from our model, as a downstream consequence of recursive pragmatic reasoning.
-We then empirically evaluate this account by manipulating which distinctions are relevant in an artificial-language repeated reference game building on \citeA{WintersKirbySmith14_LanguagesAdapt,winters2018contextual}, allowing us to observe the emergence of \emph{ad hoc} conventions from scratch.
-In both the empirical data and our model simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success and that pragmatic reasoning is needed for these effects to arise. 
+That is, when the local environment imposes a communicative need to refer to particular \emph{ad hoc} concepts (e.g. describing a particular tree that needs to be planted), communicative partners are able to coordinate on efficient lexical conventions for successfully doing so at the relevant level of abstraction (e.g. ``the mossy one'').
 
+We begin by showing that this form of context-sensitivity naturally emerges from our model, as a downstream consequence of recursive pragmatic reasoning.
+When a particular partner uses a label to refer to an object in a context, we can infer that they do not believe it ambiguously applies to distractors as well; otherwise, they would have known it would be confusing and chosen a different label.
+We then empirically evaluate this prediction by manipulating which distinctions are relevant in an artificial-language repeated reference game building on \citeA{WintersKirbySmith14_LanguagesAdapt,winters2018contextual}, allowing us to observe the emergence of \emph{ad hoc} conventions from scratch.
+In both the empirical data and our model simulations, we find that conventions come to reflect the distinctions that are functionally relevant for communicative success and that pragmatic reasoning is needed for these effects to arise. 
 
 \subsection{Model predictions}
 
@@ -88,7 +98,7 @@ Accuracy is significantly higher in the coarse condition than the fine condition
 As an initial marker of context sensitivity, we examine the effective vocabulary sizes used by speakers in each condition.
 We operationalized this measure by counting the total number of unique words produced within each repetition block.
 This measure takes a value of 8 when a different word is consistently used for every object, and a value of 1 when exactly the same word is used for every object.
-In an mixed-effects regression model including intercepts and random effects of trial number for each simulated trajectory, we find an overall main effect of condition, with agents in the fine condition using significantly fewer words across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
+In an mixed-effects regression model including intercepts and random effects of trial number for each simulated trajectory, we find an overall main effect of condition, with agents in the \textbf{fine condition using significantly fewer words? [looks like \textit{more} words]} across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
 However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition, while it stayed roughly constant in in the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}B.
 
 Next, we examine more closely the emergence of terms at different levels of generality.
@@ -208,6 +218,7 @@ Finally, how did these lexica emerge over the course of interaction?
 We use the same measure of unique words produced in each repetition block that we used in our simulations (Fig.~\ref{fig:sec2Results}D). 
 We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
 As in the post-test reports, we found an overall main effect of condition, with participants in the coarse condition using significantly fewer words across all repetition blocks: $m = 4.9$ in coarse, compared to $m=5.8, t(124)=6.1, p <0.001$ in mixed and $m=6.8, t(124) =11.4, p < 0.001$ in fine.
+\textbf{[you've already given these stats above]}
 Critically, however, we also found a significant interaction between block and condition. 
 The effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.12, t = 4.5, p < 0.001$, see Fig.~\ref{fig:sec2Results}D.
 This interaction, where participants initially attempt to reuse the same terms across targets in the fine condition, is consistent with a gradual differentiation based on communicative need.
@@ -244,6 +255,7 @@ In other words, context-sensitivity has typically been implicit in existing mode
 Models using simple update rules have accounted for referential context with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional,steels2005coordinating}.
 If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount.
 This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of allowing the agent to learn from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
+%adele{let's talk more about this at some point: i used to argue the same that this type of statistical preemption was Gricean, but dogs do it too, so am less sure there's not a more mechanistic explanation}
 Under our inferential framework, however, this property emerges as a natural consequence of well-established Gricean principles of pragmatic reasoning rather than as a heuristic.
 %Reasoning about a partner's intentions, either while updating beliefs about their lexicon or while selecting an action, naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} \cite{}.
 

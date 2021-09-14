@@ -60,45 +60,43 @@ Finally, we close by discussing several broader consequences of the theory, incl
 
 \subsection{Three lessons about convention formation from repeated reference games}
 
-
+\todo[]{Be even clearer about how we're restricting to this specific \emph{goal}, and may be different (I think this is now done (have added a footnote about lengthening for politeness, etc--feel free to delete if you want to) } 
 A core function of language is \emph{reference}: using words to convey the identity of an entity in the environment. 
-Loosely inspired by \citeA{wittgenstein2009philosophical}, empirical studies of coordination and convention in communication have predominantly focused on the subset of language use captured by simple ``reference games.'' 
-In a reference game task, participants are assigned to speaker and listener roles and shown a context  of possible referential targets (e.g. images).
+Loosely inspired by \citeA{wittgenstein2009philosophical}, empirical studies of coordination and convention in communication have predominantly focused on the subset of language use captured by simple ``reference games.'' In a reference game task, participants are assigned to speaker and listener roles and shown a context  of possible referential targets (e.g. images).
 On each trial, the speaker is asked to produce a referring expression --- typically a noun phrase --- that will allow the listener to select the intended target object from among the other objects in the context.
-Critically, a \emph{repeated reference game} asks them to refer to the same targets multiple times as they build up a shared history of interaction with their partner (see Table \ref{table:parameters} in Appendix for a review of different axes along which the design varies).
+Critically, a \emph{repeated reference game} asks speakers to refer to the same targets multiple times as they build up a shared history of interaction with their partners (see Table \ref{table:parameters} in Appendix for a review of different axes along which the design varies).
 
 Unlike typical studies of referring expression generation \cite{van_deemter_computational_2016,degen2020redundancy,dale1995computational}, studies of coordination and convention tend to use novel, ambiguous stimuli that participants do not already have strong conventions for.
 And unlike agent-based simulations of convention formation on large networks \cite<e.g.>{steels2011modeling,barr_establishing_2004,centola_spontaneous_2015}, which typically match agents with a new, anonymous partner for each trial, repeated reference games ensure that participants maintain the same partner throughout an extended interaction.
 This design allows us to observe how the speaker's referring expressions for the same objects change as a function of interaction with that particular partner.
-We highlight three findings of particular theoretical significance in this literature.
-
-\begin{figure}[t!]
-\centering
-\includegraphics[scale=1.1]{./figures/clark92_compressed}
-\vspace{1em}
-\caption{\textit{Classic phenomena in repeated reference games.} Across multiple repetitions of the same referent with the same partner, speakers converge to increasingly efficient utterances (reps.~1-6). When the listener is  replaced by a new, naive partner, speakers display a key signature of partner-specificity, reverting to longer utterances before converging again with their new partner (reps.~7-12). Error rates were low ($\sim 2.3\%$) throughout the interaction. Reproduced from Table 3 in \protect\citeA{wilkes-gibbs_coordinating_1992}.}
-\label{fig:clark92}
-\end{figure}
+We highlight three findings of particular theoretical significance that emerge from the repeated reference paradigm. 
 
 \paragraph{P1:~Increasingly efficient conventions}
 The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964, ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
 The first time participants refer to a figure, they tend to use a lengthy, detailed description (e.g. ``the upside-down martini glass in a wire stand'') but with a small number of repetitions --- between 3 and 6, depending on the pair of participants --- the description may be cut down to the limit of just one or two words (``martini''). 
 These final messages are as short or shorter than the messages participants produce when they are instructed to generate descriptions for themselves to interpret in the future \cite{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
-These observations set up our first puzzle of \emph{ad hoc} convention formation in dyads.
-How does a word or short phrase that would have been ineffective for communicating under the global conventions of a language take on local meaning over mere minutes of interaction? 
+This observation sets up a first puzzle of \emph{ad hoc} convention formation in dyads:
+How does a word or short description that would be largely ineffective in an initial conversation take on local meaning over mere minutes of interaction?\footnote{We recognize that referring expressions can be lengthened to satisfy functions other than reference, such as politeness (\textit{Professor Davidson vs. Don}), affection (\textit{Donny vs Don}), or emphasis (\textit{the one and only}). These functions, however, are not particularly relevant in the repeated reference games that are our current focus.}
 
+\begin{figure}[t!]
+\centering
+\includegraphics[scale=1.3]{./figures/clark92_compressed}
+\vspace{1em}
+\caption{\textit{Classic phenomena in repeated reference games.} Over multiple iterations with the same partner, speakers speakers converge on increasingly efficient referring expressions (reps.~1-6). When the listener is replaced by a new, naive partner, speakers display a key signature of partner-specificity, reverting to longer utterances before converging again with their new partner (reps.~7-12). Comprehension failures tend to be rare ($\sim 2.3\%$) throughout the experiment, indicating that speakers modulate their utterances effectively. Reproduced from Table 3 in \protect\citeA{wilkes-gibbs_coordinating_1992}.}
+\label{fig:clark92}
+\end{figure}
 
 \paragraph{P2:~Partner-specific conventions}
 Because meaning is grounded in the evolving common ground shared with each partner, \emph{ad hoc} conventions established over a history of interaction with one partner are not necessarily transferred to other partners \cite{metzing_when_2003,weber_cultural_2003,brown2009partner}. 
-For example, \citeA{wilkes-gibbs_coordinating_1992} paired participants for a standard repeated reference game, but after six rounds, one partner was asked to leave the room and replaced by a naive partner. 
-Without partner-specific representations, we would expect speakers to continue using the short labels they had converged on with their first partner; instead, speakers reverted to the longer utterances they had initially used and coordinated on new \emph{ad hoc} conventions with their new partner (see Fig. \ref{fig:clark92}).
+For example, \citeA{wilkes-gibbs_coordinating_1992} paired participants for a standard repeated reference game, but after six rounds, one partner was replaced by a naive partner. 
+Without partner-specific representations, we would expect speakers to continue using the short labels they had converged on with their first partner; instead, speakers reverted to the longer utterances they had initially used, and then coordinated on new \emph{ad hoc} conventions with their new partner (see Fig. \ref{fig:clark92}).
 
 These effects raise our second puzzle: how do population-level conventions form in the presence of such strong partner-specificity?
 When are agents justified in transferring an \emph{ad hoc} convention formed with one partner to a new, unseen partner? 
 One important empirical clue was provided by \citeA{fay_interactive_2010}, who examined the emergence of conventions in a lab experiment where communities of eight people played a repeated  graphical communication game similar to Pictionary, where participants produced drawings to allow their partner to identify a concept from a list of possibilities. 
-The 8 participants in each network interacted dyadically with every other member of the community in, turn, for a series of seven repeated reference games. 
+The 8 participants in each network interacted dyadically with every other member of the community, in turn, for a series of seven repeated reference games. 
 
-Strikingly, participants behaved as observed by \citeA{wilkes-gibbs_coordinating_1992} at the first few partner swaps, consistent with partner-specificity, but the initial messages they sent to subsequent partners gradually converged closer to the \emph{ad hoc} labels conventionalized with previous partners, indicating a slow gradient of generalization within their community.
+Strikingly, participants behaved as observed by \citeA{wilkes-gibbs_coordinating_1992} during the first few partner swaps, consistent with partner-specificity, but with subsequent partners, their initial drawings showed a gradual convergence with the  conventionalized drawings they had settled upon with previous partners, indicating a slow gradient of generalization within their community.
 While intriguing, this work was limited by an extremely small sample size ($N = 4$ groups) and technical challenges facing the measurement of conventions in the graphical modality \cite<see>{hawkins2019disentangling}.
 More recent work has adopted a similar design for an artificial-language communication task \cite{raviv2019larger} but has collapsed across repeated dyadic interactions to exclusively analyze network-level metrics, making it difficult to assess any effects of partner-specificity.
 Given these limitations of existing data, we evaluate our model's predictions using a large-scale, real-time web experiment directly extending \citeA{wilkes-gibbs_coordinating_1992} to larger networks.
@@ -108,13 +106,13 @@ Given these limitations of existing data, we evaluate our model's predictions us
 Finally, while a degree of arbitrariness is central to conventionality -- there must exist more than one solution that would work equally well -- this does not necessarily imply that all possible conventions for a meaning are equally likely in practice, or even that all meanings are equally likely to become conventionalized in the first place \cite{HawkinsGoldstone16_SocialConventions}.
 Indeed, functional accounts of language have frequently observed that lexical systems are well-calibrated to the needs of users under the statistics of their communicative environment \cite{gibson2019efficiency}.
 This Optimal Semantic Expressivity  hypothesis \cite<OSE;>{frankblogpost} has held remarkably well for the lexical distributions found in natural languages across semantic domains like color words and kinship categories \cite{KempRegier12_KinshipCategories,regier201511,gibson2017color,kemp2018semantic}.
-%For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{regier2016languages}. 
+%For example, languages in warm regions ought to be more likely to collapse the distinction between ice and snow into a single word, simply because there are fewer occasions that require distinguishing between the two \cite{regier2016languages}. \adele{smart to avoid going there: recall the "Great Eskimo Vocab Hoax"}
 
 While such long-term, diachronic sensitivity to context has been explained by abstract principles of optimality, such as the equilibria concepts of evolutionary game theory \cite{jager2007evolution,jager2007language}, it has not yet been grounded in a cognitive and mechanistic account of the immediate, synchronic processes unfolding in the minds of individual agents while they interact.
 In other words, while there is abundant empirical evidence for context-sensitivity in the \emph{outcomes} of convention formation processes, our third puzzle concerns which cognitive mechanisms may be necessary or sufficient to give rise to such conventions.
 
 Repeated reference games have emerged as a promising method for probing these mechanisms in the lab. 
-We can explicitly control the communicative context and observe the resulting distribution of conventions that emerge when participants communicate with artificial languages \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication,winters2018contextual} or natural language \cite{hawkins2020characterizing}.
-While these outcomes are informative, it has remained challenging to directly evaluate cognitive models against the \emph{full trajectories} of convention formation on a trial-by-trial basis.
-In our final section, we report new empirical data from a dyadic repeated reference task manipulating context, where simulated agents and human participants are shown exactly the same sequence of trials.
+Such games allow researchers to  explicitly control the communicative context and observe the resulting distribution of conventions that emerge when participants communicate using artificial languages \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication,winters2018contextual} or natural language \cite{hawkins2020characterizing}.
+While these studies are informative, it has remained challenging to directly evaluate cognitive models against the \emph{full trajectories} of convention formation on a trial-by-trial basis.
+In our final section, we report new empirical data from a dyadic repeated reference task with the context manipulated, where simulated agents and human participants are shown exactly the same sequence of trials.
 
