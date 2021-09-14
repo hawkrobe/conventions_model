@@ -60,11 +60,11 @@ Finally, we close by discussing several broader consequences of the theory, incl
 
 \subsection{Three lessons about convention formation from repeated reference games}
 
-\todo[]{Be even clearer about how we're restricting to this specific \emph{goal}, and may be different (I think this is now done (have added a footnote about lengthening for politeness, etc--feel free to delete if you want to) } 
 A core function of language is \emph{reference}: using words to convey the identity of an entity in the environment. 
-Loosely inspired by \citeA{wittgenstein2009philosophical}, empirical studies of coordination and convention in communication have predominantly focused on the subset of language use captured by simple ``reference games.'' In a reference game task, participants are assigned to speaker and listener roles and shown a context  of possible referential targets (e.g. images).
+Loosely inspired by \citeA{wittgenstein2009philosophical}, empirical studies of coordination and convention in communication have predominantly focused on the subset of language use captured by simple ``reference games.''
+In a reference game, participants are assigned to speaker and listener roles and shown a context of possible referential targets (e.g. images).
 On each trial, the speaker is asked to produce a referring expression --- typically a noun phrase --- that will allow the listener to select the intended target object from among the other objects in the context.
-Critically, a \emph{repeated reference game} asks speakers to refer to the same targets multiple times as they build up a shared history of interaction with their partners (see Table \ref{table:parameters} in Appendix for a review of different axes along which the design varies).
+Critically, a \emph{repeated reference game} asks speakers to refer to the same targets multiple times as they build up a shared history of interaction with their partners (see Table \ref{table:parameters} in Appendix for a review of different axes along which the design has varied).
 
 Unlike typical studies of referring expression generation \cite{van_deemter_computational_2016,degen2020redundancy,dale1995computational}, studies of coordination and convention tend to use novel, ambiguous stimuli that participants do not already have strong conventions for.
 And unlike agent-based simulations of convention formation on large networks \cite<e.g.>{steels2011modeling,barr_establishing_2004,centola_spontaneous_2015}, which typically match agents with a new, anonymous partner for each trial, repeated reference games ensure that participants maintain the same partner throughout an extended interaction.
@@ -72,12 +72,11 @@ This design allows us to observe how the speaker's referring expressions for the
 We highlight three findings of particular theoretical significance that emerge from the repeated reference paradigm. 
 
 \paragraph{P1:~Increasingly efficient conventions}
-The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964, ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
-The first time participants refer to a figure, they tend to use a lengthy, detailed description (e.g. ``the upside-down martini glass in a wire stand'') but with a small number of repetitions --- between 3 and 6, depending on the pair of participants --- the description may be cut down to the limit of just one or two words (``martini''). 
+The most well-known phenomenon observed in repeated reference games is a dramatic reduction in message length over multiple rounds \cite{krauss_changes_1964,ClarkWilkesGibbs86_ReferringCollaborative, hawkins2020characterizing}. 
+The first time participants refer to a figure, they tend to use a lengthy, detailed description (e.g. ``the upside-down martini glass in a wire stand'') but with a small number of repetitions --- between 3 and 6, depending on the pair of participants --- the description may be cut down to the limit of just one or two words (``martini'')\footnote{Of course, referring expressions are also lengthened for many reasons other than reference, such as politeness (\textit{Professor Davidson vs. Don}), affection (\textit{Donny vs Don}), emphasis (\textit{the one and only}), or any number of manner implicatures \cite<see>{horn1984toward,levinson2000presumptive}. However, the marked meanings of these longer forms are only obtained against the backdrop of an unmarked or ``default'' form; repeated reference games set these other functions aside to examine where unmarked expectations come from and how they depend on discourse context \cite{grosz1974structure,grosz1986attention}. This distinction may be seen by considering the non-referential implicatures that may be triggered if a speaker suddenly switched from ``martini'' back to their original longer description at the end of a game.}.
 These final messages are as short or shorter than the messages participants produce when they are instructed to generate descriptions for themselves to interpret in the future \cite{FussellKrauss89_IntendedAudienceCommonGround} and are often incomprehensible to overhearers who were not present for the initial messages \cite{SchoberClark89_Overhearers}.
 This observation sets up a first puzzle of \emph{ad hoc} convention formation in dyads:
-How does a word or short description that would be largely ineffective in an initial conversation take on local meaning over mere minutes of interaction?\footnote{We recognize that referring expressions can be lengthened to satisfy functions other than reference, such as politeness (\textit{Professor Davidson vs. Don}), affection (\textit{Donny vs Don}), or emphasis (\textit{the one and only}). These functions, however, are not particularly relevant in the repeated reference games that are our current focus.}
-
+How does a word or short description that would be largely ineffective in an initial conversation take on local meaning over mere minutes of interaction?
 \begin{figure}[t!]
 \centering
 \includegraphics[scale=1.3]{./figures/clark92_compressed}
@@ -99,7 +98,7 @@ The 8 participants in each network interacted dyadically with every other member
 Strikingly, participants behaved as observed by \citeA{wilkes-gibbs_coordinating_1992} during the first few partner swaps, consistent with partner-specificity, but with subsequent partners, their initial drawings showed a gradual convergence with the  conventionalized drawings they had settled upon with previous partners, indicating a slow gradient of generalization within their community.
 While intriguing, this work was limited by an extremely small sample size ($N = 4$ groups) and technical challenges facing the measurement of conventions in the graphical modality \cite<see>{hawkins2019disentangling}.
 More recent work has adopted a similar design for an artificial-language communication task \cite{raviv2019larger} but has collapsed across repeated dyadic interactions to exclusively analyze network-level metrics, making it difficult to assess any effects of partner-specificity.
-Given these limitations of existing data, we evaluate our model's predictions using a large-scale, real-time web experiment directly extending \citeA{wilkes-gibbs_coordinating_1992} to larger networks.
+Given these limitations of existing data, we evaluate our model's predictions using new data from a large-scale, real-time web experiment directly extending \citeA{wilkes-gibbs_coordinating_1992} to larger networks.
 
 \paragraph{P3:~Context-sensitive conventions}
 
@@ -114,5 +113,5 @@ In other words, while there is abundant empirical evidence for context-sensitivi
 Repeated reference games have emerged as a promising method for probing these mechanisms in the lab. 
 Such games allow researchers to  explicitly control the communicative context and observe the resulting distribution of conventions that emerge when participants communicate using artificial languages \cite{WintersKirbySmith14_LanguagesAdapt, KirbyTamarizCornishSmith15_CompressionCommunication,winters2018contextual} or natural language \cite{hawkins2020characterizing}.
 While these studies are informative, it has remained challenging to directly evaluate cognitive models against the \emph{full trajectories} of convention formation on a trial-by-trial basis.
-In our final section, we report new empirical data from a dyadic repeated reference task with the context manipulated, where simulated agents and human participants are shown exactly the same sequence of trials.
+In our final section, we report new empirical data from a dyadic repeated reference task manipulating context, where simulated agents and human participants are shown exactly the same sequence of trials.
 
