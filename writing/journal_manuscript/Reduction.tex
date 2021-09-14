@@ -166,11 +166,12 @@ For these simulations, we used $\alpha_S = \alpha_L = 8, w_c = 0.24, \beta=0.8$ 
 
 The simulations presented in this section aimed to establish a rational explanation for feedback-sensitive increases in efficiency over the course of \emph{ad hoc} convention formation.
 Speakers initially hedge their descriptions under uncertainty about the lexical meanings their partner is using, but are able to get away with less costly components of those descriptions as their uncertainty decreases.
-Our explanation recalls classic observations about \emph{hedges}, expressions like \emph{sort of} or \emph{like}, and morphemes like \emph{-ish}, that explicitly mark provisionality, such as \emph{a car, sort of silvery purple colored} \cite{Fraser10_Hedging,MedlockBriscoe07_HedgeClassification}.
+Our explanation recalls classic observations about \emph{hedges}, expressions like \emph{sort of} or \emph{like}, and morphemes like \emph{-ish}, that explicitly mark provisionality, such as \emph{a car, sort of silvery purple colored} \cite{Fraser10_Hedging,MedlockBriscoe07_HedgeClassification} \adele{pl add Lakoff, G. (1975). Hedges: A study in meaning criteria and the logic of fuzzy concepts. In Contemporary research in philosophical logic and linguistic semantics (pp. 221-271). Springer, Dordrecht (would be a bad oversight for me to not include w nearly 4K cites)}.
 \citeA{BrennanClark96_ConceptualPactsConversation} counted hedges across repetitions of a repeated reference game, finding a greater occurrence of hedges on early trials than later trials and a greater occurrence under more ambiguous contexts.
 While our model does not explicitly produce hedges, it is possible to understand this behavior as an explicit or implicit marker of the lexical uncertainty in our account.
-If hedges are explicit and intentional, this would require the speaker to reason about a listener that is to some degree aware of uncertainty or graded meanings.
-This is not the case with a classical truth-functional lexical representation, but is formalized naturally under soft semantics (see Appendix C).
+If hedges are explicit and intentional, this would require the speaker to reason about a listener that is to some degree aware of uncertainty or graded meanings, %.
+%This is not the case with a classical truth-functional lexical representation, but
+as can be formalized naturally with soft semantics (see Appendix C).
 
 We have already discussed why this phenomenon poses a challenge for the simple model-free reinforcement learning models in the literature --- namely, that successful listener feedback would only reinforce long utterances with no mechanism for shortening them.
 This observation is not intended to rule out the entire family of reinforcement learning approaches, however. 
@@ -180,12 +181,16 @@ Still, such an approach would have more in common with our proposal than to the 
 We return to this question with respect to scalability in the General Discussion.
 
 Finally, the theory of reduction explored in this section is consistent with recent analyses of exactly \emph{what} gets reduced in a large corpus of repeated reference games \cite{hawkins2020characterizing}.
-These analyses found that entire modifying clauses are more likely to be dropped at once than expected by random corruption, and function words like determiners are mostly dropped as parts of larger noun phases or prepositional phrases rather than omitted on their own.
-In other words, speakers apparently begin by combining multiple descriptive `units' and collapse to one of these `units', rather than dropping words at random and assuming the listener can recover the intended longer utterance, as predicted by a noisy channel model.
-This theoretical claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
+These analyses found that entire modifying clauses are more likely to be dropped at once than would be expected by random corruption, and function words like determiners are mostly dropped as parts of larger noun phases or prepositional phrases rather than omitted on their own. 
 
-While our account explains these observations as a result of structure and heterogeneity in the lexical prior, it remains an open question of how to instantiate appropriately realistic priors in our computational model. 
-Our simulation only considered two-word descriptions with homogenous uncertainty over the components, and is likely that the semantic components of real initial descriptions have more heterogeneous uncertainty: for example, the head noun may be chosen due to a higher prior probability of being understood by the listener than other components of the initial description, thus predicting asymmetries in reduction. 
+\adele{do you mean, whole NPs are dropped rather than just the determiner? If so, could say, "entire modifying clauses are more likely to be dropped at once than would be expected by random corruption of noun phrase or prepositional phrase modifiers"...Grammatical elements do get reduced via repetition and can be eliminated;  iced tea > ice tea; skimmed milk > skim milk; or in fly-fishing". It's really that as you note, modification becomes unnecessary and a simple referring expression suffices}
+
+In other words, speakers apparently begin by combining multiple descriptive `units' and collapse to retain only one of these `units', rather than dropping words at random and assuming the listener can recover the intended longer utterance, as predicted by a noisy channel model.
+This theoretical claim is further supported by early hand-tagged analyses by \citeA{Carroll80_NamingHedges}, which found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
+%nice! Does the modeling with 2 word descriptions rather than say a construction with two parts: modifying and referring capture this? could be nice to do in future work: which parts of utterances are likely to get reduced or enhanced (in the case of subordinate level descriptions) and why?
+
+While our account explains these observations as a result of structure and heterogeneity in the lexical prior, it remains an open question as to how best to instantiate  realistic priors in our computational model. 
+Our simulation only considers two-word descriptions with homogenous uncertainty over the components, while the semantic components of real initial descriptions have more heterogeneous uncertainty, thus predicting asymmetries in reduction. For example, a head noun in an initial description is more likely to be retained than a modifier, since the head noun likely to be understood to refer to the object.  
 Future work is needed to elicit these priors and evaluate predictions about more fine-grained patterns of reduction.
 
 
