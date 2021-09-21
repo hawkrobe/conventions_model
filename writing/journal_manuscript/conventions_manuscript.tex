@@ -68,6 +68,7 @@
 \newcommand{\ks}[1]{\textcolor{Red}{[ks: #1]}}  
 \newcommand{\rdh}[1]{\textcolor{Red}{[rdh: #1]}}  
 \newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
+\newcommand{\adele}[1]{\textcolor{Red}{[adele: #1]}}  
 
 
 \makeatother
@@ -75,7 +76,7 @@
 \title{From partners to populations: \\[.1em] A hierarchical Bayesian account of coordination and convention}
 \shorttitle{Conventions}
 \leftheader{Hawkins et al.}
-\authorsnames[{*1}, {2}, {3}, {4}, {1,5}, {3,6}]{Robert D. Hawkins, Michael Franke, Michael C. Frank, \\Kenny Smith, Thomas L. Griffiths, Noah D. Goodman}
+\authorsnames[{*1}, {2}, {3}, {1}, {4}, {1,5}, {3,6}]{Robert D. Hawkins, Michael Franke, Michael C. Frank, \\Adele E. Goldberg, Kenny Smith, Thomas L. Griffiths, Noah D. Goodman}
 
 \authorsaffiliations{{Department of Psychology, Princeton University}, 
 {Institute for Cognitive Science, University of Osnabr\"uck},
@@ -88,11 +89,11 @@
 Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc} or partner-specific meanings on the fly. 
 In this paper, we introduce a hierarchical Bayesian theory of convention formation that aims to reconcile the long-standing tension between these two basic observations.
 More specifically, we argue that the central computational problem of communication is not simply transmission, as in classical formulations, but \emph{learning} and \emph{adaptation} over multiple timescales.
-Under our account, rapid learning within dyadic interactions allows for coordination on partner-specific common ground, while social conventions are stable priors that have been abstracted away from interactions with multiple partners.
+Under our CHAI (Continual Hierarchical Adaptation through Inference) model, rapid learning within dyadic interactions allows for coordination on partner-specific common ground, while social conventions are stable priors that have been abstracted away from interactions with multiple partners.
 We present new empirical data alongside simulations showing how our model provides a computational foundation for several phenomena that have posed a challenge for previous accounts: (1) the convergence to more efficient referring expressions across repeated interaction with the same partner, (2) the gradual transfer of partner-specific common ground to novel partners, and (3) the influence of communicative context on which conventions eventually form.
 }
 
-\keywords{communication; learning; inference; generalization; coordination; conventions; language; meta-learning}
+\keywords{communication; learning; convention; inference; generalization; coordination; language; meta-learning}
 
 \authornote{This report is based in part on non-archival work presented at the 39th, 40th, and 42nd Conferences of the Cognitive Science Society \cite{hawkins_convention-formation_2017,hawkins_emerging_abstractions_2018,hawkins2020generalizing}. Materials and code for reproducing all model simulations, behavioral experiments, and analyses are open and available online at \href{https://github.com/hawkrobe/conventions_model}{https://github.com/hawkrobe/conventions\_model}.\\
 $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@princeton.edu}
@@ -102,11 +103,11 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 
 \input{Introduction}
 
-\section{Convention formation as Hierarchical Bayesian inference}
+\section{Convention formation as \\Hierarchical Bayesian inference}
 
 \input{ModelOverview}
 
-\section{Phenomenon \#1:  \emph{Ad hoc} conventions become more efficient}
+\section{Phenomenon \#1:  \\\emph{Ad hoc} conventions become more efficient}
 
 \input{Reduction}
 
@@ -183,26 +184,41 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 Our setting poses several technical challenges for the Rational Speech Act (RSA) framework.
 In this Appendix, we describe these challenges in more detail and justify our choices.
 
+\subsection{Action-oriented vs. belief-oriented listeners}
+
+First, both agents are ``action-oriented,'' in the sense that they behave proportional to the utility of different actions, according to a soft-max normalization $\sigma(U(z)) = e^{U(z)}/\sum e^{U(z)}$.
+This contrasts with some RSA applications, where the listener is instead assumed to be ``belief-oriented,'' simply inferring the speaker's intended meaning without producing any action of their own \cite{qing2015variations}.
+
+\subsection{Placement of uncertainty}
+
+Second, our instantiation of lexical uncertainty differs subtly from the one used by \citeA{bergen_pragmatic_2016}, which placed the integral over lexical uncertainty at a \emph{single} level of recursion (specifically, within a pragmatic listener agent).
+Instead, we argue that it is more natural in an interactive, multi-agent setting for each agent to maintain uncertainty at the highest level, such that each agent is reasoning about their \emph{partner}'s lexicon regardless of what role they are currently playing.
+
+
 \subsection{Handling degenerate lexicons}
 
-First, when we allow the full space of possible lexicons $\phi$, we must confront degenerate lexicons where an utterance $u$ is literally false of every object in context, i.e. where $\mathcal{L}_\phi(o, u) = 0$ for all $o\in \mathcal{C}$. 
+Finally, when we allow the full space of possible lexicons $\phi$, we must confront degenerate lexicons where an utterance $u$ is literally false of every object in context, i.e. where $\mathcal{L}_\phi(o, u) = 0$ for all $o\in \mathcal{C}$. 
 In this case, the normalizing constant in Eq.~\ref{eq:RSA} is zero, and the literal listener distribution is not well-defined.
-A similar problem may arise when no utterance in the speaker's repertoire is true of the target, in which case the $S_1$ distribution is not well-defined.
+A similar problem may arise for the $S_1$ distribution.
 
 Several solutions to this problem were outlined by \citeA{bergen_pragmatic_2016}.
 One of these solutions is to use a `softer' semantics in the literal listener, where a Boolean value of false does not strictly rule out an object but instead assigns a very low numerical score, e.g. 
 $$\mathcal{L}_\phi(o,u) = \left\{ \begin{array} {rl} 1 & \textrm{if }o \in \phi(u) \\ \epsilon & \textrm{o.w.} \end{array}\right.$$
-Whenever there is at least one $o\in\mathcal{C}$ where $u$ is true, this formulation assigns negligible listener probability to objects where $u$ is false, but ensures that the normalization constant to is non-zero even when $u$ is false for all objects.
+Whenever there is at least one $o\in\mathcal{C}$ where $u$ is true, this formulation will assign negligible listener probability to objects where $u$ is false, but ensures that the normalization constant is non-zero (and specifically, that the distribution is uniform) when $u$ is false for all objects.
 
 While this solution suffices for one-shot pragmatics under lexical uncertainty, where $\epsilon$ may be calibrated to be appropriately large, it runs into several technical complications in an iterated setting.
-First, due to numerical overflow at sufficiently high values of $w_L$ and $w_S$ at later iterations, elements may drop entirely out of the support at higher levels of recursion (e.g. $L_1$), leading the normalization constant to return to zero. 
+First, due to numerical overflow at later iterations for some parameter values, elements may drop entirely out of the support at higher levels of recursion (e.g. $L_1$), leading the normalization constant to return to zero. 
 Second, this `soft' semantics creates unexpected and unintuitive consequences at the level of the pragmatic speaker. 
 After renormalization in $L_0$, an utterance $u$ that fails to refer to any object in context is also by definition equally \emph{successful} for all objects (i.e. evaluating to $\epsilon$ for every object), leading to a uniform selection distribution.
-Consequently, $S_1$ may in some cases prefer utterances that are literally false of the target just as much as utterances which are true.
+However, this assumption has the unintuitive consequence that $S_1$'s utility of using an utterance known to be false of the target may be the same as an utterance known to be true.
+
+
 
 Instead of injecting $\epsilon$ into the lexical meaning, we ensure that the normalization constant is well-defined by adapting another method suggested by \citeA{bergen_pragmatic_2016}.
 First, we add a `null' object to every context so that, even if a particular utterance is false of every real object in context, it will still apply to the null object, assigning the true target a negligible probability of being chosen.
-Intuitively, this null object can be interpreted as recognizing that the referring expression has a referent but it is not in context.
+Intuitively, this null object can be interpreted as recognizing that the referring expression has a referent but it is not in context, i.e. a `failure to refer,' and effectively prevents $L_0$ from assigning belief to a referent for which the utterance is literally false.
+Note that this case is distinct from the case of a \emph{contradiction}, which arises when defining the meaning of multi-word utterances in Section \textbf{P1}.
+
 Second, we add an explicit noise model at every level of recursion.
 That is, we assume every agent has a probability $\epsilon$ of choosing a random element of their support, ensuring a fixed non-zero floor on the likelihood of each element that is constant across levels of recursion.
 Formally this corresponds to a mixture distribution, e.g. 
@@ -255,7 +271,17 @@ Mathematically, the difference between these alternatives is whether the speaker
 While other formulations are conceivable, we argue that marginalizing over the entire utility is not only the most natural but also normatively correct under Bayesian decision theory. 
 When an agent is uncertain about some aspect of the decision problem, rational choice requires the agent to optimize expected utility marginalizing over subjective uncertainty, as in our formulation. 
 
-\subsection{Appendix B: Alternative lexical representations}
+\subsection{Inference details} 
+
+We have implemented our simulations in the probabilistic programming language WebPPL \cite{GoodmanStuhlmuller14_DIPPL}.
+All of our simulations iterate the following trial-level loop: (1) sample an utterance from the speaker's distribution, given the target object, (2) sample an object from the listener's object distribution, given the utterance produced by the speaker, (3) append the results to the list of observations, and (4) update both agents' posteriors, conditioning on these observations before continuing to the next trial.
+To obtain the speaker and listener distributions (steps 1-2; Eq.~\ref{eq:RSA}), we always use exhaustive enumeration for exact inference.
+We would prefer to use enumeration to obtain posteriors over lexical meanings as well (step 4; Eq.~\ref{eq:joint_inference}), but as the space of possible lexicons $\phi$ grows, enumeration becomes intractable.
+For simulations related to \textbf{P2} and \textbf{P3}, we therefore switch to Markov Chain Monte Carlo (MCMC) methods to obtain samples from each agent's posteriors, and approximate the expectations in Eq.~\ref{eq:marginalized} by summing over these samples. 
+Because we are emphasizing a set of phenomena where our model makes qualitatively different predictions than previous models, our goal in this paper is to illustrate and evaluate these \emph{qualitative} predictions rather than provide exact quantitative fits to empirical data.
+As such, we proceed by examining predictions for a regime of parameter values ($w_S, w_L, w_C,\beta$) that help distinguish our predictions from other accounts.
+
+\section{Appendix B: Alternative lexical representations}
 
 In this section, we re-consider two specific choices we made about how to represent lexical meanings.
 
@@ -282,6 +308,11 @@ In this case, rather than discrete categorical priors over meanings, we may plac
 \end{align}
 We have previously achieved similar results using this alternative lexical representations in earlier iteration of this manuscript \cite{hawkins_convention-formation_2017,hawkins2020generalizing}, although deriving predictions required variational inference techniques rather than Markov Chain Monte Carlo. 
 Such optimization-based inference techniques may also provide the most promising path for extending our adaptive model to larger language models, including neural networks that operate over continuous spaces of image pixels and natural language embeddings \cite{hawkins2019continual}.
+
+\section*{Appendix C: Simplicity prior}
+Consider a game with a fixed set of two referents: a blue square and a red square. Then the meaning of a given utterance $u_i$ can either have extension size two (applying both objects, effectively meaning ‘square’), size one (applying only to ‘blue square’ or only to ‘red square’), or size zero (applying to neither of the objects). Now suppose there are 16 possible utterances. Then the lexicon with highest prior probability is the one where every utterance has an empty extension ($|\phi| = 16 \cdot 0 = 0$), which is also the smallest lexicon (an effective vocabulary size of 0). The lexicon with lowest prior probability is the one where every utterance has the maximal extension ($|\phi| = 16 \cdot 2 = 32$), which is also the largest lexicon (an effective vocabulary size of 16). Removing a single word from this maximal lexicon would reduce the size of the lexicon (e.g. 15 words instead of 16) and also reduce the total size of the words' extensions (e.g. taking a word with the maximal extension of size two and replacing it with the minimal extension of size zero: $|\phi| = 15 \cdot 2 + 1 \cdot 0 = 30$), which would slightly increase its prior probability. Of course, this scheme makes it possible to have a lexicon with smaller word meanings but not a smaller lexicon (e.g. for a lexicon where all 16 words have an extension size of 1, we have $|\phi| = 16 \cdot 1 = 16$, but the effective vocabulary size is still 16). So this prior straightforwardly encodes a preference for lexicons with fewer words, but gives partial credit when the words have ‘simpler’ meanings, breaking ties between lexicons with the same number of words.
+
+Note that stronger priors are possible and strengthen adaptation, such as one directly enforcing the principle of contrast \cite{clark1987principle}, assigning lower probability to lexicons that violate the principle (i.e. rejecting possibilities that contain two separate utterances with precisely the same meaning). However, we found it more theoretically satisfying for such preference emerge naturally through pragmatic reasoning mechanisms rather than baking them directly into the prior. 
 
 %Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
 %However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
