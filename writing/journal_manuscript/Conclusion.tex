@@ -76,35 +76,35 @@ We suggest that differences in production and comprehension across modalities ma
 %The resulting messages consequently look nothing like the usual kinds of symbols people create: the relationship between motor actions and perceptual output is broken such that executing a familiar movement for a symbol or numeral instead produces an odd, wavy scribble.
 %Despite the relative lack of priors on signal meanings in this medium, people were nevertheless able to converge on successful signaling systems in repeated reference games \cite<see also>{RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality}.
 %Other novel modalities used in iterated reference games include a `whistle' language where movements along a vertical touch bar slider correspond to changes in pitch \cite{VerhoefRobertsDingemanse15_Iconicity} and a visual analog where movements along the slider were presented visually \cite{VerhoefEtAl16_TemporalLanguage}.
-
-\subsection{The role of feedback and backchannels}
-\todo[]{(I'm pretty sure direct feedback isn't needed for reduction in general:  notice we initially introduce a new individual into the discourse with a name or description, but  we subsequently simply use a pronoun (shorter) or omit -- we don't need feedback to do this. This is a section that I'd consider omitting as the type of feedback that's provided here is pretty specific to this game; you're also citing quite old literature here, so its less newsworthy and the idea that we don't reduce partially for ourselves is less convincing than other parts of the paper }
-
-If convention formation is grounded in inference, then an important corollary of our model is that the extent to which partners are able to coordinate should depend critically on the observations $D_i$ they condition on in Eq.~\ref{eq:joint_inference}.
-In the \emph{complete} absence of feedback --- when the speaker is instructed to repeatedly refer to a set of objects for a listener who is not present and will do their half of the task offline --- there is no reduction in message length \citeA{HupetChantraine92_CollaborationOrRepitition}. 
-
-Our simulations examined the most minimal sources of feedback: the speaker's utterance and the listener's response in a reference game.
-A key direction for future work is to account for richer forms of feedback that arise in natural communication.
-For example, a key feature of dialogue is the capacity for a \emph{real-time back-channel}.
-The listener may say anything at any point in time, thus allowing for interjections (uh-huh, hmmm, huh?), clarification questions, and other listener-initiated forms of feedback. 
-Elaborating the generative model of the listener to include these verbal behaviors will be critical to explaining other key results from \citeA{ClarkWilkesGibbs86_ReferringCollaborative}, including changes in the frequency of listener-initiated feedback over the course of interaction.
-
-Additionally, such an elaboration would allow our model to address early empirical results from \citeA{KraussWeinheimer66_Tangrams} manipulating the feedback channel: participants were able to talk bidirectionally in one condition but in another condition, the channel was unidirectional. 
-The speaker was prevented from hearing the listener's responses. 
-This feedback manipulation was crossed with a behavioral feedback manipulation where the experimenters intercepted the listener's responses: one group of speakers was told that their partner made the correct response 100\% of the trials (regardless of their real responses), while another was told on half of the trials that their partner made the incorrect response. 
-Our account of increasing efficiency (\textbf{P1}) predicts that speaker may not have sufficient evidence to justify shorter utterances in the absence of evidence about how their longer descriptions are being interpreted.
-Indeed, \citeA{KraussWeinheimer66_Tangrams} found that both channel contribute independently to gains in efficiency.
-Speakers kept using longer utterances when they observed that their partner was making errors. 
-But blocking the real-time verbal back-channel significantly limited reduction, even when told that their partner was achieving perfect accuracy.
-%Speakers converged to utterances that were about twice as long as those found when verbal feedback was allowed.
-In the extreme case of trying to communicate to a listener who can't respond and also appears to not understand, speaker utterance length actually \emph{increased} with repetition after an early dip. 
-
-More graded disruptions of feedback seem to force the speaker to use more words overall but not to significantly change the rate of reduction. 
-For example, \citeA{KraussBricker67_Delay} tested a transmission delay to temporally shift feedback and an access delay to block the onset of listener feedback until the speaker is finished. 
-Later, \citeA{KraussEtAl77_AudioVisualBackChannel} replicated the adverse effect of delay but showed that undelayed visual access to one's partner cancelled out the effect and returned the number of words used to baseline. 
-On the listener's part, too, the ability to actively \emph{give} feedback appears critical for coordination. 
-\citeA{SchoberClark89_Overhearers} showed that even listeners who \emph{overheard} the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances, presumably because the speaker was not able to take their particular sources of confusion into account.
-Our model provide a formal framework to begin probing how these different forms of communicative feedback may license different inferences about one's partner in interaction.
+%
+%\subsection{The role of feedback and backchannels}
+%\todo[]{(I'm pretty sure direct feedback isn't needed for reduction in general:  notice we initially introduce a new individual into the discourse with a name or description, but  we subsequently simply use a pronoun (shorter) or omit -- we don't need feedback to do this. This is a section that I'd consider omitting as the type of feedback that's provided here is pretty specific to this game; you're also citing quite old literature here, so its less newsworthy and the idea that we don't reduce partially for ourselves is less convincing than other parts of the paper }
+%
+%If convention formation is grounded in inference, then an important corollary of our model is that the extent to which partners are able to coordinate should depend critically on the observations $D_i$ they condition on in Eq.~\ref{eq:joint_inference}.
+%In the \emph{complete} absence of feedback --- when the speaker is instructed to repeatedly refer to a set of objects for a listener who is not present and will do their half of the task offline --- there is no reduction in message length \citeA{HupetChantraine92_CollaborationOrRepitition}. 
+%
+%Our simulations examined the most minimal sources of feedback: the speaker's utterance and the listener's response in a reference game.
+%A key direction for future work is to account for richer forms of feedback that arise in natural communication.
+%For example, a key feature of dialogue is the capacity for a \emph{real-time back-channel}.
+%The listener may say anything at any point in time, thus allowing for interjections (uh-huh, hmmm, huh?), clarification questions, and other listener-initiated forms of feedback. 
+%Elaborating the generative model of the listener to include these verbal behaviors will be critical to explaining other key results from \citeA{ClarkWilkesGibbs86_ReferringCollaborative}, including changes in the frequency of listener-initiated feedback over the course of interaction.
+%
+%Additionally, such an elaboration would allow our model to address early empirical results from \citeA{KraussWeinheimer66_Tangrams} manipulating the feedback channel: participants were able to talk bidirectionally in one condition but in another condition, the channel was unidirectional. 
+%The speaker was prevented from hearing the listener's responses. 
+%This feedback manipulation was crossed with a behavioral feedback manipulation where the experimenters intercepted the listener's responses: one group of speakers was told that their partner made the correct response 100\% of the trials (regardless of their real responses), while another was told on half of the trials that their partner made the incorrect response. 
+%Our account of increasing efficiency (\textbf{P1}) predicts that speaker may not have sufficient evidence to justify shorter utterances in the absence of evidence about how their longer descriptions are being interpreted.
+%Indeed, \citeA{KraussWeinheimer66_Tangrams} found that both channels contribute independently to gains in efficiency.
+%Speakers kept using longer utterances when they observed that their partner was making errors. 
+%But blocking the real-time verbal back-channel significantly limited reduction, even when told that their partner was achieving perfect accuracy.
+%%Speakers converged to utterances that were about twice as long as those found when verbal feedback was allowed.
+%In the extreme case of trying to communicate to a listener who can't respond and also appears to not understand, speaker utterance length actually \emph{increased} with repetition after an early dip. 
+%
+%More graded disruptions of feedback seem to force the speaker to use more words overall but not to significantly change the rate of reduction. 
+%For example, \citeA{KraussBricker67_Delay} tested a transmission delay to temporally shift feedback and an access delay to block the onset of listener feedback until the speaker is finished. 
+%Later, \citeA{KraussEtAl77_AudioVisualBackChannel} replicated the adverse effect of delay but showed that undelayed visual access to one's partner cancelled out the effect and returned the number of words used to baseline. 
+%On the listener's part, too, the ability to actively \emph{give} feedback appears critical for coordination. 
+%\citeA{SchoberClark89_Overhearers} showed that even listeners who \emph{overheard} the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances, presumably because the speaker was not able to take their particular sources of confusion into account.
+%Our model provides a formal framework to begin probing how these different forms of communicative feedback may license different inferences about one's partner in interaction.
 
 \subsection{The role of social knowledge}
 %\adele{You focus on \textit{new} referring expressions, but I wonder if you could extend to existing expressions too by thinking about the role of frequency/entrenchment.
@@ -125,8 +125,6 @@ Previous work has probed representations of community membership by manipulating
 For example, \citeA{IsaacsClark87_ReferencesExpertsNovices} paired participants who had either lived in NYC or had never been there for a task referring to landmarks in the city (e.g. ``Rockefeller Center''). 
 Within just a few utterances from a novel partner, people could infer whether they were playing with an expert or novice and immediately adjust their language use to be appropriate for this inferred identity. 
 Social information about a partner’s group can be so important that even players in artificial-language games react to the restrictions of social anonymity by learning to identify members of their community using distinctive signals \cite{roberts_experimental_2010}.
-
-As described, players' goal in the current tangram games was to identify tangrams in an efficient and reliable way. As we saw, this led players to reduce their descriptions over repetitions. However, if players' goals were included demonstrating that they were polite or creative, descriptions may
 
 For future work using hierarchical Bayesian models to address the full scale of an individual's  network of communities, additional social knowledge about these communities must be learned and represented in the generative model.
 Larger-scale networked experiments can be used to evaluate the hypothesis that a hierarchical representation of conventions includes not just a partner-specific level and population-wide level but also intermediate community levels. 
@@ -153,7 +151,7 @@ In this section, we discuss two interlocking process-level questions: (1) exactl
 %
 % \cite{horton_revisiting_2016}.
 
-\subsubsection{Which representations are adapted?}}
+\subsubsection{Which representations are adapted?}
 \todo[]{this subsection is great and seems really relevant and important, nice!}
 While our model formulation focused on adaptation at the level of the lexicon (i.e. inferences about $\phi$, representing different possible lexical meanings), this is only one of many internal representations that may need to be adapted to achieve successful coordination. 
 Three other possible representational bases have been explored in the literature. 
@@ -172,6 +170,10 @@ Thus, learning about a partner's word frequency \cite{louwerse2012behavior}, syn
 
 \subsubsection{Scalability to larger utterance and referent spaces}
 \todo[]{tbh, I like this section but I'd reframe it as  'limitations' or 'future work' as it's not truly a  convincing description of how to scale the model up, do you think? I mean we learn all sorts of constructions for all sorts of contexts and we even speak with the same people in different ways depending on context; reference games with orthogonal features or objects is a little corner. I mean you've done a lot! you're pointing out important limitations here for the most part }
+To allow for the fact that an utterance may be learned to apply appropriately in one context but be inappropriate in another, the forgetting function must operate on the pairing of an utterance and its interpretation \textit{in context}.
+Less recent utterances that were used to express the same interpretation-in-context  become less accessible over time, but utterances with a distinct interpretation-in-context should be unaffected. 
+%include?: The current work addresses the complex issue of what should count as the same context by means of the hierarchical Bayesian model.
+
 While a fully Bayesian formulation elegantly captures the inference problem at the core of our theory, the posterior update step in Eq.~\ref{eq:joint_inference} grows increasingly intractable as the space of utterances and referents grows. 
 This computational limitation is especially evident when considering how to quantitatively fit models to the natural-language data produced in unconstrained reference games, or applications in modern machine learning where we would like to build artificial agents that can adapt to human partners.
 Generalizing our framework to the arbitrary natural language (e.g. referring expressions using the full vocabulary of an adult language user) and arbitrary visual input (e.g. sensory impressions of novel objects such as tangrams) that are the basis for natural communication not only requires a different representational space for language and visual input, it may require different inference algorithms. 
