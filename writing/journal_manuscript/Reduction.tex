@@ -127,6 +127,7 @@ After several trials of observing a successful listener response given the conju
 Once the speaker samples one of the shorter utterances (e.g. $u_1$), the symmetry collapses and that utterance remains most probable in future rounds, allowing for a stable and efficient \emph{ad hoc} convention.
 Thus, increasing efficiency is derived as a rational consequence of uncertainty and partner-specific inference about the listener's lexicon.
 For these simulations, we used $\alpha_S = \alpha_L = 8, w_c = 0.24, \beta=0.8$ but the qualitative reduction effect is found over a range of different parameters (see Appendix Fig. \ref{fig:conjunction_grid}). 
+
 %\paragraph{Model comparison}
 %
 %Here we compare this model to several simpler baselines to establish which components of the model are necessary and sufficient for the desired behavior.
@@ -138,8 +139,6 @@ For these simulations, we used $\alpha_S = \alpha_L = 8, w_c = 0.24, \beta=0.8$ 
 %In the limit, it doesn't matter whether you have pragmatics in both learning rule or decision rule. 
 %In case where it's only in production rule, you'll produce the data with the necessary biases in learning.
 
-
-
 \subsection{Discussion}
 
 The simulations presented in this section aimed to establish a rational explanation for feedback-sensitive increases in efficiency over the course of \emph{ad hoc} convention formation.
@@ -147,42 +146,38 @@ Speakers initially hedge their descriptions under uncertainty about the lexical 
 This explanation recalls classic observations about \emph{hedges} (expressions like \emph{sort of} or morphemes like \emph{-ish}) that explicitly mark provisionality, such as \emph{a sort of silvery purple colored car} \cite{lakoff1975hedges,Fraser10_Hedging,MedlockBriscoe07_HedgeClassification}.
 \citeA{BrennanClark96_ConceptualPactsConversation} counted hedges across repetitions of a repeated reference game, finding a greater occurrence of hedges on early trials than later trials and a greater occurrence under more ambiguous contexts.
 While our model does not include hedges, it is possible to understand this behavior as an explicit or implicit marker of the lexical uncertainty construct in our account.
-%For example, if the speaker is reasoning about a listener who is also aware of uncertainty or graded meaning (see Appendix B), then hedges may be preferred as intentional signals to inform the listener about the speaker's own degree of uncertainty.
-Our account is also consistent with recent analyses of exactly \emph{what} gets reduced in a large corpus of repeated reference games \cite{hawkins2020characterizing}.
+Our account is also broadly consistent with recent analyses of exactly \emph{what} gets reduced in a large corpus of repeated reference games \cite{hawkins2020characterizing}.
 These analyses found that entire modifying clauses are more likely to be dropped at once than would be expected by random and independent corruption.
-%
-%\adele{do you mean, whole NPs are dropped rather than just the determiner? If so, could say, "entire modifying clauses are more likely to be dropped at once than would be expected by random corruption of noun phrase or prepositional phrase modifiers"...Grammatical elements do get reduced via repetition and can be eliminated;  iced tea > ice tea; skimmed milk > skim milk; or in fly-fishing". It's really that as you note, modification becomes unnecessary and a simple referring expression suffices}
-%
-In other words, speakers apparently begin by combining multiple descriptive `units' and collapse to retain only one of these `units'.
-%nice! Does the modeling with 2 word descriptions rather than say a construction with two parts: modifying and referring capture this? could be nice to do in future work: which parts of utterances are likely to get reduced or enhanced (in the case of subordinate level descriptions) and why?
+In other words, speakers apparently begin by combining multiple descriptive modifiers and collapse to retain only one of these `units' contingent on evidence that their partner understands.
 
+Why has this phenomenon remained outside the explanatory scope of previous models?
+Our account differs in both level of analysis and model complexity.
+For example, the influential process-level \emph{interactive alignment} account proposes that that speakers adapt and coordinate on meaning through priming mechanisms at lower levels of linguistic representation  \cite{pickering2004toward, pickering2006alignment, garrod2009joint}.
+While priming mechanisms are certainly at play in repeated reference tasks, especially when listeners engage in extensive dialogue or alternate roles, it is not clear why priming alone would lead descriptions to get shorter as opposed to aligning on the same initial description.
+Furthermore, priming cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only sparse, non-verbal feedback is provided showing that the listener is responding correctly \cite{KraussWeinheimer66_Tangrams}; conversely, speakers continue using longer descriptions when they receive non-verbal feedback that the listener is repeatedly making errors \cite<see also>{hawkins2020characterizing}.
+In these cases, there are no linguistic features available for priming or alignment to act upon.
+Our computational-level account is not mutually exclusive with these processing principles and does not in any way falsify or undermine them.
+Explaining when and why speakers believe that shorter descriptions suffice simply requires additional computational-level principles to be considered, which we hope will lead to further enrichment of algorithms at the process level.
 
-Why has this phenomenon remained outside the scope of previous models of adaptation and convention formation?
-\todo[inline]{Need a better transition here}
-One possibility is that speakers adapt and coordinate on meaning through priming mechanisms at lower levels of representation, as proposed by influential  \emph{interactive alignment} accounts \cite{pickering2004toward, pickering2006alignment, garrod2009joint}.
-While low-level priming may be at play in repeated reference tasks, especially when listeners engage in extensive dialogue or alternate roles, it is not clear why priming would cause descriptions to get shorter as opposed to aligning on the same initial description.
-Furthermore, priming alone cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only minimal feedback is provided showing that the listener is responding correctly \cite{KraussWeinheimer66_Tangrams}; conversely, speakers continue using longer descriptions when they receive non-verbal feedback that the listener is repeatedly making errors \cite<see also>{hawkins2020characterizing}.
-In these cases, there are no linguistic features available for priming or alignment mechanisms.
-Explaining when and why speakers believe that shorter descriptions will suffice requires a mechanism for coordination on meaning even given sparse, non-verbal feedback.
-
-
-Another possibility is that speakers coordinate on meaning using some some lexical update rule that makes utterances more likely to be produced after communicative successes and less likely after communicative failures, such as a variant on the Roth-Erev reinforcement learning rule \cite{erev1998predicting} adopted by a variety of agent-based models \cite{steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
-While reinforcement is a powerful mechanism for allowing groups to reach consensus, it is not clear why a newly initialized speaker would prefer to produce longer utterances over shorter utterances, or, if this bias was built-in, how simply reinforcing initially long descriptions could lead utterances to get shorter. 
-In the rare cases that some form of reduction has been investigated in this family of models (e.g. as in the phenomenon of phonological erosion), the process has been hard-coded as an $\epsilon$ probability of speakers dropping a random token at each point in time \cite{beuls2013agent,steels2016agent}.
-
-
-Such random dropping, however, is an unsatisfying explanations for several reasons.
-First, it formalizes a reductive explanation of efficiency in terms of speaker-internal noise (or laziness). This idea dates back to the early literature on repeated reference games and
-control experiments by \citeA{HupetChantraine92_CollaborationOrRepitition} were designed to test this possibility \cite<see also>{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}. 
-Participants were asked to repeatedly refer to the same targets for a \emph{hypothetical} partner to see later, such that any effects of familiarity or repetition on the part of the speaker were held constant with the interactive task. 
+Another prominent account proposes that speakers coordinate on meaning using some lexical update rule that makes utterances more likely to be produced after communicative successes and less likely after communicative failures.
+This account has often been implemented using a simple variant of reinforcement learning (RL) such as Roth-Erev learning \cite{erev1998predicting,steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
+While such minimal rules allow groups to reach consensus, it is challenging to explain the full suite of phenomena we have explored in this section.
+First, for most of these models, it is not clear how simply reinforcing initially long descriptions could lead utterances to get shorter. 
+Second, in the rare cases that have incorporated a notion of compositionality to build longer utterances from more primitive utterances, reduction has been hard-coded as a kind of $\epsilon$-greedy exploration where the speaker has a fixed probability of dropping a random token at each point in time \cite{beuls2013agent,steels2016agent}.
+Such random dropping, however, is inconsistent with early control experiments by \citeA{HupetChantraine92_CollaborationOrRepitition} where participants were asked to repeatedly refer to the same targets for a \emph{hypothetical} partner to see later, such that any effects of familiarity or repetition on the part of the speaker would be the same as the interactive task \cite<see also>{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}. 
 No evidence of reduction was found, and in some cases utterances actually grew longer.
-This accords with observations in multi-partner settings by \citeA{wilkes-gibbs_coordinating_1992}, which we explore further in \textbf{P2}: it is difficult to explain why a speaker who only shortened their descriptions due to an $\epsilon$-noise process would suddenly switch back to a longer utterance when their partner is exchanged.
-Whatever drives efficiency cannot be explained through speaker laziness, it must be a result of the \emph{interaction} between partners.
-This observation is not intended to rule out the entire family of reinforcement learning approaches, however, and more sophisticated \emph{model-based} reinforcement learning algorithms are flexible enough to account for the phenomenon.
+Third, even if this problem were fixed by extending the rule set to be contingent on interaction, it is not clear why a speaker would initially prefer to produce longer utterances over shorter utterances.
+%Whatever drives increasing efficiency cannot be explained through speaker laziness, it must be a result of contingent \emph{interaction} between partners.
+%Second, it is inconsistent with the multi-partner settings explored by \citeA{wilkes-gibbs_coordinating_1992}, which we explore further in \textbf{P2}: It is not clear why a speaker who shortened their descriptions due to an $\epsilon$-greedy process would suddenly switch back to longer utterances when their partner is exchanged.
+
+These limitations do not stem from the RL framework itself, but from the simplifying assumption that the probability of taking actions should be directly tied to the previous outcomes of those actions.
+CHAI preserves a core idea from these accounts --- the ability to dynamically update one's lexicon --- but disentangles the inference problem (i.e. estimating a partner's underlying lexicon) from the decision problem (i.e. deciding which action to take with these estimates in hand, which may incorporate pragmatic reasoning).
+Introducing this latent variable as an intermediate construct allows the model to be more explanatory while also necessarily increasing its complexity.
+Importantly, more sophisticated \emph{model-based} reinforcement learning algorithms make a similar distinction and may consequently be flexible enough to account for the phenomenon (indeed, see \citeNP{gershman2015novelty} for an explicit connection between hierarchical Bayes and an RL algorithm known as TD-learning; but see \citeNP{velez2021learning} for outstanding problems in bridging these perspectives).
 %For instance, hierarchical architectures that appropriately incorporate compositionality or incrementality into the speaker's production model may be able to reinforce component parts of longer utterances in the shared history \cite<e.g.>{hawkins2019continual}.
 %Still, such an approach would have more in common with our proposal than to the model-free heuristics in the existing literature.
 
-Finally, while our simulations captured the core of the phenomenon, they have only scratched the surface of its empirical complexity.
+Finally, while our simulations captured core features of the phenomenon, they have only scratched the surface of its empirical complexity.
 First, our simulations only consider two-word descriptions with homogenous uncertainty over the components, while the semantic components of real initial descriptions have more heterogeneity. 
 It remains an open question as to how best to instantiate more realistic priors in our model that can predict more fine-grained patterns. 
 For example, early hand-tagged analyses by \citeA{Carroll80_NamingHedges} found that in three-quarters of transcripts from \citeA{krauss_changes_1964} the conventions that participants eventually converged upon were prominent in some syntactic construction at the beginning, often as a head noun that was initially modified or qualified by other information. 
