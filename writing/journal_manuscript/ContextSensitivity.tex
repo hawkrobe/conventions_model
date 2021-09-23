@@ -17,7 +17,6 @@ This phenomenon is most immediately motivated by recent behavioral results findi
 
 \todo[]{By 'communicative context' do you mean the linguistic context: e.g., referring expressions are more likely to remain than modifiers which is, I'd say, about the function of constructions; Or do you mean the non-linguistic context: e.g., when we need to distinguish narrow categories, we use more narrow terms? Or do you just mean that conventions are not predictable: i.e., a different group could converge on a different solution?}
 
-
 %related: more important or more (likely to be) frequent?   %PREDICTABLE words tend to get reduced
 
 \todo[]{need to say more (or less) about Optimal Semantic Expressivity (blogpost?); if the idea is that languages are as expressive and as efficient as possible, it's an old functionalist idea, but it's not entirely clear what you're alluding to here}
@@ -89,7 +88,7 @@ As before, the agents swap roles on each trial, and we run 50 distinct trajector
 
 First, we compare the model's learning curves across context conditions (Fig.~\ref{fig:sec2Results}A). 
 We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
-In a mixed-effects logic regression, we find that communicative accuracy steadily improves over time across all conditions, $b=0.72, z = 16.9, p<0.001$.
+In a mixed-effects logistic regression, we find that communicative accuracy steadily improves over time across all conditions, $b=0.72, z = 16.9, p<0.001$.
 However, accuracy also differed across conditions: adding a main effect of condition significantly improves model fit, $\chi^2(2) = 9.6, p = 0.008$. 
 Accuracy is significantly higher in the coarse condition than the fine condition $b=-0.71, z=9.3, p <0.001$ and marginally higher than the mixed condition.
 
@@ -98,7 +97,7 @@ Accuracy is significantly higher in the coarse condition than the fine condition
 As an initial marker of context sensitivity, we examine the effective vocabulary sizes used by speakers in each condition.
 We operationalized this measure by counting the total number of unique words produced within each repetition block.
 This measure takes a value of 8 when a different word is consistently used for every object, and a value of 1 when exactly the same word is used for every object.
-In an mixed-effects regression model including intercepts and random effects of trial number for each simulated trajectory, we find an overall main effect of condition, with agents in the \textbf{fine condition using significantly fewer words? [looks like \textit{more} words]} across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
+In an mixed-effects regression model including intercepts and random effects of trial number for each simulated trajectory, we find an overall main effect of condition, with agents in the fine condition using significantly more words across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
 However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition, while it stayed roughly constant in in the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}B.
 
 Next, we examine more closely the emergence of terms at different levels of generality.
