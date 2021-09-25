@@ -17,8 +17,8 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 24,
-  inferOptions: {method: 'MCMC', samples:5000, burn:5000, lag:2, verbose:true}//
+  numTrials: 23,
+  inferOptions: {method: 'MCMC', samples:2000, burn:5000, lag:5, verbose:true}//
 };
 
 var posttest_file = shared.open('./output/meaningTest_' + argv.condition + '_' + argv.chainNum + '.csv');
@@ -136,18 +136,23 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   } 
 };
 
-map(function(i) {
+foreach(_.range(1000), function(i) {
   var block1 = _.shuffle(objects.concat(objects));
-  var blocks = block1.concat(_.shuffle(objects.concat(objects)));
-  var contextTypes1 = (argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
-                       argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
+  var block2 = block1.concat(_.shuffle(objects.concat(objects)));
+  var blocks = block2.concat(_.shuffle(objects.concat(objects)));
+  console.log(argv.condition);
+  var contextTypes1 = (argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
+                       argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
                        _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-  var contextTypes = contextTypes1.concat(argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
-                                          argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
+  var contextTypes2 = contextTypes1.concat(argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
+                                          argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
+                                          _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  var contextTypes = contextTypes2.concat(argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
+                                          argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
                                           _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
   console.log('iteration', i, 'with trial seq', _.zip(blocks,contextTypes));
   iterate(i, _.zip(blocks,contextTypes), {1: [], 2: []});
-}, _.range(1000));
+});
 shared.close(f);
 shared.close(posttest_file);
 
