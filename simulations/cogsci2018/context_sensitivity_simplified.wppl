@@ -1,5 +1,5 @@
 // run using, e.g.:
-// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --gameNum 'game1'
+// webppl partnerspecificity.wppl --require ./refModule/ --require webppl-csv -- --condition 'subOnly'
 var numUtterances = 8;
 var utterances = map(function(i) {return 'word' + i;}, _.range(1, numUtterances+1));
 var objects = ['square_red_lightred', 'square_red_darkred',
@@ -17,15 +17,15 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 15,
-  inferOptions: {method: 'MCMC', samples:2500, burn:5000, lag:2, verbose:true}//{method: 'enumerate'}//
+  numTrials: 24,
+  inferOptions: {method: 'MCMC', samples:5000, burn:5000, lag:2, verbose:true}//
 };
 
-var posttest_file = shared.open('./output/meaningTest_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+var posttest_file = shared.open('./output/meaningTest_' + argv.condition + '_' + argv.chainNum + '.csv');
 shared.writeLine('chainNum,iterationNum,condition,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,trialNum,\
                   contextType,agentID,object,word,val', posttest_file);
 
-var f = shared.open('./output/trajectory_' + argv.gameNum + '_' + argv.chainNum + '.csv');
+var f = shared.open('./output/trajectory_' + argv.condition + '_' + argv.chainNum + '.csv');
 shared.writeLine('chainNum,iterationNum,condition,speakerAlpha,listenerAlpha,discountFactor,guessingEpsilon,time,\
                  contextType,speakerID,listenerID,intendedName,topSpeakerChoice,topListenerChoice,correct',
                  f);
@@ -60,7 +60,7 @@ var lexicalPrior = function() {
 
 var writeMeanings = function(trial, posterior1, posterior2) {
   var data = [
-    argv.chainNum, trial.iterationNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha,
+    argv.chainNum, trial.iterationNum, argv.condition, params.speakerAlpha, params.listenerAlpha,
     params.discountFactor,params.guessingEpsilon, trial.trialNum, trial.contextType
   ];
   map(function(word) {
@@ -73,7 +73,7 @@ var writeMeanings = function(trial, posterior1, posterior2) {
 
 var writeTrajectory= function(trial, topSpeakerChoice, topListenerChoice) {
   shared.writeLine([
-    argv.chainNum, trial.iterationNum, argv.gameNum, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
+    argv.chainNum, trial.iterationNum, argv.condition, params.speakerAlpha, params.listenerAlpha, params.discountFactor, params.guessingEpsilon,
     trial.trialNum, trial.contextType, trial.speakerID, trial.listenerID, trial.intendedName,
     topSpeakerChoice, topListenerChoice, topListenerChoice == trial.intendedName
   ].join(','), f);
@@ -93,6 +93,9 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   var target = first(remainingTargets)[0];
   var contextType = first(remainingTargets)[1];
   var trialNum = dataSoFar[1].length;
+  var prevTargets = _.map(dataSoFar[1].slice(-1), 'intendedName');
+  var possibleTargets = trialNum == 0 ? objects :  filter(function(x) {return !_.includes(prevTargets, x);}, objects);
+  var intendedName = uniformDraw(possibleTargets);
   var currTrial = {
     intendedName: target,
     contextType,
@@ -114,12 +117,10 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   var topSpeakerChoice =  sample(speakerOutput);
   var listenerOutput = L(topSpeakerChoice,  listenerPosterior, config);
   var topListenerChoice =  sample(listenerOutput);
-  display(speakerOutput)
-  display(listenerOutput)
-  console.log(currTrial.speakerID, 'is speaker; ', currTrial.listenerID, 'is listener');
+  console.log('trial', trialNum, ':', currTrial.speakerID, 'is speaker; ', currTrial.listenerID, 'is listener');
   console.log(currTrial.intendedName, topSpeakerChoice, topListenerChoice, topListenerChoice == currTrial.intendedName);
-  display(marginalize(speakerPosterior, function(x) {return x[1][topSpeakerChoice];}));
-  display(marginalize(listenerPosterior, function(x) {return x[1][topSpeakerChoice];}));
+  // display(marginalize(speakerPosterior, function(x) {return x[1][topSpeakerChoice];}));
+  // display(marginalize(listenerPosterior, function(x) {return x[1][topSpeakerChoice];}));
   writeMeanings(currTrial, speakerPosterior, listenerPosterior);
   writeTrajectory(currTrial, topSpeakerChoice, topListenerChoice);
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
@@ -139,14 +140,14 @@ map(function(i) {
   var block1 = _.shuffle(objects.concat(objects));
   var blocks = block1.concat(_.shuffle(objects.concat(objects)));
   var contextTypes1 = (argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
-                     argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
-                     _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-  var contextTypes = contextTypes1.concat(argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
                        argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
                        _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-  console.log(_.zip(blocks,contextTypes))
+  var contextTypes = contextTypes1.concat(argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
+                                          argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
+                                          _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  console.log('iteration', i, 'with trial seq', _.zip(blocks,contextTypes));
   iterate(i, _.zip(blocks,contextTypes), {1: [], 2: []});
-}, _.range(40));
+}, _.range(1000));
 shared.close(f);
 shared.close(posttest_file);
 

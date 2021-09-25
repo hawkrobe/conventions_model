@@ -1,4 +1,10 @@
+\#*
 *~
+*.blg
+*.fff
+*.ttt
+*synctex.gz
+output
 networkOutput*.csv
 /snapshots
 node_modules

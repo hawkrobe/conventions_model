@@ -76,10 +76,6 @@ var updatePosterior = function(data, lexicalPrior, params) {
       var object = trial.role == 'speaker' ? trial.clickedName : trial.intendedName;
       var trialParams = extend(params, {context: trial.context, lexicon: lexicon[trial.partnerID]});
       if(trial.role == 'speaker') {
-        // console.log(lexicon);
-        // console.log(object, trial.wordID)
-        // console.log('L1', shared.getL1Score(object, trial.wordID, trialParams));
-        // console.log('L0', shared.getL0Score(object, trial.wordID, trialParams));
         var score = (params.pragmatics == 'L1' ?
                      shared.getL1Score(object, trial.wordID, trialParams) :
                      shared.getL0Score(object, trial.wordID, trialParams));
@@ -114,8 +110,6 @@ var L = function(utt, posterior, params) {
     var utility = expectation(posterior, function(lexicon) {
       return shared.getS1Score(utt, object, extend(params, {lexicon: lexicon[params.partnerID]}));
     });
-    console.log(object);
-    console.log(utility);
     factor(params.listenerAlpha * utility);
     return object;
   });
