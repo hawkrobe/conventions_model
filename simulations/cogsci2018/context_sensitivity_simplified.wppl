@@ -17,7 +17,7 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 24,
+  numTrials: 15,
   inferOptions: {method: 'MCMC', samples:2500, burn:5000, lag:2, verbose:true}//{method: 'enumerate'}//
 };
 
@@ -81,7 +81,7 @@ var writeTrajectory= function(trial, topSpeakerChoice, topListenerChoice) {
 
 var getDistractor = function(intendedName, contextType) {
   var otherObjs = remove(intendedName, objects);
-  return (contextType == 'sub' ? find(function(obj) {
+  return (contextType == 's' ? find(function(obj) {
     return obj.split('_')[1] == intendedName.split('_')[1];
   }, otherObjs) : uniformDraw(filter(function(obj){
     return obj.split("_")[1] != intendedName.split("_")[1];
@@ -89,21 +89,16 @@ var getDistractor = function(intendedName, contextType) {
 };
 
 // for each point in data, we want the model's predictions 
-var iterate = function(i, dataSoFar) {
+var iterate = function(i, remainingTargets, dataSoFar) {
+  var target = first(remainingTargets)[0];
+  var contextType = first(remainingTargets)[1];
   var trialNum = dataSoFar[1].length;
-//  var pointInBlock = trialNum % 4;
-  var prevTargets = _.map(dataSoFar[1].slice(-1), 'intendedName');
-  var possibleTargets = trialNum == 0 ? objects :  filter(function(x) {return !_.includes(prevTargets, x);}, objects);
-  var intendedName = uniformDraw(possibleTargets);
-  var contextType = (argv.gameNum == 'subOnly' ? 'sub' :
-                     argv.gameNum == 'basicOnly' ? 'basic' :
-                     uniformDraw(['sub', 'basic']));
   var currTrial = {
-    intendedName,
+    intendedName: target,
     contextType,
     trialNum,
     iterationNum: i,
-    context : [intendedName, getDistractor(intendedName, contextType)],
+    context : [target, getDistractor(target, contextType)],
     partnerID: 1,
     speakerID: (trialNum % 2) == 0 ? 1 : 2,
     listenerID: (trialNum % 2) == 0 ? 2 : 1
@@ -123,7 +118,8 @@ var iterate = function(i, dataSoFar) {
   display(listenerOutput)
   console.log(currTrial.speakerID, 'is speaker; ', currTrial.listenerID, 'is listener');
   console.log(currTrial.intendedName, topSpeakerChoice, topListenerChoice, topListenerChoice == currTrial.intendedName);
-
+  display(marginalize(speakerPosterior, function(x) {return x[1][topSpeakerChoice];}));
+  display(marginalize(listenerPosterior, function(x) {return x[1][topSpeakerChoice];}));
   writeMeanings(currTrial, speakerPosterior, listenerPosterior);
   writeTrajectory(currTrial, topSpeakerChoice, topListenerChoice);
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
@@ -135,12 +131,21 @@ var iterate = function(i, dataSoFar) {
   }, [currTrial.speakerID, currTrial.listenerID]));
 
   if(currTrial.trialNum < params.numTrials) {
-    iterate(i, newDataSoFar);
+    iterate(i, rest(remainingTargets), newDataSoFar);
   } 
 };
 
 map(function(i) {
-  iterate(i, {1: [], 2: []});
+  var block1 = _.shuffle(objects.concat(objects));
+  var blocks = block1.concat(_.shuffle(objects.concat(objects)));
+  var contextTypes1 = (argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
+                     argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
+                     _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  var contextTypes = contextTypes1.concat(argv.gameNum == 'subOnly' ? _.repeat('s', 8).split('') :
+                       argv.gameNum == 'basicOnly' ? _.repeat('b', 8).split('') :
+                       _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  console.log(_.zip(blocks,contextTypes))
+  iterate(i, _.zip(blocks,contextTypes), {1: [], 2: []});
 }, _.range(40));
 shared.close(f);
 shared.close(posttest_file);
