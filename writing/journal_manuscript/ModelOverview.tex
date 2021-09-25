@@ -85,14 +85,14 @@ That is, an agent should know that more people will share the meaning of some wo
 Second, expectations about which meanings will be evoked for a given utterance and which utterances are expected to be used to express a meaning should be \emph{sensitive to the social identity of one's partner}.%: a cardiologist should have different expectations about a long-time colleague than a new patient.
 
 The first desideratum -- the ability to represent variability in the population -- motivates a \emph{probabilistic} formulation.
-Instead of holding a single static function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. one $\phi$ for the whole population), we assume each agent maintains \emph{uncertainty} over the exact meaning of each word as used by different partners.
+Instead of holding a single static function $\mathcal{L}_{\phi}$, which an agent assumes is shared perfectly in common ground (i.e. one $\phi$ for the whole population), we assume each agent maintains uncertainty over the exact meaning of each word as used by different partners.
 In a Bayesian framework, this uncertainty is specified by a prior probability distribution $P(\phi)$ over possible function parameters.
 For example, imagine a doctor giving a diagnosis to a new patient.
 Under some possible values of $\phi$, a piece of medical jargon like ``sclerotic aorta'' refers unambiguously to the patient's heart condition.
 Under other values of $\phi$, it has a less clear meaning. 
 A doctor with good bedside manner should assign some probability to each possibility rather than assuming everyone will share the same precise meaning they learned in medical school. 
 Importantly, this variability will be different for different words: likely more people share the meaning of ``dog'' than ``sclerotic aorta''.
-This core idea of introducing uncertainty over a partner's lexical semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{bergen_pragmatic_2016}, as well as in the context of iterated dyadic interactions \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}. 
+This core idea of introducing uncertainty over a partner's lexical semantics has previously been explored in the context of one-shot pragmatic reasoning, where it was termed \emph{lexical uncertainty} \cite{BergenGoodmanLevy12_Alternatives,PottsLevy15_Or,bergen_pragmatic_2016,potts2016embedded}, as well as in the context of iterated dyadic interactions \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}. 
 
 \begin{figure}[b!]
 \centering
@@ -107,8 +107,7 @@ This desideratum -- sensitivity to partner-specific meanings -- motivates a \emp
 At the highest level of the hierarchy is \emph{community-level} uncertainty $P(\Theta)$, where $\Theta$ represents an abstract ``overhypothesis'' about the overall distribution of all possible partners. 
 This level can be viewed as a representation of long-term ``communal lexicons'' about common knowledge based on community membership \cite{ClarkMarshall1981}. 
 $\Theta$ then parameterizes the agent's \emph{partner-specific} uncertainty $P(\phi_{k} | \Theta)$, where $\phi_k$ represents the specific system of meaning used by partner $k$ (see Fig.~\ref{fig:model_schematic}). 
-$\phi_k$ can be viewed as the ``idiolect'' that has been fine-tuned to account for partner-specific common ground and conceptual pacts from previous interactions.
-We focus for simplicity on this basic two-layer hierarchy, but the model can be straightforwardly extended to representing uncertainty at intermediate layers of social structure, including whether partners belong to distinct sub-communities (e.g. represented by discrete latent variables) or varying along latent dimensions (e.g. represented by a topic mixture). 
+$\phi_k$ can be viewed as the ``idiolect'' that has been fine-tuned to account for partner-specific common ground and conceptual pacts from previous interactions\footnote{We focus for simplicity on this basic two-layer hierarchy, but the model can be straightforwardly extended to representing uncertainty at intermediate layers of social structure, including whether partners belong to distinct sub-communities \cite<e.g. represented by discrete latent variables>{GershmanEtAl17_StructureSocialInfluence,gershman2020social}, which may explain code-switching \cite{auer_code-switching_2013,hawkinsrespect} and other social inferences based on language use \cite{kinzler2021language,IsaacsClark87_ReferencesExpertsNovices,roberts_experimental_2010}.}.
 
 To integrate lexical uncertainty into our speaker and listener models, we assume they each act in a way that is expected to be successful \emph{on average}, under likely values of $\phi_k$ \cite{SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS}.
 In other words, they sample actions by marginalizing over their own beliefs $P_S(\phi_k)$ or $P_L(\phi_k)$ about different meanings their partner $k$ may be using.
@@ -168,7 +167,7 @@ Here, we highlight several additional features addressing more specific challeng
 Our organization of these details is motivated by the analysis of \citeA{spike_minimal_2017}, who highlighted three common issues that all accounts of convention formation must address: (1) the form of feedback available, (2) the influence of memory and temporal discounting, and (3) the form of pragmatic reasoning being used.
 Finally, we set up the basic simulation framework that will be used throughout the rest of the paper.
 
-\paragraph{The role of social feedback}
+\paragraph{The role of social observation}
 
 Learning and adaptation depend critically on the availability and quality of social observations $D_k$ (Eq.~\ref{eq:joint_inference}).
 If the speaker has no way of probing the listener's understanding, or if the listener has no way of comparing their interpretation against the speaker's intentions, however indirectly, they can only continue to rely on their prior expectations, with no ground for conventions to form  \cite{HupetChantraine92_CollaborationOrRepitition,GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}.
@@ -207,7 +206,7 @@ While natural languages are rife with ambiguous and polysemous terms, speaker an
 For example, \citeA{BrennanClark96_ConceptualPactsConversation} placed participants in a context where the target object $o^*$ was easily distinguished from other objects in the context $\mathcal{C}$ by a referring expression like $u=$``the shoe.''
 In a second phase of the study, the context $\mathcal{C}'$ was switched to be a set of other shoes.
 Even though there was strong precedent for referring to $o^*$ as ``the shoe,'' this description was no longer \emph{informative}: the speaker recognized that $u$ could apply equally well to all $o\in\mathcal{C}$ leading to potential ambiguity about which shoe they were referring to.
-As a result, the speaker switched to a more specific utterance like $u'=$``the pennyloafer`` which unambiguously applied to $o^*$ in the new context.
+As a result, the speaker switched to a more specific utterance like $u'=$``the pennyloafer'' which unambiguously applied to $o^*$ in the new context.
 In a third and final phase, the context reverted back to the original one, $\mathcal{C}$, but many speakers continued to use the more specific utterance $u'$ even though $u$ would have sufficed.
 This example emphasizes how \emph{ad hoc} conventions or pacts may be sensitive to the context in which they form.
 

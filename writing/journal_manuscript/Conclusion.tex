@@ -3,16 +3,15 @@ To address these challenges, we advanced a hierarchical Bayesian approach  in wh
 We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: representing initial uncertainty about what a partner thinks words mean \textbf{(C1)}, partner-specific adaptation based on observations of language use in context \textbf{(C2)}, and hierarchical structure for graded generalization to new partners \textbf{(C3)}.
 This unified model resolves several puzzles that have posed challenges for prior models of coordination and convention formation: why referring expressions shorten over repeated interactions with the same partner \textbf{(P1)}, how partner-specific common ground coexists with the emergence of conventions at the population level \textbf{(P2)}, and how context shapes which conventions emerge \textbf{(P3)}.
 
-We conclude by raising five broader questions that arise from the proposed Adaptive Pragmatic Language User perspective, each suggesting pathways for future work: (1) in what ways is \emph{ad hoc} convention formation in adults the same as word learning in children and how does it differ? (2) to what extent do the proposed mechanisms depend on the communication modality? 
-\adele{I'd maybe drop (3) from here, because the game is such a special case; (4) is also very hard to answer. Also, (5) is really central and eliminating (3) and (4) would bump it up)}
-(3) what kinds of feedback are used to coordinate conventions in the reference game? (4) what kinds of social structure are reflected in the hierarchical prior, and (5) which representations are involved in adaptation at a process-level?
+We conclude by raising three broader questions that arise from the perspective of the proposed CHAI model, each suggesting pathways for future work: (1) how is \emph{ad hoc} convention formation in adults the same as word learning in children and how is it different? (2) to what extent do the proposed mechanisms depend on the communication modality? and (3) which representations are involved in adaptation at a process-level? 
 
 \subsection{Continuity of language learning across development}
 
-There is a close mathematical relationship between our model of convention formation and recent probabilistic models of word learning in developmental science \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
-This similarity suggests that the continual-learning mechanisms adults use to rapidly coordinate partner-specific conventions may be the same as those supporting lexical acquisition in children, although children's priors are weaker.
-Adults do not stop learning new terms and new ways of using familiar terms, because  new contexts continually arise. Adults develop stronger and better-calibrated beliefs about their community's conventions over time and the range of available conventions extends to  a broader swath of communicative scenarios than those available to children.
+An intriguing possibility is that the continual-learning mechanisms adults use to rapidly coordinate partner-specific conventions may be the same as those supporting lexical acquisition in children, although children's priors are weaker.
+Adults keep learning new terms and new ways of using familiar terms, because  new contexts continually arise. 
+Adults develop stronger and better-calibrated beliefs about their community's conventions over time and the range of available conventions extends to  a broader swath of communicative scenarios than those available to children.
 In this section, we discuss three possible implications of viewing language development in terms of social coordination and convention.
+There is a close mathematical relationship between our model of convention formation and recent probabilistic models of word learning in developmental science \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
 
 First, common paradigms that test how well labels are understood typically focus on variability across referential contexts rather than variability across speakers  \cite{siskind1996computational,regier2005emergence,smith2014unrealized,yurovsky2015integrative}. 
 Yet it is increasingly apparent that children are able to track \emph{who} produced the words they are learning and use this information to determine  how word meanings should generalize not just to other contexts but also to other speakers.
@@ -104,7 +103,7 @@ We suggest that differences in production and comprehension across modalities ma
 %\citeA{SchoberClark89_Overhearers} showed that even listeners who \emph{overheard} the entire game were significantly less accurate than listeners who could directly interact with the speaker, even though they heard the exact same utterances, presumably because the speaker was not able to take their particular sources of confusion into account.
 %Our model provides a formal framework to begin probing how these different forms of communicative feedback may license different inferences about one's partner in interaction.
 
-\subsection{The role of social knowledge}
+%\subsection{The role of social knowledge}
 %\adele{You focus on \textit{new} referring expressions, but I wonder if you could extend to existing expressions too by thinking about the role of frequency/entrenchment.
 
 %\todo[]{this isn't a todo at all, but I bet the same uncertainty and generalization with evidence of broader use is relevant to contexts as well as individuals: if you order a 'cup of coffee' in Italy, you may get espresso; we can change our conventions even with the same people in  different contexts: individuals (especially unusual individuals) provide a clear indication of context}
@@ -115,34 +114,33 @@ We suggest that differences in production and comprehension across modalities ma
 
 % --> Authority (sometimes localized sometimes diffuse) and prior FREQUENCY/entrenchment play a role in how likely a speaker is to adapt and so how likely or quickly a change in the language is (associations surely predict this).
 
-\todo[]{(I'd also consider eliminating this section if you want to simplify the general discussion, for similar reasons; the model doesn't include social information beyond identity. Down the line it'd be useful to use this sort of hierarchical grouping or even better, potentially dynamic clustering depending on contexts, to account for why some words are limited to specific contexts as well as specific people: e.g, Thing 1 and Thing 2 are associated with Dr. Suess books, subway with NY; BART with Bay Area.)}
-Real-world communities are much more complex than the simple networks we considered: each speaker takes part in a number of overlapping subcommunities, and may be more centrally or peripherally involved with stronger or less strong priors in each. 
-For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children \cite{auer_code-switching_2013}.
-When a scientist is talking to other scientists about their work, they know they can use efficient technical shorthand that they would avoid when talking to their non-expert friends and family. 
-Previous work has probed representations of community membership by manipulating the extent to which cultural background is shared between speaker and listener.
-For example, \citeA{IsaacsClark87_ReferencesExpertsNovices} paired participants who had either lived in NYC or had never been there for a task referring to landmarks in the city (e.g. ``Rockefeller Center''). 
-Within just a few utterances from a novel partner, people could infer whether they were playing with an expert or novice and immediately adjust their language use to be appropriate for this inferred identity. 
-Social information about a partner’s group can be so important that even players in artificial-language games react to the restrictions of social anonymity by learning to identify members of their community using distinctive signals \cite{roberts_experimental_2010}.
+%\todo[]{(I'd also consider eliminating this section if you want to simplify the general discussion, for similar reasons; the model doesn't include social information beyond identity. Down the line it'd be useful to use this sort of hierarchical grouping or even better, potentially dynamic clustering depending on contexts, to account for why some words are limited to specific contexts as well as specific people: e.g, Thing 1 and Thing 2 are associated with Dr. Suess books, subway with NY; BART with Bay Area.)}
+%Real-world communities are much more complex than the simple networks we considered: each speaker takes part in a number of overlapping subcommunities, and may be more centrally or peripherally involved with stronger or less strong priors in each. 
+%For example, we use partially distinct conventions depending on whether we are communicating with psychologists, friends from high school, bilinguals, or children \cite{auer_code-switching_2013}.
+%When a scientist is talking to other scientists about their work, they know they can use efficient technical shorthand that they would avoid when talking to their non-expert friends and family. 
+%Previous work has probed representations of community membership by manipulating the extent to which cultural background is shared between speaker and listener.
+%For example, \citeA{IsaacsClark87_ReferencesExpertsNovices} paired participants who had either lived in NYC or had never been there for a task referring to landmarks in the city (e.g. ``Rockefeller Center''). 
+%Within just a few utterances from a novel partner, people could infer whether they were playing with an expert or novice and immediately adjust their language use to be appropriate for this inferred identity. 
+%Social information about a partner’s group can be so important that even players in artificial-language games react to the restrictions of social anonymity by learning to identify members of their community using distinctive signals \cite{roberts_experimental_2010}.
 
-For future work using hierarchical Bayesian models to address the full scale of an individual's  network of communities, additional social knowledge about these communities must be learned and represented in the generative model.
-Larger-scale networked experiments can be used to evaluate the hypothesis that a hierarchical representation of conventions includes not just a partner-specific level and population-wide level but also intermediate community levels. 
-This hypothesis can be formalized by including additional latent representations of community membership into our hierarchical model.
-That is, in addition to updating our model of a particular \emph{partner} based on immediate feedback, even sparse observations of a partner's language use may license much broader inferences about their lexicon via diagnostic information about their social group or background. 
-If someone's favorite song is an obscure B-side from an 80s hardcore band, you can make fairly strong inferences about what else they like to listen to and how similar they might be to you \cite{VelezEtAl16_Overlaps, GershmanEtAl17_StructureSocialInfluence}. 
-Similarly, if someone casually refers to an obscure New York landmark, you may be able to update your beliefs not just about that lexical item but about a number of other lexical conventions shared among New Yorkers. 
-Lexica cluster within social groups, so inverting this relationship can yield rapid lexical learning from inferences about social group membership.
+%For future work using hierarchical Bayesian models to address the full scale of an individual's  network of communities, additional social knowledge about these communities must be learned and represented in the generative model.
+%Larger-scale networked experiments can be used to evaluate the hypothesis that a hierarchical representation of conventions includes not just a partner-specific level and population-wide level but also intermediate community levels. 
+%This hypothesis can be formalized by including additional latent representations of community membership into our hierarchical model.
+%That is, in addition to updating our model of a particular \emph{partner} based on immediate feedback, even sparse observations of a partner's language use may license much broader inferences about their lexicon via diagnostic information about their social group or background. 
+%If someone's favorite song is an obscure B-side from an 80s hardcore band, you can make fairly strong inferences about what else they like to listen to and how similar they might be to you \cite{VelezEtAl16_Overlaps, GershmanEtAl17_StructureSocialInfluence}. 
+%Similarly, if someone casually refers to an obscure New York landmark, you may be able to update your beliefs not just about that lexical item but about a number of other lexical conventions shared among New Yorkers. 
+%Lexica cluster within social groups, so inverting this relationship can yield rapid lexical learning from inferences about social group membership.
 
-This explanation is also consistent with broader linguistic phenomena outside the realm of repeated reference games. 
-For example, \citeA{PottsLevy15_Or} showed that lexical uncertainty is critical for capturing constructions like \emph{oenophile or wine lover}, where a disjunction of synonymous terms is taken to convey a definition -- information about the speaker's lexicon -- rather than a disjoint set. 
-While the reasons that speakers produce such constructions are complex, we would expect that speakers will be more likely to produce the definitional \emph{or} when the component word is expected to be rarer or more obscure for a particular partner: when there is additional uncertainty over its likely meaning in the listener's lexicon.
+%This explanation is also consistent with broader linguistic phenomena outside the realm of repeated reference games. 
+%For example, \citeA{PottsLevy15_Or} showed that lexical uncertainty is critical for capturing constructions like \emph{oenophile or wine lover}, where a disjunction of synonymous terms is taken to convey a definition -- information about the speaker's lexicon -- rather than a disjoint set. 
+%While the reasons that speakers produce such constructions are complex, we would expect that speakers will be more likely to produce the definitional \emph{or} when the component word is expected to be rarer or more obscure for a particular partner: when there is additional uncertainty over its likely meaning in the listener's lexicon.
 
 
 \subsection{Process-level mechanisms for adaptation}
 
 Finally, while we have provided a computational-level account of coordination and convention formation in terms of hierarchical inference, there remain many possible process-level mechanisms that may perform this computation.
-In this section, we discuss two interlocking process-level questions: (1) exactly which representations are being adapted? (2) how does our model scale to larger spaces of utterances and referents? %and (3) what memory systems are required for tracking and generalizing partner-specific meanings?
+In this section, we discuss two interlocking process-level questions which emphasize current limitations and areas of future work: (1) exactly which representations should be adapted? and (2) what is required to scale models of adaptation to more naturalistic language? %what memory systems are required for tracking and generalizing partner-specific meanings?
 
-\todo[]{I find "utterances and referents" a weird conjunction since utterances usually include relational information, are not just pointers to referents. Maybe 'descriptions and referents' instead?}
 \todo[]{some mention of frequency or accessibility seems important: more entrenched/more accessible memories are less likely to adapt; this would make children more adaptable than adults who have more experience and better retrieval skill; would also make shorter forms preferable not becuase efficiency is a goal but because shorter forms are ceteris paribus more accessible}
 
 %\subsection{Memory systems supporting generalization}
@@ -150,8 +148,8 @@ In this section, we discuss two interlocking process-level questions: (1) exactl
 % \cite{horton_revisiting_2016}.
 
 \subsubsection{Which representations are adapted?}
-\todo[]{this subsection is great and seems really relevant and important, nice!}
-While our model formulation focused on adaptation at the level of the lexicon (i.e. inferences about $\phi$, representing different possible lexical meanings), this is only one of many internal representations that may need to be adapted to achieve successful coordination. 
+
+While our model formulation focused on adaptation at the level of lexical meaning (i.e. inferences about $\phi$, representing different possible lexical meanings), this is only one of many internal representations that may need to be adapted to achieve successful coordination. 
 Three other possible representational bases have been explored in the literature. 
 
 First, it is possible that adaptation takes place upstream of the lexicon, directly implicating perceptual or \emph{conceptual} representations \cite{GarrodAnderson87_SayingWhatYouMean,HealeySwobodaUmataKing07_GraphicalLanguageGames}
@@ -162,12 +160,13 @@ Second, it is possible that adaptation takes place even further upstream, at the
 Rather than directly updating beliefs about lexical or conceptual representations, we may update a holistic representation of the partner themselves (e.g. as a ``partner embedding'' in a low-dimensional vector space) that is used to retrieve downstream conceptual and lexical representations. 
 Under this representational scheme, the mapping from the social representation to particular conventions is static, and \emph{ad hoc} adaptation is limited to learning where a particular partner belongs in the overall social space.
 
-Third, it is possible that expectations about other lower-level features of a partner are also adapted through interaction.
+Third, it is possible that expectations about other lower-level features are also adapted through interaction.
 For example, interactive alignment accounts \cite{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate up to strengthen higher levels of representation \cite{roelofs1992spreading,pickering1998representation}.
 Thus, learning about a partner's word frequency \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} could be functionally useful for communication if they covary with, or are informative about, higher-level representations. 
 
-\subsubsection{Scalability to larger utterance and referent spaces}
-\todo[]{tbh, I like this section but I'd reframe it as  'limitations' or 'future work' as it's not truly a  convincing description of how to scale the model up, do you think? I mean we learn all sorts of constructions for all sorts of contexts and we even speak with the same people in different ways depending on context; reference games with orthogonal features or objects is a little corner. I mean you've done a lot! you're pointing out important limitations here for the most part }
+
+
+\subsubsection{Computational tractability and scalability}
 To allow for the fact that an utterance may be learned to apply appropriately in one context but be inappropriate in another, the forgetting function must operate on the pairing of an utterance and its interpretation \textit{in context}.
 Less recent utterances that were used to express the same interpretation-in-context  become less accessible over time, but utterances with a distinct interpretation-in-context should be unaffected. 
 %include?: The current work addresses the complex issue of what should count as the same context by means of the hierarchical Bayesian model.
