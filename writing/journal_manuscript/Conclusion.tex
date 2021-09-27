@@ -3,67 +3,60 @@ To address these challenges, we advanced a hierarchical Bayesian approach  in wh
 We formalized this approach by integrating three core cognitive capacities in a probabilistic framework: representing initial uncertainty about what a partner thinks words mean \textbf{(C1)}, partner-specific adaptation based on observations of language use in context \textbf{(C2)}, and hierarchical structure for graded generalization to new partners \textbf{(C3)}.
 This unified model resolves several puzzles that have posed challenges for prior models of coordination and convention formation: why referring expressions shorten over repeated interactions with the same partner \textbf{(P1)}, how partner-specific common ground coexists with the emergence of conventions at the population level \textbf{(P2)}, and how context shapes which conventions emerge \textbf{(P3)}.
 
-We conclude by raising three broader questions that arise from the perspective of the proposed CHAI model, each suggesting pathways for future work: (1) how is \emph{ad hoc} convention formation in adults the same as word learning in children and how is it different? (2) to what extent do the proposed mechanisms depend on the communication modality? and (3) which representations are involved in adaptation at a process-level? 
+We conclude by raising three broader questions that arise from the perspective of our model, each suggesting pathways for future work: (1) to what extent is \emph{ad hoc} convention formation in adults the same as word learning in children and how is it different? (2) to what extent do the proposed mechanisms depend on the communication modality? and (3) which representations are involved in adaptation at a process-level? 
 
 \subsection{Continuity of language learning across development}
 
-An intriguing possibility is that the continual-learning mechanisms adults use to rapidly coordinate partner-specific conventions may be the same as those supporting lexical acquisition in children, although children's priors are weaker.
-Adults keep learning new terms and new ways of using familiar terms, because  new contexts continually arise. 
-Adults develop stronger and better-calibrated beliefs about their community's conventions over time and the range of available conventions extends to  a broader swath of communicative scenarios than those available to children.
-In this section, we discuss three possible implications of viewing language development in terms of social coordination and convention.
-There is a close mathematical relationship between our model of convention formation and recent probabilistic models of word learning in developmental science \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur}. 
+CHAI aims to shift the central computational problem of communication from transmission to learning and adapation. 
+Although it is intended as a theory of \emph{adult} communication among mature language users, our emphasis on learning has much in common with theories of language acquisition in development.
+Could the basic cognitive mechanisms allowing adults to coordinate on conventions be the same as those supporting learning in children?
+In other words, is it possible that adults never stop learning language and simply develop better-calibrated priors? 
+In this section, we discuss three possible implications of viewing language acquisition in terms of social coordination and convention formation, which may help to further unify models of adult communication with those of language learning \cite<e.g.>{XuTenenbaum07_WordLearningBayesian,FrankGoodmanTenenbaum09_Wurwur,bohn2019pervasive}.
 
-First, common paradigms that test how well labels are understood typically focus on variability across referential contexts rather than variability across speakers  \cite{siskind1996computational,regier2005emergence,smith2014unrealized,yurovsky2015integrative}. 
-Yet it is increasingly apparent that children are able to track \emph{who} produced the words they are learning and use this information to determine  how word meanings should generalize not just to other contexts but also to other speakers.
-Bilingual children learn to expect different languages to be used by different speakers.
-Even infants are sensitive to coarse social distinctions based on foreign vs. native language \cite{KinzlerDupouxSpelke07_LanguageGroups}, or accent \cite{KinzlerEtAl09_AccentRace}. Children are also sensitive to the reliability of individual speakers. For example, young children may limit the generalizability of observations from speakers who use language in idiosyncratic ways, such as a speaker who calls a ball a ``dog'' \cite{koenig2010sensitivity,luchkina2018eighteen}, and may even retrospectively update beliefs about earlier words after observing such idiosyncracies \cite{dautriche2021}. This discounting of idiosyncratic speakers may be understood as an instance of the same inductive problem that convention formation poses for adults in \textbf{P2}.
-Unlike complete-pooling models, which predict that all observations should be equally informative about a community's conventions, our hierarchical model predicts that children should be able to explain away ``outliers'' without their community-level expectations being disrupted.
-Indeed, a novel prediction generated by our account is that children should be able to accommodate idiosyncratic language \emph{within} extended interaction with the same speaker (e.g. continue to pretend the ball is called ``dog,'' given partner-specific common ground) while also limiting generalization of that convention \emph{across} other speakers.
+First, developmental paradigms have typically focused on variability and generalization across referential contexts (e.g. in cross-situational word learning) rather than variability and generalization across speakers  \cite{siskind1996computational,regier2005emergence,smith2014unrealized,yurovsky2015integrative}. 
+Yet it is increasingly apparent that children are able to track \emph{who} produced the words they are learning and use this information when generalizing.
+For example, bilingual children learn to expect different languages to be used by different speakers and even infants are sensitive to coarse social distinctions based on foreign vs. native language \cite{KinzlerDupouxSpelke07_LanguageGroups}, or accent \cite{KinzlerEtAl09_AccentRace}. 
+Children are also sensitive to the reliability of individual speakers. 
+For example, young children may limit the generalizability of observations from speakers who use language in idiosyncratic ways, such as a speaker who calls a ball a ``dog'' \cite{koenig2010sensitivity,luchkina2018eighteen}, and may even retrospectively update their beliefs about earlier evidence from a speaker after observing such idiosyncracies \cite{dautriche2021}. 
+Such discounting of idiosyncratic speakers may be understood as an instance of the same inductive problem that convention formation poses for adults in \textbf{P2}.
+Unlike complete-pooling models, which predict that all observations should be equally informative about a community's conventions, CHAI predicts that children should be able to explain away ``outliers'' without their community-level expectations being disrupted.
+One novel prediction generated by our account is that children should be able to accommodate idiosyncratic language \emph{within} extended interaction with the same speaker (e.g. continue to pretend the ball is called ``dog,'' given partner-specific common ground) while also limiting generalization of that convention \emph{across} other speakers.
 
-Second, we have emphasized the importance of representing lexical \emph{uncertainty}, capturing expected variability in the population beyond the point estimates assumed by traditional lexical representations. 
+Second, CHAI emphasizes the importance of representing lexical \emph{uncertainty} (\textbf{C1}), capturing expected variability in the population beyond the point estimates assumed by traditional lexical representations. 
 But how do children calibrate their lexical uncertainty?
-One possibility assigns a key role to the number of distinct speakers in a child's environment, by analogy to the literature on talker variability \cite{creel2011talker,clopper2004effects}.
-Exposure to fewer partners may result in weaker \cite<e.g.>{lev2017talking} or mis-calibrated priors for meanings.
+The number of distinct speakers in a child's environment may play a key role, by analogy to the literature on talker variability \cite{creel2011talker,clopper2004effects}.
+Exposure to fewer partners may result in weaker  or mis-calibrated priors \cite<e.g.>{lev2017talking}.
 If an idiosyncratic construction is over-represented in the child's environment, they may later be surprised to find that it was specific to their household's lexicon and not shared by the broader community  \cite<see>[Chap. 6]{Clark09_FirstLanguageAcquisition}. 
-Conversely, however, hierarchical inference predicts a blessing of abstraction \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality}: under certain conditions, community-level conventions may be inferred even with relatively  sparse observations from each partner.
+Conversely, however, hierarchical inference predicts a blessing of abstraction \cite{GoodmanUllmanTenenbaum11_TheoryOfCausality}: under certain conditions, reliable community-level conventions may be inferred even with relatively  sparse observations from each partner.
 To resolve these questions, future work will need to develop new methods for eliciting children's expectations about partner-specificity and variability of meanings.
 
-Third, our work suggests a new explanation for why young children struggle to coordinate \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech}. 
-%When an experimenter feeds them messages produced by adult speakers in other games, they are able to maintain high accuracy even as the utterance reduce down to one- or two-word label. 
-%When Kindergarteners play with one another, however, they continue to make errors even after 15 repetitions.
-Children as old as fifth grade have been found to require assistance from an experimenter in order to successfully converge on new conventions in the repeated referential game used here  \cite{matthews2007toddlers}: instead of beginning with the long indefinite descriptions that adults provide, children began with shorter descriptions like \emph{Mother's dress} \cite<see also>{kempe2019adults}.
-% \adele{I'm not sure what this shows; could simply be a failure to remember what had made them construe the tangram that way} While the failure to provide sufficient information was initially attributed to limits on the fifth graders' theory of mind, this explanation has been complicated by findings that 
-%  children often cannot even interpret their own utterances after a delay \cite{asher1976children}.
-Children's struggle to alight on utterances that can usefully discriminate one of the entities from the others may stem from a failure to anticipate how much information is required for the other person to discriminate the intended entity or from a failure to access the requisite complex formulations needed in the context of the experiment. Our model raises the possibility that the problem stems from the latter in that children's lexical priors are weaker: since there are no existing conventions for describing the novel objects in their vocabulary, their utterances are dispersed widely over easy-to-access ``good-enough'' formulations \cite{goldberg2019explain}.
-Indeed, when children are paired with their caregivers rather than peers, they are successful at forming new conventions \cite{LeungEtAl20_Pacts}.
-The adults helped to interactively scaffold the conventions, both by proactively seeking clarification in the listener role \cite<e.g.>{anderson1994interactive} and by providing more descriptive labels in the speaker role, which children adopted themselves on later trials.
-These results highlight one way in which our model of convention formation may coincide with models of language acquisition in development: in both cases, listeners are trying to infer the meanings of the speaker's utterances \cite{bohn2019pervasive}. 
+Third, our work suggests a new explanation for why young children struggle to coordinate \emph{ad hoc} conventions with one another in repeated reference games \cite{GlucksbergKraussWeisberg66_DevoRefGames,KraussGlucksberg69_DevoReferenceGames,KraussGlucksberg77_SocialNonsocialSpeech,matthews2007toddlers}. 
+Early explanations appealed to rigidity in the child's perspective that prevented adaptation.
+Yet subsequent findings that children could not even interpret their own utterances after a delay \cite{asher1976children} suggest that the challenge may instead stem from production quality and the lack of coordinating 'signal'. 
+Children may either be unable to anticipate how much information is required for their partner to discriminate the referent, or struggle to access those more complex formulations. 
+In terms of our model, children's lexical priors may be weaker than adults': without existing conventions for describing the novel objects in their vocabulary, their utterances are dispersed widely over easier-to-access ``good-enough'' formulations \cite{goldberg2019explain}.
+Indeed, when children are paired with their caregivers rather than peers, they easily coordinate on new conventions \cite{LeungEtAl20_Pacts}.
+Adults helped to interactively scaffold the conventions, both by proactively seeking clarification and providing strong feedback in the listener role \cite<e.g.>{anderson1994interactive} and by providing more descriptive labels in the speaker role, which children immediately adopted\footnote{It may be observed that agents in our simulations were still able to quickly coordinate despite being initialized with weak priors, but they had the benefit of using feedback from the referential task, as well as small, shared vocabularies. In the paradigms used by \citeA{KraussGlucksberg69_DevoReferenceGames}, young children did not have access to such information and may have struggled to search their vocabulary for better candidates even if they did, especially under time pressure \cite<e.g.>{glucksberg1967people}. This kind of accessibility consideration has previously been instantiated in computational models via the cost term $c(u)$, but further work on convention formation in developmental samples may benefit from a more fine-grained, incremental model of production (see below).}.
+From this perspective, \emph{ad hoc} conventions may not be so different from other settings where children look to their parents for guidance and rapidly adopt new conventions to talk about new things \cite<e.g.>{carey1978acquiring,heibeck1987word}. 
 
-
-
-%The paragraph below could be omitted as an infinite number of questions are unanswered, and this has some new jargon. The final sentence above is a nice way to end this section.
 %While we have highlighted three particular developmental phenomena where our approach may generate novel predictions, there are many finer-grained questions raised by our computational approach.
 %For example, is the child's lexical expectations in communication best explained as a (resource-limited) representation of \emph{others'} lexicons, or as an egocentric (asocial) epistemic state? 
 %To what extent is the ability to retrieve or use this lexical prior constrained by theory of mind development? 
 
 \subsection{The role of communication modality}
 
-%\begin{quote}
-%The oral modality is not well suited to conveying messages mimetically (i.e., iconically), even though that function is also important to human languages. This function is, however, very well served by the manual modality. \cite[p.155]{}
-%\end{quote}
-%see Christiansen work for counterarguments (mostly within each language)
-
-A core claim of our hierarchical account that the basic learning mechanisms underlying adaptation and convention formation are domain-general.
-In other words, we predict that there is nothing inherently special about spoken or written language: any system that humans use to communicate should display similar \emph{ad hoc} learning and convention formation dynamics because in every case people are simply trying to infer the system of meaning being used by their partners. Directly comparing behavior in repeated reference games across different modalities is therefore necessary to determine which adaptation effects, if any, are robust and attributable to modality-general mechanisms.
+One of our core claims is that the basic learning mechanisms underlying coordination and convention formation are domain-general.
+In other words, we predict that there is nothing inherently special about spoken or written language: any system that humans use to communicate should display similar \emph{ad hoc} convention formation dynamics because in every case people will be trying to infer the system of meaning being used by their partners. 
+Directly comparing behavior in repeated reference games across different modalities is therefore necessary to determine which adaptation effects, if any, are robust and attributable to modality-general mechanisms.
 In fact, there has been significant progress in understanding the dynamics of adaptation during communication in the  graphical modality \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling}, the gestural modality \cite{FayListerEllisonGoldinMeadow13_GestureBeatsVocalization,motamedi2019evolving,bohn2019young} and other \emph{de novo} modalities \cite{Galantucci05_EmergenceOfCommunication,RobertsGalantucci12_DualityOfPatterning,RobertsEtAl15_IconocityOnCombinatoriality,VerhoefRobertsDingemanse15_Iconicity,VerhoefEtAl16_TemporalLanguage,kempe2019adults}.
-CHAI predicts a critical role for the \emph{priors} we build up across interactions with different individuals, and therefore predicts that different communication modalities should display certain systematic differences due to the representational structure of the communication channel.
-For example, in the verbal modality, the tangram shapes from \citeA{ClarkWilkesGibbs86_ReferringCollaborative} are highly ``innominate'' \cite<meaning empirically difficult to name;>{HupetEtAl91_CodabilityReference,zettersten2020finding} -- most people do not have much experience naming or describing them with words, so relevant priors are weak and local adaptation plays a greater role.
-In the graphical modality, where communication takes place by drawing on a shared sketchpad, people can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common} -- drawing a quick sketch of the tangram's outline may suffice for understanding.
 
+CHAI views the similarities and differences between modalities through the lens of the hierarchical \emph{priors} we have built up across interactions with different individuals.
+For example, in the verbal modality, the tangram shapes from \citeA{ClarkWilkesGibbs86_ReferringCollaborative} are highly ``innominate'' \cite<meaning empirically difficult to name;>{HupetEtAl91_CodabilityReference,zettersten2020finding} -- most people do not have much experience naming or describing them with words, so relevant priors are weak and local adaptation plays a greater role.
+In the graphical modality, where communication takes place by drawing on a shared sketchpad, people can be expected to have a stronger prior rooted in assumptions about shared perceptual systems and visual similarity \cite{fan2018common}.
+Drawing a quick sketch of the tangram's outline may suffice for understanding.
 Other referents have precisely the opposite property: to distinguish between natural images of dogs, people may have strong existing conventions in the linguistic modality (e.g. `husky', `poodle', `pug') but making the necessarily fine-grained visual distinctions in the graphical modality may be initially very costly for novices \cite{fan2020pragmatic}, requiring the formation of local conventions to achieve understanding \cite{hawkins2019disentangling}. 
 The gestural modality also has its own distinctive prior, which also allows communicators to use time and the space around them to convey mimetic or depictive meanings that may be difficult to encode verbally or graphically \cite{goldin-meadow_role_1999,clark2016depicting,mcneill1992hand}. 
-We suggest that differences in production and comprehension across modalities may therefore be understood by coupling modality-specific priors with modality-generic learning mechanisms.
-
+We therefore suggest that differences in production and comprehension across modalities may be understood by coupling modality-specific priors with modality-generic learning mechanisms.
 
 %If we adhered solely to the verbal modality, we would be limited to a fairly narrow range of stimuli (e.g. abstract shapes/tangrams) where behavior in the lab isn't totally dominated by strong prior conventions people bring into the interaction. 
 %For example, similar phenomena Pictionary games where participants use a whiteboard to draw messages instead of an auditory or text-based channel \cite{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems,TheisenEtAl10_SystematicityArbitrariness,hawkins2019disentangling}.
@@ -139,13 +132,7 @@ We suggest that differences in production and comprehension across modalities ma
 \subsection{Process-level mechanisms for adaptation}
 
 Finally, while we have provided a computational-level account of coordination and convention formation in terms of hierarchical inference, there remain many possible process-level mechanisms that may perform this computation.
-In this section, we discuss two interlocking process-level questions which emphasize current limitations and areas of future work: (1) exactly which representations should be adapted? and (2) what is required to scale models of adaptation to more naturalistic language? %what memory systems are required for tracking and generalizing partner-specific meanings?
-
-\todo[]{some mention of frequency or accessibility seems important: more entrenched/more accessible memories are less likely to adapt; this would make children more adaptable than adults who have more experience and better retrieval skill; would also make shorter forms preferable not becuase efficiency is a goal but because shorter forms are ceteris paribus more accessible}
-
-%\subsection{Memory systems supporting generalization}
-%
-% \cite{horton_revisiting_2016}.
+In this section, we discuss two interlocking process-level questions which emphasize current limitations and areas of future work: (1) exactly which representations should be adapted? and (2) what is required to scale models of adaptation to more naturalistic language? 
 
 \subsubsection{Which representations are adapted?}
 
@@ -160,44 +147,43 @@ Second, it is possible that adaptation takes place even further upstream, at the
 Rather than directly updating beliefs about lexical or conceptual representations, we may update a holistic representation of the partner themselves (e.g. as a ``partner embedding'' in a low-dimensional vector space) that is used to retrieve downstream conceptual and lexical representations. 
 Under this representational scheme, the mapping from the social representation to particular conventions is static, and \emph{ad hoc} adaptation is limited to learning where a particular partner belongs in the overall social space.
 
-Third, it is possible that expectations about other lower-level features are also adapted through interaction.
-For example, interactive alignment accounts \cite{pickering2004toward} have argued that activating phonetic or syntactic features that are associated with specific lemmas in the lexicon can percolate up to strengthen higher levels of representation \cite{roelofs1992spreading,pickering1998representation}.
-Thus, learning about a partner's word frequency \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity} could be functionally useful for communication if they covary with, or are informative about, higher-level representations. 
-
-
+Third, expectations about other lower-level features may also be adapted through interaction, such as a partner's word frequencies \cite{louwerse2012behavior}, syntax \cite{gruberg2019syntactic,levelt1982surface}, body postures \cite{lakin2003using}, speech rate \cite{giles1991contexts}, or even informational complexity \cite{abney2014complexity}.
+This level of adaptation may lead some forms to become more accessible or entrenched in memory over time, possibly allowing partner identity to be used as a retrieval cue (e.g. \citeNP{horton2005impact,horton2007influence,horton_revisiting_2016}; but see \cite{brown2014influence}).
 
 \subsubsection{Computational tractability and scalability}
-To allow for the fact that an utterance may be learned to apply appropriately in one context but be inappropriate in another, the forgetting function must operate on the pairing of an utterance and its interpretation \textit{in context}.
-Less recent utterances that were used to express the same interpretation-in-context  become less accessible over time, but utterances with a distinct interpretation-in-context should be unaffected. 
-%include?: The current work addresses the complex issue of what should count as the same context by means of the hierarchical Bayesian model.
 
-While a fully Bayesian formulation elegantly captures the inference problem at the core of our theory, the posterior update step in Eq.~\ref{eq:joint_inference} grows increasingly intractable as the space of utterances and referents grows. 
-This computational limitation is especially evident when considering how to quantitatively fit models to the natural-language data produced in unconstrained reference games, or applications in modern machine learning where we would like to build artificial agents that can adapt to human partners.
-Generalizing our framework to the arbitrary natural language (e.g. referring expressions using the full vocabulary of an adult language user) and arbitrary visual input (e.g. sensory impressions of novel objects such as tangrams) that are the basis for natural communication not only requires a different representational space for language and visual input, it may require different inference algorithms. 
+While a fully Bayesian formulation elegantly formalizes the computational-level inference problem at the core of the CHAI account, this formulation faces a number of limitations. 
+For one, it is clearly intractable \cite{van2008tractable,van2019cognition}: the posterior update step in Eq.~\ref{eq:joint_inference} grows increasingly intensive as the space of possible utterances and meanings grows \cite{scalingupmodels}.
+The intractability problem also raises a scalability problem: does CHAI provide any guidance toward building artificial agents that are actually able to adapt to human partners as humans do with one another?
+Through this applied lens, a number of recent efforts have focused on developing algorithms for state-of-the-art neural networks that tractably scale to arbitrary natural language (e.g. referring expressions using the full vocabulary of an adult language user) and arbitrary visual input (e.g. sensory impressions of novel objects such as tangrams).
 
-The first computational obstacle is the lexical representation.
-A discrete $m\times n$ matrix containing entries for each utterance-referent pair, as typically used in convention formation simulations, has two primary limitations as a proxy for human representations: (1) it  grows quadratically as additional utterances and referents are added while becoming increasingly sparse (i.e. most words only apply to a relatively small set of referents) and (2) it does not straightforwardly represent similarity relationships between utterances and referents (i.e. a new referent must be added as a distinct new column, even if it is visually similar to a known referent).
-This limitation is especially clear when referents are presented as raw images. 
+For example, building on recent formal connections between hierarchical Bayes and gradient-based meta-learning approaches in machine learning \cite{grant_recasting_2018}, the algorithm proposed by \citeA{hawkins2019continual} (1) relaxes the full community-level prior over $\Theta$ to a point estimate and (2) replaces the difficult integral in the posterior update with a fixed number of (regularized) gradient update steps.
+While such approximate algorithms cannot fix the intractability of the Bayesian formulation \cite{kwisthout2011bayesian}, and their precise correspondence to constraints on the computational-level theory remain unexplored, they nonetheless provide a promising algorithmic instantiation of the CHAI principles. 
+When lexical meaning is represented by the parameters of a neural network, conventions can be interpreted as learned \emph{initializations} used for new partners and coordination is partner-specific \emph{fine-tuning} or \emph{domain adaptation} of vector representations. 
 
-The second computational obstacle is the inference algorithm.
-Even if a more scalable family of lexical representations $\mathcal{L}_\phi$ is chosen, any parameterization $\phi$ of this representation will be much higher-dimensional than we have considered.
-For example, if $(\Theta, \phi)$ are defined to be the weights of a neural network, then maintaining uncertainty $P(\Theta, \phi)$ would require placing a prior over the weights and the posterior update $P(\Theta, \phi | D)$ would require a difficult integral over a very high-dimensional support, or a type of (hierarchical) Bayesian neural network \cite{mackay1992practical,neal2012bayesian}.
-While recent algorithmic breakthroughs have made (approximate) inference for such networks increasingly tractable \cite<e.g.>{hernandez2015probabilistic,lacoste2018uncertainty,dusenberry2020efficient,izmailov2020subspace}, they remain untested as cognitive models.
+Neural network instantiations also provide a possible pathway toward addressing the lack of incrementality in the fully Bayesian formulation. 
+As more scalable implementations of pragmatic reasoning have proliferated in machine learning \cite{vogel2013emergence,AndreasKlein16_Pragmatics,monroe_colors_2017,shen2019pragmatically,takmaz2020refer} it has been natural to use incremental architectures  \cite{augurzky2019gricean,cohn2018pragmatically,cohn2019incremental,waldon2021modeling}. 
+However, there remain a number of limitations to address in future work, including how to incorporate incremental \emph{feedback} into lexical updates (e.g. backchannel responses or interruptions), how to define a more satisfying notion of \emph{compositional semantics} for incrementally constructed utterances, and how to maintain representations of partner-specific parameters alongside community-wide parameters in memory. 
 
-While these obstacles are significant, we argue that our hierarchical Bayesian framework is nonetheless well-poised to explain coordination and convention-formation at scale. 
-\todo[]{this sounds really intriguing and I'd  keep it in, but there's not enough information here to convince a skeptical reader that this means the current model can scale up without giving up the goal of connecting initial learning and convention formation suggested in subsection above. Vector representations have the benefit of allowing for some type of similarity metric, but then it's not clear how that would work with the RSA model that assumes sets (which are unstructured collections). so I dunno, 'well-poised to explain at scale' seems bold}
-In particular, recent formal connections between hierarchical Bayes and gradient-based meta-learning approaches in machine learning \cite{grant_recasting_2018} suggest an alternative algorithm that relaxes the full prior over $\Theta$ to a point estimate and replaces the difficult integral in the posterior update with a handful of (regularized) gradient steps. 
-This more tractable algorithm approximates the same computational-level problem we have formulated but provides a different perspective: conventions are learned \emph{initializations} and coordination is partner-specific \emph{fine-tuning} or \emph{domain adaptation} of vector representations. 
-The fine-tuning approach, initializing with a state-of-the-art neural language model, has recently accounted for psycholinguistic data on reading times \cite{van2018neural} as well as \emph{ad hoc} convention formation in reference games using (unseen) natural images as referents \cite{hawkins2019continual}.
+%The first computational obstacle is the lexical representation.
+%A discrete $m\times n$ matrix containing entries for each utterance-referent pair, as typically used in convention formation simulations, has two primary limitations as a proxy for human representations: (1) it  grows quadratically as additional utterances and referents are added while becoming increasingly sparse (i.e. most words only apply to a relatively small set of referents) and (2) it does not straightforwardly represent similarity relationships between utterances and referents (i.e. a new referent must be added as a distinct new column, even if it is visually similar to a known referent).
+%This limitation is especially clear when referents are presented as raw images. 
+%
+%The second computational obstacle is the inference algorithm.
+%Even if a more scalable family of lexical representations $\mathcal{L}_\phi$ is chosen, any parameterization $\phi$ of this representation will be much higher-dimensional than we have considered.
+%For example, if $(\Theta, \phi)$ are defined to be the weights of a neural network, then maintaining uncertainty $P(\Theta, \phi)$ would require placing a prior over the weights and the posterior update $P(\Theta, \phi | D)$ would require a difficult integral over a very high-dimensional support, or a type of (hierarchical) Bayesian neural network \cite{mackay1992practical,neal2012bayesian}.
+%While recent algorithmic breakthroughs have made (approximate) inference for such networks increasingly tractable \cite<e.g.>{hernandez2015probabilistic,lacoste2018uncertainty,dusenberry2020efficient,izmailov2020subspace}, they remain untested as cognitive models.
+%
+
 
 \paragraph{Conclusion}
 
-We have argued that successful communication depends on continual learning across multiple timescales. 
-We must coordinate on \emph{ad hoc} meaning through common ground with individual partners but also abstract these experiences away to represent stable, generalizable \emph{conventions} and norms.
+How do we manage to understand one another?
+We have argued that successful communication depends not just on transmission but on continual learning across multiple timescales. 
+We must coordinate on meaning through common ground with individual partners but also abstract these experiences away to represent stable \emph{conventions} and norms that generalize across our communities.
 Like other socially-grounded knowledge, language is not a rigid dictionary that we acquire at an early age and deploy mechanically for the rest of our lives. 
-Nor does language only change over the slow time-scales inter-generational drift.
-Language is a means for communication -- a shared interface between minds -- and must therefore adapt over the rapid contextual timescales required by communication.
-As new \emph{ad hoc} concepts arise, new \emph{ad hoc} conventions must be formed to solve the new coordination problems they pose.
+Nor do languages only change over the slow time-scales of inter-generational drift.
+Language is a means for communication -- a shared interface between minds -- and as new \emph{ad hoc} concepts arise, new \emph{ad hoc} conventions must be formed to solve the new coordination problems they pose.
 In other words, we are constantly learning language. 
 Not just one language, but a family of related languages, across interactions with each partner. 
 

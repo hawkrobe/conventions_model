@@ -24,7 +24,7 @@ After interacting with multiple partners in a tight-knit community, however, spe
 In this section, we test this novel prediction in a networked communication game.
 We then explicitly compare CHAI to complete-pooling and no-pooling variants that lesion the hierarchy, using only the top level or bottom level, to evaluate the contribution of each component.
 
-\subsection{Model predictions}
+\subsection{Model predictions: Simulation 2.1}
 
 \begin{figure}[t]
 \centering
@@ -37,7 +37,7 @@ We then explicitly compare CHAI to complete-pooling and no-pooling variants that
 We first examine the generalization behavior produced by each model by simulating the outcomes of interacting with multiple partners on a small network (see Fig.~\ref{fig:task1_display}A). 
 We used a round-robin scheme (Fig.~\ref{fig:task1_display}B) to schedule four agents into a series of repeated reference games with their three neighbors, playing 8 successive trials with one partner before advancing to the next, for a total of 24 trials.
 These reference games used a set of two objects $\{o_1, o_2\}$ and four utterances $\{u_1, u_2, u_3, u_4\}$ as in Simulation 1.2; agents were randomized to roles when assigned to a new partner and swap roles after each repetition block within a given interaction.
-Consequently, all agents at a particular phase have interacted with the same number of previous partners, allowing us to examine network convergence \cite<but see>[for a ``first-person'' version of the analysis where each partner is entirely fresh to the task, finding similar generalization dynamics]{hawkins2020generalizing}.
+Consequently, all agents at a particular phase have interacted with the same number of previous partners, allowing us to examine network convergence \cite<but see>[for a ``first-person'' version where each new partner is entirely fresh to the task, finding similar speaker generalization]{hawkins2020generalizing}.
 
 Unlike our previous simulations with a single partner, where hierarchical generalization was irrelevant, we must now specify the hyper-prior P($\Theta$) governing the overall distribution of \emph{partners} (Eq.~\ref{eq:joint_inference}).
 Following \citeA{KempPerforsTenenbaum07_HBM}, we extend the uniform categorical prior over possible referents to a hierarchical Dirichlet-Multinomial model \cite{gelman_bayesian_2014}, where the prior over the partner-specific meaning of $u$, $P(\phi_k(u_i)~=~o_j)$, is not uniform, but given by a parameter $\Theta$  that is shared across the entire population.
@@ -112,7 +112,7 @@ This reversion is due to ambiguity about whether the behavior of the first partn
 In the absence of data from other partners, a partner-specific explanation is more parsimonious.
 Second, unlike a no-pooling model, after interacting with several partners, the model becomes more confident that one of the short labels is shared across the entire community, and is correspondingly more likely to begin a new interaction with it (Fig.~\ref{fig:results}A, third column).
 
-It is possible, however, that these two predictions only distinguish our partial-pooling models at a few parameter values; the no-pooling and complete-pooling could produce these qualitative effects elsewhere in parameter space.
+It is possible, however, that these two predictions only distinguish our partial-pooling model at a few parameter values; the no-pooling and complete-pooling could produce these qualitative effects elsewhere in parameter space.
 To conduct a more systematic model comparison, then, we simulated 10 networks in each cell of a large grid manipulating the the optimality parameters $\alpha_S,\alpha_L$, the cost parameter $w_C$, and the memory discounting parameter $\beta$. 
 We computed a ``reversion'' statistic (the magnitude of the change in $P(u_1u_2)$ immediately after a partner swap) and a ``generalization'' statistic (the magnitude of the change in $P(u_1u_2)$ from the initial trial with the agent's first partner to the initial trial with the final partner) and conducted single-sample $t$-tests at each parameter value to compare these statistics with what would be expected due to random variation.
 We found that only the partial-pooling model consistently makes both predictions across a broad regime. 

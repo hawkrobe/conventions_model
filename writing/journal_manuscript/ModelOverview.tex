@@ -3,7 +3,7 @@ In this section, we propose a unified computational account of \emph{ad hoc} coo
 We begin from first principles: What is the core computational problem that must be solved to achieve successful communication?
 Classically, this problem has been formulated in terms of coding and compression \cite{Shannon48}. 
 An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
-This transmission problem has since been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to draw inferences beyond the literal meaning of messages \cite{sperber1986relevance}.
+This transmission problem has since been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to go beyond the literal meaning of messages \cite{RosenbergCohen66_ReferentialProcesses,sperber1986relevance}.
 We take the Rational Speech Act framework \cite<RSA;>{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} as representative of this current synthesis, formalizing communication as recursive social inference in a probabilistic model.
 In the next section, we review this basic framework and raise two fundamental computational problems facing it, which motivate the CHAI model.
 
@@ -47,7 +47,7 @@ The RSA framework and its extensions have accounted for a variety of important p
 Yet it retains a key assumption from classical models: that the speaker and listener must share the same literal ``protocol'' $\mathcal{L}$ for encoding and decoding messages.
 In this section, we highlight two under-appreciated challenges of communication that complicate this assumption. 
 
-The first problem arises from the existence of \emph{variability} throughout a language community. 
+The first problem arises from the existence of \emph{variability} throughout a language community \cite{kidd2018individual,wangidiosyncratic}. 
 Different listeners may recover systematically different meanings from the same message, and different speakers may express the same message in different ways.
 For example, doctors may fluently communicate with one another about medical conditions using specialized terminology that is meaningless to patients. 
 The words may not be in the patient's lexicon, or common words may be used in non-standard ways.
@@ -55,7 +55,7 @@ That is, being fluent speakers of the same language does not ensure agreement fo
 Different partners may be using different functions $\mathcal{L}$.
 
 The second problem arises from the \emph{non-stationarity} of the world. 
-Agents are continually presented with new thoughts, feelings, and entities, which they may not already have efficient conventions to talk about.
+Agents are continually presented with new thoughts, feelings, and entities, which they may not already have efficient conventions to talk about \cite{gerrig1988beyond}.
 For example, when new technology is developed, the community of developers and early adopters must find ways of referring to the new concepts they are working on (e.g. \emph{tweeting}, \emph{the cloud}). 
 Or, when researchers design a new experiment with multiple conditions, they must find ways of talking about their own \emph{ad hoc} abstractions, often converging on idiosyncratic names that can be used seamlessly in meetings.
 That is, any fixed $\mathcal{L}$ shared by a group of speakers at one moment in time can quickly become outdated \cite<see>[for a demonstration of the related problems posed by non-stationary for large neural language models]{lazaridou2021pitfalls}.
@@ -197,7 +197,7 @@ Especially if a partner is assumed to change over time, then older data may prov
 Recency is typically incorporated into Bayesian models with a simple decay term in the likelihood function \cite{anderson2000adaptive,angela2009sequential,fudenberg2014recency,kalm2018visual}.
 $$P(D_k | \phi_k) = \prod_{\tau=0}^T \beta^{\tau} P(\{o^*,u',o'\}_{T-\tau}\, |\, \phi_k)$$
 where $\tau=0$ indexes the most recent trial $T$ and decay increases further back through time.
-This decay term is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be derived by simply extending our hierarchical model down an additional layer \emph{within} each partner to allow for the possibility that they are using slightly different lexicons at different points in time; assuming a degree of auto-correlation between neighboring time points yields this form of discounting\footnote{While this simple decay model is sufficient for our reference games, it is clearly missing important mechanistic distinctions between working memory and long-term memory; for example, explaining convention formation over longer timescales may require an explicit model of consolidation or source memory for context. It is also consistent with different algorithmic-level mechanisms; for example, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}, or a process where observations have some probability of dropping out of memory at each time step.}.
+This decay term is motivated by the empirical power function of forgetting \cite{wixted1991form}, and can be derived by simply extending our hierarchical model down an additional layer \emph{within} each partner to allow for the possibility that they are using slightly different lexicons at different points in time; assuming a degree of auto-correlation between neighboring time points yields this form of discounting\footnote{While this simple decay model is sufficient for our reference games, it is clearly missing important mechanistic distinctions between working memory and long-term memory; for example, explaining convention formation over longer timescales may require an explicit model of consolidation or source memory. It is also consistent with multiple algorithmic-level mechanisms; for example, decay can be viewed as a form of weighted importance sampling, where more recent observations are preferentially sampled \cite{pearl2010online}, or a process where observations have some probability of dropping out of memory at each time step.}.
 
 
 \paragraph{The role of pragmatics}
