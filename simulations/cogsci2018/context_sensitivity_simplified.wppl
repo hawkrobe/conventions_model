@@ -17,7 +17,7 @@ var params = {
   costWeight: 0,
   utterances: utterances,
   objects: objects,
-  numTrials: 15,
+  numTrials: 7,
   inferOptions: {method: 'MCMC', samples:5000, burn:5000, lag:2, verbose:true}//
 };
 
@@ -35,7 +35,7 @@ console.log(params);
 var extensionLookup = {
   'square' : ['darkred', 'darkblue', 'lightred', 'lightblue'],
   'red'    : ['darkred', 'lightred'],
-  'blue'   : ['darkblue', 'darkred'],
+  'blue'   : ['darkblue', 'lightblue'],
   'darkred':['darkred'],
   'lightred':['lightred'],
   'darkblue':['darkblue'],
@@ -56,6 +56,22 @@ var lexicalPrior = function() {
   }, utterances));
   factor(-1 * extensionSize(lexicon));
   return {1 : lexicon};
+};
+
+var partitions = function() {
+  return Infer({method: 'enumerate'}, function() {
+    globalStore.availableMeanings = meanings;
+    globalStore.availableUtterances = utterances;
+    var lexicon = map(function(i) {
+      var utt = uniformDraw(globalStore.availableUtterances);
+      var meaning = uniformDraw(globalStore.availableMeanings);
+      globalStore.availableUtterances = remove(utt, globalStore.availableUtterances);
+      globalStore.availableMeanings = filter(function(m) {
+        return _.intersection(extensionLookup[meaning], extensionLookup[m]).length == 0;
+      }, globalStore.availableMeanings);
+    }, _.range(utterances.length));
+    return {1 : lexicon};
+  });
 };
 
 var writeMeanings = function(trial, posterior1, posterior2) {
@@ -93,9 +109,6 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   var target = first(remainingTargets)[0];
   var contextType = first(remainingTargets)[1];
   var trialNum = dataSoFar[1].length;
-  // var prevTargets = _.map(dataSoFar[1].slice(-1), 'intendedName');
-  // var possibleTargets = trialNum == 0 ? objects :  filter(function(x) {return !_.includes(prevTargets, x);}, objects);
-  // var intendedName = uniformDraw(possibleTargets);
   var currTrial = {
     intendedName: target,
     contextType,
@@ -119,7 +132,7 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   var topListenerChoice =  sample(listenerOutput);
   console.log('trial', trialNum, ':', currTrial.speakerID, 'is speaker; ', currTrial.listenerID, 'is listener');
   console.log(currTrial.intendedName, topSpeakerChoice, topListenerChoice, topListenerChoice == currTrial.intendedName);
-  display(marginalize(speakerPosterior, function(x) {return x[1][topSpeakerChoice];}));
+  //display(marginalize(speakerPosterior, function(x) {return x[1][topSpeakerChoice];}));
   writeMeanings(currTrial, speakerPosterior, listenerPosterior);
   writeTrajectory(currTrial, topSpeakerChoice, topListenerChoice);
   var newDataSoFar = _.zipObject([currTrial.speakerID, currTrial.listenerID], map(function(id) {
@@ -135,29 +148,25 @@ var iterate = function(i, remainingTargets, dataSoFar) {
   } 
 };
 
-var trialSeq = sample(Infer({method: 'rejection', samples: 1}, function() {
-  var block1 = _.shuffle(objects.concat(objects));
-  var block2 = block1.concat(_.shuffle(objects.concat(objects)));
-  var blocks = block2.concat(_.shuffle(objects.concat(objects)));
-  var bool = reduce(function(x, acc) {
-    return [x, (x != acc[0]) && acc[1]];
-  }, [last(blocks), true], blocks.slice(0,-1))[1];
-  condition(bool);
-  return blocks;
-}));
+foreach(_.range(40), function(i) {
+  var trialSeq = sample(Infer({method: 'rejection', samples: 1}, function() {
+    var block1 = _.shuffle(objects.concat(objects));
+    var blocks = block1.concat(_.shuffle(objects.concat(objects)));
+    var bool = reduce(function(x, acc) {
+      return [x, (x != acc[0]) && acc[1]];
+    }, [last(blocks), true], blocks.slice(0,-1))[1];
+    condition(bool);
+    return blocks;
+  }));
 
-console.log(trialSeq);
-
-var contextTypes1 = (argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
-                     argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
-                     _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-var contextTypes2 = contextTypes1.concat(argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
-                                         argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
-                                         _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-var contextTypes = contextTypes2.concat(argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
-                                        argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
-                                        _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
-iterate(0, _.zip(trialSeq,contextTypes), {1: [], 2: []});
+  var contextTypes1 = (argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
+                       argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
+                       _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  var contextTypes = contextTypes1.concat(argv.condition == 'subOnly' ? _.repeat('s', 8).split('') :
+                                           argv.condition == 'basicOnly' ? _.repeat('b', 8).split('') :
+                                           _.shuffle(_.repeat('s', 4) + _.repeat('b', 4)));
+  iterate(i, _.zip(trialSeq,contextTypes), {1: [], 2: []});
+});
 shared.close(f);
 shared.close(posttest_file);
 
