@@ -12,11 +12,12 @@ In the next section, we review this basic framework and raise two fundamental co
 For concreteness, we restrict our scope to reference in a context $\mathcal{C}$ containing a discrete set of objects $o\in\mathcal{O}$, but the same formulation aims to apply more generally.
 In this referential setting, the RSA framework defines a pragmatic speaker, denoted by $S_1$, who must choose an utterance $u$ that will allow their partner to choose a particular target object $o^* \in \mathcal{C}$.
 They attempt to satisfy Gricean Maxims \cite{Grice75_LogicConversation} by selecting utterances according to a utility function $U(u;o)$ that balances informativity to an imagined listener against the cost of producing an utterance.
-Specifically, $S_1$ chooses from a ``softmax distribution'' concentrating mass on the utterance that maximizes $U(u;o)$ to an extent modulated by a free parameter $\alpha_S \in[0,\infty]$.
-For $\alpha_S = 1$, this decision rule corresponds to Luce's choice axiom \cite{luce1959individual}, but  larger settings of $\alpha_S$ concentrate more probability on the single utterance maximizing utility.
+Specifically, $S_1$ chooses from a ``softmax distribution'' concentrating mass on the utterance that maximizes $U(u;o)$ to an extent modulated by a free parameter $\alpha_S \in[0,\infty]$:
 \begin{align}
 S_1(u | o) & \propto   \exp\{\alpha_S \cdot U(u; o)\}
 \end{align}
+For $\alpha_S = 1$, this decision rule corresponds to Luce's choice axiom \cite{luce1959individual}. 
+Larger settings of $\alpha_S$ concentrate more probability on the single utterance maximizing utility.
 
 The basic speaker utility function in the RSA framework is defined as follows:
 \begin{align}
@@ -29,7 +30,7 @@ That is, the probability of the imagined listener choosing object $o$ is simply 
 \begin{align}
 L_0(o | u) &\propto  \mathcal{L}(u,o)\nonumber
 \end{align}
-Throughout this paper, we will take $\mathcal{L}$ to be a traditional Boolean function evaluating whether or not the expression $u$ applies to the entity in question.\footnote{Due to the current limitations of representing lexical meaning in formal semantics, it has not been straightforward to specify a truth-conditional function explaining listener behavior for natural-language utterances (e.g. what makes one drawing belong in the literal extension of ``upside-down martini glass'' but not another, when neither of them are literally martini glasses?) This representation is convenient for our simulations, where we consider all possible discrete mappings between utterances and objects in the context, but better representations of lexical meaning may be substituted \cite<see>{potts2019case}. For example, Appendix B works out an example using a real-valued, continuous function \cite{degen2020redundancy} such as those learned by multi-modal neural networks \cite{monroe_colors_2017,achlioptas2019shapeglot,hawkins2019continual}.}:
+Throughout this paper, we will take $\mathcal{L}$ to be a traditional Boolean function evaluating whether or not the expression $u$ applies to the entity in question\footnote{Due to the current limitations of representing lexical meaning in formal semantics, it has not been straightforward to specify a truth-conditional function explaining listener behavior for natural-language utterances (e.g. what makes one drawing belong in the literal extension of ``upside-down martini glass'' but not another, when neither of them are literally martini glasses?) This representation is convenient for our simulations, where we consider all possible discrete mappings between utterances and objects in the context, but better representations of lexical meaning may be substituted \cite<see>{potts2019case}. For example, Appendix B works out an example using a real-valued, continuous function \cite{degen2020redundancy} such as those learned by multi-modal neural networks \cite{monroe_colors_2017,achlioptas2019shapeglot,hawkins2019continual}.}:
 $$
 \mathcal{L}(u,o) = \left\{ \begin{array} {rl} 1 & \textrm{if $o \in \den{u}$} \\ 0 & \textrm{otherwise} \end{array}\right.
 $$
@@ -43,7 +44,7 @@ $$
 
 \subsection{Two fundamental problems for static meaning}
 
-The RSA framework and its extensions have accounted for a variety of important phenomena in pragmatic language use \cite<e.g.>{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
+The RSA framework and its extensions provide an account for a variety of important phenomena in pragmatic language use \cite<e.g.>{Scontras_problang,KaoWuBergenGoodman14_NonliteralNumberWords,TesslerGoodman16_Generics,LassiterGoodman15_AdjectivalVagueness}.
 Yet it retains a key assumption from classical models: that the speaker and listener must share the same literal ``protocol'' $\mathcal{L}$ for encoding and decoding messages.
 In this section, we highlight two under-appreciated challenges of communication that complicate this assumption. 
 
@@ -63,9 +64,9 @@ We must have some ability to extend our language on the fly as needed.
 
 \subsection{CHAI: A model of dynamic meaning}
 
-Rather than assuming a monolithic, universally shared language, we argue that agents solve the fundamental problems posed by variability and non-stationarity by attempting to continually, adaptively \emph{infer} or update their beliefs about the system of meaning used by their current partner, in context.
-When all agents are continually learning in this way, we will show that they are not only able to coordinate on local, \emph{ad hoc} meanings or pacts with specific partners but also abstract away \emph{conventions} that are expected to be shared across an entire community.
-We introduce our CHAI model in three steps, corresponding to how it formalizes the three core capacities \textbf{C1-C3}: hierarchical uncertainty about meaning, online partner-specific learning, and inductive generalization.
+Rather than assuming a monolithic, universally shared language, we argue that agents solve the fundamental problems posed by variability and non-stationarity by attempting to continually, adaptively \emph{infer} the system of meaning used by their current partner.
+When all agents are continually learning in this way, and changing their own behavior to best respond, we will show that they are not only able to coordinate on local, \emph{ad hoc} meanings or pacts with specific partners but also abstract away \emph{conventions} that are expected to be shared across an entire community.
+We introduce the CHAI (Continual Hierarchical Adaptation through Inference) model in three steps, corresponding to how it formalizes the three core capacities \textbf{C1-C3}: hierarchical uncertainty about meaning, online partner-specific learning, and inductive generalization.
 
 \paragraph{C1:~Representing variability in meaning via structured uncertainty} 
 
@@ -265,7 +266,14 @@ This prior becomes more important for \textbf{P3}, however, where we consider sp
 A single word may apply to multiple conceptually related referents or, conversely, may have an empty meaning, where it is effectively removed from the agent's vocabulary.
 In this more general case, a simplicity prior generically favors smaller word meanings as well as a smaller effective vocabulary size, since the empty meaning has the smallest extension (see Appendix C for a worked example.)
 
-Finally, while the probabilistic model we have formulated in this section is theoretically well-motivated and mathematically well-defined, it has previously been challenging to actually derive predictions from it.
-Historically, interactive models have been challenging to study with closed-form analytical techniques and computationally expensive to study through simulation, likely contributing to the prevalence of simplified heuristics in prior work. 
-Our work has been facilitated by recent advances in probabilistic inference techniques that have helped to overcome these obstacles.
-See Appendix A for further details of our implementation.
+Finally, while the probabilistic model we have formulated in this section is theoretically well-motivated and mathematically well-defined, it is challenging to derive predictions from it.
+Historically, interactive models like ours are not amenable to closed-form analytical techniques and computationally expensive to study through simulation, likely contributing to the prevalence of simplified heuristics in prior work. 
+Our work has been facilitated by recent advances in probabilistic inference techniques that have helped to overcome these obstacles (see Appendix A for further details of our implementation.)
+
+\subsection{Summary}
+
+In this section, we formalized the computational problem facing agents who must communicate in a variable, changing world. 
+No static lexicon is appropriate for all partners and situations, requiring them to update on the fly. 
+We proposed CHAI, a cognitive model of how people solve this problem through continual adaptation.
+CHAI instantiates three core capacities in a hierarchical Bayesian framework: (C1) structured uncertainty over what words mean to different partners, (C2) social inference to back out likely latent systems of meaning from a partner's observable behavior, and (C3) hierarchical induction to generalize to the overall distribution of possible partners. 
+In the remainder of the paper, we argue that CHAI provides a new computational foundation for understanding coordination and convention formation, focusing on three empirical phenomena that have posed a challenge for previous accounts: (P1) the increase in communicative efficiency as a function of shared history, (P2) the transfer of partner-specific expectations to communal expectations, and (P3) the influence of communicative context on which conventions eventually form.
