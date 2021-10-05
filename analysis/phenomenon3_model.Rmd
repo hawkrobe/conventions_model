@@ -39,25 +39,28 @@ ggsave('../writing/journal_manuscript/figures/clark92.pdf', height = 8, width = 
 ## Examine trajectory of model simulations
 
 ```{r}
-trajectories <- read_csv(here('simulations/cogsci2018/output/simplified_trajectories.csv')) %>%
-# trajectories <- read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_testing_new.csv')) %>%
-#   bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_testing_new.csv'))) %>%
-#   bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_testing_new.csv'))) %>%
+trajectories <- read_csv(here('simulations/cogsci2018/output/simplified_trajectories_noPrior.csv')) %>%
+  # read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_sub_production.csv')) %>%
+  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_basic_production.csv'))) %>%
+  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_mixed_production.csv'))) %>%
+  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_sub_production2.csv'))) %>%
+  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_basic_production2.csv'))) %>%
+  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_mixed_production2.csv'))) %>%
   filter(time < 24) %>%
   mutate(quarter = floor((time) / 24)) %>%
-  mutate(repNum = floor((time) / 4) + 1)
+  mutate(repNum = floor((time) / 4))
 # #   #filter(chainNum <= 600000)
 
 trajectories %>%
   group_by(discountFactor, speakerAlpha, condition, time) %>%
   tidyboot_mean(correct, nboot= 100) %>% 
-  ggplot(aes(x = time+1, y = empirical_stat * 100, color = condition)) +
+  ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha = 0.2, stroke = 0, size = 2) +
     #geom_line() +
-    #geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
+    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = c(50,100), lty = 'dashed') +
-    geom_smooth(se=T) +
-    #facet_grid(discountFactor ~ pragmatics) +
+    geom_smooth(se=F) +
+    facet_grid(discountFactor ~ .) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_manual(values = condition_pal) +
@@ -65,10 +68,24 @@ trajectories %>%
     #ylim(25,105) +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', 
-       width = 4, height = 4, 
-       useDingbats = FALSE)
+# ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', 
+#        width = 4, height = 4, 
+#        useDingbats = FALSE)
 ```
+```{r}
+read_csv(here('simulations/cogsci2018/output/simplified_trajectories_revision.csv')) %>%
+  group_by(condition, chainNum, iterationNum) %>%
+  mutate(firstTrial = first(correct)) %>%
+  group_by(condition, firstTrial, time) %>%
+  summarize(m = mean(correct)) %>%
+  ggplot(aes(x = time, y = m, color = condition)) +
+    geom_point() +
+    geom_smooth() +
+    facet_wrap(~ firstTrial) +
+    theme_few()
+
+```
+
 
 ```{r}
 mod1 <- trajectories %>%
@@ -94,7 +111,7 @@ anova(mod1, mod2,mod3)
 
 ```{r}
 trajectories %>%
-  mutate(sextet = floor((time) / 6)) %>%
+  mutate(sextet = floor((time) / 8)) %>%
   #mutate(condition = fct_relevel(condition, 'mixed')) %>%
   group_by(iterationNum, discountFactor, chainNum, condition,  sextet) %>%
   mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
@@ -293,64 +310,4 @@ postTest %>%
     facet_wrap(condition ~ gameNum)
 
 ggsave("big_tile.pdf", width = 10, height = 10, units = 'in')
-```
-
-## Fitting human data
-
-```{r}
-modelInput <- dir(path = "../simulations/cogsci2018/input/",
-    pattern = "game*",
-    full.names = T) %>%
-  map(read_csv) %>%
-  reduce(rbind) %>%
-  rename(time = trialNum, gameNum = id)
-
-modelOutput <- dir(path = "../simulations/cogsci2018/output/",
-    pattern = "*.csv",
-    full.names = T) %>%
-  map(read_csv) %>%
-  reduce(rbind) %>%
-  left_join(modelInput, by = c('gameNum', 'time', 'speakerID', 'listenerID')) %>%
-  mutate(sameUtteranceAsParticipant = topSpeakerChoice==trueUtterance,
-         sameSelectionAsParticipant = topListenerChoice == trueResponse)
-```
-
-Model accuracy appears to track participant accuracy at each point in time... 
-
-```{r}
-modelOutput %>%
-  gather(src,value,modelCorrect, participantCorrect) %>%
-  group_by(time, condition, src) %>%
-  summarize(m = mean(value)) %>%
-  ggplot(aes(x = time, y = m, color = src)) +
-    geom_point() +
-    geom_smooth() +
-    facet_grid(condition ~ .) +
-    theme_few()
-```
-
-Predicting utterance is harder than predicting selection. And we make better predictions over time (maybe not surprising, since human behavior stabilizes later on)
-
-```{r}
-modelOutput %>%
-  gather(src,value,sameUtteranceAsParticipant,sameSelectionAsParticipant) %>%
-  group_by(time, condition, src) %>%
-  summarize(m = mean(value)) %>%
-  ggplot(aes(x = time, y = m, color = src)) +
-    geom_point(alpha = 0.25) +
-    geom_smooth() +
-    facet_grid(condition ~ .) +
-    theme_few()
-```
-
-```{r}
-modelOutput %>%
-  gather(src,value,speakerPredictionLikelihood,listenerPredictionLikelihood) %>%
-  group_by(time, condition, src) %>%
-  summarize(m = mean(value)) %>%
-  ggplot(aes(x = time, y = m)) +
-    geom_point(alpha = 0.25) +
-    geom_smooth() +
-    facet_grid(src ~ condition, scale = 'free_y') +
-    theme_few()
 ```

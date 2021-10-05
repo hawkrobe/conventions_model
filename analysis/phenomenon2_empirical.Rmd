@@ -139,15 +139,24 @@ ggsave('../writing/journal_manuscript/figures/sec3-empirical-results.pdf',
 
 ```{r}
 library(lme4)
-library(broom)
-glmer(match ~ ordinalrep * partnernum * partnerType + (1 | target) + (1 + partnernum * partnerType | networkid), 
+library(broom.mixed)
+```
+
+```{r}
+glmer(match ~ partnernum * partnerType + (1 | target) + (1 + partnernum * partnerType | networkid), 
       family = 'binomial',
+      control = glmerControl(optimizer = 'bobyqa'),
       data = matches %>% mutate(match = matchRate > 0)) %>%
-  tidy()
+  summary()
+
+glmer(match ~ partnernum + (1 | target) + (1 + partnernum | networkid), 
+      family = 'binomial',
+      control = glmerControl(optimizer = 'bobyqa'),
+      data = matches %>% mutate(match = matchRate > 0) %>% filter(partnerType == 'within') %>%  filter(partnernum < 2)) %>%
+  summary()
 ```
 
 # Supplementary 
-
 
 ## Accuracy results
 
