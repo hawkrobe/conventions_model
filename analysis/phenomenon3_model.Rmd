@@ -39,53 +39,66 @@ ggsave('../writing/journal_manuscript/figures/clark92.pdf', height = 8, width = 
 ## Examine trajectory of model simulations
 
 ```{r}
-trajectories <- read_csv(here('simulations/cogsci2018/output/simplified_trajectories_noPrior.csv')) %>%
-  # read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_sub_production.csv')) %>%
-  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_basic_production.csv'))) %>%
-  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_mixed_production.csv'))) %>%
-  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_subOnly_sub_production2.csv'))) %>%
-  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_basicOnly_basic_production2.csv'))) %>%
-  # bind_rows(read_csv(here('simulations/cogsci2018/output/trajectory_mixed_mixed_production2.csv'))) %>%
+simplicityPriorTrajectoriesPath <- 'simulations/P3/output/simplicity_trajectories.csv'
+sharpPriorTrajectoriesPath <- 'simulations/P3/output/sharpPriorTrajectories.csv'
+trajectories <- read_csv(here(simplicityPriorTrajectoriesPath)) %>%
   filter(time < 24) %>%
-  mutate(quarter = floor((time) / 24)) %>%
+  mutate(blockNum = floor((time) / 8)) %>%
   mutate(repNum = floor((time) / 4))
-# #   #filter(chainNum <= 600000)
-
-trajectories %>%
+  
+trajectories.acc <- trajectories %>%
   group_by(discountFactor, speakerAlpha, condition, time) %>%
-  tidyboot_mean(correct, nboot= 100) %>% 
+  tidyboot_mean(correct, nboot= 100) 
+
+trajectories.acc %>%
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha = 0.2, stroke = 0, size = 2) +
-    #geom_line() +
     geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = c(50,100), lty = 'dashed') +
     geom_smooth(se=F) +
-    facet_grid(discountFactor ~ .) +
+    facet_grid(discountFactor ~ speakerAlpha) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_manual(values = condition_pal) +
-    scale_x_continuous(breaks = c(1,6,11,16,21)) +
-    #ylim(25,105) +
     theme(aspect.ratio = 1)
 
-# ggsave('../writing/journal_manuscript/figures/Exp2_model_accuracy.pdf', 
-#        width = 4, height = 4, 
-#        useDingbats = FALSE)
+ggsave('../writing/journal_manuscript/figures/Exp2_model_partitionPrior.pdf',
+       width = 6, height = 6, units = 'in',
+       useDingbats = FALSE)
 ```
+
+
 ```{r}
-read_csv(here('simulations/cogsci2018/output/simplified_trajectories_revision.csv')) %>%
-  group_by(condition, chainNum, iterationNum) %>%
-  mutate(firstTrial = first(correct)) %>%
-  group_by(condition, firstTrial, time) %>%
-  summarize(m = mean(correct)) %>%
-  ggplot(aes(x = time, y = m, color = condition)) +
-    geom_point() +
-    geom_smooth() +
-    facet_wrap(~ firstTrial) +
-    theme_few()
+trajectories %>%
+  mutate(sextet = floor((time) / 8)) %>%
+  group_by(iterationNum, discountFactor, speakerAlpha, chainNum, condition,  sextet) %>%
+  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition, sextet, discountFactor, speakerAlpha) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
+  ggplot(aes(x = sextet, y = empirical_stat, color = condition)) +
+    geom_line() +
+    geom_hline(yintercept = c(2, 4), linetype = 'dashed') +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    theme_few() +
+    facet_grid(discountFactor ~ speakerAlpha) +
+    scale_color_manual(values = condition_pal) +
+    labs(y = "number unique words used") +
+    theme(aspect.ratio = 1)
 
+ggsave('../writing/journal_manuscript/figures/Exp2_numWords_partitionPrior.pdf',
+       width = 6, height = 6, useDingbats = F)
 ```
 
+```{r}
+trajectories %>%
+  mutate(condition = fct_relevel(condition, 'mixed')) %>%
+  group_by(chainNum, iterationNum, discountFactor, condition, blockNum) %>%
+  summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(discountFactor,condition,blockNum) %>%
+  summarize(m = mean(numUniqueWordsUsed))
+```
+
+# Statistics
 
 ```{r}
 mod1 <- trajectories %>%
@@ -111,37 +124,6 @@ anova(mod1, mod2,mod3)
 
 ```{r}
 trajectories %>%
-  mutate(sextet = floor((time) / 8)) %>%
-  #mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(iterationNum, discountFactor, chainNum, condition,  sextet) %>%
-  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(condition, sextet, discountFactor) %>%
-  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 100) %>%
-  ggplot(aes(x = sextet, y = empirical_stat, color = condition)) +
-    geom_line() +
-    geom_hline(yintercept = c(2, 4), linetype = 'dashed') +
-    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
-    theme_few() +
-    scale_color_manual(values = condition_pal) +
-    labs(y = "number unique words used") +
-    theme(aspect.ratio = 1)
-
-ggsave('../writing/journal_manuscript/figures/Exp2_model_numWords.pdf',
-       width = 4, height = 4, useDingbats = F)
-```
-
-```{r}
-trajectories %>%
-  mutate(condition = fct_relevel(condition, 'mixed')) %>%
-  group_by(gameNum, discountFactor, condition, repNum) %>%
-  summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
-  group_by(discountFactor,condition,repNum) %>%
-  summarize(m = mean(numUniqueWordsUsed))
-```
-
-
-```{r}
-trajectories %>%
   mutate(condition = fct_relevel(condition, 'mixed')) %>%
   group_by(gameNum, condition,  repNum) %>%
   summarize(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
@@ -150,7 +132,8 @@ trajectories %>%
   summary()
 
 ```
-Compare parameters
+
+# Compare parameters
 
 ```{r}
 trajectories %>%

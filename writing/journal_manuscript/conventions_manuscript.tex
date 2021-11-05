@@ -1,4 +1,4 @@
-\documentclass[10pt, man, floatsintext]{apa7}
+\documentclass[10pt, jou, floatsintext]{apa7}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[outdir=./]{epstopdf}
@@ -87,8 +87,8 @@
 
 \abstract{Languages are powerful solutions to coordination problems: they provide stable, shared expectations about how the words we say correspond to the beliefs and intentions in our heads.
 Yet language use in a variable and non-stationary social environment requires linguistic representations to be flexible: old words acquire new \emph{ad hoc} or partner-specific meanings on the fly. 
-In this paper, we introduce a hierarchical Bayesian theory of coordination and convention formation that aims to reconcile the long-standing tension between these two basic observations.
-Under the CHAI (Continual Hierarchical Adaptation through Inference) model, we argue that the central computational problem of communication is not simply transmission, as in classical formulations, but continual \emph{learning} and \emph{adaptation} over multiple timescales.
+In this paper, we introduce CHAI (Continual Hierarchical Adaptation through Inference), a hierarchical Bayesian theory of coordination and convention formation that aims to reconcile the long-standing tension between these two basic observations.
+We argue that the central computational problem of communication is not simply transmission, as in classical formulations, but continual \emph{learning} and \emph{adaptation} over multiple timescales.
 Partner-specific common ground quickly emerges from social inferences within dyadic interactions, while community-wide social conventions are stable priors that have been abstracted away from interactions with multiple partners.
 We present new empirical data alongside simulations showing how our model provides a computational foundation for several phenomena that have posed a challenge for previous accounts: (1) the convergence to more efficient referring expressions across repeated interaction with the same partner, (2) the gradual transfer of partner-specific common ground to strangers, and (3) the influence of communicative context on which conventions eventually form.
 }
@@ -309,16 +309,29 @@ In this case, rather than discrete categorical priors over meanings, we may plac
 We have previously achieved similar results using this alternative lexical representations in earlier iteration of this manuscript \cite{hawkins_convention-formation_2017,hawkins2020generalizing}, although deriving predictions required variational inference techniques rather than Markov Chain Monte Carlo. 
 Such optimization-based inference techniques may also provide the most promising path for extending our adaptive model to larger language models, including neural networks that operate over continuous spaces of image pixels and natural language embeddings \cite{hawkins2019continual}.
 
-\section*{Appendix C: Example of simplicity prior}
+\section*{Appendix C: Alternative lexical priors}
 
-Some models \cite<e.g.>{carr2020simplicity} force the lexicon to strictly partition the set of referents, ensuring that every object must be in the extension of exactly one word.
-In this case, a simplicity prior based on extension sizes sounds like it would conflict with a preference for smaller vocabulary sizes: the fewer words you have, the bigger each word's denotation must be, and the simplest lexicon is one word that covers everything. 
-Our model, however, does not hard-code such strong constraints and allows, in principle, all possible assignments of denotations to all words (including, e.g. highly redundant and overlapping lexicons where every object is in the extension of every word, as well as highly degenerate lexicons where every word has a completely empty extension). 
-In this case, a simplicity prior favoring simpler word meanings necessarily favors smaller lexicons. 
+A variety of priors have been proposed for probabilistic models of language learning and convention formation, which build in stronger or weaker assumptions about the structure of the lexicon.
+Our approach has been to err on the side of weaker assumptions and allow any stronger preferences to emerge naturally through pragmatic reasoning during learning and usage. 
+The space of possible lexicons we consider allows any denotation to be assigned to any word, including highly redundant and overlapping lexicons (where every object is in the extension of every word), and highly degenerate lexicons (where every word has a completely empty extension).
+Given this unconstrained space of lexicons, the simplest way to penalize complexity is to penalize the total extension size.
+In this case, favoring simpler word meanings necessarily favors smaller lexicons. 
 
-To illustrate this property, consider a game with a fixed set of two referents: a blue square and a red square. Then the meaning of a given utterance $u_i$ can either have extension size two (applying both objects, effectively meaning ‘square’), size one (applying only to ‘blue square’ or only to ‘red square’), or size zero (applying to neither of the objects). Now suppose there are 16 possible utterances. Then the lexicon with highest prior probability is the one where every utterance has an empty extension ($|\phi| = 16 \cdot 0 = 0$), which is also the smallest lexicon (an effective vocabulary size of 0). The lexicon with lowest prior probability is the one where every utterance has the maximal extension ($|\phi| = 16 \cdot 2 = 32$), which is also the largest lexicon (an effective vocabulary size of 16). Removing a single word from this maximal lexicon would reduce the size of the lexicon (e.g. 15 words instead of 16) and also reduce the total size of the words' extensions (e.g. taking a word with the maximal extension of size two and replacing it with the minimal extension of size zero: $|\phi| = 15 \cdot 2 + 1 \cdot 0 = 30$), which would slightly increase its prior probability. Of course, this scheme makes it possible to have a lexicon with smaller word meanings but not a smaller lexicon (e.g. for a lexicon where all 16 words have an extension size of 1, we have $|\phi| = 16 \cdot 1 = 16$, but the effective vocabulary size is still 16). So this prior straightforwardly encodes a preference for lexicons with fewer words, but gives partial credit when the words have ‘simpler’ meanings, breaking ties between lexicons with the same number of words.
+To illustrate this property, consider a game with a fixed set of two referents: a blue square and a red square. 
+Then the meaning of a given utterance $u_i$ can either have extension size two (applying both objects, effectively meaning ‘square’), size one (applying only to ‘blue square’ or only to ‘red square’), or size zero (applying to neither of the objects). 
+Now suppose there are 16 possible utterances. 
+Then the lexicon with highest prior probability is the one where every utterance has an empty extension ($|\phi| = 16 \cdot 0 = 0$), which is also the smallest lexicon (an effective vocabulary size of 0). 
+The lexicon with lowest prior probability is the one where every utterance has the maximal extension ($|\phi| = 16 \cdot 2 = 32$), which is also the largest lexicon (an effective vocabulary size of 16). 
+Removing a single word from this maximal lexicon would reduce the size of the lexicon (e.g. 15 words instead of 16) and also reduce the total size of the words' extensions (e.g. taking a word with the maximal extension of size two and replacing it with the minimal extension of size zero: $|\phi| = 15 \cdot 2 + 1 \cdot 0 = 30$), which would slightly increase its prior probability. 
+Of course, this scheme also makes it possible to have a lexicon with smaller word meanings but not a smaller lexicon (e.g. for a lexicon where all 16 words have an extension size of 1, we have $|\phi| = 16 \cdot 1 = 16$, but the effective vocabulary size is still 16). 
+So this prior straightforwardly encodes a preference for lexicons with fewer words, but gives partial credit when the words have ‘simpler’ meanings, breaking ties between lexicons with the same number of words.
 
-Note that stronger priors are possible and strengthen adaptation, such as one directly enforcing the principle of contrast \cite{clark1987principle}, assigning lower probability to lexicons that violate the principle (e.g. explicitly rejecting possibilities that contain two separate utterances with precisely the same meaning). However, we found it more theoretically satisfying for such preference emerge naturally through pragmatic reasoning mechanisms rather than building them directly into the prior. 
+To explore the robustness of our results in \textbf{P3}, where the simplicity prior played the largest role, we also ran our simulations using a more common ``partition-based'' prior that imposes stronger assumptions \cite<e.g.>{carr2020simplicity}. 
+This prior only considers lexicons that strictly partition the set of referents, ensuring that every object must be in the extension of exactly one word.
+In this case, the fewer words you have, the bigger each word's denotation must be, and the simplest lexicon is one word that covers everything.
+Simulation results using this prior are shown in \ref{fig:partitionPrior}. 
+Note that other choices are possible, such as those only enforcing mutual exclusivity, or enforcing the principle of contrast \cite{clark1987principle}.
+In the context of \textbf{P3}, we expect these choices to primarily affect choices on early trials: (1) an \emph{agglomerative} form of learning where all conditions begin using fine-grained language and then the \emph{coarse} condition gradually collapses down to a more minimal lexicon, or (2) a \emph{divisive} form where all conditions begin using coarse-grained language and then the \emph{fine} condition gradually introduces words with more refined meanings. 
 
 
 
@@ -371,6 +384,12 @@ Note that stronger priors are possible and strengthen adaptation, such as one di
 %  \label{fig:full_accuracy_grid}
 %\end{figure*}
 
+ \begin{figure*}
+\centering
+    \includegraphics[scale=.7]{partitionPrior.pdf}
+  \caption{Similar simulation results for \textbf{P3} are found when using a stronger partition-based lexical prior, where the space of lexicons is constrained to strictly partition the space of meanings (such that the `smallest' lexicon is one word referring to all 4 objects and the `largest' lexicon is 4 words, each referring to unique objects). Columns and rows of facets represent different values of $\alpha$ and $\beta$, respectively. }
+  \label{fig:partitionPrior}
+\end{figure*}
 
  \begin{figure*}
 \centering

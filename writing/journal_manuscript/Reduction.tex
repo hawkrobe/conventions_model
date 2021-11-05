@@ -48,8 +48,6 @@ The trial sequence was structured as a repeated reference game, containing 30 tr
 The two objects appeared in a random order within each block, and agents swapped roles at the beginning of each block.
 We show representative behavior at soft-max optimality parameter values $\alpha_L = \alpha_S = 8$ and memory discounting parameter $\beta = 0.8$, but find similar behavior in a wide regime of parameter values (see Appendix Fig.~\ref{fig:arbitrariness_grid}).
 
-
-
 We highlight several key results from this simulation.
 First, and most fundamentally, the communicative success of the dyad rises over the course of interaction: the listener is able to more accurately select the intended target object (see Fig.~\ref{fig:sec1model}A). 
 Second, the initial symmetry between meanings in the prior is broken by initial choices, leading to \emph{arbitrary} but \emph{stable} mappings in future rounds.
@@ -78,24 +76,24 @@ For example, a participant who hears `ice skater' on the first round of the task
 %This observation is key to understanding why speakers may initially use longer utterances in repeated reference games with ambiguous stimuli. 
 %Under a uniform prior, where all words are expected to be equally meaningless to one's partner, longer utterances would have no additional value. 
 %Under a concentrated prior, where there already exists a strong convention for a short label, that label would suffice and a longer utterance would be completely redundant.
-We thus initialize both agents with weak biases $\delta$ (represented in compressed matrix form in Fig.~\ref{fig:sec1efficiency}):
+We thus initialize both agents with weak biases $\delta$ (represented in compressed matrix form in Fig.~\ref{fig:sec1internals}):
 \begin{align}
 \phi(u_1), \phi(u_2) \sim \textrm{Categorical}(0.5 + \delta) \nonumber\\
 \phi(u_3), \phi(u_4) \sim \textrm{Categorical}(0.5 - \delta) \nonumber
 \end{align}
 
-\begin{figure}[t]
-\centering
-    \includegraphics[scale=.9]{sec1-reduction_example}
-  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
-  \label{fig:sec1efficiency}
-\end{figure}
+%\begin{figure}[t]
+%\centering
+%    \includegraphics[scale=.9]{sec1-reduction_example}
+%  \caption{\emph{Schematic of speaker for first trial of Simulation 1.2.} The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon.}
+%  \label{fig:sec1efficiency}
+%\end{figure}
 
 
 \begin{figure*}[t]
 \centering
-    \includegraphics[scale=1]{sec1-reduction_schematic}
-  \caption{\emph{Internal state of speaker in example trajectory from Simulation 1.2.} Each term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout an interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, they update their beliefs and become more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
+    \includegraphics[scale=.8]{sec1-reduction_schematic}
+  \caption{\emph{Internal state of speaker.} (A) Schematic showing how lexical uncertainty is added to a simple pragmatic speaker utility; CHAI proposes that lexical expectations are adapted over time based on social observations. (B) A single trial of Simulation 2.1. The speaker begins with uncertainty about the meanings in the listener's lexicon (e.g. assigning 55\% probability to the possibility that utterance $u_1$ means object $o_1$.) A target $o_1$ is presented, and the speaker samples an utterance from the distribution $S(u|o_1)$. Finally, they observe the listener's response and update their beliefs. Due to the compositional semantics of the utterance $u_1u_2$, the speaker becomes increasingly confident that both component primitives, $u_1$ and $u_2$, apply to object $o_1$ in their partner's lexicon. (C) Each internal term of the speaker's utility (Eq. \ref{eq:marginalized}) is shown throughout the interaction. When the speaker is initially uncertain about meanings (far left), the longer utterance $u_1u_2$ has higher expected informativity (center-left) and therefore higher utility (center-right) than the shorter utterances $u_1$ and $u_2$, despite its higher cost (far-right). As the speaker observes several successful interactions, they update their beliefs and become more confident about the meanings of the component lexical items $u_1$ and $u_2$. As a result, more efficient single-word utterances gradually gain in utility as cost begins to dominate the utility. On trial 5, $u_1$ is sampled, breaking the symmetry between utterances.}
   \label{fig:sec1internals}
 \end{figure*}
 
@@ -103,7 +101,7 @@ As in Simulation 1.1, we simulated 1000 distinct trajectories of dyadic interact
 Utterance cost was defined to be the number of `words' in an utterance, so $c(u_1) =1$ and $c(u_1u_2)=2$.
 As shown in Fig.~\ref{fig:sec1model}B, our speaker agent initially prefers longer utterance (mean length $\approx 1.5$ on first block) but rapidly converges to shorter utterances after several repetitions (mean length $\approx 1$ on final block), qualitatively matching the curves measured in the empirical literature.
 
-To illustrate in detail how our model derives this behavior, we walk step-by-step through a single trial (Fig. \ref{fig:sec1efficiency}).
+To illustrate in detail how our model derives this behavior, we walk step-by-step through a single trial (Fig. \ref{fig:sec1internals}).
 Consider a speaker who wants to refer to object $\bluesquare$. 
 They expect their partner to be slightly more likely to interpret their language using a lexicon in which $u_{1}$ and $u_{2}$ apply to this object, due to their weak initial biases. 
 However, there is still a reasonable chance ($p=0.45$) that either $u_1$ or $u_2$ alone will be interpreted to mean $\orangecircle$, giving their partner false beliefs. 
@@ -153,27 +151,27 @@ In other words, speakers apparently begin by combining multiple descriptive modi
 Why has this phenomenon remained outside the explanatory scope of previous models?
 Our account differs in both level of analysis and model complexity.
 For example, the influential \emph{interactive alignment} account proposes that that speakers adapt and coordinate on meaning through priming mechanisms that allow phonetic or syntactic features associated with lexical items to percolate up to strengthen higher levels of representation \cite{pickering2004toward, pickering2006alignment,roelofs1992spreading}.
-While priming mechanisms are certainly at play in repeated reference tasks, especially when listeners engage in extensive dialogue and alternate roles, it is not clear why priming alone would lead descriptions to get shorter as opposed to aligning on the same longer initial description.
-Furthermore, priming cannot explain why speakers still converge to more efficient labels even when the listener is prevented from saying anything at all and only sparse, non-verbal feedback is provided; conversely, speakers continue using longer descriptions when they receive non-verbal feedback that the listener is repeatedly making errors (\citeNP{KraussWeinheimer66_Tangrams}; see also \citeNP{hawkins2020characterizing}).
+While priming mechanisms are certainly at play in repeated reference tasks, especially when listeners engage in extensive dialogue and alternate roles, it is not clear why priming alone would lead to convergence on more efficient descriptions as opposed to aligning on the same longer initial description.
+Furthermore, priming cannot explain why speakers still converge to shorter descriptions even when the listener is prevented from saying anything at all and only sparse, non-verbal feedback of success is provided, or why speakers continue using longer descriptions when they receive non-verbal feedback that the listener is repeatedly making errors (\citeNP{KraussWeinheimer66_Tangrams}; see also \citeNP{hawkins2020characterizing}).
 In these cases, there are no linguistic features available for priming or alignment to act upon.
-Our computational-level account is not mutually exclusive with these process-level principles and does not in any way falsify or undermine them.
-Explaining when and why speakers believe that shorter descriptions suffice requires additional computational-level principles to be considered, which we hope will lead to further enrichment of algorithms at the process level.
+To be clear, our computational-level account is not mutually exclusive with these process-level principles and does not in any way falsify or undermine them.
+Explaining when and why speakers believe that shorter descriptions will suffice, and how it depends on context, requires additional computational-level principles, which we hope will lead to further enrichment of algorithms at the process level.
 
-Another prominent account proposes that speakers coordinate on meaning using some lexical update rule that makes utterances more likely to be produced after communicative successes and less likely after communicative failures.
+Another prominent account proposes that speakers coordinate on meaning using a simpler update rule that simpler makes utterances more likely to be produced after communicative successes and less likely after communicative failures.
 This account has often been implemented using a simple variant of reinforcement learning (RL) such as Roth-Erev learning \cite{erev1998predicting,steels_self-organizing_1995,barr_establishing_2004,young_evolution_2015}.
-While such minimal rules allow groups to reach consensus, it is challenging to explain the full suite of phenomena we have explored in this section.
-First, for most of these models, it is not clear how simply reinforcing initially long descriptions could lead utterances to get shorter. 
-Second, in the rare cases that have allowed longer utterances to be constructed compositionally from more primitive utterances, reduction has been hard-coded as a kind of $\epsilon$-greedy exploration where the speaker has a fixed probability of dropping a random token at each point in time \cite{beuls2013agent,steels2016agent}.
-Such random dropping, however, is inconsistent with early control experiments by \citeA{HupetChantraine92_CollaborationOrRepitition} where participants were asked to repeatedly refer to the same targets for a \emph{hypothetical} partner to see later, such that any effects of familiarity or repetition on the part of the speaker would be the same as the interactive task \cite<see also>{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}. 
-No evidence of reduction was found in this case, and in some cases utterances actually grew longer.
-Third, even if this problem were fixed by extending the update rule to be contingent on interaction, it is not clear why a speaker would initially prefer to produce longer utterances over shorter utterances.
+While such minimal rules allow groups to reach consensus, it is challenging to explain the full suite of phenomena we have explored in this section. 
+First, it is not clear how simply reinforcing longer descriptions could lead them to get shorter. 
+In the rare cases that have allowed longer utterances to be constructed compositionally from more primitive utterances, reduction has been hard-coded as a kind of $\epsilon$-greedy exploration where the speaker has a fixed probability of dropping a random token at each point in time \cite{beuls2013agent,steels2016agent}.
+Such noisy dropping, however, is inconsistent with studies by \citeA{HupetChantraine92_CollaborationOrRepitition} where participants were asked to repeatedly refer to the same targets for a \emph{hypothetical} partner to see later, such that any effects of familiarity or repetition on the part of the speaker would be the same as the interactive task.
+No evidence of reduction was found in this case, and in some cases utterances actually grew longer \cite<see also>{GarrodFayLeeOberlanderMacLeod07_GraphicalSymbolSystems}.
+Even if we fixed this problem by extending the update rule to be contingent on interaction, it is not clear why a speaker would initially prefer to produce longer utterances over shorter utterances.
 %Whatever drives increasing efficiency cannot be explained through speaker laziness, it must be a result of contingent \emph{interaction} between partners.
 %Second, it is inconsistent with the multi-partner settings explored by \citeA{wilkes-gibbs_coordinating_1992}, which we explore further in \textbf{P2}: It is not clear why a speaker who shortened their descriptions due to an $\epsilon$-greedy process would suddenly switch back to longer utterances when their partner is exchanged.
 
 Importantly, these limitations do not stem from the RL framework itself, but from the simplifying assumption that the probability of taking actions should be directly tied to the previous outcomes of those actions.
 CHAI preserves a core idea from these accounts --- the ability to dynamically adapt one's behavior contingent on one's partner's --- but disentangles the inference problem (i.e. estimating a partner's underlying lexicon) from the decision problem (i.e. deciding which action to take with these estimates in hand).
-Introducing the latent variable of the lexicon as an intermediate construct allows the model to be more explanatory while also necessarily increasing its complexity.
-Importantly, more sophisticated \emph{model-based} reinforcement learning algorithms make a similar distinction and may consequently be flexible enough to account for this phenomenon (see \citeNP{gershman2015novelty} for an explicit connection between hierarchical Bayes and an RL algorithm known as TD-learning; but see \citeNP{velez2021learning} for outstanding problems associated with bridging these perspectives).
+Introducing the latent variable of the lexicon increases the model's complexity but is also more explanatory, as we show in the subsequent sections. 
+Importantly, more sophisticated model-based reinforcement learning algorithms make a similar distinction and may consequently be flexible enough to account for this phenomenon (see \citeNP{gershman2015novelty} for an explicit connection between hierarchical Bayes and an RL algorithm known as TD-learning; but see \citeNP{velez2021learning} for outstanding problems associated with bridging these perspectives).
 %For instance, hierarchical architectures that appropriately incorporate compositionality or incrementality into the speaker's production model may be able to reinforce component parts of longer utterances in the shared history \cite<e.g.>{hawkins2019continual}.
 %Still, such an approach would have more in common with our proposal than to the model-free heuristics in the existing literature.
 

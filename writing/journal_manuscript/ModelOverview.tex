@@ -4,8 +4,9 @@ We begin from first principles: What is the core computational problem that must
 Classically, this problem has been formulated in terms of coding and compression \cite{Shannon48}. 
 An intended meaning in the speaker's mind must be encoded as a signal that is recoverable by the receiver after passing through a noisy transmission channel.
 This transmission problem has since been enriched to account for \emph{pragmatics} -- the ability of speakers and listeners to use context and social knowledge to go beyond the literal meaning of messages \cite{RosenbergCohen66_ReferentialProcesses,sperber1986relevance}.
-We take the Rational Speech Act framework \cite<RSA;>{frank_predicting_2012,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} as representative of this current synthesis, formalizing communication as recursive social inference in a probabilistic model.
-In the next section, we review this basic framework and raise two fundamental computational problems facing it, which motivate the CHAI model.
+We take the Rational Speech Act framework \cite<RSA;>{FrankGoodman12_PragmaticReasoningLanguageGames,goodman_pragmatic_2016,FrankeJager16_ProbabilisticPragmatics} as representative of this current synthesis, formalizing communication as recursive social inference in a probabilistic model (see Appendix A for technical details.)
+In the next section, we review this basic framework and raise two fundamental computational problems facing it.
+These problems motivate the introduction of continual learning in the CHAI model.
 
 \subsection{Models of communication with static meaning}
 
@@ -216,9 +217,8 @@ First, our Gricean agents'  production and comprehension is guided by cooperativ
 They do not only make passive inferences from observation, they participate in the interaction by \emph{using language} themselves.
 Second, our agents assume that their \emph{partner} is also using language in a cooperative manner, which strengthens the inferences they may make about the underlying system of meanings their partner is using.
 That is, we use the RSA equations as the linking function in the likelihood $P(D_k | \phi_k)$, representing an agent's prediction about how a partner with meaning function $\phi_k$ would actually behave in context (Eq.~\ref{eq:joint_inference}). 
-This use of pragmatic reasoning has been explicitly linked to \emph{mutual exclusivity} in word learning \cite{bloom2002children,FrankGoodmanTenenbaum09_Wurwur,SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS,gulordava2020one,ohmerreinforcement}.
+This use of pragmatic reasoning has been explicitly linked to principles like mutual exclusivity in word learning \cite{bloom2002children,FrankGoodmanTenenbaum09_Wurwur,SmithGoodmanFrank13_RecursivePragmaticReasoningNIPS,gulordava2020one,ohmerreinforcement}.
 For example, upon hearing their partner use a particular utterance $u$ to refer to an object $o$, a pragmatic listener can not only infer that $u$ means $o$ in their partner's lexicon, but also that other utterances $u'$ likely do \emph{not} mean $o$: if they did, the speaker would have used them instead.
-Many minor variations on the basic RSA model have been explored in previous work, and we discuss several further technical choices of our formulation in Appendix A.
 
 \subsection{Simulation details}
 
