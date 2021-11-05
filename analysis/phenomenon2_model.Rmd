@@ -134,12 +134,11 @@ ggsave('../writing/journal_manuscript/figures/sec3-model-results.pdf',
 ```
 
 ```{r}
-conv <- exampleNetworks %>%
+exampleNetworks %>%
   filter(!(iterationNum %in% incompleteGames)) %>%
-  getConvergence() 
-
-%>%
-  glm(match ~ partnerID * comparison)
+  getConvergence() %>%
+  glm(match ~ partnerID * partnerType + (1 | ), family = 'binomial', data = .) %>%
+  summary()
 ```
 
 # Parameter sweep

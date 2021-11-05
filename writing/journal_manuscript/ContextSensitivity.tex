@@ -1,9 +1,9 @@
-\begin{figure}[t]
+\begin{figure*}[t]
 \begin{center}
 {\includegraphics[scale=1.6]{./figures/Sec2-design.pdf}}
 {\caption{{\emph{Context-sensitivity experiment.} (A) Targets are related to one another in a conceptual taxonomy. (B) Speakers choose between labels, where the label ``niwa'' has been selected. (C) Examples of \emph{fine} and \emph{coarse} contexts. In the \emph{fine} context, the target (marked in black) must be disambiguated from a distractor (marked in grey) at the same subordinate-level branch of the taxonomy.  In the \emph{coarse} context, the closest distractor belongs to a different branch of the center-level of the taxonomy (i.e. a spotted circle) such that disambiguation at the sub-ordinate level is not required. \label{fig:context_design}}}}
 \end{center}
-\end{figure}
+\end{figure*}
 
 In the previous two sections, we evaluated a model of rapid, partner-specific learning that allows agents to form stable but arbitrary \emph{ad hoc} conventions with partners that gradually generalize to their entire community. 
 The final phenomenon we consider is the way that \emph{ad hoc} conventions are shaped by the communicative needs of the context in which they form.
@@ -85,7 +85,7 @@ As an initial marker of context sensitivity, we examine the effective vocabulary
 We operationalized this measure by counting the total number of unique words produced within each repetition block.
 This measure takes a value of 8 when a different word is consistently used for every object, and a value of 1 when exactly the same word is used for every object.
 In an mixed-effects regression model including intercepts and random effects of trial number for each simulated trajectory, we find an overall main effect of condition, with agents in the fine condition using significantly more words across all repetition blocks ($m = 4.7$ in \emph{coarse}, $m=6.5$ in \emph{fine,} $t = 4.5, p < 0.001$).
-However, we also found a significant interaction: the effective vocabulary size gradually increased over time in the fine condition, while it stayed roughly constant in in the coarse condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}B.
+However, we also found a significant interaction: the effective vocabulary size gradually dropped over time in the coarse condition, while it stayed roughly constant in in the fine condition, $b = 0.18, t = 8.1, p < 0.001$, see Fig.~\ref{fig:sec2Results}B.
 
 Next, we examine more closely the emergence of terms at different levels of generality.
 We have access not only to the signaling behavior of our simulated agents, but also their internal \emph{beliefs} about their partner's lexicon, which allows us to directly examine the evolution of these beliefs from the beginning of the interaction.
@@ -109,7 +109,7 @@ We use a between-subjects design where pairs of participants are assigned to dif
 
 \subsubsection{Participants}
 
-We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game. Pairs were randomly assigned to one of three different conditions, yielding $n=36$ dyads in the \emph{coarse} condition, $n=38$ in the \emph{fine} condition, and $n=53$ in the \emph{mixed} condition after excluding participants who disconnected before completion\footnote{This experiment was pre-registered at \url{https://osf.io/2hkjc/} with a target sample size of roughly 40 games per condition. We had originally also planned to exclude participants who failed to achieve 75\% accuracy on the final block, to restrict analyses to ``converged'' lexica, but later decided that this would eliminate variation of interest across conditions, and instead included all pairs who completed the task. All statistical tests in mixed-effects models reported in this section use degrees of freedom based on the Satterthwaite approximation \cite{luke2017evaluating}.}.
+We recruited 278 participants from Amazon Mechanical Turk to play an interactive, multi-player game. Pairs were randomly assigned to one of three different conditions, yielding $n=36$ dyads in the \emph{coarse} condition, $n=38$ in the \emph{fine} condition, and $n=53$ in the \emph{mixed} condition after excluding participants who disconnected before completion\footnote{This experiment was pre-registered at \url{https://osf.io/2hkjc/} with a target sample size of roughly 40 games per condition. We planned to include all participants for our accuracy analyses but then exclude participants who were still below 75\% accuracy on the final quarter of the task $(n=29$ pairs) for our analyses of the lexicon, to ensure post-test measurements could be interpreted as ``converging'' lexicons (as opposed to pairs who had lost interest or given up). We were later concerned that this exclusion could lead to spurious differences because convergence rates differed across conditions, but no results substantially changed depending on the exclusion criteria. All statistical tests in mixed-effects models reported in this section use degrees of freedom based on the Satterthwaite approximation \cite{luke2017evaluating}.}.
 
 \subsubsection{Procedure \& Stimuli}
 Participants were paired over the web and placed in a shared environment containing an array of four objects at a time (Fig.~\ref{fig:context_design}A) and a `chatbox' to choose utterances from a fixed vocabulary by clicking-and-dragging (Fig.~\ref{fig:context_design}B). On each trial, one player (the `speaker') was privately shown a highlighted target object and allowed to send a single word to communicate the identity of this object to their partner (the `listener'), who subsequently made a selection from the array. Players were given full feedback, swapped roles each trial, and both received bonus payment for each correct response.
@@ -123,12 +123,12 @@ These arrays were held constant across trials.
 However, as in our simulations, the set of referents on each trial was manipulated in a between-subjects design to test the context-sensitivity of the resulting conventions. 
 The trial sequence consisted of 6 blocks of 16 trials, for a total of 96 trials.
 Each of the eight possible objects shown in Fig.~\ref{fig:context_design}A appeared as the target exactly twice per block, and was prevented from being shown twice in a row.
-
 %In the \emph{fine} condition, all targets appeared in fine contexts; in the \emph{coarse} condition, all targets appeared in coarse contexts.
 %To match our model as closely as possible, pairs were assigned one of the same sequences of trials that we constructed for our simulations. 
 In addition to behavioral responses collected over the course of the game, we designed a post-test to explicitly probe players' final lexica. 
 For all sixteen words, we asked players to select all objects that a word can refer to (if any), and for each object, we asked players to select all words that can refer to it (if any). 
-This bidirectional measure allowed us to check the internal validity of the lexica reported.
+This bidirectional measure allowed us to check the internal validity of the lexica reported checking mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa').
+We conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses.
 
 %\begin{figure}[t]
 %\begin{center}
@@ -157,12 +157,11 @@ A mixed-effects logistic regression on listener responses with trial number as a
 Accuracy also differed significantly \emph{across} conditions: adding an additional main effect of condition to our logistic model provided a significantly better fit, $\chi^2(2) = 10.8, p = 0.004$. 
 Qualitatively, the \emph{coarse} condition was easiest for participants, the \emph{fine} condition was hardest, and the \emph{mixed} condition was in between.
 These effects track the most important qualitative feature of our simulations -- our artificial agents were also able to successfully coordinate in both conditions, and did so more easily in the coarse condition than the fine condition. 
-However, we found that the speed of coordination in the mixed and fine conditions was larger than predicted in our simulations.
+However, we found that the speed of coordination in the mixed and fine conditions was slower than predicted in our simulations.
 The additional difficulty participants' experienced in the \emph{fine} condition may be due to additional motivational constraints, memory constraints, or other factors not captured in our model.
 
 
 %Finally, the (log) response time taken by the speaker to choose an utterance also decreased significantly over the course of the game, $t(126) = -19.7, p < 0.001$, from approximately 20 seconds to only 6 seconds on average, indicating that lexical mappings became increasingly established or accessible.
-
 %
 %\paragraph{Partners converge on similar conventions}
 %
@@ -173,40 +172,39 @@ The additional difficulty participants' experienced in the \emph{fine} condition
 %Overall accuracy in the game is strongly correlated with alignment: partners who reported more similar lexica at the end also tended to perform significantly better at the task ($r = 0.77, t(120) = -13.5,~p <0.001$).  
 %Despite these broad markers of convergence at the group level, individual performance had a long tail: a subpopulation of 29 games (11\% of coarse games, 18\% of mixed games, and 39\% of fine games) still showed relatively poor performance late in the game (see Fig.~\ref{fig:full_accuracy_grid} in Appendix for full histograms).
 %For the subsequent analyses focusing on the content of the lexicon, we exclude games with accuracy below the pre-registered criterion of 75\% on the final quarter of trials to ensure we are examining only the content of lexica that converged.
-%\rdh{double-check this. add better motivation if I do this.}
 
-\subsubsection{Validating post-test responses}
 
-Before examining post-test responses, we validate their internal consistency.
-For each participant, we counted the number of mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa'). 
-In general, participants were highly consistent: out of 128 cells in the lexicon matrix (16 words $\times$ 8 objects), the median number of mismatches was 2 (98\% agreement), though the distribution has a long tail (mean $= 7.3$). 
-We therefore conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses for the subsequent analyses.
+% \subsubsection{Validating post-test responses}
+
+%Before examining post-test responses, we validate their internal consistency.
+%For each participant, we counted the number of mismatches between the two directions of the lexicon question (e.g.\ if they clicked the word `mawa' when we showed them one of the blue squares, but failed to click that same blue square when we showed `mawa'). 
+%In general, participants were highly consistent: out of 128 cells in the lexicon matrix (16 words $\times$ 8 objects), the median number of mismatches was 2 (98\% agreement), though the distribution has a long tail (mean $= 7.3$). 
+%We therefore conservatively take a participant's final lexicon to be the \emph{intersection} of their word-to-object and object-to-word responses for the subsequent analyses.
 
 \subsubsection{Contextual pressures shape the lexicon}
 
 We predicted that in contexts regularly requiring speakers to make fine distinctions among objects at subordinate levels of the hierarchy, we would find lexicalization of specific terms for each object (indeed, a one-to-one mapping may be the most obvious solution in a task with only 8 objects). 
 Conversely, when no such distinctions were required, we expected participants to adaptively conventionalize more general terms that could be reused across different contexts.
 One coarse signature of this prediction lies in the \emph{compression} of the resulting lexicon: less specific conventions should allow participants to achieve the same communicate accuracy with a smaller vocabulary.
-To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words for which they marked at least one object in the post-test in an internally consistent way). 
-We then conducted a mixed-effects regression predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
-We found that participants in the \emph{coarse} condition reported significantly smaller, simpler lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.~\ref{fig:sec2postTest}). 
+We calculated the same measure of effective vocabulary size that we used in our simulations (Fig.~\ref{fig:sec2Results}D): the number of unique words produced in each repetition block. 
+We then constructed a mixed-effects regression model predicting effective vocabulary size, including fixed effects of condition and six repetition blocks, with random intercepts and repetition block slopes for each dyad. 
+First, we found an overall main effect of condition, with significantly fewer words used in the coarse condition $(m = 5.5)$ than the mixed ($m=7.9$, $t(95)=13.2$, $p <0.001$) or fine ($m=8.3$, $t(95) =13.3$, $p < 0.001$) conditions.
+Consistent with our simulations, we also found a significant interaction between block and condition, with the coarse condition decreasing more over time than mixed ($b = 0.39$, $t(95) = 3.4$, $p < 0.001$) or fine ($b=0.36$, $t(95)=2.6$, $p=0.009$; see Fig.~\ref{fig:sec2Results}D).
+%This interaction is consistent with gradual compression based on communicative need.
 
-What allowed participants in the \emph{coarse} condition get away with fewer words in their lexicon while maintaining high accuracy?
+
+%To test this prediction, we operationalize vocabulary size as the number of words in each participant's reported lexicon in the post-test (i.e.\ the words where at least one object was marked in an internally consistent way.
+%We then conducted a mixed-effects regression predicting each individual's vocabulary size as a function of dummy-coded condition factors, with random intercepts for each game. 
+%We found that participants in the \emph{coarse} condition reported significantly smaller, simpler lexica ($m = 4.9$ words) than participants in the \emph{mixed} ($m=7.1, t(110.8)=7.6, p < 0.001$) and \emph{fine} condition ($m = 6.9, t(109.3) = 6.4, p < 0.001$; see Fig.~\ref{fig:sec2postTest}). 
+What allowed participants in the coarse condition get away with fewer words in their lexicon while maintaining high accuracy?
 We hypothesized that each word had a larger extension size. 
-To test this hypothesis, we counted the numbers of `specific' terms (e.g.~words that refer to only one object) and more `general' terms (e.g.~words that refer to two objects) in the post-test. 
+To test this hypothesis, we turned to our post-test survey.
+We counted the numbers of `specific' terms (e.g.~words that refer to only one object) and `general' terms (e.g.~words that refer to two objects) in the post-test. 
 We found that the likelihood of lexicalizing more general terms differed systematically across conditions.
-Participants in the \emph{coarse} condition reported significantly more general terms ($m=2.3$) than in the \emph{fine} ($m = 0.24, t(121.2) = 8.5, p < 0.001$) or \emph{mixed} ($m=0.65, t(122.7)= 7.3, p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
+Participants in the coarse condition reported significantly more general terms ($m=2.3$) than in the mixed ($m=0.47$, $t(91.8)= 8.8$, $p < 0.001$) or fine ($m = 0.04$, $t(90.2) = 9.2$, $p < 0.001$) conditions, where lexicons contained almost exclusively specific terms.
 Using the raw extension size of each word as the dependent variable instead of counts yielded similar results.
 Indeed, the modal system in the fine condition was exactly eight specific terms with no more general terms, and the modal system in the coarse condition was exactly four general terms (red, blue, striped, spotted) with no specific terms.
 However, many individual participants reported a mixture of terms at different levels of generality (see Appendix Fig.~\ref{fig:mixtureOfTerms}). 
-
-But did these lexica emerge over the course of interaction? 
-We use the same measure of unique words produced in each repetition block that we used in our simulations (Fig.~\ref{fig:sec2Results}D). 
-We constructed a mixed-effects regression model predicting the effective vocabulary size, including fixed effects of condition and repetition block, and random intercepts and effects of repetition block for each dyad. 
-As in the post-test reports, we found an overall main effect of condition, with participants in the coarse condition using significantly fewer words throughout the experiment. 
-Critically, however, we also found a significant interaction between block and condition. 
-The effective vocabulary size gradually increased over time in the fine condition but remained roughly constant in the coarse condition, $b = 0.12, t = 4.5, p < 0.001$, see Fig.~\ref{fig:sec2Results}D.
-This interaction, where participants initially attempt to reuse the same terms across targets in the fine condition, is consistent with a gradual differentiation based on communicative need.
 
 %\paragraph{Model comparison}
 

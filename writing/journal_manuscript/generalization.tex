@@ -14,8 +14,9 @@ We call this a \emph{no-pooling} model \cite<see>[which contrasted no-pooling an
 The problem with no-pooling is that agents are forced to start from scratch with each partner.
 Community-level expectations never get off the ground.
 
-CHAI is a hierarchical \emph{partial-pooling} account that offers a compromise between these extremes.
-Unlike simpler complete-pooling and no-pooling models, we propose that beliefs about language have hierarchical structure.
+In other words, complete-pooling and no-pooling models are \emph{prima facie} unable to explain partner-specific or community-level convention formation, respectively. 
+CHAI is a hierarchical \emph{partial-pooling} account that offers a solution to this puzzle. 
+We propose that beliefs about language have hierarchical structure.
 That is, the meanings used by different partners are expected to be drawn from a shared community-wide distribution but are also allowed to differ from one another in systematic, partner-specific ways.
 This structure provides an inductive pathway for abstract population-level expectations to be distilled from partner-specific experience.
 The key predictions distinguishing our model thus concern the pattern of generalization across partners.
@@ -53,13 +54,13 @@ where $\lambda \cdot \boldsymbol{\alpha}$ gives the concentration parameter enco
 The relative values of the entries of $\boldsymbol{\alpha}$ correspond to inductive biases regarding the central tendency of lexicons, while the absolute magnitude of  the scaling factor $\lambda$ roughly corresponds to prior beliefs about the spread, where larger magnitudes correspond to more concentrated probability distributions across the population.
 We fix $\lambda = 2$ and assume the agent has uncertainty about the population-level central tendency by placing a hyper-prior on $\alpha$ \cite<see>{cowans2004information} that roughly corresponds to the weak initial preferences we used in our previous simulations:
 %We set $\boldsymbol{\alpha} = [1,1.5]$ for $u\in \{u_1,u_2\}$ and  $\boldsymbol{\alpha} = [1.5, 1]$ for $u\in\{u_3,u_4\}$ to encode weak initial preferences, as in Simulation 1.2.
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
 \includegraphics[scale=.8]{./figures/sec3-model-results.pdf}
 \vspace{1em}
 \caption{Simulation results and empirical data for (A) speaker reduction, and (B) network convergence across three partners. In (A) vertical boundaries mark time points when new partners were introduced, and the dotted grey line represents what would be produced for a stranger at each point in time. In (B), dashed line represents alignment between partners who are currently paired while solid line represents alignment across partners who are \emph{not} paired. Error bars represent bootstrapped 95\% confidence intervals.}
 \label{fig:results}
-\end{figure}
+\end{figure*}
 
 
 \begin{equation*}
@@ -160,7 +161,7 @@ First, one of the four tangrams in the context was highlighted as the \emph{targ
 They were instructed to use a chatbox to communicate the identity of this object to their partner, the listener.
 The two participants could engage freely in dialogue through the chatbox but the listener must ultimately make a selection from the array. 
 Finally, both participants in a pair were given full feedback on each trial about their partner's choice and received bonus payment for each correct response. 
-The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. `the one on the left').
+The order of the stimuli on the screen was randomized on every trial to prevent the use of spatial cues (e.g. ``the one on the left'').
 The display also contained an avatar for the current partner  representing different partners with different colors as shown in Fig.~\ref{fig:task1_display} to emphasize that they were speaking to the same partner for an extended period.
 On the waiting screen between partners, participants were shown the avatars of their previous partner and upcoming partner and told that they were about to interact with a new partner.
 
@@ -213,7 +214,7 @@ The partial-pooling model is the only model predicting all three of these effect
 
 Now, we examine the \emph{content} of conventions and evaluate the extent to which alignment increased across the network over the three partner swaps. 
 Specifically, we extend the same measure of alignment used in our simulations to natural language data by examining whether the intersection of words produced by different speakers was non-empty.
-We excluded a list of common stop words (e.g. 'the', 'both') to focus on core conceptual content.
+We excluded a list of common stop words (e.g. ``the'', ``both'') to focus on core conceptual content.
 While this pure overlap measure provides a relatively weak notion of similarity, a more continuous measure based on the \emph{size} of the intersection or the string edit distance yielded similar results.
 
 As in our simulation, the main comparison of interest was between currently interacting participants and participants who are not interacting: the partial-pooling model predicted that within-pair alignment should stay consistently high while (tacit) alignment between non-interacting pairs will increase. 

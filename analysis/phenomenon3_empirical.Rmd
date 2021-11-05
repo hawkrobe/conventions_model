@@ -40,6 +40,71 @@ masterGameIDLookup <- raw_clicks %>%
   distinct()
 ```
 
+Filter out incompletes & compute cumulative accuracy. We also divide into quarters to compare games that ran different amounts of trials.
+
+```{r}
+incompletes <- raw_clicks %>% 
+  group_by(gameid) %>%
+  tally() %>%
+  filter(n < 90) %>%
+  pull(gameid)
+
+non_converged <- raw_clicks %>%
+  mutate(quarter = floor((trialNum - 1) / (last(trialNum)/4))) %>%
+  filter(quarter == 3) %>%
+  group_by(gameid) %>%
+  summarize(acc = mean(correct)) %>%
+  filter(acc < 0.75) %>%
+  pull(gameid)
+
+d <- raw_clicks %>%
+  mutate(acc = ifelse(correct, 1, 0)) %>%
+  filter(!(gameid %in% incompletes)) %>%
+  group_by(gameid) %>%
+  mutate(quarter = floor((trialNum - 1) / (last(trialNum)/4))) %>%
+  mutate(cumAcc = cumsum(acc)) %>%
+  mutate(overallAcc = last(cumAcc)/last(trialNum)) %>%
+  left_join(raw_drops, by = c('gameid', 'trialNum', 'intendedName')) %>%
+  select(-ends_with('y'), -ends_with('x'), -correct) %>%
+  left_join(masterWordIDLookup) %>%
+  left_join(masterGameIDLookup) %>%
+  ungroup()
+
+
+```
+
+Look at how many games we have in each condition
+
+```{r}
+d %>% 
+  group_by(gameid, condition) %>%
+  tally() %>%
+  group_by(condition) %>%
+  summarize(n = length(n))
+```
+Write out in nice format for BDA.
+
+```{r}
+gameIDs = d %>% 
+  pull(id) %>%
+  unique()
+
+for(i in gameIDs) {
+  toWrite = d %>% 
+    ungroup() %>%
+    filter(id == i) %>%
+    mutate(speakerID = ifelse(trialNum %% 2 == 0, 1, 2),
+           listenerID = ifelse(trialNum %% 2 == 0, 2, 1)) %>%
+    select(-gameid, -text, -acc, -quarter, -cumAcc, -overallAcc, -timeFromRoundStart)  
+  write_csv(toWrite, path = paste0('../simulations/cogsci2018/input/', i, '.csv'))
+}
+
+d %>%
+  select(id, condition) %>%
+  unique() %>%
+  write_csv( path = '../simulations/cogsci2018/input/all_gameids.csv')
+```
+
 Read in post-test results
 
 ```{r}
@@ -90,60 +155,6 @@ postTest <- postTest_obj %>%
          condition = fct_relevel(condition, 'coarse', 'mixed', 'fine'))
 ```
 
-Filter out incompletes & compute cumulative accuracy. We also divide into quarters to compare games that ran different amounts of trials.
-
-```{r}
-incompletes <- raw_clicks %>% 
-  group_by(gameid, condition) %>%
-  tally() %>%
-  filter(n < 90) %>%
-  pull(gameid)
-
-d <- raw_clicks %>%
-  mutate(acc = ifelse(correct, 1, 0)) %>%
-  filter(!(gameid %in% incompletes)) %>%
-  group_by(gameid) %>%
-  mutate(quarter = floor((trialNum - 1) / (last(trialNum)/4))) %>%
-  mutate(cumAcc = cumsum(acc)) %>%
-  mutate(overallAcc = last(cumAcc)/last(trialNum)) %>%
-  left_join(raw_drops, by = c('gameid', 'trialNum', 'intendedName')) %>%
-  select(-ends_with('y'), -ends_with('x'), -correct) %>%
-  left_join(masterWordIDLookup) %>%
-  left_join(masterGameIDLookup) %>%
-  ungroup()
-```
-Look at how many games we have in each condition
-
-```{r}
-d %>% 
-  group_by(gameid, condition) %>%
-  tally() %>%
-  group_by(condition) %>%
-  summarize(n = length(n))
-```
-Write out in nice format for BDA.
-
-```{r}
-gameIDs = d %>% 
-  pull(id) %>%
-  unique()
-
-for(i in gameIDs) {
-  toWrite = d %>% 
-    ungroup() %>%
-    filter(id == i) %>%
-    mutate(speakerID = ifelse(trialNum %% 2 == 0, 1, 2),
-           listenerID = ifelse(trialNum %% 2 == 0, 2, 1)) %>%
-    select(-gameid, -text, -acc, -quarter, -cumAcc, -overallAcc, -timeFromRoundStart)  
-  write_csv(toWrite, path = paste0('../simulations/cogsci2018/input/', i, '.csv'))
-}
-
-d %>%
-  select(id, condition) %>%
-  unique() %>%
-  write_csv( path = '../simulations/cogsci2018/input/all_gameids.csv')
-```
-
 # Behavioral Results 
 
 ## Partners successfully learn to communicate (Fig. 8)
@@ -159,15 +170,15 @@ Make Fig. 8
 ```{r}
 d %>%
   mutate(sextet = floor((trialNum - 1) / 16)) %>%
-  group_by(condition, sextet) %>%
+  group_by(condition, trialNum) %>%
   tidyboot_mean(acc) %>%
-  ggplot(aes(x = sextet, y = 100 * empirical_stat, color = condition)) +
-    #geom_point(alpha = 0.2, stroke = 0, size = 2) +
-    geom_line()+
+  ggplot(aes(x = trialNum, y = 100 * empirical_stat, color = condition)) +
+    geom_point(alpha = 0.2, stroke = 0, size = 2) +
+    #geom_line()+
     theme_few() +
-    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
+    #geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = 25, lty = 'dashed') +
-    #geom_smooth(method = 'loess') +
+    geom_smooth(method = 'loess') +
     scale_color_manual(values = condition_pal) +
     theme(aspect.ratio = 1) +
     labs(x = 'trial #', y = '% correct') +
@@ -212,6 +223,7 @@ postTest %>%
 
 ```{r}
 d %>%
+  filter(!(gameid %in% non_converged)) %>%
   mutate(repNum = floor((trialNum - 1) / 8)) %>%
   mutate(sextet = floor((trialNum - 1) / 16)) %>%
   group_by(gameid, condition, sextet) %>%
@@ -233,6 +245,7 @@ Statistics
 
 ```{r}
 uniqueWords <- d %>%
+  filter(!(gameid %in% non_converged)) %>%
   mutate(sextet = floor((trialNum - 1) / 16)) %>%
   group_by(gameid, condition, sextet) %>%
   summarize(numUniqueWordsUsed = length(unique(wordID))) %>%
@@ -247,31 +260,22 @@ uniqueWords %>%
 Compare raw vocabulary size in post-test
 
 ```{r}
-postTest %>%
-  group_by(gameid, finalRole, wordID, condition) %>%
-  summarize(numObjects = sum(meaning)) %>%
-  filter(numObjects > 0) %>%
-  group_by(gameid, finalRole, condition) %>%
-  summarize(vocabSize = n()) %>%
-  lmer(vocabSize ~ condition + (1 | gameid), data = .) %>%
-  summary()
-```
-
-Compare average extension size in post-test
-
-```{r}
-postTest %>%
-  group_by(gameid, finalRole, wordID, condition) %>%
-  summarize(extensionSize = sum(meaning)) %>%
-  filter(extensionSize > 0) %>%
-  lmer(extensionSize ~ condition + (1 | gameid), data = .) %>%
-  summary()
+# postTest %>%
+#   #filter(!(gameid %in% non_converged)) %>%
+#   group_by(gameid, finalRole, wordID, condition) %>%
+#   summarize(numObjects = sum(meaning)) %>%
+#   filter(numObjects > 0) %>%
+#   group_by(gameid, finalRole, condition) %>%
+#   summarize(vocabSize = n()) %>%
+#   lmer(vocabSize ~ condition + (1 | gameid), data = .) %>%
+#   summary()
 ```
 
 How many abstract vs. specific terms?
 
 ```{r}
 lexiconCounts <- postTest %>% 
+  filter(!(gameid %in% non_converged)) %>%
   group_by(gameid, finalRole, wordID, condition) %>%
   summarize(numMeanings = sum(meaning)) %>%
   group_by(condition, numMeanings) %>%
@@ -283,7 +287,7 @@ lexiconCounts <- postTest %>%
 
 lexiconCounts %>%
   mutate(numWords = 16*pct) %>%
-ggplot(aes(x = condition, y = numWords, fill = fct_relevel(factor(numMeanings), '0', '2', '1'))) +
+  ggplot(aes(x = condition, y = numWords, fill = fct_relevel(factor(numMeanings), '0', '2', '1'))) +
     geom_bar(stat = 'identity', width=.75) +
     scale_fill_manual(values = c('#E6E6E5','#97A5A4', '#231F20')) +
     scale_y_continuous(breaks = c(0,4,8,12,16)) +
@@ -293,10 +297,26 @@ ggplot(aes(x = condition, y = numWords, fill = fct_relevel(factor(numMeanings), 
 ggsave('../writing/cogsci18/figures/lexiconContent.pdf', width = 3, height = 3)
 ```
 
+Compare average extension size in post-test
+
+```{r}
+postTest %>%
+  filter(!(gameid %in% non_converged)) %>%
+  group_by(gameid, finalRole, wordID, condition) %>%
+  summarize(extensionSize = sum(meaning)) %>%
+  group_by(gameid, condition, finalRole, extensionSize) %>%
+  tally() %>%
+  mutate(extensionSize = factor(extensionSize)) %>%
+  complete(extensionSize, nesting(gameid, condition, finalRole), fill = list(n = 0)) %>%
+  filter(extensionSize == 2) %>%
+  lmer(n ~ condition + (1 | gameid), data = .) %>%
+  summary()
+```
 What is modal response in each condition?
 
 ```{r}
 postTest %>% 
+  filter(!(gameid %in% non_converged)) %>%
   group_by(gameid, finalRole, wordID) %>%
   filter(meaning == 1) %>%
   summarize(subordinate = sum(meaning) == 1,
