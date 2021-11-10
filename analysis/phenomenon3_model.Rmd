@@ -36,37 +36,35 @@ data.frame(
 ggsave('../writing/journal_manuscript/figures/clark92.pdf', height = 8, width = 8, units = 'cm', useDingbats = F)
 ```
 
-## Examine trajectory of model simulations
+## Examine trajectory of specific model simulations (Fig. 9B)
 
 ```{r}
-simplicityPriorTrajectoriesPath <- 'simulations/P3/output/simplicity_trajectories.csv'
 sharpPriorTrajectoriesPath <- 'simulations/P3/output/sharpPriorTrajectories.csv'
-trajectories <- read_csv(here(simplicityPriorTrajectoriesPath)) %>%
-  filter(time < 24) %>%
+trajectories <- read_csv(here(sharpPriorTrajectoriesPath)) %>%
+  filter(speakerAlpha == 8, discountFactor == 0.8) %>%
   mutate(blockNum = floor((time) / 8)) %>%
   mutate(repNum = floor((time) / 4))
   
 trajectories.acc <- trajectories %>%
   group_by(discountFactor, speakerAlpha, condition, time) %>%
-  tidyboot_mean(correct, nboot= 100) 
+  tidyboot_mean(correct, nboot= 1) 
 
 trajectories.acc %>%
   ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
     geom_point(alpha = 0.2, stroke = 0, size = 2) +
-    geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
+    #geom_errorbar(aes(ymin = ci_lower*100, ymax = ci_upper*100), width = 0) +
     geom_hline(yintercept = c(50,100), lty = 'dashed') +
-    geom_smooth(se=F) +
-    facet_grid(discountFactor ~ speakerAlpha) +
+    geom_smooth(se=F, span=.75) +
     labs(y = '% correct', x = 'trial #') +
     theme_few() +
     scale_color_manual(values = condition_pal) +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/Exp2_model_partitionPrior.pdf',
-       width = 6, height = 6, units = 'in',
-       useDingbats = FALSE)
+ggsave('../writing/journal_manuscript/figures/Exp2_accuracy.pdf',
+       width = 4, height = 4, useDingbats = F)
 ```
 
+## Specific 'unique word' trajectories (Fig. 9C)
 
 ```{r}
 trajectories %>%
@@ -85,7 +83,56 @@ trajectories %>%
     labs(y = "number unique words used") +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/Exp2_numWords_partitionPrior.pdf',
+ggsave('../writing/journal_manuscript/figures/Exp2_numWords.pdf',
+       width = 4, height = 4, useDingbats = F)
+```
+
+## Visualize bigger set of parameter values (Appendix Fig. A5)
+
+```{r}
+#priorType = 'sharpPrior'
+#priorType = 'simplicity'
+priorType = 'middle'
+read_csv(here(paste0('simulations/P3/output/', priorType,'Trajectories.csv'))) %>%
+  filter(time < 24) %>%
+  filter(discountFactor < 0.9) %>%
+  mutate(blockNum = floor((time) / 6)) %>%
+  mutate(repNum = floor((time) / 4)) %>%
+  group_by(discountFactor, speakerAlpha, condition, time) %>%
+  summarize(empirical_stat = mean(correct)) %>%
+  ggplot(aes(x = time, y = empirical_stat * 100, color = condition)) +
+    geom_point(alpha = 0.2, stroke = 0, size = 2) +
+    geom_hline(yintercept = c(50,100), lty = 'dashed') +
+    geom_smooth(se=F) +
+    facet_grid(discountFactor ~ speakerAlpha) +
+    labs(y = '% correct', x = 'trial #') +
+    theme_few() +
+    scale_color_manual(values = condition_pal) +
+    theme(aspect.ratio = 1)
+
+ggsave(paste0('../writing/journal_manuscript/figures/Exp2_model_', priorType, '.pdf'),
+       width = 6, height = 6, units = 'in',
+       useDingbats = FALSE)
+```
+
+```{r}
+read_csv(here(paste0('simulations/P3/output/', priorType, 'Trajectories.csv'))) %>%
+  mutate(sextet = floor((time) / 8)) %>%
+  group_by(iterationNum, discountFactor, speakerAlpha, chainNum, condition,  sextet) %>%
+  mutate(numUniqueWordsUsed = length(unique(topSpeakerChoice))) %>%
+  group_by(condition, sextet, discountFactor, speakerAlpha) %>%
+  tidyboot::tidyboot_mean(numUniqueWordsUsed, nboot= 1) %>%
+  ggplot(aes(x = sextet, y = empirical_stat, color = condition)) +
+    geom_line() +
+    geom_hline(yintercept = c(2, 4), linetype = 'dashed') +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width=0) +
+    theme_few() +
+    facet_grid(discountFactor ~ speakerAlpha) +
+    scale_color_manual(values = condition_pal) +
+    labs(y = "number unique words used") +
+    theme(aspect.ratio = 1)
+
+ggsave(paste0('../writing/journal_manuscript/figures/Exp2_numWords', priorType, '.pdf'),
        width = 6, height = 6, useDingbats = F)
 ```
 
@@ -175,8 +222,9 @@ trajectories %>%
 Read in files:
 
 ```{r}
-meanings <- read_csv(here('./simulations/cogsci2018/output/meaningTests.csv')) %>%
-  mutate(iterationNum = row_number() / 
+meanings <- read_csv(here('./simulations/P3/output/meaningTestSharpPrior.csv')) %>%
+  group_by(chainNum, iterationNum, agentID, trialNum, word, speakerAlpha, discountFactor) %>%
+  filter(val == max(val))
 ```
 
 Plot proportion of levels across words
@@ -188,26 +236,25 @@ meanings.toplot <- meanings %>%
     object %in% c('circle', 'square') ~ 'super',
     object %in% c('blue', 'red', 'striped', 'spotted') ~ 'basic',
     TRUE ~ 'sub'
-  ))%>%
-  group_by(gameNum, agentID, trialNum, word) %>%
-  filter(val == max(val)) %>%
-  group_by(trialNum, level, condition) %>%
+  )) %>%
+  group_by(trialNum, level, condition, speakerAlpha, discountFactor) %>%
   tally() %>%
-  group_by(condition, trialNum) %>%
+  group_by(condition, trialNum, speakerAlpha, discountFactor) %>%
   mutate(prob = n / sum(n))  %>%
   ungroup() %>%
   mutate(level = fct_relevel(level, 'null', 'sub', 'basic'))
 
 meanings.toplot %>% 
+  complete(trialNum, condition, speakerAlpha, discountFactor, level, fill = list(prob = 0, n = 0)) %>%
   ggplot(aes(x = trialNum, y = prob, fill = level)) +
-    geom_area(state='identity', alpha = 0.8) +
-    facet_wrap(~ condition) +
+    geom_area(stat = 'identity', alpha = 0.8) +
+    facet_grid(discountFactor ~  speakerAlpha + condition) +
     scale_fill_brewer(palette = 'Green1') +
     labs(x = 'trial #', y = 'proportion of words at level') +
     theme_few() +
     theme(aspect.ratio = 1)
 
-ggsave('../writing/journal_manuscript/figures/evolution.pdf', height = 2, width = 4)
+ggsave('../writing/journal_manuscript/figures/evolution2.pdf', height = 4, width = 12)
 ```
 
 Statistical test of rates on final round:

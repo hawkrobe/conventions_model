@@ -303,11 +303,11 @@ Such optimization-based inference techniques may also provide the most promising
 
 A variety of priors have been proposed for probabilistic models of language learning and convention formation, which build in stronger or weaker assumptions about the structure of the lexicon.
 We used a simplicity prior over lexicons that strictly partition the set of referents, ensuring that every object must be in the extension of exactly one word \cite<e.g.>{carr2020simplicity}. 
-To explore the robustness of our results in \textbf{P3} to alternative choices, we also considered a weaker prior where the space of possible lexicons allows any denotation to be assigned to any word, including highly redundant and overlapping lexicons (where every object is in the extension of every word), and highly degenerate lexicons (where every word has a completely empty extension).
-Given this more unconstrained space of lexicons, the simplest way to penalize complexity is to penalize the \emph{total extension size}, i.e. the summed extensions of all terms.
+To explore the robustness of our results in \textbf{P3} to alternative choices of lexical priors, we also considered a weaker prior where the space of possible lexicons allows any denotation to be assigned to any word, including highly redundant and overlapping lexicons (where every object is in the extension of every word), and highly degenerate lexicons (where every word has a completely empty extension).
+Given this more unconstrained space of lexicons, the simplest way to penalize complexity is to define the size of the lexicon $|\phi|$ as the \emph{total extension size}, i.e. the summed extensions of all terms.
 In this case, favoring simpler word meanings also necessarily favors smaller lexicons. 
 
-To illustrate this property, consider a game with a fixed set of two referents: a blue square and a red square. 
+To illustrate this property of the weaker prior, consider a reference game with a fixed set of two referents: a blue square and a red square. 
 Then the meaning of a given utterance $u_i$ can either have extension size two (applying both objects, effectively meaning ‘square’), size one (applying only to ‘blue square’ or only to ‘red square’), or size zero (applying to neither of the objects). 
 Now suppose there are 16 possible utterances. 
 Then the lexicon with highest prior probability is the one where every utterance has an empty extension ($|\phi| = 16 \cdot 0 = 0$), which is also the smallest lexicon (an effective vocabulary size of 0). 
@@ -315,12 +315,24 @@ The lexicon with lowest prior probability is the one where every utterance has t
 Removing a single word from this maximal lexicon would reduce the size of the lexicon (e.g. 15 words instead of 16) and also reduce the total size of the words' extensions (e.g. taking a word with the maximal extension of size two and replacing it with the minimal extension of size zero: $|\phi| = 15 \cdot 2 + 1 \cdot 0 = 30$), which would slightly increase its prior probability. 
 Of course, this scheme also makes it possible to have a lexicon with smaller word meanings but not a smaller lexicon (e.g. for a lexicon where all 16 words have an extension size of 1, we have $|\phi| = 16 \cdot 1 = 16$, but the effective vocabulary size is still 16). 
 So this prior straightforwardly encodes a preference for lexicons with fewer words, but gives partial credit when the words have ‘simpler’ meanings, breaking ties between lexicons with the same number of words.
-Simulation results using this prior are shown in \ref{fig:partitionPrior}. 
-We find the same qualitative effects for the ``coarse'' and ``fine'' conditions, but the ``mixed'' condition somewhat unintuitively accelerates faster than the other conditions under some situations.
-This is a result of the 
+Simulation results using this prior are shown in Fig.~\ref{fig:partitionPrior}B. 
 
 Note that other choices are possible, such as those only enforcing mutual exclusivity, or only the principle of contrast \cite{clark1987principle}.
-In the context of \textbf{P3}, we expect these choices to primarily affect choices on early trials: (1) an \emph{agglomerative} form of learning where all conditions begin using fine-grained language and then the \emph{coarse} condition gradually collapses down to a more minimal lexicon, or (2) a \emph{divisive} form where all conditions begin using coarse-grained language and then the \emph{fine} condition gradually introduces words with more refined meanings. 
+In the context of \textbf{P3}, we expect these choices to primarily affect choices on early trials.
+Some priors may predict an \emph{agglomerative} form of learning where all conditions begin using fine-grained language and then the \emph{coarse} condition gradually collapses down to a more minimal lexicon, while others predict a \emph{divisive} form where all conditions begin using coarse-grained language and then the \emph{fine} condition gradually introduces words with more refined meanings. 
+For example, we one qualitative feature of our empirical results in \textbf{P3} (see Fig.~\ref{fig:sec2Results}D) is that participants apparently begin using more unique terms at the outset, and remain constant at that large number of unique terms in the \emph{fine} and \emph{mixed} conditions but gradually whittle away their vocabulary size in the \emph{coarse} condition.
+Because we noticed that neither of the priors considered in Fig.~\ref{fig:partitionPrior} displayed this pattern, we considered a third possible prior. 
+This prior enforced full coverage over all meanings (i.e. disallowed `degenerate' lexicons where some objects are not in the extension of any words at all), unlike the unconstrained prior, but otherwise allowed redundancy (i.e. some objects were in the extension of multiple words), unlike the partition-based prior.
+This prior gave rise to a qualitatively more similar pattern of lexical convergence (see Fig.~\ref{fig:partitionMiddle}). 
+
+
+ \begin{figure}[h]
+\centering
+    \includegraphics[scale=.5]{Exp2_numWordsmiddle.pdf}
+  \caption{Simulation results for \textbf{P3} using a full-coverage lexical prior that disallows degenerate lexicons ($\alpha_S = \alpha_L = 6, \beta = 0.6$)}
+  \label{fig:partitionMiddle}
+\end{figure}
+
 
 %Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
 %However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
@@ -366,12 +378,12 @@ In the context of \textbf{P3}, we expect these choices to primarily affect choic
 
  \begin{figure*}
 \centering
-    \includegraphics[scale=.7]{partitionPrior.pdf}
-  \caption{Simulation results for \textbf{P3} using different values of $\alpha$ and $\beta$, respectively.}
+    \includegraphics[scale=.7]{lexicalPriors.pdf}
+  \caption{Simulation results for \textbf{P3} using different values of $\alpha$ and $\beta$ for (A) partition-based simplicity prior, and (B) alternative unconstrained simplicity prior. Simulations were run for fewer trials in (B). Overall, we observe similar qualitative predictions for the difference between the coarse and fine condition, although the mixture condition is more sensitive to parameters and priors.}
   \label{fig:partitionPrior}
 \end{figure*}
 
- \begin{figure*}
+ \begin{figure*}[h!]
 \centering
     \includegraphics[scale=.9]{mixtureOfTerms.pdf}
   \caption{Empirical mixtures of terms reported by participants in \textbf{P3}. While the modal lexicon in the coarse condition contained 0 specific terms and 4 more general terms (32\% of participants) and the modal lexicon in the mixture and fine conditions contained 8 specific terms and 0 more general terms (42\% and 38\% of participants, respectively), many participants reported a mixture of abstract and specific terms.}
