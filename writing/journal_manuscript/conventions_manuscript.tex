@@ -2,7 +2,6 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[outdir=./]{epstopdf}
-%\DeclareGraphicsExtensions{.eps}
 \usepackage{caption}
 \captionsetup{font=footnotesize}
 
@@ -10,7 +9,6 @@
 \usepackage{enumerate}
 \usepackage{textcomp}
 \usepackage{lingmacros}
-%\usepackage[draft]{hyperref}
 \usepackage{apacite}
 \usepackage{listings}
 \usepackage{multirow}
@@ -22,7 +20,6 @@
 
 \newcommand*{\bluesquare}[0]{%
 \mathord{
-    %\raisebox{-.6\baselineskip}{%
         \includegraphics[
         height=.6em,
         width=.6em,
@@ -33,7 +30,6 @@
 
 \newcommand*{\orangecircle}[0]{%
 \mathord{
-%\mathchoice{
         \includegraphics[
         height=.6em,
         width=.6em,
@@ -54,22 +50,12 @@
 	{\def\@captype{figure}}
 	{}
 \usepackage{lipsum}
-%\pagenumbering{gobble}
-%\usepackage{apacite}
-
-%\linespread{1}
-
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \graphicspath{{./figures/}}
  
  \definecolor{Green}{RGB}{10,200,100}
   \definecolor{Red}{RGB}{200,100,50}
-\newcommand{\ks}[1]{\textcolor{Red}{[ks: #1]}}  
-\newcommand{\rdh}[1]{\textcolor{Red}{[rdh: #1]}}  
-\newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
-\newcommand{\adele}[1]{\textcolor{Red}{[adele: #1]}}  
-
 
 \makeatother
 
@@ -123,8 +109,12 @@ $^*$Correspondence should be addressed to Robert  Hawkins, e-mail: rdhawkins@pri
 
 \input{Conclusion}
 
-%\section{\bf Acknowledgments}
+\section{\bf Acknowledgments}
 \small
+
+Thanks to Herb Clark, Judith Degen, Natalia V\'elez, Rosa Cao, Hyo Gweon, Judith Fan, Dan Yamins, Chris Potts, Iris van Rooij, Mark Blokpoel, Marten van Schijndel, and Josh Armstrong for helpful discussions.
+This work was supported by NSF grant \#1911835 to RDH, AEG, and TDG.
+
 
 \bibliography{ref}
 \bibliographystyle{apacite-no-initials}
@@ -312,10 +302,10 @@ Such optimization-based inference techniques may also provide the most promising
 \section*{Appendix C: Alternative lexical priors}
 
 A variety of priors have been proposed for probabilistic models of language learning and convention formation, which build in stronger or weaker assumptions about the structure of the lexicon.
-Our approach has been to err on the side of weaker assumptions and allow any stronger preferences to emerge naturally through pragmatic reasoning during learning and usage. 
-The space of possible lexicons we consider allows any denotation to be assigned to any word, including highly redundant and overlapping lexicons (where every object is in the extension of every word), and highly degenerate lexicons (where every word has a completely empty extension).
-Given this unconstrained space of lexicons, the simplest way to penalize complexity is to penalize the total extension size.
-In this case, favoring simpler word meanings necessarily favors smaller lexicons. 
+We used a simplicity prior over lexicons that strictly partition the set of referents, ensuring that every object must be in the extension of exactly one word \cite<e.g.>{carr2020simplicity}. 
+To explore the robustness of our results in \textbf{P3} to alternative choices, we also considered a weaker prior where the space of possible lexicons allows any denotation to be assigned to any word, including highly redundant and overlapping lexicons (where every object is in the extension of every word), and highly degenerate lexicons (where every word has a completely empty extension).
+Given this more unconstrained space of lexicons, the simplest way to penalize complexity is to penalize the \emph{total extension size}, i.e. the summed extensions of all terms.
+In this case, favoring simpler word meanings also necessarily favors smaller lexicons. 
 
 To illustrate this property, consider a game with a fixed set of two referents: a blue square and a red square. 
 Then the meaning of a given utterance $u_i$ can either have extension size two (applying both objects, effectively meaning ‘square’), size one (applying only to ‘blue square’ or only to ‘red square’), or size zero (applying to neither of the objects). 
@@ -325,15 +315,12 @@ The lexicon with lowest prior probability is the one where every utterance has t
 Removing a single word from this maximal lexicon would reduce the size of the lexicon (e.g. 15 words instead of 16) and also reduce the total size of the words' extensions (e.g. taking a word with the maximal extension of size two and replacing it with the minimal extension of size zero: $|\phi| = 15 \cdot 2 + 1 \cdot 0 = 30$), which would slightly increase its prior probability. 
 Of course, this scheme also makes it possible to have a lexicon with smaller word meanings but not a smaller lexicon (e.g. for a lexicon where all 16 words have an extension size of 1, we have $|\phi| = 16 \cdot 1 = 16$, but the effective vocabulary size is still 16). 
 So this prior straightforwardly encodes a preference for lexicons with fewer words, but gives partial credit when the words have ‘simpler’ meanings, breaking ties between lexicons with the same number of words.
-
-To explore the robustness of our results in \textbf{P3}, where the simplicity prior played the largest role, we also ran our simulations using a more common ``partition-based'' prior that imposes stronger assumptions \cite<e.g.>{carr2020simplicity}. 
-This prior only considers lexicons that strictly partition the set of referents, ensuring that every object must be in the extension of exactly one word.
-In this case, the fewer words you have, the bigger each word's denotation must be, and the simplest lexicon is one word that covers everything.
 Simulation results using this prior are shown in \ref{fig:partitionPrior}. 
-Note that other choices are possible, such as those only enforcing mutual exclusivity, or enforcing the principle of contrast \cite{clark1987principle}.
+We find the same qualitative effects for the ``coarse'' and ``fine'' conditions, but the ``mixed'' condition somewhat unintuitively accelerates faster than the other conditions under some situations.
+This is a result of the 
+
+Note that other choices are possible, such as those only enforcing mutual exclusivity, or only the principle of contrast \cite{clark1987principle}.
 In the context of \textbf{P3}, we expect these choices to primarily affect choices on early trials: (1) an \emph{agglomerative} form of learning where all conditions begin using fine-grained language and then the \emph{coarse} condition gradually collapses down to a more minimal lexicon, or (2) a \emph{divisive} form where all conditions begin using coarse-grained language and then the \emph{fine} condition gradually introduces words with more refined meanings. 
-
-
 
 %Second, we used a conjunction operation to derive the semantics of longer utterances from primitive utterances, which captures the intuitive behavior of a speaker who proposes multiple possible descriptions, or ways of seeing the object.
 %However, it is reasonable to consider alternative ways of interpreting a multi-word utterance, including a disjunctive `max' operation:
@@ -376,18 +363,11 @@ In the context of \textbf{P3}, we expect these choices to primarily affect choic
 \label{fig:generalization_modelcomparison}
 \end{figure*}
 
-%
-% \begin{figure*}
-%\centering
-%    \includegraphics[scale=.9]{exp2-acc-grid_cleaned.pdf}
-%  \caption{Raw empirical accuracy distributions for context-sensitivity experiment. Each row represents how the accuracies of different games shift across the four quarters of the task for a given condition. Dotted vertical line represents chance accuracy (0.25), solid vertical line represents pre-registered convergence threshold (0.75).}
-%  \label{fig:full_accuracy_grid}
-%\end{figure*}
 
  \begin{figure*}
 \centering
     \includegraphics[scale=.7]{partitionPrior.pdf}
-  \caption{Similar simulation results for \textbf{P3} are found when using a stronger partition-based lexical prior, where the space of lexicons is constrained to strictly partition the space of meanings (such that the `smallest' lexicon is one word referring to all 4 objects and the `largest' lexicon is 4 words, each referring to unique objects). Columns and rows of facets represent different values of $\alpha$ and $\beta$, respectively. }
+  \caption{Simulation results for \textbf{P3} using different values of $\alpha$ and $\beta$, respectively.}
   \label{fig:partitionPrior}
 \end{figure*}
 

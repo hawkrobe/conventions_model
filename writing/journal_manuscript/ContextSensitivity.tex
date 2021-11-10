@@ -41,7 +41,7 @@ We then populate the utterance space with 8 single-word labels (Fig.~\ref{fig:co
 
 Another important feature of real environments is that speakers do not have the advantage of a fixed context; the relevant distinctions change from moment to moment as different subsets of objects are in context at different times. 
 This property poses a challenge for models of convention formation because the relevant distinctions cannot be determined from a single context; they must be abstracted over time.
-We therefore only displayed four of the eight objects in the context on a given trial.
+We therefore only displayed two of the four possible objects on a given trial.
 Distractors could differ from the target at various levels of the hierarchy, creating different types of contexts defined by the finest distinction that had to be drawn (e.g. Fig.~\ref{fig:context_design}C).  
 
 Critically, we manipulated the prevalence of different kinds of contexts, controlling how often participants are required to make certain distinctions to succeed at the task. 
@@ -52,14 +52,12 @@ We constructed the trial sequence identically for the three conditions.
 On each trial, we randomly sampled one of the four possible objects to be the target.
 Then we sampled a distractor according to the constraints of the context type.
 As before, the agents swapped roles after each trial. 
-We ran 50 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S=8$ and memory discounting parameter of $\beta = 0.6$.
-% (see Model comparison below for a more thorough evaluation of these parameters).
-
+We ran 400 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S=8$ and memory discounting parameter of $\beta = 0.8$ (see Fig.~\ref{fig:partitionPrior} for results at other parameter values).
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[scale=0.87]{sec2-results.pdf}
-\caption{\emph{Comparison of simulation results to empirical data}. (A) Agents in our simulation learn to coordinate on a successful communication system, but converge faster in the coarse condition than the fine condition.  (B) The number of unique words used by agents in each repetition block increased in the fine condition but stayed roughly constant in the coarse condition. (C-D) The same metrics computed on our empirical data, qualitatively matching the patterns observed in the simulations. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits.}
+\caption{\emph{Comparison of simulation results to empirical data}. (A) Agents in our simulation learn to coordinate on a successful communication system, but converge faster in the coarse condition than the fine condition.  (B) The number of unique words used by agents in each repetition block stayed roughly constant in the fine condition but decreased over time in the coarse condition. (C-D) The same metrics computed on our empirical data, qualitatively matching the patterns observed in the simulations. Each point is the mean proportion of correct responses by listeners; curves are nonparametric fits and error bars are bootstrapped 95\% CIs.}
 \label{fig:sec2Results}
 \end{center}
 \end{figure}
@@ -67,7 +65,7 @@ We ran 50 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.9]{evolution.pdf}
-\caption{\emph{Dynamics of lexical beliefs over time in model simulations.} Regions represent the average proportion of words at each level of generality in an agent's beliefs about the lexicon. In the coarse condition, agents initially assume subordinate terms but gradually abstract away to a smaller number of more general terms; in the fine and mixed conditions, however, agents become more confident of subordinate terms.}
+\caption{\emph{Dynamics of lexical beliefs over time in model simulations.} Regions represent the average number of words at each level of generality in an agent's beliefs about the lexicon. Level of generality is determined by taking the MAP meaning. In the fine and mixed conditions, agents shift toward more subordinate terms.}
 \label{fig:evolution}
 \end{center}
 \end{figure}
@@ -75,7 +73,6 @@ We ran 50 distinct trajectories with parameter settings of $\alpha_L=8, \alpha_S
 \subsubsection{Partners successfully learn to communicate}
 
 First, we compare the model's learning curves across context conditions (Fig.~\ref{fig:sec2Results}A). 
-We focus on the \emph{coarse} and \emph{fine} conditions for simplicity, since this single comparison captures the core phenomena of interest.
 In a mixed-effects logistic regression, we find that communicative accuracy steadily improves over time across all conditions, $b=0.72, z = 16.9, p<0.001$.
 However, accuracy also differed across conditions: adding a main effect of condition significantly improves model fit, $\chi^2(2) = 9.6, p = 0.008$. 
 Accuracy is significantly higher in the coarse condition than the fine condition $b=-0.71, z=9.3, p <0.001$ and marginally higher than the mixed condition.
@@ -93,9 +90,9 @@ We have access not only to the signaling behavior of our simulated agents, but a
 At each time point in each game, we take the single meaning with highest probability for each word.
 In Fig.~\ref{fig:evolution}, we show the proportion of words with meanings at each level of generality, collapsing across all games in each condition.
 Qualitatively, we observe that agents begin by assuming null meanings (i.e. with an effectively empty vocabulary) but quickly begin assigning meanings to words based on their partner's usage.
-In both conditions, basic-level meanings and subordinate-meanings are equally consistent with the initial data, but the simplicity prior prefers smaller effective vocabulary sizes where each word has smaller extensions.
+In both conditions, basic-level meanings and subordinate-meanings are equally consistent with the initial data, but the simplicity prior prefers smaller effective vocabulary sizes.
 After the first repetition block, however, agents in the coarse condition begin pruning out some of the subordinate-level terms and become increasingly confident of basic-level meanings.
-Agents in the fine condition become even more confident of subordinate level meanings.
+Meanwhile, agents in the fine condition begin to disaggregate these basic-level terms into a greater number of subordinate-level meanings.
 
 By the final trial, the proportion of basic-level vs.~subordinate-level terms is significantly different across the coarse and fine conditions.
 Only 9\% of words had subordinate-level meanings (green) in the coarse condition, compared with 79\% in the fine condition, $\chi^2(1) = 436, p < 0.001$.
@@ -239,7 +236,7 @@ In other words, to the extent that context-sensitivity has been addressed by exi
 Models using simple update rules have accounted for local referential context with a \emph{lateral inhibition} heuristic used by both the speaker and listener agents \cite{franke2012bidirectional,steels2005coordinating}.
 If communication is successful, the connection strength between the label and object is not only increased, the connection between the label and competing objects (and, similarly, between the object and competing labels) is explicitly \emph{decreased} by a corresponding amount.
 This lateral inhibition heuristic is functionally similar to our pragmatic reasoning mechanism, in terms of allowing the agent to learn from negative evidence (i.e. the speaker's choice \emph{not} to use a word, or the listener's choice \emph{not} to pick an object). 
-Under our inferential framework, however, this form of statistical preemption emerges as a natural consequence of normative Gricean principles of pragmatic reasoning rather than as a heuristic (see also Appendix C and Fig.~\ref{fig:partitionPrior} for similar results using a stronger partition-based prior.)
+Under our inferential framework, however, this form of statistical preemption emerges as a natural consequence of normative Gricean principles of pragmatic reasoning rather than as a heuristic (see also Appendix C for similar results using a alternative priors.)
 %Reasoning about a partner's intentions, either while updating beliefs about their lexicon or while selecting an action, naturally instantiates a kind of inductive bias for \emph{mutual exclusivity} \cite{}.
 
 %Our results may help to illuminate the relationship between our concepts and words, which are often treated interchangeably. While our mental taxonomies are adaptive to the natural perceptual structure of the world \cite{MervisRosch81_CategorizationReview} %(Rosch et al, 1976; Mervis \& Rosch ,1981; Murphy \& Smith, 1982), 
